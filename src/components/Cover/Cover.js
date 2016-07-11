@@ -7,7 +7,6 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Cover.scss';
 
 import Paper from 'material-ui/Paper';
-import RaisedButton from 'material-ui/RaisedButton';
 import Avatar from 'material-ui/Avatar';
 
 class Cover extends Component {

@@ -8,7 +8,7 @@
 .container {
   display: flex;
   flex-direction: row;
-  margin: 0 auto;
+  margin-top: 20px;
   padding: 14px;
   max-width: $max-content-width;
 }
@@ -20,7 +20,6 @@
   justify-content: center;
   flex-basis: 0;
   flex-grow: 1;
-  padding: 0 10px;
   border-left: 2px solid $gray-lighter;
   &:first-child {
     border-left: 0;
