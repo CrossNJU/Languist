@@ -13,19 +13,21 @@ import s from './Header.scss';
 import Link from '../Link';
 import Navigation from '../Navigation';
 
+import Paper from 'material-ui/Paper';
+import RaisedButton from 'material-ui/RaisedButton';
+
 class Header extends Component {
 
   render() {
     return (
-      <div className={s.root}>
+      <Paper className={s.root} style={{backgroundColor: "#F2DF83"}}>
         <div className={s.container}>
           <Navigation className={s.nav} />
           <Link className={s.brand} to="/">
-            <img src={require('./logo-brand.png')} width="36" height="36" alt="Languist" />
-            <span className={s.brandTxt}>Languist</span>
+            <img src={require('./logo-brand@2x.png')} width="150" height="36" alt="Languist" />
           </Link>
         </div>
-      </div>
+      </Paper>
     );
   }
 
