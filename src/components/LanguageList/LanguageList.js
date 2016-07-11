@@ -17,7 +17,7 @@ class LanguageItem extends Component {
     return (
       <ListItem innerDivStyle={{paddingTop: '8px', paddingBottom: '8px'}}>
         <div className={s.item}>
-          <Avatar src={require('./avatar-default.png')} size={36} className={s.avatar}/>
+          <Avatar src={require('./avatar-default-s.png')} size={36} className={s.avatar}/>
           <div className={s.text}>{this.props.lang.name}</div>
           <div className={s.level}>
             {[...Array(this.props.lang.level)].map((x, i) =>
