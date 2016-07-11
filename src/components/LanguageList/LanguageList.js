@@ -13,12 +13,6 @@ import ListItem from 'material-ui/List/ListItem';
 import RaisedButton from 'material-ui/RaisedButton';
 
 class LanguageItem extends Component {
-  renderLevel() {
-    let i = 0;
-    for (i = 0; i < this.props.level; i++) {
-
-    }
-  }
   render() {
     return (
       <ListItem innerDivStyle={{paddingTop: '8px', paddingBottom: '8px'}}>
@@ -36,7 +30,7 @@ class LanguageItem extends Component {
   }
 }
 
-let data = [
+let langData = [
   {
     name: 'JavaScript',
     level: 3
@@ -65,7 +59,7 @@ let data = [
 
 class LanguageList extends Component {
   renderLanguages() {
-    let languages = data.map(language => {
+    let languages = langData.map(language => {
       return <LanguageItem key={language.name} lang={language} />;
     });
     return languages;

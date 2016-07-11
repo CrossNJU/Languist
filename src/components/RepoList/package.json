@@ -1,0 +1,6 @@
+{
+  "name": "RepoList",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./RepoList.js"
+}
