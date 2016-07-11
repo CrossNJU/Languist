@@ -14,18 +14,19 @@ import Link from '../Link';
 import Navigation from '../Navigation';
 
 import Paper from 'material-ui/Paper';
-import RaisedButton from 'material-ui/RaisedButton';
 
 class Header extends Component {
 
   render() {
     return (
-      <Paper className={s.root} style={{backgroundColor: "#F2DF83"}}>
-        <div className={s.container}>
-          <Navigation className={s.nav} />
-          <Link className={s.brand} to="/">
-            <img src={require('./logo-brand@2x.png')} width="150" height="36" alt="Languist" />
-          </Link>
+      <Paper>
+        <div className={s.root}>
+          <div className={s.container}>
+            <Navigation className={s.nav} />
+            <Link className={s.brand} to="/">
+              <img src={require('./logo-brand@2x.png')} width="150" height="36" alt="Languist" />
+            </Link>
+          </div>
         </div>
       </Paper>
     );

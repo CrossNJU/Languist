@@ -10,18 +10,11 @@
 import React, { Component, PropTypes } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './HomePage.scss';
+import Cover from '../Cover';
 
-class Cover extends Component {
-  render() {
-    return (
-      <div className="cover">
-        <img className="avatar" src={require('./avatar-default.png')} width="112" height="112" alt="Avatar" />
-        <h1>Polaris Chen</h1>
-        <span>8 Languages</span>
-      </div>
-    );
-  }
-}
+import Paper from 'material-ui/Paper';
+import RaisedButton from 'material-ui/RaisedButton';
+import Avatar from 'material-ui/Avatar';
 
 class Count extends Component {
   render() {
@@ -100,7 +93,6 @@ class RepoItem extends Component {
 class RepoList extends Component {
   renderRepos() {
     let repos = repoData.map(repo => {
-      console.log(repo);
       return (<RepoItem key={repo.owner + repo.name} repo={repo} />);
     });
     return repos;
@@ -129,11 +121,13 @@ class HomePage extends Component {
 
   render() {
     return (
-      <div className={s.root}>
-        <div className={s.container}>
-          <Cover />
-          <Count />
-          <RepoList />
+      <div className="HomePage">
+        <Cover />
+        <div className={s.root}>
+          <div className={s.container}>
+            <Count />
+            <RepoList />
+          </div>
         </div>
       </div>
     );

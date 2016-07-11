@@ -9,10 +9,8 @@
 
 @import '../variables.scss';
 
-$brand-color: #F2DF83;
-
 .root {
-  background: #F2DF83;
+  background: $brand-color;
   color: #fff;
 }
 
