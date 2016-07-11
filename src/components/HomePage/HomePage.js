@@ -12,6 +12,7 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './HomePage.scss';
 import Cover from '../Cover';
 import Count from '../Count';
+import LanguageList from '../LanguageList';
 
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -102,6 +103,7 @@ class HomePage extends Component {
           <div className={s.container}>
             <div className={s.sidebar}>
               <Count />
+              <LanguageList />
             </div>
             <div className={s.main}>
               <RepoList />
