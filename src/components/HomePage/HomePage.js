@@ -11,36 +11,11 @@ import React, { Component, PropTypes } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './HomePage.scss';
 import Cover from '../Cover';
+import Count from '../Count';
 
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 import Avatar from 'material-ui/Avatar';
-
-class Count extends Component {
-  render() {
-    let data = {
-      followingCount: 6,
-      followersCount: 12,
-      starredCount: 32
-    };
-    return (
-      <div className="Card">
-        <div className="CountItem">
-          <div className="CountNumber">{data.followersCount}</div>
-          <div className="CountLabel">Followers</div>
-        </div>
-        <div className="CountItem">
-          <div className="CountNumber">{data.starredCount}</div>
-          <div className="CountLabel">Starred</div>
-        </div>
-        <div className="CountItem">
-          <div className="CountNumber">{data.followingCount}</div>
-          <div className="CountLabel">Following</div>
-        </div>
-      </div>
-    );
-  }
-}
 
 let repoData = [
   {
@@ -125,8 +100,12 @@ class HomePage extends Component {
         <Cover />
         <div className={s.root}>
           <div className={s.container}>
-            <Count />
-            <RepoList />
+            <div className={s.sidebar}>
+              <Count />
+            </div>
+            <div className={s.main}>
+              <RepoList />
+            </div>
           </div>
         </div>
       </div>

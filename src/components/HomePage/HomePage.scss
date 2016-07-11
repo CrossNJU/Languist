@@ -14,7 +14,20 @@
 }
 
 .container {
+  display: flex;
+  flex-direction: row;
   margin: 0 auto;
-  padding: 0 0 40px;
+  padding: 20px 0 40px;
   max-width: $max-content-width;
+}
+
+.sidebar {
+  flex-basis: 0;
+  flex-grow: 1;
+  padding-right: 40px;
+}
+
+.main {
+  flex-basis: 0;
+  flex-grow: 2;
 }
