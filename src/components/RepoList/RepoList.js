@@ -27,7 +27,8 @@ let repoData = [
       'JavaScript',
       'Framework'
     ],
-    update: 'July 11, 2016'
+    update: 'July 11, 2016',
+    star: 2731
   },
   {
     avatarUrl: '',
@@ -40,20 +41,22 @@ let repoData = [
       'React',
       'UI'
     ],
-    update: 'July 11, 2016'
+    update: 'July 11, 2016',
+    star: 1523
   },
   {
     avatarUrl: '',
-    owner: 'callemall',
-    name: 'material',
-    description: 'React Components that Implement Google\'s Material Design. http://www.material-ui.com',
+    owner: 'kriasoft',
+    name: 'react-starter-kit',
+    description: 'React Starter Kit — isomorphic web app boilerplate (Node.js, Express, GraphQL, React.js, Babel 6, PostCSS, Webpack, Browsersync) https://www.reactstarterkit.com',
     tags: [
       'JavaScript',
       'Framework',
       'React',
-      'UI'
+      'Starter Kit'
     ],
-    update: 'July 11, 2016'
+    update: 'July 11, 2016',
+    star: 9298
   }
 ];
 
@@ -100,16 +103,16 @@ class RepoItem extends Component {
             }
           </div>
         </CardText>
-        <CardActions style={{marginLeft: 12, paddingTop: 6, paddingBottom: 6}}>
+        <CardActions style={{marginLeft: 12, paddingTop: 16, paddingBottom: 6}}>
           <RaisedButton
             icon={<Star />}
-            label="Star"
-            secondary={true}
+            label={'Star (' + this.props.repo.star + ')'}
+            primary={true}
             onTouchTap={this.handleExpand} />
           <RaisedButton
             icon={<Code />}
             label="View"
-            primary={true}
+            labelColor="#666"
             onTouchTap={this.handleReduce} />
         </CardActions>
       </Card>

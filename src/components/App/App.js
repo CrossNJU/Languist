@@ -29,7 +29,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 const muiTheme = getMuiTheme({
   palette: {
-    primary1Color: cyan500,
+    primary1Color: '#74C2CE',
     primary2Color: cyan700,
     primary3Color: grey400,
     accent1Color: '#F2DF83',
@@ -46,6 +46,9 @@ const muiTheme = getMuiTheme({
   },
   appBar: {
     color: '#F2DF83',
+  },
+  raisedButton: {
+    fontWeight: '500',
   }
 });
 
