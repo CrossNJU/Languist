@@ -24,7 +24,7 @@ class Header extends Component {
           <div className={s.container}>
             <Navigation className={s.nav} />
             <Link className={s.brand} to="/">
-              <img src={require('./logo-brand@2x.png')} width="150" height="36" alt="Languist" />
+              <img src={require('./logo-brand@2x.png')} height="32" alt="Languist" />
             </Link>
           </div>
         </div>
