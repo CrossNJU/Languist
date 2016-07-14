@@ -9,21 +9,19 @@
 
 @import '../variables.scss';
 
-$brand-color: #61dafb;
-
 .root {
-  background: #373277;
+  background: $brand-color;
   color: #fff;
 }
 
 .container {
   margin: 0 auto;
-  padding: 20px 0;
+  padding: 6px 0 10px;
   max-width: $max-content-width;
 }
 
 .brand {
-  color: color($brand-color lightness(+10%));
+  color: white;
   text-decoration: none;
   font-size: 1.75em; /* ~28px */
 }
