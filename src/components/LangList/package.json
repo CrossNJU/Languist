@@ -1,0 +1,6 @@
+{
+  "name": "LangList",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./LangList.js"
+}

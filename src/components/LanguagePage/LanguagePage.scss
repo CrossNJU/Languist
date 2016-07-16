@@ -1,0 +1,17 @@
+/**
+ * Created by chenm on 2016/7/14.
+ */
+@import '../variables.scss';
+
+.root {
+  background: $background-color;
+  min-height: 900px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 0 0 40px;
+  max-width: $max-content-width;
+}
