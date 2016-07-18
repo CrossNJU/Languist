@@ -28,6 +28,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 
 const muiTheme = getMuiTheme({
+  fontFamily: 'Segoe UI, \'HelveticaNeue-Light\', sans-serif',
   palette: {
     primary1Color: '#74C2CE',
     primary2Color: cyan700,
