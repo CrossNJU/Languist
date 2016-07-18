@@ -1,42 +1,56 @@
 
 @import '../variables.scss';
+@import 'normalize.css';
 
 .root {
 
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  margin-top: 20px;
-  padding: 14px 0;
-  max-width: $max-content-width;
-}
-
-.item {
+.lang__list__item {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  .avatar {
-    flex-basis: auto;
-    flex-grow: 0;
-  }
-  .text {
+
+  .lang__list__item__left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     flex-basis: 0;
     flex-grow: 1;
-    padding-left: 8px;
-    font-size: 18px;
+
+    .lang__name {
+      color: $primary-color;
+      margin-left: 10px;
+    }
   }
-  .level {
+
+  .lang__list__item__right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     flex-basis: auto;
     flex-grow: 0;
   }
 }
 
-.action {
-  margin: 0 14px;
-  padding-top: 14px;
-  display: flex;
-  border-top: 2px solid $gray-lighter;
+.lang__questions {
+  padding: 16px;
+  background: $gray-lighter;
+
+  .question__wrapper {
+    .question__title {
+      font-weight: lighter;
+      font-size: 1.25em;
+    }
+    .options__wrapper {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+
+      &>div {
+        margin-right:2em;
+      }
+    }
+  }
 }
+
