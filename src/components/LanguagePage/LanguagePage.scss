@@ -6,6 +6,7 @@
 .root {
   background: $background-color;
   min-height: 900px;
+  padding-top: 30px;
 }
 
 .container {
@@ -14,4 +15,13 @@
   margin: 0 auto;
   padding: 0 0 40px;
   max-width: $max-content-width;
+  width: 800px;
+
+  .btn__group {
+    padding: 30px 16px;
+
+    >div {
+      margin-right: 1em;
+    }
+  }
 }
