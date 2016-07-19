@@ -9,7 +9,7 @@ var schema =  mongoose.Schema;
 var userSchema = schema({
   name: String,
   language:{
-    language_id: String,
+    language_id: schema.Types.ObjectId,
     level: Number
   },
   application_id: [schema.Types.ObjectId],
