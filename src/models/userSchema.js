@@ -7,7 +7,19 @@ var schema =  mongoose.Schema;
 
 //add schema
 var userSchema = schema({
-  name: String
+  name: String,
+  language:{
+    language_id: String,
+    level: Number
+  },
+  application_id: [schema.Types.ObjectId],
+  email: String,
+  starred: Number,
+  fork: Number,
+  follower: Number,
+  following: Number,
+  star_repo_ids: [schema.Types.ObjectId],
+  fork_repo_ids: [schema.Types.ObjectId]
 });
 
 //add instance methods
