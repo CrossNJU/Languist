@@ -8,10 +8,10 @@ var schema =  mongoose.Schema;
 //add schema
 var userSchema = schema({
   name: String,
-  language:{
+  language:[{
     language_id: schema.Types.ObjectId,
     level: Number
-  },
+  }],
   application_id: [schema.Types.ObjectId],
   email: String,
   starred: Number,
@@ -28,5 +28,5 @@ userSchema.methods.findSimilarTypes = function(fc) {
 };
 
 //make model and export
-var user = mongoose.model('user', tagSchema);
+var user = mongoose.model('user', userSchema);
 export default user;
