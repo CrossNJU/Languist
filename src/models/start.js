@@ -37,10 +37,10 @@ function log(res){
   console.log(res);
 }
 
-//user.find({'name':'user_name'},function(err,res){
-//  if (err) return console.log(err);
-//  console.log(res[0].fork);
-//});
+user.find({'name':'Jeremy Stephens'},function(err,res){
+  if (err) return console.log(err);
+  console.log(res);
+});
 
 //user.findSimilarTypes((err,res) => {
 //  log(res);
@@ -70,49 +70,54 @@ function log(res){
 //var r1 = new repository({
 //  fullname: 'fullname',
 //  owner: 'owner',
-//  star: 0,
-//  fork: 0,
-//  view: 0,
-//  language_id: ['578f5381b9bfb2686dc9837b'],
-//  application_id: ['578f5381b9bfb2686dc9837a'],
+//  star_num: -1,
+//  fork_num: -1,
+//  view_num: -1,
+//  subscriber_num: -1,
+//  contributor_num: -1,
+//  collaborators_num: -1,
+//  issue_num: -1,
+//  language_id: [''],
+//  application_id: [''],
 //  description: 'description:sssaaa',
 //  url: 'url_test',
 //  createTime: date1,
 //  updateTime: date2,
-//  tag: ['578f5381b9bfb2686dc9837a'],
+//  tag: [''],
 //  avatar_url: 'avatar_url_test'
 //});
 //saveToDB(r1);
-var d3 = new Date(2015,11,1);
-var u1 = new user({
-  login: "__login",
-  name: "__name",
-  type: "__type",
-  avatar_url: "__avatar_url",
-  html_url: "__html_url",
-  language:[{
-    language_id: '578f5381b9bfb2686dc9837b',
-    level: -1
-  }],
-  application_id: ['578f5381b9bfb2686dc9837a'],
-  email: "__email",
-  star_num: -1,
-  starred_num: -1,
-  fork_num: -1,
-  follower_num: -1,
-  following_num: -1,
-  subscription_num: -1,
-  public_gist_num: -1,
-  public_repo_num: -1,
-  location: "__location",
-  blog: "__blog",
-  company: "__company",
-  created_at: d3,
-  star_repo_ids: ['578f5a75bfe1fb501c0f8035'],
-  fork_repo_ids: ['578f5a75bfe1fb501c0f8035']
 
-});
-saveToDB(u1);
+//var d3 = new Date(2015,11,1);
+//var u1 = new user({
+//  login: "__login",
+//  name: "__name",
+//  type: "__type",
+//  avatar_url: "__avatar_url",
+//  html_url: "__html_url",
+//  language:[{
+//    language_id: '578f5381b9bfb2686dc9837b',
+//    level: -1
+//  }],
+//  application_id: ['578f5381b9bfb2686dc9837a'],
+//  email: "__email",
+//  star_num: -1,
+//  starred_num: -1,
+//  fork_num: -1,
+//  follower_num: -1,
+//  following_num: -1,
+//  subscription_num: -1,
+//  public_gist_num: -1,
+//  public_repo_num: -1,
+//  location: "__location",
+//  blog: "__blog",
+//  company: "__company",
+//  created_at: d3,
+//  star_repo_ids: ['578f5a75bfe1fb501c0f8035'],
+//  fork_repo_ids: ['578f5a75bfe1fb501c0f8035']
+//
+//});
+//saveToDB(u1);
 
 //var c4 = new kitten({ name: 'cat4', type: 'cat'});
 //c4.findSimilarTypes((err, res) => {
