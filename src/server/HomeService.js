@@ -6,20 +6,21 @@ import repoDataService from '../models/repositorySchema';
 import userDataService from '../models/userSchema';
 import languageService from '../models/languageSchema';
 
-export var getCountData = (userName) => {
+export var getCountData = (userName, callback) => {
   let data = {};
   userDataService
-    .findOne({name: userName})
+    .findOne({login: userName})
     .exec((err, user) => {
       if (err) {
         console.log('err occurs: '+err.message);
       }else {
-        data.followingCount = user.following;
-        data.followersCount = user.follower;
-        data.starredCount = user.starred;
+        data.followingCount = user.following_num;
+        data.followersCount = user.follower_num;
+        data.starredCount = user.starred_num;
+        callback(data);
       }
     });
-  return data;
+  //return data;
 };
 
 export var getLangListData = (userName) => {
