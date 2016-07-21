@@ -31,9 +31,21 @@ function saveToDB(ins){
   });
 }
 
+
+
 function log(res){
   console.log(res);
 }
+
+//user.find({'name':'user_name'},function(err,res){
+//  if (err) return console.log(err);
+//  console.log(res[0].fork);
+//});
+
+//user.findSimilarTypes((err,res) => {
+//  log(res);
+//});
+
 
 //tests
 //var c1 = new kitten({ name: 'cat1', type: 'cat'});
@@ -71,21 +83,34 @@ function log(res){
 //  avatar_url: 'avatar_url_test'
 //});
 //saveToDB(r1);
-
+var d3 = new Date(2015,11,1);
 var u1 = new user({
-  name: 'user_name',
+  login: "__login",
+  name: "__name",
+  type: "__type",
+  avatar_url: "__avatar_url",
+  html_url: "__html_url",
   language:[{
     language_id: '578f5381b9bfb2686dc9837b',
     level: -1
   }],
   application_id: ['578f5381b9bfb2686dc9837a'],
-  email: 'email_test',
-  starred: 0,
-  fork: 0,
-  follower: 0,
-  following: 0,
+  email: "__email",
+  star_num: -1,
+  starred_num: -1,
+  fork_num: -1,
+  follower_num: -1,
+  following_num: -1,
+  subscription_num: -1,
+  public_gist_num: -1,
+  public_repo_num: -1,
+  location: "__location",
+  blog: "__blog",
+  company: "__company",
+  created_at: d3,
   star_repo_ids: ['578f5a75bfe1fb501c0f8035'],
   fork_repo_ids: ['578f5a75bfe1fb501c0f8035']
+
 });
 saveToDB(u1);
 
