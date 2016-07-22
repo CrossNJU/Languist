@@ -5,6 +5,7 @@
 import repoDataService from '../models/repositorySchema';
 import userDataService from '../models/userSchema';
 import languageService from '../models/languageSchema';
+import {getRepoByUser} from './RecommendLogic_lang'
 
 export var getCountData = (userName, callback) => {
   let data = {};
@@ -14,16 +15,15 @@ export var getCountData = (userName, callback) => {
       if (err) {
         console.log('err occurs: '+err.message);
       }else {
-        data.followingCount = user.following_num;
-        data.followersCount = user.follower_num;
+        data.followingCount = user.followings_num;
+        data.followersCount = user.followers_num;
         data.starredCount = user.starred_num;
         callback(data);
       }
     });
-  //return data;
 };
 
-export var getLangListData = (userName) => {
+export var getLangListData = (userName, callback) => {
   let data = [];
   userDataService
     .findOne({name: userName})
@@ -38,12 +38,43 @@ export var getLangListData = (userName) => {
           });
         i ++;
       }
+      callback(data);
     });
-  return data;
 };
 
-export var getRepoListData = (userName, language) => {
-  let data = {};
+//let sample = {
+//  avatarUrl: '',
+//  owner: 'facebook',
+//  name: 'react',
+//  description: 'A declarative, efficient, and flexible JavaScript library for building user interfaces. https://facebook.github.io/react/',
+//  tags: [
+//    'JavaScript',
+//    'Framework'
+//  ],
+//  update: 'July 11, 2016',
+//  star: 2731
+//}
 
-  return data;
+function getRepoList(names,index,data,callback){
+  if (index>=names.length) callback(data);
+  else {
+    repoDataService.findOne({fullname: names[index]}, (err, repo) => {
+      let len = data.length;
+      data[len] = {
+        avatarUrl: '',
+        owner: repo.owner,
+        name: repo.fullname,
+        description: repo.description,
+        tags: repo.tags,
+        update: repo.update_time,
+        star: repo.star_num
+      }
+    });
+  }
+}
+
+export var getRepoListData = (userName, language, callback) => {
+  getRepoByUser(userName, language, (data) => {
+    getRepoList(data, 0, [], val => callback(val));
+  });
 };

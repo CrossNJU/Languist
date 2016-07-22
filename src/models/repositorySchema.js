@@ -17,21 +17,21 @@ var repositorySchema = schema({
   collaborators_num: Number,
   issue_num: Number,
   language_id: [schema.Types.ObjectId],
+  main_language: String,
   application_id: [schema.Types.ObjectId],
   description: String,
   url: String,
   create_time: Date,
   update_time: Date,
-  tag: [schema.Types.ObjectId],
+  tags: [String],
   avatar_url: String
-
 });
 
 //add instance methods
 repositorySchema.methods.findSimilarTypes = function(fc) {
-  return this.model('repositories').find({ type: this.type}, fc);
+  return this.model('repos').find({ type: this.type}, fc);
 };
 
 //make model and export
-var repository = mongoose.model('repository', repositorySchema);
-export default repository;
+var repo = mongoose.model('repo', repositorySchema);
+export default repo;

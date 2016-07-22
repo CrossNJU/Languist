@@ -31,7 +31,9 @@ var userSchema = schema({
   company: String,
   created_at: Date,
   star_repo_ids: [schema.Types.ObjectId],
-  fork_repo_ids: [schema.Types.ObjectId]
+  fork_repo_ids: [schema.Types.ObjectId],
+  star_repo_fullname: [String],
+  is_done: Boolean
 });
 
 
