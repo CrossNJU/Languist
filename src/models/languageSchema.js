@@ -8,6 +8,8 @@ var schema =  mongoose.Schema;
 //add schema
 var languageSchema = schema({
   name: String,
+  repo_num: Number,
+  user_num: Number,
   application_id: [ schema.Types.ObjectId]
 });
 

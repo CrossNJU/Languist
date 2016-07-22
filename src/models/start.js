@@ -9,6 +9,7 @@ import application from './applicationSchema'
 import repository from './repositorySchema'
 import tag from './tagSchema'
 import user from './userSchema'
+import userlanguage from './userlanguageSchema'
 var schema =  mongoose.Schema;
 
 mongoose.connect('mongodb://localhost/languistdb');
@@ -123,3 +124,51 @@ user.find({'name':'Jeremy Stephens'},function(err,res){
 //c4.findSimilarTypes((err, res) => {
 //  log(res);
 //});
+
+
+//language去除重复
+language.find().forEach(function(){
+  var lanName = this.name;
+  language.remove({"name":lanName});
+
+});
+
+
+//user.find({"star_num":{$gt:-1}}).forEach(function(){
+//  var login = this.login;
+//  userlanguage.find({"id":{$gt:-1}}).forEach(function(){
+//    var user_login = this.user_login;
+//    if (login == user_login){
+//      var lan = {
+//        language_id
+//      }
+//      this.language.put(lan);
+//    }
+//  });
+//});
+
+
+
+
+db.getCollection(tmp_coll).find({"value":{$gt:1}}).forEach(
+  function(obj) {
+    var cur = db.getCollection(coll).find(
+      {name:obj._id},
+      {_id:1}
+    );
+    var skip = true;
+    while(cur.hasNext()) {
+      var doc = cur.next();
+      if (skip) {
+        skip = false;
+        continue
+      }
+      db.getCollection(coll).remove(
+        {_id: doc._id});
+    }
+  }
+)
+
+db.getCollection(coll).ensureIndex({"sid":1},{unique:true})
+
+db.getCollection(tmp_coll).drop()
