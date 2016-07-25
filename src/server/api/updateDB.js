@@ -21,7 +21,7 @@ db.once('open', () => {
 });
 
 var t1 = new user({"login": "cr", "send": [], is_done: true});
-var test_code = 8;
+var test_code = 6;
 
 switch (test_code){
   case 1:{
@@ -77,16 +77,30 @@ switch (test_code){
     });
   }break;
   case 6:{
-    language.find({}, (err, langs)=>{
+    language.find({}, async (err, langs)=>{
+      let i = 0;
       for (let lang of langs){
+        i++;
+        console.log(lang.language+': '+i);
         //console.log(lang.language);
-        repo.find({main_language: lang.language}).sort({'star_num': -1}).limit(10)
-          .exec(function(err, posts) {
-            console.log(posts.length);
-            language.update({ language: lang.language}, {ranked_repo: posts}, (err, res) => {
+        //repo.find({main_language: lang.language}).sort({'star_num': -1}).limit(10)
+        //  .exec(function(err, posts) {
+        //    console.log(posts.length);
+        //    language.update({ language: lang.language}, {ranked_repo: posts}, (err, res) => {
+        //      console.log(res);
+        //    });
+        //  });
+        var res = await new Promise(function(resolve, reject){
+          language.update({ language: lang.language}, {test: i}, (err, res) => {
+            if (err){
+              reject(err);
+            }else {
               console.log(res);
-            });
+              resolve('success!');
+            }
           });
+        });
+        console.log(res);
       }
     })
   }break;

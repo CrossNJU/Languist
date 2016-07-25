@@ -10,7 +10,10 @@ var languageSchema = schema({
   language: String,
   repo_num: Number,
   user_num: Number,
-  application_id: [ schema.Types.ObjectId]
+  ranked_repo: [String],
+  application_id: [ schema.Types.ObjectId],
+
+  test: Number
 });
 
 //add instance methods
