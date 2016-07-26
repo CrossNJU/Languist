@@ -11,11 +11,9 @@ var client = github.client({
 function getUserStarred(login, page, array, callback) {
   let len = array.length;
   client.get('users/' + login + '/starred', {page: page, per_page: 100}, function (err, status, body, headers) {
-    if (body === undefined){
-      callback(undefined);
-    }else if (body.length == 0) {
+    if (body === undefined || body.length == 0){
       callback(array);
-    } else {
+    }else {
       for (let i = 0; i < body.length; i++) {
         let json = body[i];
         array[len] = json.full_name;
@@ -29,7 +27,7 @@ function getUserStarred(login, page, array, callback) {
 //getUserStarred('tricknotes', 1, [], (v) => {
 //  console.log('done!' + v[0]);
 //});
-//getUserStarred('RobertDober', 1, [], (v) => {
-//  console.log('done!'+v[0]);
+//getUserStarred('ChenDanni', 1, [], (v) => {
+//  console.log('done!'+ v);
 //});
 export {getUserStarred}

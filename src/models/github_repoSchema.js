@@ -24,7 +24,7 @@ var repositorySchema = schema({
   create_time: Date,
   update_time: Date,
   tags: [String],
-  avatar_url: String
+  avatar_url: String,
 });
 
 //add instance methods

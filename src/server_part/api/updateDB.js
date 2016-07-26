@@ -8,6 +8,7 @@ import userSchema from '../../models/userSchema'
 import language from '../../models/languageSchema'
 import repoSchema from '../../models/github_repoSchema'
 import {getUserStarred} from './User_github'
+import {getRepoInfo} from './Repo_github'
 
 mongoose.connect('mongodb://localhost/test');
 
@@ -22,7 +23,7 @@ db.once('open', () => {
 });
 
 var t1 = new github_userSchema({"login": "cr", "send": [], is_done: true});
-var test_code = 4;
+var test_code = 12;
 
 switch (test_code){
   case 1:{
@@ -147,6 +148,31 @@ switch (test_code){
       if (err) return console.error(err);
       console.log(res);
     });
+  }break;
+  case 12:{
+    repoSchema.find({}, async (err, repos) => {
+      for (let i=0;i<10;i++){
+        let repo = repos[i];
+        console.log(repo);
+        //await new Promise((resolve, reject) => {
+        //  getRepoInfo(repo.fullname, (repo_info) => {
+        //    var conditions = {fullname : repo.fullname };
+        //    var update     = {$set : {
+        //      owner: repo_info.owner.login,
+        //      avatar_url: repo_info.owner.avatar_url,
+        //      url: repo_info.html_url
+        //    }};
+        //    repoSchema.update(conditions, update, (err, res)=>{
+        //      if (err) reject(err);
+        //      else {
+        //        console.log(res);
+        //        resolve();
+        //      }
+        //    });
+        //  });
+        //});
+      }
+    })
   }break;
 }
 
