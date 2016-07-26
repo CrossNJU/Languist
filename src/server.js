@@ -23,6 +23,13 @@ import Router from './routes';
 import assets from './assets';
 import { port, auth, analytics } from './config';
 
+import {connect, disconnect} from './server_part/config'
+import {home, test_login} from './server_part/test/testController';
+import {saveUser} from './server_part/service/LoginService';
+import {getRepoListData, getCountData, getLangListData} from './server_part/service/HomeService'
+
+connect();
+
 const server = global.server = express();
 
 //
@@ -74,6 +81,29 @@ server.use('/graphql', expressGraphQL(req => ({
   rootValue: { request: req },
   pretty: process.env.NODE_ENV !== 'production',
 })));
+
+//login
+server.get('/test', (req, res)=>{
+  saveUser(req.query.code, (ress) => res.send(ress));
+});
+server.get('/test_login', test_login);
+
+//home
+server.get('/repoList', (req, res) => {
+  getRepoListData('cr', req.query.lang, call => {
+    res.send(call);
+  });
+});
+server.get('/count', (req, res) => {
+  getCountData(req.query.user, call => {
+    res.send(call);
+  });
+});
+server.get('/langList', (req, res) => {
+  getLangListData(req.query.user, call => {
+    res.send(call);
+  });
+});
 
 //
 // Register server-side rendering middleware

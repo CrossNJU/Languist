@@ -6,9 +6,9 @@ import mongoose from 'mongoose'
 //import kitten from './kittySchema'
 import language from './languageSchema'
 import application from './applicationSchema'
-import repository from './repositorySchema'
+import repository from './github_repoSchema'
 import tag from './tagSchema'
-import user from './userSchema'
+import user from './github_userSchema'
 import userlanguage from './userlanguageSchema'
 var schema =  mongoose.Schema;
 

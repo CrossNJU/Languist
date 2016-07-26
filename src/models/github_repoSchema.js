@@ -29,9 +29,9 @@ var repositorySchema = schema({
 
 //add instance methods
 repositorySchema.methods.findSimilarTypes = function(fc) {
-  return this.model('repos').find({ type: this.type}, fc);
+  return this.model('github_repo').find({ type: this.type}, fc);
 };
 
 //make model and export
-var repo = mongoose.model('repo', repositorySchema);
-export default repo;
+var repoSchema = mongoose.model('github_repo', repositorySchema);
+export default repoSchema;

@@ -7,7 +7,7 @@ export var home = (req, res) => {
   res.send('Hello world test');
 };
 
-export var test2 = (req, res) => {
+export var test_login = (req, res) => {
   res.send(
   `<!DOCTYPE html>
     <html lang="en">

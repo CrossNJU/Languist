@@ -26,6 +26,8 @@
     "jsonwebtoken": "5.7.0",
     "markdown-it": "6.0.0",
     "material-ui": "^0.15.2",
+    "mongodb": "^2.2.4",
+    "mongoose": "^4.5.7",
     "node-fetch": "1.3.3",
     "normalize.css": "3.0.3",
     "passport": "0.3.2",
@@ -37,6 +39,7 @@
     "react-routing": "0.0.7",
     "react-tap-event-plugin": "^1.0.0",
     "source-map-support": "0.4.0",
+    "superagent": "^2.1.0",
     "whatwg-fetch": "0.11.0"
   },
   "devDependencies": {

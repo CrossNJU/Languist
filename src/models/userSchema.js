@@ -1,4 +1,7 @@
 /**
+ * Created by raychen on 16/7/26.
+ */
+/**
  * Created by chendanni on 16/7/19.
  */
 
@@ -8,44 +11,30 @@ var schema =  mongoose.Schema;
 //add schema
 var userSchema = schema({
   login: String,
-  name: String,
-  type: String,
+  level: Number,
   avatar_url: String,
-  html_url: String,
-  language:[{
-    language_id: schema.Types.ObjectId,
-    level: Number
-  }],
-  application_id: [schema.Types.ObjectId],
-  email: String,
-  star_num: Number,
-  starred_num: Number,
-  fork_num: Number,
-  followers_num: Number,
-  followings_num: Number,
-  subscription_num: Number,
-  public_gist_num: Number,
-  public_repo_num: Number,
-  location: String,
-  blog: String,
+  type: String,
+  name: String,
   company: String,
-  created_at: Date,
-  star_repo_ids: [schema.Types.ObjectId],
-  fork_repo_ids: [schema.Types.ObjectId],
-  star_repo_fullname: [String],
-  is_done: Boolean
+  location: String,
+  email: String,
+  public_repos: Number,
+  public_gists: Number,
+  followers: Number,
+  following: Number,
+  created_at: String,
+  updated_at: String,
+  language: [{
+    lang_name: String,
+    lang_level: Number
+  }]
 });
 
-
-
 //add instance methods
-userSchema.methods.findSimilarTypes = function(fc) {
-  return this.model('user').find({ type: this.type}, fc);
-};
 
 //make model and export
-var user = mongoose.model('user', userSchema);
-export default user;
+var userSchema = mongoose.model('user', userSchema);
+export default userSchema;
 
 //user.methods.findUsers = function(fc){
 //    return find()

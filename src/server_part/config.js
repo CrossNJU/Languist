@@ -4,16 +4,24 @@
 
 import mongoose from 'mongoose'
 
-function connect_mongo(){
+function mon_conn(){
   mongoose.connect('mongodb://localhost/test');
   var db = mongoose.connection;
-  //test connection
+//test connection
   db.on('error', () => {
     console.log('connect error!');
   });
   db.once('open', () => {
-    console.log('connected to mongodb!');
+    console.log('connected!');
   });
 }
 
-export {connect_mongo}
+function mon_disconn(){
+  mongoose.disconnect((err)=>{
+    console.log('disconnect err');
+  });
+}
+
+export {
+  mon_conn as connect,
+  mon_disconn as disconnect}
