@@ -3,6 +3,7 @@
  */
 
 import userSchema from '../../models/userSchema'
+import {getUserStarred} from '../api/User_github'
 var superagent = require('superagent');
 
 var getAccessURL = 'https://github.com/login/oauth/access_token';
@@ -28,33 +29,43 @@ export var saveUser = (code, callback) => {
             return console.log(err);
           }
           let json = JSON.parse(ssres.text);
-          //console.log(ssres.text);
+          console.log(ssres.text);
           //insert new users
-          userSchema.findOne({ 'login': json.login }, function (err, person) {
-            if (err) return console.error(err);
-            if (person == null){
-              let new_user = new userSchema({
-                login: json.login,
-                avatar_url: json.avatar_url,
-                type: json.type,
-                name: json.name,
-                company: json.company,
-                location: json.location,
-                email: json.email,
-                public_repos: json.public_repos,
-                public_gists: json.public_gists,
-                followers: json.followers,
-                following: json.following,
-                created_at: json.created_at,
-                updated_at: json.updated_at,
-                level: 0,
-                language: []});
-              new_user.save((err, res) => {
-                if (err) return console.error(err);
-                callback(res);
-              })
-            }else {
-              callback(person);
+          var conditions = {login : json.login };
+          var update     = {$set : {
+            login: json.login,
+            avatar_url: json.avatar_url,
+            type: json.type,
+            name: json.name,
+            company: json.company,
+            location: json.location,
+            email: json.email,
+            public_repos: json.public_repos,
+            public_gists: json.public_gists,
+            followers: json.followers,
+            following: json.following,
+            created_at: json.created_at,
+            updated_at: json.updated_at,
+            star_num: -1,
+            star_repos: [],
+            level: 0,
+            language: []}
+          };
+          var options = {upsert : true};
+          userSchema.update(conditions, update, options, function(error, res){
+            if(error) {
+              return console.log(error);
+            } else {
+              getUserStarred(json.login, 1, [], (ret) => {
+                var conditions = {login : json.login };
+                var update     = {$set : {
+                  star_num: ret.length,
+                  star_repos: ret}
+                };
+                userSchema.update(conditions, update, (err, res2) => {
+                  callback(res2);
+                })
+              });
             }
           });
         });

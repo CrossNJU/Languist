@@ -26,7 +26,7 @@ import { port, auth, analytics } from './config';
 import {connect, disconnect} from './server_part/config'
 import {home, test_login} from './server_part/test/testController';
 import {saveUser} from './server_part/service/LoginService';
-import {getRepoListData, getCountData, getLangListData} from './server_part/service/HomeService'
+import {getRepoListData, getCountData, getLangListData, getCoverData} from './server_part/service/HomeService'
 
 connect();
 

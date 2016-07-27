@@ -24,10 +24,12 @@ var userSchema = schema({
   following: Number,
   created_at: String,
   updated_at: String,
+  star_num: Number,
   language: [{
     lang_name: String,
     lang_level: Number
-  }]
+  }],
+  star_repos: [String]
 });
 
 //add instance methods
