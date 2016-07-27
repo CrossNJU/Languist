@@ -14,17 +14,17 @@ var repositorySchema = schema({
   view_num: Number,
   subscriber_num: Number,
   contributor_num: Number,
-  collaborators_num: Number,
+  collaborator_num: Number,
   issue_num: Number,
-  language_id: [schema.Types.ObjectId],
-  main_language: String,
-  application_id: [schema.Types.ObjectId],
   description: String,
   url: String,
   create_time: Date,
   update_time: Date,
+  avatar_url: String,
   tags: [String],
-  avatar_url: String
+  application_id: [schema.Types.ObjectId],
+  language_id: [schema.Types.ObjectId],
+  main_language: String
 });
 
 //add instance methods
