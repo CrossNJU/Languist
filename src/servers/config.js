@@ -5,7 +5,7 @@
 import mongoose from 'mongoose'
 
 function mon_conn(){
-  mongoose.connect('mongodb://localhost/test');
+  mongoose.connect('mongodb://localhost/languist');
   var db = mongoose.connection;
 //test connection
   db.on('error', () => {

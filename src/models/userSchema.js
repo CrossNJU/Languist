@@ -1,9 +1,6 @@
 /**
  * Created by raychen on 16/7/26.
  */
-/**
- * Created by chendanni on 16/7/19.
- */
 
 import mongoose from 'mongoose'
 var schema =  mongoose.Schema;
@@ -32,12 +29,6 @@ var userSchema = schema({
   star_repos: [String]
 });
 
-//add instance methods
-
 //make model and export
 var userSchema = mongoose.model('user', userSchema);
-export default userSchema;
-
-//user.methods.findUsers = function(fc){
-//    return find()
-//};
+export {userSchema};

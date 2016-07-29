@@ -1,15 +1,13 @@
 /**
- * Created by raychen on 16/7/28.
+ * Created by chendanni on 16/7/19.
  */
 
 import mongoose from 'mongoose'
 var schema =  mongoose.Schema;
 
 //add schema
-var repo = schema({
+var my_repo = schema({
   full_name: String,
-  owner: String,
-  owner_avatar_url: String,
   description: String,
   url: String,
   clone_url: String,
@@ -17,18 +15,24 @@ var repo = schema({
   forks_count: Number,
   stars_count: Number,
   contributors_count: Number,
-  contributors: [String],
   collaborators_count: Number,
-  collaborators: [String],
   pullrequests_count: Number,
   issues_count: Number,
   size: Number,
   updated_at: Number,
   created_at: Number,
-  main_language: String,
-  languages: [String]
+  language: String,
+  score: Number,
+  is_language_fetched: Number,
+  is_contributor_fetched: Number,
+  is_collaborator_fetched: Number,
+  is_pullrequest_fetched: Number,
+  is_punch_fetched: Number,
+  is_issue_fetched: Number,
+  is_awe: Number,
+  is_watcher_fetched: Number
 });
 
 //make model and export
-var github_repoSchema = mongoose.model('github_repo', repo);
-export {github_repoSchema};
+var my_repoSchema = mongoose.model('my_repo', my_repo);
+export {my_repoSchema};

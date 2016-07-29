@@ -23,10 +23,10 @@ import Router from './routes';
 import assets from './assets';
 import { port, auth, analytics } from './config';
 
-import {connect, disconnect} from './server_part/config'
-import {home, test_login} from './server_part/test/testController';
-import {saveUser} from './server_part/service/LoginService';
-import {getRepoListData, getCountData, getLangListData, getCoverData} from './server_part/service/HomeService'
+import {connect, disconnect} from 'servers/config'
+import {home, test_login} from 'servers/test/testController';
+import {saveUser} from 'servers/service/LoginService';
+import {getRepoListData, getCountData, getLangListData, getCoverData} from 'servers/service/HomeService'
 
 connect();
 

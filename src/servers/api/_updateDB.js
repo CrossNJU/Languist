@@ -3,12 +3,12 @@
  */
 
 import mongoose from 'mongoose'
-import github_userSchema from '../../models/github_userSchema'
+import github_userSchema from '../../models/mysql-models/my_userSchema'
 import userSchema from '../../models/userSchema'
-import language from '../../models/languageSchema'
-import repoSchema from '../../models/github_repoSchema'
-import {getUserStarred} from './User_github'
-import {getRepoInfo} from './Repo_github'
+import language from '../../models/tests/_languageSchema'
+import repoSchema from '../../models/mysql-models/my_repoSchema'
+import {getUserStarred} from './github_user'
+import {getRepoInfo} from './github_repo'
 
 mongoose.connect('mongodb://localhost/test');
 
@@ -150,28 +150,48 @@ switch (test_code){
     });
   }break;
   case 12:{
-    repoSchema.find({}, async (err, repos) => {
-      for (let i=0;i<10;i++){
-        let repo = repos[i];
-        console.log(repo);
-        //await new Promise((resolve, reject) => {
-        //  getRepoInfo(repo.fullname, (repo_info) => {
-        //    var conditions = {fullname : repo.fullname };
-        //    var update     = {$set : {
-        //      owner: repo_info.owner.login,
-        //      avatar_url: repo_info.owner.avatar_url,
-        //      url: repo_info.html_url
-        //    }};
-        //    repoSchema.update(conditions, update, (err, res)=>{
-        //      if (err) reject(err);
-        //      else {
-        //        console.log(res);
-        //        resolve();
-        //      }
-        //    });
-        //  });
-        //});
-      }
+    //repoSchema.remove({fullname: ''}, (err, res)=>{console.log(res)});
+    //var q = repoSchema.find({}, 'fullname').sort({'star_num': -1}).limit(50000);
+    //q.exec(async (err, repos) => {
+    //  console.log(repos.length);
+    //  //for (let repo of repos){
+    //  //  if (repo.star_num === undefined){
+    //  //    await new Promise((resolve, reject) => {
+    //  //      repoSchema.update({ fullname: repo.fullname}, {star_num: 0}, (err, res) => {
+    //  //        if (err) return reject(err);
+    //  //        console.log(res);
+    //  //        console.log(repo.fullname);
+    //  //        resolve();
+    //  //      })
+    //  //    })
+    //  //  }
+    //  //}
+    //});
+    var q = repoSchema.find({c: undefined}, 'fullname').limit(10);
+    q.exec(async (err, repos) => {
+      console.log(repos.length);
+      //let len = repos.length;
+      //for (let i=0;i<len;i++){
+      //  let repo = repos[i];
+      //  console.log(repo);
+      //  await new Promise((resolve, reject) => {
+      //    getRepoInfo(repo.fullname, (repo_info) => {
+      //      var conditions = {fullname : repo.fullname };
+      //      var update     = {$set : {
+      //        owner: repo_info.owner.login,
+      //        avatar_url: repo_info.owner.avatar_url,
+      //        url: repo_info.html_url
+      //      }};
+      //      repoSchema.update(conditions, update, (err, res)=>{
+      //        if (err) reject(err);
+      //        else {
+      //          console.log(res);
+      //          resolve();
+      //        }
+      //      });
+      //    });
+      //  });
+      //}
     })
   }break;
 }

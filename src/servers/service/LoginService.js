@@ -3,7 +3,7 @@
  */
 
 import userSchema from '../../models/userSchema'
-import {getUserStarred} from '../api/User_github'
+import {getUserStarred} from '../api/github_user'
 var superagent = require('superagent');
 
 var getAccessURL = 'https://github.com/login/oauth/access_token';

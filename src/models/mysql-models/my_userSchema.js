@@ -1,12 +1,12 @@
 /**
- * Created by raychen on 16/7/28.
+ * Created by chendanni on 16/7/19.
  */
 
 import mongoose from 'mongoose'
 var schema =  mongoose.Schema;
 
 //add schema
-var github_user = schema({
+var my_user = schema({
   login: String,
   name: String,
   type: String,
@@ -14,6 +14,7 @@ var github_user = schema({
   html_url: String,
   followers_count: Number,
   followings_count: Number,
+  repo_score: Number,
   repo_star_count: Number,
   starred_count: Number,
   subscription_count: Number,
@@ -24,10 +25,18 @@ var github_user = schema({
   blog: String,
   company: String,
   create_at: Number,
-  repos: [String],
-  languages: [String]
+  score: Number,
+  is_repo_fetched: Number,
+  is_old: Number,
+  is_star_fetched: Number,
+  is_watch_fetched: Number
+
 });
 
 //make model and export
-var github_userSchema = mongoose.model('github_user', github_user);
-export {github_userSchema};
+var my_userSchema = mongoose.model('my_user', my_user);
+export {my_userSchema};
+
+//user.methods.findUsers = function(fc){
+//    return find()
+//};

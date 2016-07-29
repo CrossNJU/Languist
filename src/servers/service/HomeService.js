@@ -2,9 +2,9 @@
  * Created by raychen on 16/7/19.
  */
 
-import github_userSchema from '../../models/github_userSchema';
+import github_userSchema from '../../models/mysql-models/my_userSchema';
 import userSchema from '../../models/userSchema'
-import language from '../../models/languageSchema';
+import language from '../../models/tests/_languageSchema';
 import {getRepoByUser} from '../logic/RecommendLogic_lang'
 
 export var getCoverData = (userName, callback) => {
@@ -12,7 +12,7 @@ export var getCoverData = (userName, callback) => {
   let condition = {login: userName};
   userSchema.findOne(condition, (err, user)=> {
     data.avatar_url = user.avatar_url;
-    data.name = user.name;
+    data.name = user.login;
     data.langs = user.language.length;
     callback(data);
   });
