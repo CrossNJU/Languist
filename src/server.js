@@ -23,10 +23,10 @@ import Router from './routes';
 import assets from './assets';
 import { port, auth, analytics } from './config';
 
-import {connect, disconnect} from 'servers/config'
-import {home, test_login} from 'servers/test/testController';
-import {saveUser} from 'servers/service/LoginService';
-import {getRepoListData, getCountData, getLangListData, getCoverData} from 'servers/service/HomeService'
+import {connect, disconnect} from './servers/config'
+import {home, test_login} from './servers/test/testController';
+import {saveUser} from './servers/service/LoginService';
+import {getRepoListData, getCountData, getLangListData, getCoverData} from './servers/service/HomeService'
 
 connect();
 
@@ -101,6 +101,11 @@ server.get('/count', (req, res) => {
 });
 server.get('/langList', (req, res) => {
   getLangListData(req.query.user, call => {
+    res.send(call);
+  });
+});
+server.get('/cover', (req, res)=>{
+  getCoverData(req.query.user, call => {
     res.send(call);
   });
 });

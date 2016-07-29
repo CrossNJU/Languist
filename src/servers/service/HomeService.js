@@ -2,10 +2,11 @@
  * Created by raychen on 16/7/19.
  */
 
-import github_userSchema from '../../models/mysql-models/my_userSchema';
-import userSchema from '../../models/userSchema'
-import language from '../../models/tests/_languageSchema';
-import {getRepoByUser} from '../logic/RecommendLogic_lang'
+import {github_repoSchema} from '../../models/github_repoSchema';
+import {userSchema} from '../../models/userSchema'
+import {languageSchema} from '../../models/languageSchema';
+import {getRepoByUser} from '../logic/RecommendLogic_lang';
+import {transTime} from '../util/timeUtil'
 
 export var getCoverData = (userName, callback) => {
   let data = {};
@@ -53,7 +54,7 @@ export var getRepoListData = (userName, language, callback) => {
       for (let i=0;i<repos.length;i++){
         let full_name = repos[i];
         let repo_single = await new Promise((resolve, reject) => {
-          repoSchema.findOne({"fullname": full_name}, 'avatar_url description tags update_time star_num', (err, repo_sing) => {
+          github_repoSchema.findOne({"full_name": full_name}, (err, repo_sing) => {
             if (err){
               reject(err);
             }else {
@@ -61,14 +62,15 @@ export var getRepoListData = (userName, language, callback) => {
             }
           });
         });
+        let update_time = transTime(repo_single.updated_at);
         ans[i] = {
-          avatarUrl: repo_single.avatar_url,
+          avatarUrl: repo_single.owner_avatar_url,
           owner: repo_single.owner,
           name: full_name.split("/")[1],
           description: repo_single.description,
-          tags: repo_single.tags,
-          update: repo_single.update_time,
-          star: repo_single.star_num,
+          tags: repo_single.languages,
+          update: update_time,
+          star: repo_single.stars_count,
           url: repo_single.url
         };
       }

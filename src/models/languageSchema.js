@@ -8,7 +8,8 @@ var schema =  mongoose.Schema;
 var language = schema({
   language: String,
   repo_num: Number,
-  user_num: Number
+  user_num: Number,
+  ranked_repo: [String]
 });
 
 //make model and export

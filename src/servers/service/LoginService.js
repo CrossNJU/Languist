@@ -2,7 +2,7 @@
  * Created by raychen on 16/7/15.
  */
 
-import userSchema from '../../models/userSchema'
+import {userSchema} from '../../models/userSchema'
 import {getUserStarred} from '../api/github_user'
 var superagent = require('superagent');
 
