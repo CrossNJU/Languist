@@ -83,28 +83,31 @@ server.use('/graphql', expressGraphQL(req => ({
 })));
 
 //login
-server.get('/test', (req, res)=>{
-  saveUser(req.query.code, (ress) => res.send(ress));
+server.get('/api/login/success', (req, res)=>{
+  saveUser(req.query.code, (ress) => {
+    if (ress == 1) res.redirect('/home');
+    else res.redirect('/login');
+  });
 });
-server.get('/test_login', test_login);
+server.get('/api/test_login', test_login);
 
 //home
-server.get('/repoList', (req, res) => {
-  getRepoListData('cr', req.query.lang, call => {
+server.get('/api/home/repoList', (req, res) => {
+  getRepoListData(req.query.user, req.query.lang, call => {
     res.send(call);
   });
 });
-server.get('/count', (req, res) => {
+server.get('/api/home/count', (req, res) => {
   getCountData(req.query.user, call => {
     res.send(call);
   });
 });
-server.get('/langList', (req, res) => {
+server.get('/api/home/langList', (req, res) => {
   getLangListData(req.query.user, call => {
     res.send(call);
   });
 });
-server.get('/cover', (req, res)=>{
+server.get('/api/home/cover', (req, res)=>{
   getCoverData(req.query.user, call => {
     res.send(call);
   });

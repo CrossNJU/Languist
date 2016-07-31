@@ -16,10 +16,16 @@ export var saveUser = (code, callback) => {
     .end(function(err, sres){
       if (err) {
         console.log('err: ' + err);
+        callback(0);
         return;
       }
-      console.log(sres.body);
+      //console.log(sres.body);
       let access_token = sres.body.access_token;
+      if (access_token === undefined) {
+        console.log('undefined!');
+        callback(0);
+        return;
+      }
       superagent
         .get('https://api.github.com/user')
         .query({ access_token: access_token})
@@ -63,7 +69,7 @@ export var saveUser = (code, callback) => {
                   star_repos: ret}
                 };
                 userSchema.update(conditions, update, (err, res2) => {
-                  callback(res2);
+                  callback(1);
                 })
               });
             }
