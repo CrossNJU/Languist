@@ -5,13 +5,13 @@
 var github = require('octonode');
 //var client = github.client();
 
-var client = github.client({
-  username: 'RickChem',
-  password: 'cr112358132134'
-});
+var client = github.client();
 
-client.limit(function (err, left, max) {
-  console.log(left); // 4999
-  console.log(max);  // 5000
-});
+//client.limit(function (err, left, max) {
+//  console.log(left); // 4999
+//  console.log(max);  // 5000
+//});
 
+//client.get()
+
+export {client as auth_client}

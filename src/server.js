@@ -27,6 +27,7 @@ import {connect, disconnect} from './servers/config'
 import {home, test_login} from './servers/test/testController';
 import {saveUser} from './servers/service/LoginService';
 import {getRepoListData, getCountData, getLangListData, getCoverData} from './servers/service/HomeService'
+import {starRepo} from './servers/api/github_user'
 
 connect();
 
@@ -90,6 +91,14 @@ server.get('/api/login/success', (req, res)=>{
   });
 });
 server.get('/api/test_login', test_login);
+
+//star repo
+server.get('/api/repo/star', (req, res)=>{
+  starRepo(req.query.user, req.query.repo, resa => {
+    if (resa == 1) res.send("success");
+    else res.send("fail");
+  });
+});
 
 //home
 server.get('/api/home/repoList', (req, res) => {

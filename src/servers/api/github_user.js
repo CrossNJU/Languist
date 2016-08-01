@@ -2,6 +2,8 @@
  * Created by raychen on 16/7/21.
  */
 
+import {userSchema} from '../../models/userSchema'
+
 var github = require('octonode');
 var client = github.client({
   username: 'RickChem',
@@ -23,11 +25,36 @@ function getUserStarred(login, page, array, callback) {
     }
   });
 }
+
+function starRepo(login, repo, callback){
+  userSchema.findOne({login: login}, (err, user) => {
+    var auth_client = github.client(user.access_token);
+    var ghme = auth_client.me();
+    ghme.star(repo, (err, data, header) => {
+      if (err) callback(err);
+      else {
+        let starred = user.star_num;
+        let update = {
+          $set: {
+            star_num: starred + 1
+          },
+          $addToSet: {
+            star_repos: repo
+          }
+        };
+        userSchema.update({login: login}, update, (err, res) => {
+          callback(1);
+        });
+      }
+    });
+  });
+}
+
 //
 //getUserStarred('tricknotes', 1, [], (v) => {
 //  console.log('done!' + v[0]);
 //});
-//getUserStarred('ChenDanni', 1, [], (v) => {
-//  console.log('done!'+ v);
-//});
-export {getUserStarred}
+getUserStarred('ChenDanni', 1, [], (v) => {
+  console.log('done!'+ v);
+});
+export {getUserStarred, starRepo}

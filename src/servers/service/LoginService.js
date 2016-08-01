@@ -35,7 +35,7 @@ export var saveUser = (code, callback) => {
             return console.log(err);
           }
           let json = JSON.parse(ssres.text);
-          console.log(ssres.text);
+          //console.log(ssres.text);
           //insert new users
           var conditions = {login : json.login };
           var update     = {$set : {
@@ -55,13 +55,11 @@ export var saveUser = (code, callback) => {
             star_num: -1,
             star_repos: [],
             level: 0,
-            language: []}
+            language: [],
+            access_token: access_token}
           };
           var options = {upsert : true};
           userSchema.update(conditions, update, options, function(error, res){
-            if(error) {
-              return console.log(error);
-            } else {
               getUserStarred(json.login, 1, [], (ret) => {
                 var conditions = {login : json.login };
                 var update     = {$set : {
@@ -72,7 +70,6 @@ export var saveUser = (code, callback) => {
                   callback(1);
                 })
               });
-            }
           });
         });
     });

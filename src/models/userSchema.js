@@ -26,7 +26,8 @@ var userSchema = schema({
     lang_name: String,
     lang_level: Number
   }],
-  star_repos: [String]
+  star_repos: [String],
+  access_token: String
 });
 
 //make model and export

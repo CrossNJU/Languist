@@ -16,7 +16,7 @@ export var test_login = (req, res) => {
     <title>Title</title>
     </head>
     <body>
-      <a href='https://github.com/login/oauth/authorize?client_id=d310933db63d64f563a0'>test</a>
+      <a href='https://github.com/login/oauth/authorize?scope=user%20public_repo&client_id=d310933db63d64f563a0'>test</a>
     </body>
     </html>
     `);
