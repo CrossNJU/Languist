@@ -40,6 +40,7 @@ export var getLangListData = (userName, callback) => {
   userSchema.findOne(condition, (err, user)=>{
     let langs = user.language;
     for (let i=0;i<langs.length;i++){
+      data[i] = {};
       data[i].name = langs[i].lang_name;
       data[i].level = langs[i].lang_level;
     }

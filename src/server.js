@@ -122,6 +122,8 @@ server.get('/api/home/cover', (req, res)=>{
     res.send(call);
   });
 });
+
+//get current user
 server.get('/api/current_user', (req, res) => {
   getCurrentUser(rest => {
     res.send(rest);
