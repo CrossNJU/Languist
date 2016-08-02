@@ -25,8 +25,9 @@ import { port, auth, analytics } from './config';
 
 import {connect, disconnect} from './servers/config'
 import {home, test_login} from './servers/test/testController';
-import {saveUser} from './servers/service/LoginService';
+import {saveUser, getCurrentUser} from './servers/service/LoginService';
 import {getRepoListData, getCountData, getLangListData, getCoverData} from './servers/service/HomeService'
+import {addLang} from './servers/service/LanguageService'
 import {starRepo} from './servers/api/github_user'
 
 connect();
@@ -119,6 +120,19 @@ server.get('/api/home/langList', (req, res) => {
 server.get('/api/home/cover', (req, res)=>{
   getCoverData(req.query.user, call => {
     res.send(call);
+  });
+});
+server.get('/api/current_user', (req, res) => {
+  getCurrentUser(rest => {
+    res.send(rest);
+  })
+});
+
+//choose language
+server.get('/api/lang/choose', (req, res) => {
+  addLang(req.query.login, req.query.lang, req.query.level, ret => {
+    if (ret == 1) res.send('success');
+    else res.send('fail');
   });
 });
 

@@ -3,10 +3,17 @@
  */
 
 import {userSchema} from '../../models/userSchema'
+import {globalSchema} from '../../models/globalSchema'
 import {getUserStarred} from '../api/github_user'
 var superagent = require('superagent');
 
 var getAccessURL = 'https://github.com/login/oauth/access_token';
+
+function getCurrentUser(callback){
+  globalSchema.findOne({global_num: 1}, (err, glo) => {
+    callback(glo.current_user);
+  });
+}
 
 export var saveUser = (code, callback) => {
   superagent
@@ -67,10 +74,14 @@ export var saveUser = (code, callback) => {
                   star_repos: ret}
                 };
                 userSchema.update(conditions, update, (err, res2) => {
-                  callback(1);
+                  globalSchema.update({global_num: 1}, {current_user: json.login}, {upsert: true}, (err, res) => {
+                    callback(1);
+                  })
                 })
               });
           });
         });
     });
 };
+
+export {getCurrentUser}

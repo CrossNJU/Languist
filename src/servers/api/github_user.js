@@ -54,7 +54,7 @@ function starRepo(login, repo, callback){
 //getUserStarred('tricknotes', 1, [], (v) => {
 //  console.log('done!' + v[0]);
 //});
-getUserStarred('ChenDanni', 1, [], (v) => {
-  console.log('done!'+ v);
-});
+//getUserStarred('ChenDanni', 1, [], (v) => {
+//  console.log('done!'+ v);
+//});
 export {getUserStarred, starRepo}
