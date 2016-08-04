@@ -121,11 +121,20 @@ class RepoItem extends Component {
 }
 
 class RepoList extends Component {
+  constructor(props) {
+    super(props);
+  }
   renderRepos() {
-    let repos = repoData.map(repo => {
-      return (<RepoItem key={repo.owner + repo.name} repo={repo} />);
-    });
-    return repos;
+    console.log(JSON.parse(JSON.stringify(this.props.data)));
+    repoData = this.props.data;
+    if (repoData.length > 0) {
+      let repos = repoData.map(repo => {
+        return (<RepoItem key={repo.owner + repo.name} repo={repo} />);
+      });
+      return repos;
+    } else {
+      return (<div>Loading...</div>);
+    }
   };
 
   render() {

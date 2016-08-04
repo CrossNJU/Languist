@@ -9,12 +9,13 @@ import s from './Count.scss';
 import Paper from 'material-ui/Paper';
 
 class Count extends Component {
+  constructor(props) {
+    super(props);
+    console.log('constructor');
+  }
   render() {
-    let data = {
-      followingCount: 6,
-      followersCount: 12,
-      starredCount: 32
-    };
+    console.log('render Count');
+    const data = this.props.data;
     return (
       <Paper className={s.container}>
         <div className={s.item}>

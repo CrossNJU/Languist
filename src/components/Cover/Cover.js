@@ -10,15 +10,19 @@ import Paper from 'material-ui/Paper';
 import Avatar from 'material-ui/Avatar';
 
 class Cover extends Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
+    const data = this.props.data;
     return (
       <Paper>
         <div className={s.root}>
           <div className={s.container}>
-            <Avatar src={require('./avatar-default.png')} size={112} className={s.avatar}/>
+            <Avatar src={data.avatar_url} size={112} className={s.avatar}/>
             <div className={s.text}>
-              <h1>Polaris Chen</h1>
-              <p>8 Languages</p>
+              <h1>{data.name}</h1>
+              <p>{data.langs} Languages</p>
             </div>
           </div>
         </div>

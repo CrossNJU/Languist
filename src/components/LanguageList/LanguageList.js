@@ -21,7 +21,7 @@ class LanguageItem extends Component {
           <div className={s.text}>{this.props.lang.name}</div>
           <div className={s.level}>
             {[...Array(this.props.lang.level)].map((x, i) =>
-              <img src={require('./logo-s@2x.png')} width="18" />
+              <img src={require('./logo-s@2x.png')} key={i} width="18" />
             )}
           </div>
         </div>
@@ -58,14 +58,22 @@ let langData = [
 ];
 
 class LanguageList extends Component {
+  constructor(props) {
+    super(props);
+  }
   renderLanguages() {
-    let languages = langData.map(language => {
-      return <LanguageItem key={language.name} lang={language} />;
-    });
-    return languages;
+    console.log(JSON.parse(JSON.stringify(this.props.data)));
+    langData = this.props.data;
+    if (langData.length > 0) { 
+      let languages = langData.map(language => {
+        return <LanguageItem key={language.name} lang={language} />;
+      });
+      return languages;
+    } else {
+      return (<div>Loading...</div>);
+    }
   }
   render() {
-
     return (
       <Paper className={s.container}>
         <List>
