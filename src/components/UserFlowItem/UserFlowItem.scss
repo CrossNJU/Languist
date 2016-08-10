@@ -1,0 +1,26 @@
+
+@import '../variables.scss';
+
+.root {
+
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  max-width: $max-content-width;
+}
+
+.item {
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+  padding: 10px 0 18px;
+}
+
+
+.tags {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}

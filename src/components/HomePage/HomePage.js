@@ -15,6 +15,7 @@ import Cover from '../Cover';
 import Count from '../Count';
 import LanguageList from '../LanguageList';
 import RepoList from '../RepoList';
+import UserFlowItem from '../UserFlowItem';
 
 const title = 'Home';
 
@@ -106,6 +107,20 @@ class HomePage extends Component {
   }
 
   render() {
+    let userData = {
+      avatarUrl: '',
+      login: 'PolarisChen',
+      name: 'Polaris Chen',
+      bio: 'A developer',
+      url: 'http://bus1996.me',
+      langs: [
+        'JavaScript',
+        'CSS'
+      ],
+      join: 'July 11, 2016',
+      location: 'Nanjing, China',
+      followers: 12
+    }
     console.log('render HomePage');
     return (
       <div className="HomePage">
@@ -118,6 +133,7 @@ class HomePage extends Component {
             </div>
             <div className={s.main}>
               <RepoList data={this.state.repoList} />
+              <UserFlowItem user={userData}/>
             </div>
           </div>
         </div>
