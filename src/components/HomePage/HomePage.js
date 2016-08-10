@@ -16,6 +16,7 @@ import Count from '../Count';
 import LanguageList from '../LanguageList';
 import RepoList from '../RepoList';
 import UserFlowItem from '../UserFlowItem';
+import LangFlowItem from '../LangFlowItem';
 
 const title = 'Home';
 
@@ -121,6 +122,10 @@ class HomePage extends Component {
       location: 'Nanjing, China',
       followers: 12
     }
+    let langData = {
+      name: 'JavaScript',
+      description: 'A popular programming language for front-end development.'
+    }
     console.log('render HomePage');
     return (
       <div className="HomePage">
@@ -134,6 +139,7 @@ class HomePage extends Component {
             <div className={s.main}>
               <RepoList data={this.state.repoList} />
               <UserFlowItem user={userData}/>
+              <LangFlowItem lang={langData}/>
             </div>
           </div>
         </div>

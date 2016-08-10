@@ -23,7 +23,7 @@ const styles = {
     color: '#666'
   },
   actions: {
-    marginLeft: 12,
+    marginLeft: 10,
   }
 };
 
@@ -63,7 +63,7 @@ class UserFlowItem extends Component {
             }
           </div>
         </CardText>
-        <CardActions style={{marginLeft: 12, paddingTop: 16, paddingBottom: 6}}>
+        <CardActions style={{marginLeft: 10, paddingTop: 16, paddingBottom: 6}}>
           <RaisedButton
             icon={<PersonAdd />}
             label={'Follow (' + this.props.user.followers + ')'}
@@ -76,32 +76,6 @@ class UserFlowItem extends Component {
             onTouchTap={this.handleReduce} />
         </CardActions>
       </Card>
-    );
-  }
-}
-
-class RepoList extends Component {
-  constructor(props) {
-    super(props);
-  }
-  renderRepos() {
-    console.log(JSON.parse(JSON.stringify(this.props.data)));
-    repoData = this.props.data;
-    if (repoData.length > 0) {
-      let repos = repoData.map(repo => {
-        return (<RepoItem key={repo.owner + repo.name} repo={repo} />);
-      });
-      return repos;
-    } else {
-      return (<div>Loading...</div>);
-    }
-  };
-
-  render() {
-    return (
-      <div className={s.container}>
-        {this.renderRepos()}
-      </div>
     );
   }
 }
