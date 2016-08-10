@@ -15,8 +15,7 @@ import Cover from '../Cover';
 import Count from '../Count';
 import LanguageList from '../LanguageList';
 import RepoList from '../RepoList';
-import UserFlowItem from '../UserFlowItem';
-import LangFlowItem from '../LangFlowItem';
+import FlowList from '../FlowList';
 
 const title = 'Home';
 
@@ -35,6 +34,7 @@ class HomePage extends Component {
         langs: 0
       },
       repoList: [],
+      flowList: [],
       langList: []
     };
     console.log('constructor');
@@ -91,6 +91,16 @@ class HomePage extends Component {
       console.error(url, status, err.toString());
     }).bind(this));
 
+    // Get flowList
+    // url = '/api/home/flowList?user=' + user;
+    // $.ajax(url)
+    // .done(((data) => {
+    //   this.setState({flowList: data});
+    // }).bind(this))
+    // .fail(((xhr, status, err) => {
+    //   console.error(url, status, err.toString());
+    // }).bind(this));
+
     // Get langList
     url = '/api/home/langList?user=' + user;
     $.ajax(url)
@@ -108,24 +118,6 @@ class HomePage extends Component {
   }
 
   render() {
-    let userData = {
-      avatarUrl: '',
-      login: 'PolarisChen',
-      name: 'Polaris Chen',
-      bio: 'A developer',
-      url: 'http://bus1996.me',
-      langs: [
-        'JavaScript',
-        'CSS'
-      ],
-      join: 'July 11, 2016',
-      location: 'Nanjing, China',
-      followers: 12
-    }
-    let langData = {
-      name: 'JavaScript',
-      description: 'A popular programming language for front-end development.'
-    }
     console.log('render HomePage');
     return (
       <div className="HomePage">
@@ -138,15 +130,13 @@ class HomePage extends Component {
             </div>
             <div className={s.main}>
               <RepoList data={this.state.repoList} />
-              <UserFlowItem user={userData}/>
-              <LangFlowItem lang={langData}/>
+              <FlowList data={this.state.flowList} />
             </div>
           </div>
         </div>
       </div>
     );
   }
-
 }
 
 export default withStyles(HomePage, s);
