@@ -1,0 +1,39 @@
+
+@import '../variables.scss';
+
+.root {
+
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  max-width: $max-content-width;
+}
+
+.item {
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+  padding: 14px 16px;
+  .text {
+    flex-basis: 0;
+    flex-grow: 1;
+    .title {
+      color: $primary-color;
+      font-size: 16px;
+      font-weight: 400;
+    }
+    .subtitle {
+      font-size: 12px;
+      font-weight: 300;
+      color: #666;
+    }
+  }
+  .action {
+    flex-basis: 1;
+    flex-grow: auto;
+  }
+}
+
+
