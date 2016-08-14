@@ -10,13 +10,13 @@
 @import '../variables.scss';
 
 .root {
-  background: $brand-color;
+  background: $primary-color;
   color: #fff;
 }
 
 .container {
   margin: 0 auto;
-  padding: 6px 0 10px;
+  padding: 14px 0;
   max-width: $max-content-width;
 }
 

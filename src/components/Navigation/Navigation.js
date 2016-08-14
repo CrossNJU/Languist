@@ -13,6 +13,8 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Navigation.scss';
 import Link from '../Link';
 
+import FlatButton from 'material-ui/FlatButton';
+
 class Navigation extends Component {
 
   static propTypes = {
@@ -31,8 +33,8 @@ class Navigation extends Component {
     } else {
       return (
         <div className={cx(s.root, this.props.className)} role="navigation">
-          <Link className={s.link} to="/login">Log in</Link>
-          <Link className={cx(s.link, s.highlight)} to="/register">Sign up</Link>
+          <Link className={s.link} to="/login">LOG IN</Link>
+          <Link className={s.link} to="/register">SIGN UP WITH GITHUB</Link>
         </div>
       );
     };

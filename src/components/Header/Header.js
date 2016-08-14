@@ -19,16 +19,14 @@ class Header extends Component {
 
   render() {
     return (
-      <Paper>
-        <div className={s.root}>
-          <div className={s.container}>
-            <Navigation className={s.nav} />
-            <Link className={s.brand} to="/">
-              <img src={require('./logo-brand@2x.png')} height="32" alt="Languist" />
-            </Link>
-          </div>
+      <div className={s.root}>
+        <div className={s.container}>
+          <Navigation className={s.nav} />
+          <Link className={s.brand} to="/">
+            <img src={require('./logo-brand-text@2x.png')} height="32" alt="Languist" />
+          </Link>
         </div>
-      </Paper>
+      </div>
     );
   }
 

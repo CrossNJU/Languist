@@ -16,17 +16,15 @@ class Cover extends Component {
   render() {
     const data = this.props.data;
     return (
-      <Paper>
-        <div className={s.root}>
-          <div className={s.container}>
-            <Avatar src={data.avatar_url} size={112} className={s.avatar}/>
-            <div className={s.text}>
-              <h1>{data.name}</h1>
-              <p>{data.langs} Languages</p>
-            </div>
+      <div className={s.root}>
+        <div className={s.container}>
+          <Avatar src={data.avatar_url} size={112} className={s.avatar}/>
+          <div className={s.text}>
+            <h1>{data.name}</h1>
+            <p>{data.langs} Languages</p>
           </div>
         </div>
-      </Paper>
+      </div>
     );
   }
 }
