@@ -1,0 +1,25 @@
+
+@import '../variables.scss';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  max-width: $max-content-width;
+}
+
+.item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 20px;
+  padding: 14px 16px;
+  .text {
+    flex-basis: 0;
+    flex-grow: 1;
+    padding-left: 12px;
+    font-size: 18px;
+    color: #666;
+  }
+}
+
+
