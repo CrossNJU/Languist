@@ -11,13 +11,19 @@ import Avatar from 'material-ui/Avatar';
 import List from 'material-ui/List/List';
 import ListItem from 'material-ui/List/ListItem';
 import RaisedButton from 'material-ui/RaisedButton';
+import CircularProgress from 'material-ui/CircularProgress';
+
+const listItemStyle = {
+  paddingTop: '8px',
+  paddingBottom: '8px'
+}
 
 class LanguageItem extends Component {
   render() {
     return (
-      <ListItem innerDivStyle={{paddingTop: '8px', paddingBottom: '8px'}}>
+      <ListItem innerDivStyle={listItemStyle}>
         <div className={s.item}>
-          <Avatar src={require('./avatar-default-s.png')} size={36} className={s.avatar}/>
+          <Avatar src={require('./avatar-default-s.png')} size={36} className={s.avatar} />
           <div className={s.text}>{this.props.lang.name}</div>
           <div className={s.level}>
             {[...Array(this.props.lang.level)].map((x, i) =>
@@ -70,7 +76,14 @@ class LanguageList extends Component {
       });
       return languages;
     } else {
-      return (<div>Loading...</div>);
+      return (
+        <ListItem innerDivStyle={listItemStyle} disabled={true}>
+          <div className={s.item}>
+            <CircularProgress size={0.6} />
+            <div className={s.text}>Loading languages...</div>
+          </div>
+        </ListItem>
+      );
     }
   }
   render() {
