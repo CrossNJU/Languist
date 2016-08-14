@@ -9,21 +9,37 @@ import s from './UserFlowItem.scss';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import Chip from 'material-ui/Chip';
-import Toggle from 'material-ui/Toggle';
-import FontIcon from 'material-ui/FontIcon';
 
 import PersonAdd from 'material-ui/svg-icons/social/person-add';
 import PersonOutline from 'material-ui/svg-icons/social/person-outline';
-import LinkIcon from 'material-ui/svg-icons/content/link';
 
 const styles = {
-  chip: {
+  title: {
+    fontSize: '16px',
+    color: '#74C2CE'
+  },
+  subtitle: {
     fontSize: '12px',
     fontWeight: 300,
     color: '#666'
   },
-  actions: {
+  chipLabel: {
+    fontSize: '12px',
+    fontWeight: 300,
+    color: '#666'
+  },
+  chip: {
+    marginRight: 6,
+    marginBottom: 6
+  },
+  cardText: {
+    paddingTop: 6,
+    paddingBottom: 6
+  },
+  cardActions: {
     marginLeft: 10,
+    paddingTop: 16,
+    paddingBottom: 6
   }
 };
 
@@ -37,23 +53,23 @@ class UserFlowItem extends Component {
       <Card className={s.item}>
         <CardHeader
           title={this.props.user.name + ' (' + this.props.user.login + ')'}
-          titleStyle={{color: '#74C2CE', fontSize: '16px'}}
+          titleStyle={styles.title}
           subtitle={subtitle}
-          subtitleStyle={{fontSize: '12px', fontWeight: 300, color: '#666'}}
+          subtitleStyle={styles.subtitle}
           avatar={require('./avatar-default-s.png')}
         />
-        <CardText style={{paddingTop: 6, paddingBottom: 6}}>
+        <CardText style={styles.cardText}>
           {this.props.user.bio}
         </CardText>
-        <CardText style={{paddingTop: 6, paddingBottom: 6}}>
+        <CardText style={styles.cardText}>
           <div className={s.tags}>
             {
               this.props.user.langs.map((lang, i) => {
                 return (
                   <Chip
                     key={i}
-                    labelStyle={styles.chip}
-                    style={{marginRight: 6, marginBottom: 6}}
+                    labelStyle={styles.chipLabel}
+                    style={styles.chip}
                     onTouchTap={this.handleTouchTap}
                   >
                     {lang}
@@ -63,7 +79,7 @@ class UserFlowItem extends Component {
             }
           </div>
         </CardText>
-        <CardActions style={{marginLeft: 10, paddingTop: 16, paddingBottom: 6}}>
+        <CardActions style={styles.cardActions}>
           <RaisedButton
             icon={<PersonAdd />}
             label={'Follow (' + this.props.user.followers + ')'}
