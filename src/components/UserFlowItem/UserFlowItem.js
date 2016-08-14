@@ -83,7 +83,7 @@ class UserFlowItem extends Component {
           <RaisedButton
             icon={<PersonAdd />}
             label={'Follow (' + this.props.user.followers + ')'}
-            primary={true}
+            secondary={true}
             onTouchTap={this.handleExpand} />
           <RaisedButton
             icon={<PersonOutline />}

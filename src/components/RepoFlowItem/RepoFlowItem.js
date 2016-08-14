@@ -80,7 +80,7 @@ class RepoFlowItem extends Component {
           <RaisedButton
             icon={<Star />}
             label={'Star (' + this.props.repo.star + ')'}
-            primary={true}
+            secondary={true}
             onTouchTap={this.handleExpand} />
           <RaisedButton
             icon={<Code />}
