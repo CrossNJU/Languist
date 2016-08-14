@@ -18,7 +18,7 @@ class Cover extends Component {
     return (
       <div className={s.root}>
         <div className={s.container}>
-          <Avatar src={data.avatar_url} size={112} className={s.avatar}/>
+          <Avatar src={data.avatar_url || require('./avatar-default.png')} size={112} className={s.avatar}/>
           <div className={s.text}>
             <h1>{data.name}</h1>
             <p>{data.langs} Languages</p>
