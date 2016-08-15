@@ -19,12 +19,15 @@ import RegisterPage from './components/RegisterPage';
 import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
 import LanguagePage from './components/LanguagePage';
+import IndexPage from './components/IndexPage';
 
 const router = new Router(on => {
   on('*', async (state, next) => {
     const component = await next();
     return component && <App context={state.context}>{component}</App>;
   });
+
+  on('/index', async () => <IndexPage/>);
 
   on('/home', async () => <HomePage />);
 
