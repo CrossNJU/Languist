@@ -25,8 +25,8 @@ import { port, auth, analytics } from './config';
 
 import {connect, disconnect} from './servers/config'
 import {home, test_login} from './servers/test/testController';
-import {saveUser, getCurrentUser} from './servers/service/LoginService';
-import {getRepoListData, getCountData, getLangListData, getCoverData} from './servers/service/HomeService'
+import {saveUser, getCurrentUser, login, register} from './servers/service/LoginService';
+import {getFlowListData, getCountData, getLangListData, getCoverData} from './servers/service/HomeService'
 import {addLang} from './servers/service/LanguageService'
 import {starRepo} from './servers/api/github_user'
 
@@ -87,11 +87,29 @@ server.use('/graphql', expressGraphQL(req => ({
 //login
 server.get('/api/login/success', (req, res)=>{
   saveUser(req.query.code, (ress) => {
-    if (ress == 1) res.redirect('/home');
+    if (ress == 1) {
+      res.redirect('/register');
+    }
     else res.redirect('/login');
   });
 });
 server.get('/api/test_login', test_login);
+server.get('/api/login', (req, res) => {
+  login(req.query.username, req.query.password, (res2) => {
+    if (res2 == 1) {
+      res.send("success");
+    }else
+      res.send(res2);
+  })
+});
+server.get('/api/register', (req, res) => {
+  register(req.query.username, req.query.password, (res2) => {
+    if (res2 == 1) {
+      res.send("success");
+    }else
+      res.send(res2);
+  })
+});
 
 //star repo
 server.get('/api/repo/star', (req, res)=>{
@@ -102,8 +120,8 @@ server.get('/api/repo/star', (req, res)=>{
 });
 
 //home
-server.get('/api/home/repoList', (req, res) => {
-  getRepoListData(req.query.user, req.query.lang, call => {
+server.get('/api/home/flowList', (req, res) => {
+  getFlowListData(req.query.user, req.query.lang, call => {
     res.send(call);
   });
 });

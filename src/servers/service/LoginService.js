@@ -15,6 +15,30 @@ function getCurrentUser(callback){
   });
 }
 
+function login(username, password, callback){
+  userSchema.findOne({login: username}, (err, user) => {
+    if (user == null) callback("no such user!");
+    else {
+      if (user.password == password) callback(1);
+      else if (user.password === undefined) callback("password not set yet!");
+      else callback("password error!");
+    }
+  });
+}
+
+function register(username, password, callback){
+  var conditions = {login : username };
+  var update     = {$set : {
+    password: password}
+  };
+  userSchema.update(conditions, update, (err, res) => {
+    if (err) callback(err);
+    else {
+      callback(1);
+    }
+  })
+}
+
 export var saveUser = (code, callback) => {
   superagent
     .post(getAccessURL)
@@ -84,4 +108,4 @@ export var saveUser = (code, callback) => {
     });
 };
 
-export {getCurrentUser}
+export {getCurrentUser, login, register}

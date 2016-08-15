@@ -7,7 +7,7 @@ import express from 'express';
 import {connect, disconnect} from './config'
 import {home, test_login} from './test/testController';
 import {saveUser} from './service/LoginService';
-import {getRepoListData, getCountData, getLangListData} from './service/HomeService'
+import {getFlowListData, getCountData, getLangListData} from './service/HomeService'
 
 var server = express();
 
@@ -18,7 +18,7 @@ server.get('/test', saveUser);
 server.get('/test_login', test_login);
 
 server.get('/repoList', (req, res) => {
-  getRepoListData('cr', req.query.lang, call => {
+  getFlowListData('cr', req.query.lang, call => {
     res.send(call);
   });
 });

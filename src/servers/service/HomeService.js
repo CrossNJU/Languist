@@ -48,7 +48,7 @@ export var getLangListData = (userName, callback) => {
   });
 };
 
-export var getRepoListData = (userName, language, callback) => {
+export var getFlowListData = (userName, language, callback) => {
   getRepoByUser(userName, language, async (repos) => {
     let ans = [];
     if (repos.length > 0){
@@ -65,6 +65,7 @@ export var getRepoListData = (userName, language, callback) => {
         });
         let update_time = transTime(repo_single.updated_at);
         ans[i] = {
+          //type:
           avatarUrl: repo_single.owner_avatar_url,
           owner: repo_single.owner,
           name: full_name.split("/")[1],
