@@ -1,0 +1,136 @@
+/**
+ * React Starter Kit (https://www.reactstarterkit.com/)
+ *
+ * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
+
+@import '../variables.scss';
+
+p, h1, h2, h3 {
+  margin: 0;
+  font-weight: normal;
+  color: $gray
+}
+
+.root {
+  background: $background-color;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: $primary-color;
+}
+
+.content_1 {
+  padding-top: 87px;
+  padding-bottom: 127px;
+
+  .title {
+    font-size: 72px;
+    color: $white-color;
+    margin-bottom: 48px;
+  }
+
+  .article p {
+    font-size: 24px;
+    color: $white-color;
+    line-height: 120%;
+    font-weight: lighter;
+    text-align: center;
+  }
+}
+
+.content_2 {
+  background-color: $background-color;
+  padding-top: 125px;
+  padding-bottom: 111px;
+
+  .title {
+    font-size: 36px;
+    color: $primary-color;
+  }
+
+  .content_2__main {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 59px;
+
+    .TagList {
+      width: 308px;
+      margin-top: 28px;
+
+      p {
+        font-size: 18px;
+      }
+    }
+
+    .sumTag__main {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+
+      .IconList {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        margin-bottom: 22px;
+      }
+
+      p {
+        font-size: 18px;
+        line-height: 120%;
+        width: 210px;
+        text-align: center;
+      }
+    }
+
+
+  }
+}
+
+.content_3 {
+  background-color: $white-color;
+  padding: 95px 0 146px 0;
+
+  .title {
+    font-size: 36px;
+    color: $primary-color;
+    margin-bottom: 61px;
+  }
+
+  .memberIconList {
+    margin-bottom: 15px;
+  }
+
+  p {
+    font-size: 18px;
+    line-height: 120%;
+    margin-bottom: 37px;
+  }
+
+  h3 {
+    font-size: 22px;
+    color: $primary-color;
+
+  }
+}
+
+
+.content_4 {
+  padding: 166px 0 163px 0;
+
+  p {
+    font-size: 36px;
+    margin-bottom: 61px;
+    color: $white-color
+  }
+}
