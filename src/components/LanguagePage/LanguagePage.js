@@ -10,23 +10,7 @@ import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 
-let langData = [
-  {
-    name: "JavaScript",
-    isSelected: false,
-    repoNum: 4000000
-  },
-  {
-    name: "C++",
-    isSelected: true,
-    repoNum: 2131200
-  },
-  {
-    name: "Java",
-    isSelected: false,
-    repoNum: 2100000
-  }
-];
+
 
 class LanguagePage extends Component {
   render() {
@@ -40,7 +24,7 @@ class LanguagePage extends Component {
                        inputStyle={{padding: '0 16px', boxSizing: 'border-box'}}
                        hintStyle={{padding: '0 16px'}}
             />
-            <LangList langData={langData}/>
+            <LangList/>
             <div className={s.btn__group}>
               <RaisedButton label="DONE" primary={true}/>
               <RaisedButton label="CANCEL"/>
