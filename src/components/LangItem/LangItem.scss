@@ -1,0 +1,40 @@
+
+@import '../variables.scss';
+@import 'normalize.css';
+
+.root {
+
+}
+
+.lang__list__item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .lang__list__item__left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-basis: 0;
+    flex-grow: 1;
+
+    .lang__name {
+      color: $primary-color;
+      margin-left: 10px;
+    }
+  }
+
+  .lang__list__item__right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-basis: auto;
+    flex-grow: 0;
+  }
+
+}
+.lang__questions {
+  padding: 16px;
+  background: $gray-lighter;
+}
+
