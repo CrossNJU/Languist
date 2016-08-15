@@ -1,0 +1,22 @@
+
+@import '../variables.scss';
+@import 'normalize.css';
+
+
+.question__wrapper {
+  .question__title {
+    font-weight: lighter;
+    font-size: 1.25em;
+  }
+  .options__wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    &>div {
+      margin-right:2em;
+    }
+  }
+}
+
+
