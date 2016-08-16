@@ -16,6 +16,13 @@ function mon_conn(){
   });
 }
 
+function mon_disconn(){
+  mongoose.disconnect((err)=>{
+    console.log('disconnect err');
+  });
+}
+
+//**
 function mon_conn2(callback){
   mongoose.connect('mongodb://localhost/languist');
   var db = mongoose.connection;
@@ -27,12 +34,6 @@ function mon_conn2(callback){
   db.once('open', () => {
     console.log('connected!');
     callback(1);
-  });
-}
-
-function mon_disconn(){
-  mongoose.disconnect((err)=>{
-    console.log('disconnect err');
   });
 }
 

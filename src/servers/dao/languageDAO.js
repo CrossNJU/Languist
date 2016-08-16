@@ -24,7 +24,7 @@ async function getLanguageByUser(login){
           name: user_lang.lang_name,
           level: user_lang.lang_level,
           tag: lang_det.tags,
-          size: (lang_det.repo_num+lang_det.user_num)/2
+          //size: (lang_det.repo_num+lang_det.user_num)/2
         });
       }
       resolve(ans);
@@ -37,19 +37,26 @@ async function getLanguageByTag(tag){
   let promise = await new Promise(function(resolve, reject){
     languageSchema.find({tags: tag}, (err, res) => {
       if (err) reject(err);
-      resolve(res);
+      let ans = [];
+      for (let lang of res) {
+        ans.push(lang.language);
+      }
+      resolve(ans);
     })
   });
   return promise;
 }
 
-async function getLanguageByName(langNames){
+async function getLanguageSize(langName){
   let promise = await new Promise(function(resolve, reject){
-    languageSchema.findOne()
+    languageSchema.findOne({language: langName}, (err, lang) => {
+      if (err) reject(err);
+      resolve(lang.repo_num);
+    });
   });
+  return promise;
 }
-
-export {getLanguageByUser}
+export {getLanguageByUser, getLanguageSize, getLanguageByTag}
 
 async function test(){
   connect();
@@ -58,4 +65,4 @@ async function test(){
   console.log(t);
 }
 
-test();
+//test();
