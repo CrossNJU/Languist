@@ -23,8 +23,8 @@ var repo = schema({
   pullrequests_count: Number,
   issues_count: Number,
   size: Number,
-  updated_at: Number,
-  created_at: Number,
+  updated_at: String,
+  created_at: String,
   main_language: String,
   languages: [String]
 });

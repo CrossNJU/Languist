@@ -4,10 +4,10 @@
 
 import {connect, disconnect} from '../../servers/config'
 import {create_user,user_language,user_language_syn} from '../table_ops/table_user'
-import {create_repo,repo_avatar,repo_language} from '../table_ops/table_repo'
+import {create_repo,repo_avatar,repo_language, repo_recover} from '../table_ops/table_repo'
 import {create_language,language_rankedRepo, language_tags} from '../table_ops/table_language'
 
-let test_code = 9;
+let test_code = 10;
 connect();
 
 switch (test_code) {
@@ -50,5 +50,8 @@ switch (test_code) {
     break;
   case 9:
     language_tags();
+    break;
+  case 10:
+    repo_recover();
     break;
 }

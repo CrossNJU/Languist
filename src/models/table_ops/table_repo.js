@@ -80,8 +80,44 @@ function updateRepoLanguage() {
   });
 }
 
+function updateRepoRecover() {
+  const cursor0 = github_repoSchema.find({contributors_count:-1}).cursor();
+  cursor0.on('data', (doc0) => {
+    const cursor = my_joinlanguageSchema.find({repo_full_name: doc0.full_name}).cursor();
+    cursor.on('data', (doc) => {
+      let conditions = {full_name: doc.repo_full_name};
+      let update = {
+        $addToSet: {
+          languages: doc.language
+        }
+      };
+      github_repoSchema.update(conditions, update, (err, res) => {
+        console.log(doc.id);
+      });
+    });
+    my_repoSchema.findOne({full_name: doc0.full_name}, (err, my_repo) => {
+      if (my_repo != null){
+        let update = {
+          $set:{
+            subscribers_count: my_repo.subscribers_count,
+            contributors_count: my_repo.contributors_count,
+            contributors: [],
+            collaborators_count: my_repo.collaborators_count,
+            collaborators: [],
+            pullrequests_count: my_repo.pullrequests_count
+          }
+        };
+        github_repoSchema.update({full_name: doc0.full_name}, update, (err, ress) =>{
+          console.log(ress);
+        })
+      }
+    })
+  });
+}
+
 export {
   createRepoFromMysql as create_repo,
   updateRepoAvatar as repo_avatar,
-  updateRepoLanguage as repo_language
+  updateRepoLanguage as repo_language,
+  updateRepoRecover as repo_recover,
 }
