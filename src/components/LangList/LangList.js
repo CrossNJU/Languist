@@ -8,42 +8,79 @@ import s from './LangList.scss';
 
 import List from "material-ui/List/List";
 import LangItem from '../LangItem';
+import RaisedButton from 'material-ui/RaisedButton';
+import $ from 'jquery';
 
-let langData = [
-  {
-    name: "JavaScript",
-    isSelected: false,
-    repoNum: 4000000
-  },
-  {
-    name: "C++",
-    isSelected: true,
-    repoNum: 2131200
-  },
-  {
-    name: "Java",
-    isSelected: false,
-    repoNum: 2100000
-  }
-];
 
 class LangList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      langData: props.langData
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let langData = nextProps.langData.map((lang) => {
+      return {
+        name: lang.name,
+        isSelected: false,
+        level: 0
+      }
+    });
+
+    this.setState({
+      langData: langData
+    });
+  }
+
+  handleSubmit() {
+    let langs = this.state.langData;
+    console.log(langs);
+    langs = langs.filter((lang) => {
+      return lang.isSelected;
+    });
+    langs.forEach((lang) => {
+      $.ajax('api/lang/choose', {async: false, data: {lang:lang.name, level: lang.level, login: this.props.user}})
+        .done((function (message) {
+          console.log('choose ' + lang.name + " " + message);
+        }));
+    });
+  }
+
+  handleChange(lang) {
+    let langData = this.state.langData;
+    langData.forEach((l, index) => {
+      if(l.name == lang.name) {
+        langData[index] = lang;
+      }
+    });
+    this.setState({langData: langData});
+
+  }
+
   renderLanguage() {
-    return langData.map(lang => {
+    return this.props.langData.map(lang => {
       return (
-        <LangItem lang={lang}/>
+        <LangItem key={lang.name + "Item"} lang={lang} ref={lang.name} handleChange={this.handleChange.bind(this)}/>
       )
-    })
+    });
   }
 
   render() {
     return (
-      <List className={s.root}
-            style={{padding:'0px'}}>
-        {this.renderLanguage()}
-      </List>
+      <div className={s.root}>
+        <List style={{padding:'0px'}}>
+          {this.renderLanguage()}
+        </List>
+        <div className={s.btn__group}>
+          <RaisedButton label="DONE" primary={true} onClick={this.handleSubmit.bind(this)}/>
+          <RaisedButton label="CANCEL"/>
+        </div>
+      </div>
     )
   }
+
 }
 
 export default withStyles(LangList, s);

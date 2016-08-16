@@ -16,19 +16,19 @@ let questionData1 = {
   options: [
     {
       option: "I've just started",
-      value: 0
+      value: "0"
     },
     {
       option: "I've developed 1~2 JavaScript projects",
-      value: 1
+      value: "1"
     },
     {
       option: "I've developed 3~5 JavaScript projects",
-      value: 2
+      value: "2"
     },
     {
       option: "I am quite experienced in JavaScript",
-      value: 3
+      value: "3"
     }
   ]
 };
@@ -39,19 +39,19 @@ let questionData2 = {
   options: [
     {
       option: "Web applications",
-      value: 0
+      value: '0'
     },
     {
       option: "Desktop applications",
-      value: 1
+      value: '1'
     },
     {
       option: "Data process",
-      value: 2
+      value: '2'
     },
     {
       option: "Algorithm",
-      value: 3
+      value: '3'
     }
   ]
 };
@@ -59,16 +59,24 @@ let questionData2 = {
 class LangItem extends Component {
   constructor(props) {
     super(props);
-    this.state = {isSelected: this.props.lang.isSelected};
+    this.state = {
+      // isSelected: this.props.lang.isSelected
+      isSelected: false,
+      level: 0
+    };
   }
 
-  handClick() {
-    if (!this.refs.toggle.state.switched) {
-      this.setState({isSelected: true});
-    } else {
-      this.setState({isSelected: false});
-    }
+  handleClick() {
+    let isSelected = (!this.refs.toggle.state.switched);
+    this.setState({isSelected: isSelected});
+    this.props.handleChange({name: this.props.lang.name, isSelected: isSelected, level: this.state.level})
   };
+
+  handleQuestion(level) {
+    this.setState({level: level});
+    console.log(level);
+    this.props.handleChange({name: this.props.lang.name, isSelected: this.state.isSelected, level: level})
+  }
 
   render() {
     return (
@@ -81,16 +89,16 @@ class LangItem extends Component {
                       label={this.props.lang.name}
                       labelPosition="right"
                       defaultToggled={this.state.isSelected}
-                      onToggle={this.handClick.bind(this)}/>
+                      onToggle={this.handleClick.bind(this)}/>
             </div>
             <div className={s['lang__list__item__right']}>
               <img src={require('./logo-s@2x.png')}/>
-              <p>{this.props.lang.repoNum}</p>
+              <p>{this.props.lang.repos}</p>
             </div>
           </div>
         </ListItem>
         <div className={s.lang__questions} ref="question" style={{display: this.state.isSelected?"block":"none"}}>
-          <LangQuestion question={questionData1}/>
+          <LangQuestion question={questionData1} onChoose={this.handleQuestion.bind(this)}/>
           <LangQuestion question={questionData2}/>
         </div>
       </div>

@@ -10,6 +10,12 @@ import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import Checkbox from 'material-ui/Checkbox';
 
 class LangQuestion extends Component {
+  handleChoose(event, value) {
+    if(this.props.question.type == 'radio'){
+      this.props.onChoose(value);
+    }
+  }
+
   renderOptions(type) {
     if(!this.props.question.options) {
       return null;
@@ -23,7 +29,7 @@ class LangQuestion extends Component {
           value={option.value}
           label={option.option}
           labelStyle={{width: 'auto'}}
-          style={{width:'auto', color: "color(black lightness(+13.5%))"}}/>
+          style={{width:'auto'}}/>
       );
     })
   }
@@ -34,7 +40,7 @@ class LangQuestion extends Component {
     return (
       <div className={s.question__wrapper}>
         <h1 className={s.question__title}>{this.props.question.question}</h1>
-        <ButtonGroup className={s.options__wrapper} name={this.props.question.question} defaultSelected="not_light">
+        <ButtonGroup className={s.options__wrapper} name={this.props.question.question} defaultSelected={"0"} ref="group" onChange={this.handleChoose.bind(this)}>
           {this.renderOptions(this.props.question.type)}
         </ButtonGroup>
       </div>
