@@ -66,8 +66,8 @@ function getSortFun(order, sortBy) {
 //user_tags{
 // tag : num,tag:num
 // }
-function get_user_tag(login){
-  let user_langs = getLanguageByUser(login);
+async function get_user_tag(login){
+  let user_langs = await getLanguageByUser(login);
   //console.log(user_langs[0]["tag"]);
   let user_tags = {};
   let tags_sort = [];
@@ -98,7 +98,7 @@ function get_user_tag(login){
   return tags_sort;
 }
 
-function get_rec_languages(login){
+async function get_rec_languages(login){
   let lang_info = [];
 
   user_langs = await getLanguageByUser(login);
@@ -110,7 +110,7 @@ function get_rec_languages(login){
   for (let i = 0;i < user_tags.length;i++){
     //console.log(user_tags[i]);
     let tag = user_tags[i];
-    let temp_langs = getLanguageByTag(tag['name']);
+    let temp_langs = await getLanguageByTag(tag['name']);
     let tag_count = tag['count'];
     for (let j = 0;j < temp_langs.length;j++){
       let key = temp_langs[j]['name']; //language name
@@ -139,7 +139,7 @@ function get_rec_languages(login){
   for (let key in lang_count){
     let temp_lang = {
       name: key,
-      score: lang_count[key] + getLanguageSize(key)/5000
+      score: lang_count[key] + await getLanguageSize(key)/5000
     };
     lang_info.push(temp_lang);
   }
