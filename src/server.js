@@ -23,11 +23,15 @@ import Router from './routes';
 import assets from './assets';
 import { port, auth, analytics } from './config';
 
+//config and test
 import {connect, disconnect} from './servers/config'
 import {home, test_login} from './servers/test/testController';
+//services
 import {saveUser, getCurrentUser, login, register} from './servers/service/LoginService';
 import {getFlowListData, getCountData, getLangListData, getCoverData} from './servers/service/HomeService'
-import {addLang} from './servers/service/LanguageService'
+import {addLang, getAllLanguage} from './servers/service/LanguageService'
+import {} from './servers/service/UserService'
+//others
 import {starRepo} from './servers/api/github_user'
 
 connect();
@@ -84,7 +88,7 @@ server.use('/graphql', expressGraphQL(req => ({
   pretty: process.env.NODE_ENV !== 'production',
 })));
 
-//login
+//login and register
 server.get('/api/login/success', (req, res)=>{
   saveUser(req.query.code, (ress) => {
     if (ress == 1) {
@@ -93,7 +97,6 @@ server.get('/api/login/success', (req, res)=>{
     else res.redirect('/login');
   });
 });
-server.get('/api/test_login', test_login);
 server.get('/api/login', (req, res) => {
   login(req.query.username, req.query.password, (res2) => {
     if (res2 == 1) {
@@ -110,6 +113,7 @@ server.get('/api/register', (req, res) => {
       res.send(res2);
   })
 });
+server.get('/api/test_login', test_login);
 
 //star repo
 server.get('/api/repo/star', (req, res)=>{
@@ -154,6 +158,11 @@ server.get('/api/lang/choose', (req, res) => {
     if (ret == 1) res.send('success');
     else res.send('fail');
   });
+});
+server.get('/api/language/all', (req, res) => {
+  getAllLanguage((langs) => {
+    res.send(langs);
+  })
 });
 
 //

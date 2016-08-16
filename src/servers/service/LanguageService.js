@@ -19,5 +19,16 @@ function chooseLanguage(login, language, level, callback){
   })
 }
 
-export {chooseLanguage as addLang}
+function getAllLanguage(callback){
+  var q = languageSchema.find({}).sort({'repo_num': -1}).limit(15);
+  q.exec((err, langs) => {
+    let lang_names = [];
+    for (let lang of langs){
+      lang_names.push(lang.language);
+    }
+    callback(lang_names);
+  });
+}
+
+export {chooseLanguage as addLang, getAllLanguage}
 

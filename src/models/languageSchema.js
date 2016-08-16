@@ -9,7 +9,8 @@ var language = schema({
   language: String,
   repo_num: Number,
   user_num: Number,
-  ranked_repo: [String]
+  ranked_repo: [String],
+  tags: [String]
 });
 
 //make model and export

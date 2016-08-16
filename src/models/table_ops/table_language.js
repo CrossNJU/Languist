@@ -3,6 +3,7 @@
  */
 
 import {my_languageSchema} from '../mysql-models/my_languageSchema'
+import {my_languagetagSchema} from '../mysql-models/my_languagetag'
 import {github_repoSchema} from '../github_repoSchema'
 import {languageSchema} from '../languageSchema'
 
@@ -44,7 +45,30 @@ function updateLanguageRankedRepo(){
   });
 }
 
+function updateLanguageTags(){
+  const cursor = languageSchema.find({}).cursor();
+  cursor.on('data', doc => {
+    var q = my_languagetagSchema.find({language: doc.language});
+    q.exec((err, tags) => {
+      let tag_names = [];
+      for (let tag of tags) {
+        tag_names.push(tag.tag_name);
+      }
+      let update = {
+        $set: {
+          tags: tag_names
+        }
+      };
+      let condition = {language: doc.language};
+      languageSchema.update(condition, update, (err, res) =>{
+        console.log(doc.language);
+      });
+    })
+  });
+}
+
 export {
   createFromMysql as create_language,
-  updateLanguageRankedRepo as language_rankedRepo
+  updateLanguageRankedRepo as language_rankedRepo,
+  updateLanguageTags as language_tags
 }
