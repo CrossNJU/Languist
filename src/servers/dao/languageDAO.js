@@ -24,7 +24,7 @@ async function getLanguageByUser(login){
           name: user_lang.lang_name,
           level: user_lang.lang_level,
           tag: lang_det.tags,
-          //size: (lang_det.repo_num+lang_det.user_num)/2
+          size: lang_det.repo_num
         });
       }
       resolve(ans);
@@ -39,7 +39,7 @@ async function getLanguageByTag(tag){
       if (err) reject(err);
       let ans = [];
       for (let lang of res) {
-        ans.push(lang.language);
+        ans.push({name:lang.language});
       }
       resolve(ans);
     })
@@ -60,9 +60,9 @@ export {getLanguageByUser, getLanguageSize, getLanguageByTag}
 
 async function test(){
   connect();
-  let t = await getLanguageByTag("Functional");
+  let t = await getLanguageByTag("Object-oriented");
   //let a = {"tt":{a:1, b:2}};
   console.log(t);
 }
 
-//test();
+test();

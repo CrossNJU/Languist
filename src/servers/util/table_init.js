@@ -20,5 +20,17 @@ function addOneToUser(){
   });
 }
 
+function modifyUser(){
+  let condition = {login: "RickChem"};
+  let update = {
+    $set: {
+      language: [{lang_name: "Java", lang_level: 2}]
+    }
+  };
+  userSchema.update(condition, update, (err, res) => {
+    console.log(res);
+  });
+}
+
 connect();
-addOneToUser();
+modifyUser();

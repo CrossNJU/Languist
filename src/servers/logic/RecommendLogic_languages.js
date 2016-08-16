@@ -3,7 +3,6 @@
  */
 
 import {getLanguageByUser} from '../dao/languageDAO'
-import {getLanguageByUser} from '../dao/languageDAO'
 import {getLanguageByTag} from '../dao/languageDAO'
 import {getLanguageSize} from '../dao/languageDAO'
 import {connect} from '../config'
@@ -160,9 +159,10 @@ async function get_rec_languages(login){
 
   }
 
-  //console.log(rec_langs);
+  console.log(rec_langs);
 
   return rec_langs;
 }
 
-get_rec_languages('test');
+connect();
+get_rec_languages('RickChem');
