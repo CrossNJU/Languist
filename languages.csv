@@ -1,0 +1,252 @@
+language,repo_num,user_num,ranked_repo,tags
+Ruby,1031648,323036,"[""rails/rails"",""Homebrew/legacy-homebrew"",""jekyll/jekyll"",""discourse/discourse"",""plataformatec/devise"",""cantino/huginn"",""mitchellh/vagrant"",""diaspora/diaspora"",""ruby/ruby"",""Thibaut/devdocs""]","[""Object-oriented"",""Functional"",""Imperative"",""Scripting"",""Server""]"
+Perl,116402,27437,"[""sitaramc/gitolite"",""so-fancy/diff-so-fancy"",""Jack000/Expose"",""major/MySQLTuner-perl"",""sarabander/sicp-pdf"",""kraih/mojo"",""openresty/nginx-tutorials"",""nbs-system/naxsi"",""alexrj/Slic3r"",""thoughtbot/rcm""]","[""Object-oriented"",""Imperative"",""Scripting"",""Procedural"",""Science""]"
+Go,128094,24320,"[""golang/go"",""getlantern/lantern"",""kubernetes/kubernetes"",""avelino/awesome-go"",""astaxie/build-web-application-with-golang"",""google/cayley"",""github/hub"",""astaxie/beego"",""cockroachdb/cockroach"",""drone/drone""]","[""Imperative"",""Concurrent""]"
+R,147432,101557,"[""hadley/ggplot2"",""hadley/devtools"",""hadley/plyr"",""hadley/testthat"",""slowkow/ggrepel"",""hadley/r4ds"",""hadley/lubridate"",""rasmusab/bayesian_first_aid"",""daattali/addinslist"",""hadley/multidplyr""]","[""Functional"",""Interactive mode"",""Scripting"",""Science""]"
+PHP,890610,415650,"[""laravel/laravel"",""bcit-ci/CodeIgniter"",""symfony/symfony"",""domnikl/DesignPatternsPHP"",""fzaninotto/Faker"",""yiisoft/yii2"",""composer/composer"",""WordPress/WordPress"",""roots/sage"",""phacility/phabricator""]","[""Object-oriented"",""Imperative"",""Procedural"",""Scripting"",""Web Application"",""Server"",""Website""]"
+Shell,366373,91251,"[""robbyrussell/oh-my-zsh"",""nvie/gitflow"",""dokku/dokku"",""creationix/nvm"",""xdissent/ievms"",""tj/git-extras"",""rbenv/rbenv"",""sorin-ionescu/prezto"",""boot2docker/boot2docker"",""babun/babun""]",[]
+HTML,881296,268947,"[""FortAwesome/Font-Awesome"",""necolas/normalize.css"",""google/material-design-lite"",""harvesthq/chosen"",""ariya/phantomjs"",""Prinzhorn/skrollr"",""Polymer/polymer"",""google/web-starter-kit"",""ftlabs/fastclick"",""madrobby/zepto""]","[""Website"",""Web Application""]"
+CoffeeScript,60554,15898,"[""jashkenas/coffeescript"",""michaelvillar/dynamics.js"",""philc/vimium"",""Leonidas-from-XIV/node-xml2js"",""oskarkrawczyk/heyoffline.js"",""twilson63/express-coffee"",""sstephenson/xipd"",""jinzhu/vrome"",""netzpirat/haml-coffee"",""jashkenas/journo""]","[""Website""]"
+Scala,71319,19839,"[""twitter/kestrel"",""twitter/flockdb"",""sbt/sbt"",""scalatra/scalatra"",""slick/slick"",""scalanlp/breeze"",""ensime/ensime-server"",""vkostyukov/scalacaster"",""unfiltered/unfiltered"",""squeryl/squeryl""]","[""Object-oriented"",""Functional"",""Procedural"",""Concurrent""]"
+JavaScript,2300661,869448,"[""FreeCodeCamp/FreeCodeCamp"",""d3/d3"",""angular/angular.js"",""jquery/jquery"",""airbnb/javascript"",""meteor/meteor"",""h5bp/html5-boilerplate"",""hakimel/reveal.js"",""impress/impress.js"",""moment/moment""]","[""Object-oriented"",""Functional"",""Procedural"",""Scripting"",""Website"",""Web Application"",""Server""]"
+Cucumber,660,186,"[""rejeep/wrap-region.el"",""awendt/poet"",""p0deje/yard-doctest"",""geeksam/poker-dice"",""charleseff/git-blame-game"",""everzet/laraconeu15-shop"",""drewda/gavel"",""atipugin/middleman-blog"",""fukayatsu/middleman-gemoji"",""aslakhellesoy/autocomplete-demo""]",[]
+ApacheConf,12386,3011,"[""h5bp/html5boilerplate.com"",""hellvinz/goredis"",""scy/universe"",""tomasAlabes/JamesBondEffect"",""ankit8898/octopart-api"",""d11wtq/apache-docker"",""arthurgouveia/youRepeat"",""Paxa/pg_cluster"",""antage/docker-apache2-php5"",""shadowhand/mithril-bootstrap-starter""]",[]
+C,504077,244499,"[""torvalds/linux"",""antirez/redis"",""git/git"",""firehol/netdata"",""SamyPesse/How-to-Make-a-Computer-Operating-System"",""kripken/emscripten"",""php/php-src"",""ggreer/the_silver_searcher"",""wg/wrk"",""julycoding/The-Art-Of-Programming-By-July""]","[""Procedural"",""Imperative"",""Server""]"
+Java,2032690,880710,"[""facebook/react-native"",""elastic/elasticsearch"",""ReactiveX/RxJava"",""square/retrofit"",""nostra13/Android-Universal-Image-Loader"",""square/okhttp"",""iluwatar/java-design-patterns"",""google/iosched"",""futurice/android-best-practices"",""square/picasso""]","[""Object-oriented"",""Functional"",""Imperative"",""Concurrent"",""Mobile Application"",""Website"",""Web Application"",""Game"",""Server""]"
+PowerShell,22632,9616,"[""dahlbyk/posh-git"",""psake/psake"",""mwrock/packer-templates"",""JeremySkinner/posh-hg"",""JamesKovacs/psake"",""enricosada/fsharp-dotnet-cli-samples"",""jonnii/BuildDeploySupport"",""PProvost/AssertEx"",""JeremySkinner/posh-svn"",""loudej/WheresLouSamples""]",[]
+Tcl,3754,1122,"[""zdia/gorilla"",""AE9RB/ruby-redis"",""antirez/partitions"",""flightaware/yajl-tcl"",""antirez/recidiv"",""minad/3delta"",""flightaware/speedtables"",""Raimondi/scid"",""bovine/tclws"",""jadeforrest/Tcl-Map-Reduce""]","[""Scripting"",""Procedural"",""Object-oriented""]"
+CSS,722198,329524,"[""twbs/bootstrap"",""daneden/animate.css"",""google/material-design-icons"",""FezVrasta/bootstrap-material-design"",""numbbbbb/the-swift-programming-language-in-chinese"",""sahat/hackathon-starter"",""IanLunn/Hover"",""twbs/ratchet"",""dhg/Skeleton"",""tobiasahlin/SpinKit""]","[""Website"",""Web Application""]"
+Python,1107494,421789,"[""vinta/awesome-python"",""pallets/flask"",""nvbn/thefuck"",""kennethreitz/requests"",""rg3/youtube-dl"",""mitsuhiko/flask"",""certbot/certbot"",""scrapy/scrapy"",""josephmisiti/awesome-machine-learning"",""scikit-learn/scikit-learn""]","[""Object-oriented"",""Functional"",""Imperative"",""Procedural"",""Scripting"",""Website"",""Server"",""Web Application"",""Game""]"
+C++,593342,274425,"[""electron/electron"",""apple/swift"",""nwjs/nw.js"",""tensorflow/tensorflow"",""rethinkdb/rethinkdb"",""facebook/hhvm"",""textmate/textmate"",""BVLC/caffe"",""Itseez/opencv"",""google/protobuf""]","[""Object-oriented"",""Functional"",""Imperative"",""Procedural"",""Server"",""Game""]"
+Smarty,2063,395,"[""mitchellh/boot2docker-vagrant-box"",""bobtfish/terraform-aws-coreos-kubernates-cluster"",""arpunk/rebar3_lfe_templates"",""frankdejonge/vagrant-nginx-loadbalancing"",""codekitchen/boot2docker-vagrant-box"",""SteveEdson/dev-env"",""clach04/OpenROAD_proxygen"",""NotBobTheBuilder/docs"",""phinze/terraform-issues"",""jacques/common-smarty-templates""]",[]
+Groff,5576,1934,"[""frdmn/init.js"",""fanf2/nsnotifyd"",""troydm/mymalloc"",""jneen/clojure-west-2015-slides"",""denisarnaud/fedorareviews"",""DarthGandalf/ircv3-specifications"",""ddrown/wwvb"",""somasis/arbor"",""muratayusuke/yasnippet-ruby-mode"",""ntalbott/riak_test_server""]",[]
+QMake,520,157,"[""jmesmon/qmake-protobuf-example"",""c3d/tao-stereo-decoder""]",[]
+Groovy,26145,14742,"[""chrisbanes/gradle-mvn-push"",""gaelyk/gaelyk"",""grails/grails-doc"",""grails-plugins/grails-spring-security-core"",""grails/grails-gradle-plugin"",""x2on/gradle-hockeyapp-plugin"",""kobo/groovyserv"",""textmate/groovy.tmbundle"",""x2on/gradle-spoon-plugin"",""Grails-Plugin-Consortium/grails-cxf""]","[""Functional"",""Imperative"",""Interactive mode"",""Scripting""]"
+ASP,15241,5666,"[""kneath/nightfire"",""stephenmcd/aspchat"",""RyanNielson/ludum-dare-31"",""oskarb/RDSFactor"",""theill/conquerrss"",""theill/conquersms"",""theill/conquermarks"",""egh/SpaceShooterGame"",""chadmyers/ManagerPants"",""unixmonkey/RollABall""]",[]
+Batchfile,6410,1698,"[""inkarkat/runVimTests"",""speartail/wpkg"",""malev/conda-phantomjs"",""fumiyas/windows-hack"",""Infocatcher/Addons_Recent_Updates"",""titusfortner/windows-selenium-dev-setup"",""JasonGhent/vagrantfile-windows-iis-mssql"",""pinya/nodemcu-devkit"",""panesofglass/suaveonazurewebsites"",""jonathan-s/python-guide""]",[]
+PigLatin,285,73,"[""vinaygoel/archive-analysis"",""mrflip/big_data_for_chimps-code"",""smlance/ATLAS-Hadoop""]",[]
+Thrift,99,7,"[""knuton/thrift-missing-guide"",""chopmo/tchannel""]",[]
+Objective-C,317917,143288,"[""AFNetworking/AFNetworking"",""ReactiveCocoa/ReactiveCocoa"",""BradLarson/GPUImage"",""SnapKit/Masonry"",""rs/SDWebImage"",""RestKit/RestKit"",""Mantle/Mantle"",""magicalpanda/MagicalRecord"",""jdg/MBProgressHUD"",""alcatraz/Alcatraz""]","[""Object-oriented"",""Mobile Application"",""Game""]"
+Lua,55810,26511,"[""kikito/middleclass"",""keplerproject/luarocks"",""stevedonovan/Penlight"",""nrk/redis-lua"",""tekkub/wow-ui-source"",""fab13n/metalua"",""macournoyer/neuralconvo"",""pguillory/luajit-libuv"",""meric/l2l"",""fperrad/lua-MessagePack""]","[""Object-oriented"",""Imperative"",""Procedural"",""Scripting"",""Game""]"
+C#,511870,236904,"[""dotnet/corefx"",""dotnet/coreclr"",""SignalR/SignalR"",""dotnet/roslyn"",""mono/mono"",""StackExchange/dapper-dot-net"",""NancyFx/Nancy"",""thedillonb/CodeHub"",""shadowsocks/shadowsocks-windows"",""ShareX/ShareX""]","[""Object-oriented"",""Imperative"",""Functional"",""Mobile Application"",""Website"",""Web Application"",""Server"",""Game""]"
+XSLT,8320,6455,"[""napcs/docbook"",""dsanson/Pandoc.tmbundle"",""descala/haltr"",""sonatype/nexus-book"",""hashier/MacFolket"",""michael-e/members-forms"",""goldmann/wildfly-docker-configuration"",""discoverygarden/basic-solr-config"",""joebew42/daily-activity-log"",""abarth/http-state""]",[]
+Swift,137759,27342,"[""Alamofire/Alamofire"",""vsouza/awesome-ios"",""SwiftyJSON/SwiftyJSON"",""ipader/SwiftGuide"",""danielgindi/Charts"",""matteocrippa/awesome-swift"",""MengTo/Spring"",""fullstackio/FlappySwift"",""PerfectlySoft/Perfect"",""allenwong/30DaysofSwift""]","[""Mobile Application""]"
+AppleScript,1625,567,"[""lhagan/Open-in-Chrome"",""codez/ImportPhotoFolders"",""SirVer/move_window"",""christineyen/spotify-applescripts"",""textmate/applescript.tmbundle"",""azizshamim/thumbscrew"",""omega/vim-deckset"",""mxgrn/launchbar-scripts"",""lhagan/CrashPlan-Switch"",""jmcantrell/applescript-alfred""]","[""Scripting""]"
+ActionScript,22365,12646,"[""robertpenner/as3-signals"",""robotlegs/robotlegs-framework"",""useflashpunk/FlashPunk"",""nathancolgate/s3-swf-upload-plugin"",""prefuse/Flare"",""arthur-debert/BulkLoader"",""theturtle32/AS3WebSocket"",""wardi/django-filebrowser-no-grappelli"",""scottschiller/arduino.js"",""jslatts/nodechat""]","[""Functional"",""Scripting""]"
+Makefile,30999,6967,"[""blynn/gitmagic"",""tj/react-fatigue-dev"",""dotwaffle/rancid-git"",""eosrei/emojione-color-font"",""jsonn/pkgsrc"",""timcharper/git_osx_installer"",""gstf/libspatialite-ios"",""eosrei/twemoji-color-font"",""lmullen/ocr-makefile"",""khaledhosny/aref-ruqaa""]",[]
+VimL,85319,21741,"[""tpope/vim-pathogen"",""spf13/spf13-vim"",""tpope/vim-fugitive"",""scrooloose/syntastic"",""scrooloose/nerdtree"",""kien/ctrlp.vim"",""tpope/vim-surround"",""tpope/vim-rails"",""mattn/emmet-vim"",""scrooloose/nerdcommenter""]",[]
+Logos,3749,1649,"[""mattknox/x"",""jasonzhao3/WordHunter"",""Swop/sia-pps"",""dcorking/mobs"",""yav/config-lang"",""pepijndevos/world_improvement_server"",""glguy/happy-plus-alex"",""manlycode/beats-trap"",""schukin/jailbreak_tweak_example"",""tsdh/ttc-2013-flowgraphs""]",[]
+Erlang,16789,4700,"[""ChicagoBoss/ChicagoBoss"",""mochi/mochiweb"",""discoproject/disco"",""webmachine/webmachine"",""klacke/yaws"",""processone/tsung"",""rvirding/lfe"",""nitrogen/nitrogen"",""ostinelli/misultin"",""davisp/jiffy""]","[""Functional"",""Interactive mode"",""Concurrent"",""Server""]"
+TeX,61020,16136,"[""jbrownlee/CleverAlgorithms"",""matze/mtheme"",""bamos/latex-templates"",""jdavis/latex-homework-template"",""hadley/ggplot2-book"",""zellux/resume"",""purcell/mmm-mode"",""bamos/beamer-snippets"",""wspr/fontspec"",""wspr/unicode-math""]",[]
+Clojure,39564,6284,"[""technomancy/leiningen"",""weavejester/compojure"",""incanter/incanter"",""bhauman/lein-figwheel"",""ztellman/aleph"",""weavejester/hiccup"",""nathanmarz/cascalog"",""cgrand/enlive"",""stuartsierra/component"",""marick/Midje""]","[""Functional"",""Interactive mode"",""Concurrent""]"
+Emacs Lisp,672,2,"[""purcell/emacs.d"",""auto-complete/auto-complete"",""gabrielelanaro/emacs-for-python"",""mooz/js2-mode"",""company-mode/company-mode"",""defunkt/coffee-mode"",""senny/emacs-eclim"",""clojure-emacs/clojure-mode"",""serras/emacs-haskell-tutorial"",""nonsequitur/smex""]","[""Functional""]"
+Lex,319,66,"[""proycon/tscan"",""zmughal/opendetex"",""bryant1410/FreeLing"",""ambs/FreeLing"",""fivethreeo/walkless"",""unhammer/corevoikko"",""unhammer/apertium-sme-nob"",""unhammer/apertium-sme-smj""]",[]
+PAWN,359,279,[],[]
+NSIS,1514,611,"[""robmuh/gamemaker-tutorials"",""shadowbq/software_automation_notes"",""jamie/DbC"",""RyanNielson/ludum-dare-34"",""mithro/HDMI2USB-and-Numato-Opsis-Windows-Drivers"",""jystic/elm-platform"",""sonnym/elm-platform""]",[]
+CMake,5238,905,"[""kmorel/UseLATEX"",""SiegeLord/RustCMake"",""euler0/mini-cmake-qt"",""andersonfreitas/opengl-boilerplate"",""TheFox/cmus-control"",""calincru/QML-Android-Demo"",""crystax/android-samples-cmake"",""dennisdegreef/ESPixel"",""devurandom/cmake-files"",""spajus/sdl2-snake""]",[]
+M4,320,23,"[""tomjnixon/Dotfiles"",""somasis/autoconf-lean"",""emonty/pandora-build"",""sardemff7/eventd-events"",""swansontec/libbitcoin-client""]",[]
+Mathematica,3396,823,"[""nriley/launch"",""ianhinder/Kranc"",""wspr/magcode"",""roryk/mypubs"",""davidized/euler"",""chapmanb/mypubs"",""pjf/RealSolarSystem"",""m00nlight/MathematicaNotebook"",""artempyanykh/postgraduate-work""]","[""Functional"",""Interactive mode""]"
+Jupyter Notebook,10271,43,"[""bmabey/pyLDAvis"",""brandon-rhodes/pycon-pandas-tutorial"",""hans/ipython-notebooks"",""chezou/notebooks"",""vinaygoel/ars-workshop"",""tiagoantao/biopython-notebook"",""dannguyen/gis-geospatial-fun-python3x"",""dannguyen/python-notebooks-data-wrangling"",""tiagoantao/genomics-notebooks"",""kmike/morphine""]",[]
+ANTLR,294,88,"[""lrowe/lucenequery"",""fjenett/processing-preprocessor-antlr4"",""metadave/rrd-antlr4"",""marconilanna/minimal-sbt-antlr4"",""Shoen/aggregate-1""]",[]
+KiCad,2711,571,"[""mrehkopf/sd2snes"",""tardate/LittleArduinoProjects"",""jdesfossez/usbarmory"",""jasiek/ESP8266-PowerMonitor"",""nyxtom/threephase"",""SunboX/tiny-ESP8266-breakout"",""imrehg/grovehat"",""adamstac/electronics"",""njh/1wire-wall-sensor"",""donpdonp/esp-ftl""]",[]
+SQLPL,1544,474,"[""ionas/levenshtein-sql"",""qbit/orts"",""ilkka/mealprep"",""billy1arm/ScriptDev2-Translate-FR"",""leandrocp/docker-pentaho""]",[]
+AMPL,257,63,[],[]
+DTrace,75,16,"[""patcoll/hellod""]",[]
+Liquid,591,127,"[""keirwhitaker/shopify-birthday-suit"",""carolineschnapp/ajaxify-cart"",""carolineschnapp/make-image-change-variant"",""carolineschnapp/add-product-to-cart-automatically"",""carolineschnapp/cart-attributes-validation"",""carolineschnapp/donation"",""gavinballard/skillshare-examples"",""jteneycke/documentation"",""danielvlopes/documentation"",""dsabanin/skeleton-theme""]",[]
+GLSL,2647,539,"[""calleerlandsson/shader-talk"",""valera-rozuvan/urho3d-demos"",""titanous/tls_prober"",""triptych/superpowers-asset-packs"",""MrJoy/RaymarchingInUnity"",""MrJoy/OpticalCircuitUnityPort"",""paulbatum/Workbooks"",""julik/crok_matchbox"",""fschaefer/recalbox-buildroot"",""mattfoster/tls_prober""]",[]
+Ragel in Ruby Host,59,0,"[""earl/ohcount"",""dmitry/redcloth"",""ferdinandrosario/redcloth"",""brodock/redcloth"",""Ocramius/ohcount"",""leehambley/libterminal"",""kruton/ssh-ragel"",""robinst/ohcount"",""jystic/itch""]",[]
+Nginx,3700,504,"[""ernie/the_setup"",""princemaple/docker-nginx-lb"",""jlecour/ssl-gandi-nginx-debian"",""p8952/nginx-puma-sinatra"",""hsbt/nginx-tech-talk"",""rossriley/docker-bolt"",""authorNari/mrb_vs_lua_in_ngx"",""glogiotatidis/dokku-static-site"",""jtblin/nginx-k8s"",""lucasmundim/nginx-lua-push-stream-dockerfile""]",[]
+Yacc,502,84,"[""cliffordwolf/yosys-plugins"",""walf443/parser"",""dLobatog/parser"",""nelhage/parser"",""yoshinorim/rqg"",""ykzts/parser"",""yuki-kimoto/try-static-perl"",""patperry/rust-grammar""]",[]
+Jasmin,19,5,"[""epitron/decompiler-vulnerabilities-and-bugs""]",[]
+F#,0,0,"[""SuaveIO/suave"",""mausch/Fleece"",""bleis-tift/FSharp.Quotations.Compiler"",""kongo2002/SharpXml"",""bartelink/FunDomain"",""bleis-tift/TableDsl"",""mausch/MbUnit.FSharp"",""mausch/XmlLiteralsTypeProvider"",""mausch/EdmundsNet"",""mausch/FsControl""]","[""Functional""]"
+Nu,76,16,"[""itfrombit/nutils"",""Shadowfiend/pointy-haired-boss.tmbundle"",""Shadowfiend/vico-fill-in-the-blanks.tmbundle"",""itfrombit/nu_let_over_lambda"",""meric/parser"",""timburks/NuTravisCI"",""itfrombit/nu_minicallcc"",""Shadowfiend/vico-ensime.vicobundle"",""Shadowfiend/simple-build-tool.tmbundle"",""timburks/CONTROL""]",[]
+Assembly,17576,5160,"[""leachim6/hello-world"",""augustl/halt"",""cliffordwolf/picorv32"",""ziutek/blas"",""chesterbr/2048-2600"",""programble/tetrasm"",""seanlynch/pynacl"",""amenonsen/tappet"",""FauxFaux/nanorc4"",""agentzh/salent""]",[]
+Protocol Buffer,6596,103,"[""nnmatveev/idea-plugin-protobuf"",""evanphx/eventd-rfc"",""bradfitz/grpc-go16-demo"",""sqs/pbtypes"",""Flameeyes/gdef"",""mrcsparker/relang"",""kanzure/bips"",""bobbens/loadcaffe"",""timburks/ios-docs-samples"",""manveru/yasha""]",[]
+QML,2603,527,"[""aportale/qtouchandlearn"",""pepijndevos/tincan"",""xdarklight/keystate-plasmoid"",""jaywink/share-to-diaspora"",""andy0130tw/terrarium-app"",""shovon/blow-face-example"",""gnufied/arecorder"",""gnufied/quickfm"",""eadz/cool-retro-term"",""audreyt/lit-app""]",[]
+Inno Setup,34645,97,"[""stfx/innodependencyinstaller"",""mathiasbynens/toolbox"",""candera/ffw-balkans-setup""]",[]
+Prolog,5590,1546,"[""semifor/twirc"",""tylergreen/PLisp"",""ljos/epictetus"",""coreyhaines/evercraft-prolog"",""moustaki/henry"",""moustaki/rstore"",""jpalumickas/dotfiles"",""coreyhaines/gildedrose_prolog"",""larsyencken/docker-vm"",""Sinjo/7languages""]","[""Science""]"
+Perl6,1911,221,"[""perl6/perl6-examples"",""masak/007"",""jnthn/zavolaj"",""viklund/november"",""cjfields/bioperl6"",""moritz/json"",""masak/ufo"",""cosimo/perl6-lwp-simple"",""grondilu/libdigest-perl6"",""bessarabov/curry""]",[]
+PostScript,2539,574,"[""tjmahr/GelmanHill"",""juba/intro-r"",""matthias-springer/master-thesis"",""ambs/music"",""lucaskanashiro/tcc"",""norpol/attac-opensource-vortrag-plakat"",""sjl/not-my-Thesis-but-someone-elses-im-proofreading"",""caioariede/PensePython2"",""cegme/pi-castle-journal"",""seejohnrun/brooklynjs.github.io""]","[""Interactive mode""]"
+NewLisp,131,20,"[""bernerdschaefer/sgheme""]",[]
+SystemVerilog,702,224,"[""zmughal/silver"",""Paulche/course_work32"",""jmarshall/pindel"",""KennethWilke/capi-mmio"",""KennethWilke/capi-systemverilog"",""KennethWilke/shift-register""]",[]
+Objective-J,597,395,"[""cappuccino/cappuccino"",""tolmasky/language"",""luddep/LPKit"",""cappuccino/issues"",""saikat/DrawTogether"",""saikat/SCAuth"",""eliaskg/Cappuccino-X-Tornado"",""tbalthazar/cappuccinocasts-episodes"",""Me1000/CappuTweetie"",""cacaodev/cappuccino""]",[]
+Awk,701,142,"[""cosimo/vlogdump"",""dubiousjim/awkenough"",""sstephenson/bashprof"",""paradigm/digmbot"",""iiSeymour/mpttawk"",""nuex/invpdf"",""smtlaissezfaire/awk_examples"",""soveran/ers"",""nuex/tunehomie"",""nuex/jennifer""]","[""Procedural"",""Scripting""]"
+Visual Basic,107713,433,"[""mono/mono-basic"",""luislavena/service_wrapper"",""badcodes/vb6"",""jystic/idris-vba"",""robertpfeiffer/hello-world"",""mkremer/echo_service_client_vb"",""amorilia/buildenv"",""samccone/lock-master"",""novas0x2a/Command-T"",""pointybeard/OziExplorer-Batch-Map-Convert""]","[""Object-oriented""]"
+Pascal,12413,4693,"[""tristan2468/hgdc-x"",""JamesKovacs/cm-cqrs"",""kylecordes/mathdrill"",""tokibito/delphi-argparse"",""esasse/delphi-stathat"",""siers/snake"",""tokibito/dokan-delphi"",""csteeg/BoC.Sitecore.ProjectStarter"",""bvp/Student-s-registration-delays"",""icy/ktml""]","[""Imperative""]"
+Objective-C++,1839,733,"[""pivotal/cedar"",""KenjiTakahashi/pacmixer"",""fjolnir/SVGPathSerializing"",""textmate/dialog"",""prideout/parm"",""Sjlver/pocs"",""syhw/contextual_word_segmentation"",""johndpope/ios-caffe-ObjectRecognition"",""snatchev/neovim-osx-gui"",""tkersey/BestPractices""]",[]
+Smalltalk,1327,389,"[""bonzini/smalltalk"",""lukego/xoos"",""mkobetic/Xtreams"",""dalehenrich/obex"",""bonzini/GoogleAPI"",""bonzini/iliad"",""cdlm/pharo-katas"",""takano32/FO-Formatter"",""bonzini/Grease"",""dalehenrich/Mergery""]","[""Interactive mode"",""Scripting"",""Object-oriented""]"
+Scheme,7707,1385,"[""neo4j-contrib/spatial"",""notanumber/django-vagrant"",""orlandohill/waxeye"",""brutasse/states"",""davexunit/guile-2d"",""skanev/playground"",""nickg/swank-chicken"",""ijp/guildhall"",""ijp/pfds"",""oc/roninku""]","[""Functional"",""Procedural"",""Interactive mode""]"
+TypeScript,22899,10419,"[""ariya/esprima"",""shprink/angular2-nobullshit-boilerplate"",""kara/puppy-love"",""shprink/ionic-cross-platform-boilerplate"",""TheLarkInn/angular2-webpack-lite"",""phuu/fetch-engine"",""shprink/ionic2-webpack-boilerplate"",""thomasboyt/manygolf"",""s-panferov/tsimmutable"",""rhysd/electron-about-window""]",[]
+XProc,49,11,[],"[""Concurrent""]"
+Elixir,11985,675,"[""seven1m/30-days-of-elixir"",""edgurgel/verk"",""drewolson/scrivener"",""keathley/wallaby"",""pragdave/earmark"",""joakimk/toniq"",""hassox/phoenix_guardian"",""apeacox/nova"",""lexmag/tty2048"",""henrik/progress_bar""]",[]
+LilyPond,399,79,"[""ciconia/music"",""fxn/scores"",""ConradIrwin/music"",""julik/trumpet"",""bani/harp"",""chrisroos/lilypond-playground"",""sunny256/openbook"",""sunny256/MutopiaProject"",""ciconia/lyp-dependency-test"",""gmoothart/plainsong-psalms""]",[]
+Haskell,48958,6702,"[""yesodweb/yesod"",""jaspervdj/hakyll"",""jgm/gitit"",""olivierverdier/zsh-git-prompt"",""ajtulloch/dnngraph"",""kazu-yamamoto/ghc-mod"",""yesodweb/wai"",""ananthakumaran/webify"",""snapframework/snap"",""pcapriotti/optparse-applicative""]","[""Interactive mode"",""Functional""]"
+Io,450,99,"[""jeremytregunna/IoSpec"",""josip/eerie"",""quag/io-json"",""quag/iospec2"",""josip/generys"",""jdp/boid"",""kevinclark/chordal"",""quag/io-pack"",""josip/kano"",""kevinclark/iospec2""]","[""Scripting""]"
+Arduino,47330,15701,"[""BleuLlama/TinyBasicPlus"",""pepijndevos/arduino-boy"",""PulsedLight3D/LIDARLite_Basics"",""imjosh/espBasicExample"",""manuel-rabade/sismo_alerta"",""jgeisler0303/QTouchADCArduino"",""lian/multiwii"",""nottwo/BasicTerm"",""bleything/arduino-NeoPixel-Wifi-Controller"",""dmcinnes/charlieplex-marquee""]",[]
+FreeMarker,487,85,"[""paulvi/pagination-freemarker-macros"",""tml/qwazr-javascript-example""]",[]
+Scilab,728,286,"[""timcowlishaw/nand2tetris"",""hectoregm/numerico"",""pipt/nand2tetris"",""robbat2/diradm""]",[]
+ColdFusion,21349,1538,"[""framework-one/fw1"",""atuttle/Taffy"",""timblair/restfulcf"",""timblair/coldfusion-airbrake-notifier"",""timblair/coldfusion-inflector"",""illuminerdi/DefaultScope"",""timblair/cflogger"",""jdzak/coldfusion-cas-client"",""illuminerdi/Remote-Form-Helpers"",""cknadler/UnderscoreCF""]","[""Scripting"",""Server""]"
+D,7230,2466,"[""ruckus/android-image-filter-ndk"",""azizk/dil"",""repeatedly/xxhash-d"",""bakkdoor/gumbo-d"",""DannyArends/D-coding"",""repeatedly/d-volkswagen"",""tomerfiliba/dlang"",""CyberShadow/csfo4"",""bakkdoor/ircbod"",""jaredonline/action-pack""]","[""Functional"",""Imperative"",""Procedural""]"
+Vala,1337,407,"[""ueno/ibus-skk"",""ueno/libkkc"",""mariocesar/pomodoro-elementary"",""ueno/ibus-kkc"",""ueno/gnome-credentials"",""axiak/shotwell"",""madx/therm"",""sardemff7/purple-eventc"",""phaylon/glyph"",""fmoralesc/vim-clip""]",[]
+OpenEdge ABL,22,0,"[""tiagoantao/bioinf-python"",""bolangi/nama"",""proycon/colibri-apps"",""leeping/OpenMM-MD"",""rvosa/comphy-cobra"",""rvosa/cobra"",""norpol/willhaben-scrapper"",""cho45/OsmAnd-resources"",""Faldrian/OsmAndGermanSpeech"",""idoerg/gene_block_evolution""]",[]
+xBase,407,166,"[""endersonmaia/hbunit"",""endersonmaia/hbstomp"",""jasim/clipper"",""jasim/StockMaster"",""endersonmaia/advpl-oo"",""vszakats/hbtui""]",[]
+LLVM,123,14,"[""AlexDenisov/mbx""]",[]
+Limbo,84,18,"[""itorres/inferno-lab""]","[""Concurrent""]"
+Smali,461,125,"[""datagutt/jBART"",""datagutt/FlymeOS-hima"",""CyberShadow/Emacs-Smali"",""yyjdelete/patchrom_android""]",[]
+Omgrofl,3,0,[],[]
+VHDL,6225,1856,"[""Sumith1896/tusSAT"",""nullobject/papilio-neopixel"",""schmich/g9impulse"",""manuel-rabade/von_neumann"",""makestuff/seven-seg"",""nickg/vests"",""Paulche/hdl-labs"",""nullobject/papilio-flasher"",""nullobject/papilio-picoblaze"",""forrestv/grlib-gpl""]",[]
+Hack,213,85,"[""facebook/xhp-lib"",""fredemmott/definition-finder"",""ustun/xhp-getting-started"",""stardiviner/fbctf"",""holyshared/HackUnit"",""holyshared/hackunit-examples"",""fredemmott/hack-router"",""fredemmott/personal-site"",""kkirsche/fbctf"",""reedy/oss-performance""]",[]
+Matlab,51973,18091,"[""matlab2tikz/matlab2tikz"",""shelhamer/visual-pulse-monitor"",""danielfm/edx-learning-from-data"",""mpf/spot"",""tianyicui/ml-class"",""shelhamer/visual-clutter"",""wspr/hatze-biomech"",""Heliosmaster/image-denoising"",""oeddyo/CityBeat"",""wspr/splines-matlab""]","[""Imperative"",""Procedural"",""Interactive mode"",""Science""]"
+Apex,4076,2712,"[""jgfoster/Jade"",""jhersh/GroupMaster"",""andrunix/sf-spreadsheet"",""cdcarter/SlackSFDCLib"",""cdcarter/SalesforceDonationHistory"",""jamesward/foo"",""cwarden/trailhead-code-samples"",""cwarden/Salesforce-Public-Tag-To-Chatter-Topics-Migration"",""cwarden/declarative-lookup-rollup-summaries"",""cwarden/force-dot-com-esapi""]",[]
+FORTRAN,7293,3408,"[""andreww/fox"",""henjo/slicot"",""aespinosa/mpich-docker"",""b45ch1/hpsc_hanoi_2009_walter"",""certik/ffte"",""paulromano/openmc"",""domitry/ode"",""skyl/S.js"",""CamDavidsonPilon/pymc"",""xuanxu/galactic-imf-monte""]","[""Object-oriented"",""Imperative"",""Procedural"",""Concurrent"",""Science""]"
+Modula-2,42,3,"[""jdrago999/voc""]","[""Procedural""]"
+SourcePawn,1715,692,"[""xPaw/AMXX-Plugins"",""xPaw/AMXX-Gag"",""sergeylukin/Redstone"",""xPaw/BombGame""]",[]
+COBOL,314,109,"[""steveh/gobsprogram"",""kentaro/sekigae2015""]","[""Object-oriented"",""Imperative"",""Procedural""]"
+Brainfuck,240,27,"[""gigasquid/howistart"",""EvanHahn/brainfuck-web-app"",""nixpulvis/brainfuck"",""josevalim/howistart"",""norpol/metalab-git-workshop"",""alpha123/FizzBuzz"",""ferd/howistart"",""nelhage/brainfuck"",""yous/FizzBuzz"",""johntyree/brnfckr""]","[""Science""]"
+Forth,398,78,"[""nimblemachines/muforth"",""earl/gforth-mirror"",""benhoyt/third"",""lukego/fwd"",""automatthew/fyte"",""robertpfeiffer/forthsnake"",""larsbrinkhoff/forth-continuous-integration"",""larsbrinkhoff/forth16"",""larsbrinkhoff/forth-compiler"",""benhoyt/false-forth""]","[""Procedural"",""Interactive mode""]"
+Common Lisp,10120,207,"[""dimitri/pgloader"",""archimag/restas"",""3b/cl-opengl"",""akapav/js"",""blindglobe/common-lisp-stat"",""kriyative/ecl-iphone-builder"",""sionescu/iolib"",""marijnh/Postmodern"",""angavrilov/cl-gpu"",""froydnj/ironclad""]","[""Interactive mode"",""Procedural"",""Functional"",""Object-oriented""]"
+Nemerle,165,67,"[""lidaobing/manpages-zh"",""robertwahler/openfl-tools"",""idavis/nemerle"",""vasily-kirichenko/nitra"",""vasily-kirichenko/Nitra-Mini-C"",""vasily-kirichenko/nYaml"",""vasily-kirichenko/NemerleHelloWorld"",""epidemian/Nitra"",""nanotech/openfl-tools""]","[""Functional""]"
+Ada,1316,327,"[""dsanson/Words"",""moriyoshi/mod_yudoufu"",""ThomasLocke/Basic"",""BRMatt/arts"",""mulander/lace"",""pgeorgi/ironsides-authoritative""]","[""Imperative"",""Concurrent""]"
+Module Management System,20888,29,[],[]
+Oz,72,10,"[""cmeiklejohn/Paradigms-of-Computer-Programming""]","[""Concurrent""]"
+AGS Script,30,0,"[""henjo/pycircuit"",""simeonf/sqlalchemy-tutorial"",""mauricio/expat-interviews"",""rocketnia/mikkamon"",""schacon/FMS-registerClass"",""kevin1024/fanboost"",""michel-slm/progit2-id"",""mattions/bitcoin.org"",""AndyA/Jaded"",""rocketnia/myai-franchise""]",[]
+Verilog,6525,2347,"[""cliffordwolf/SimpleVOut"",""steveicarus/ivtest"",""benreynwar/fft-dit-fpga"",""Eelis/qs-avg"",""cliffordwolf/yosys-bigsim"",""cliffordwolf/icotools"",""rickysarraf/gcide"",""perfaram/cu-hw-gps"",""BigEd/m68k"",""BigEd/m68k-1""]",[]
+Fantom,49,11,[],[]
+Dogescript,17,1,"[""manlycode/hello-doge""]",[]
+Mercury,283,77,"[""sebgod/mpm"",""sebgod/delphi-analyser"",""sebgod/mercury-slre"",""chrisdembia/gpops-playground"",""min/XNGMarkdownParser""]","[""Functional""]"
+LOLCODE,38,10,[],[]
+Cool,22,2,[],[]
+Standard ML,21857,12339,"[""GoldenCheetah/GoldenCheetah"",""kfl/mosml"",""gamelinux/prads"",""j-baker/l1c"",""jozefg/miniprl"",""jozefg/sml-fingertree"",""bleis-tift/SmlSharpContrib"",""jlouis/sml_erlang_bridge"",""gamelinux/prads-perl-version"",""jozefg/sml-higher-order-matching""]",[]
+Kotlin,4257,1148,"[""sirlantis/rubocop-for-rubymine"",""evanchooly/javabot"",""dam5s/android-example-kotlin"",""dam5s/kspec"",""mikaelhg/kotlin-spring-boot-data-rest"",""yole/faguirra"",""Jire/Kotmem"",""exviva/stew"",""Jire/KTON"",""yole/kcabend""]",[]
+LSL,159,86,[],[]
+BlitzBasic,305,161,"[""kergoth/meta-openembedded"",""esteve/meta-ros"",""bachp/meta-ros""]",[]
+Golo,20,3,"[""rlespinasse/jenkinsdsl__project-maven"",""rlespinasse/modern-headline-builder.golo""]",[]
+SAS,717,307,"[""slothbear/antidumping""]",[]
+Pony,71,2,"[""jemc/pony-stable"",""jemc/pony-inspect"",""SeanTAllen/pony-echo-server"",""jemc/pony-sodium"",""jemc/pony-pegasus"",""jemc/pony-capnp"",""jemc/pony-ast"",""jemc/pony-llvm"",""jemc/eo"",""jemc/pony-unsafe""]",[]
+PureScript,987,30,"[""osener/wring"",""dancingrobot84/purescript-express"",""anttih/purescript-rx"",""dancingrobot84/bro"",""damncabbage/ylj16-workshop"",""anttih/psc-pane"",""kofno/BasicLambda"",""kofno/purescript-aws-lambda"",""dysinger/purescript-leaflet"",""puffnfresh/purescript-functor-semigroups""]",[]
+OCaml,7855,1860,"[""artagnon/rhine-ml"",""mirage/mirage"",""ocaml-batteries-team/batteries-included"",""mirage/ocaml-cohttp"",""jaked/ocamljs"",""biocaml/biocaml"",""wickedchicken/ocaml_skeleton"",""tianyicui/golio"",""yoshihiro503/ocamltter"",""jaked/froc""]","[""Imperative""]"
+Haxe,5450,1363,"[""andyli/jQueryExternForHaxe"",""bendmorris/hxpk"",""AdamHarte/Gamepad-Haxe"",""bendmorris/hide-n-stab"",""jdonaldson/packhx"",""jdonaldson/haxe"",""NobukazuHanada/Mage"",""AdamHarte/Barricade"",""jdonaldson/nginhx"",""bendmorris/haxepop""]",[]
+Idris,440,33,"[""reynir/Verified"",""soimort/idris-commonmark"",""japesinator/Idris-Profunctors"",""puffnfresh/idris-partiality"",""reynir/idris-ffi-example"",""gergoerdi/brainfuck-idris"",""davidfstr/idris-insertion-sort"",""japesinator/complex"",""japesinator/Broadhead"",""TimothyKlim/idris-type-providers""]","[""Functional""]"
+Clean,71,11,[],"[""Functional""]"
+PLSQL,2883,921,"[""radar/railsbot"",""dkinzer/xplsql"",""blindglobe/CommonDataModel"",""bronsen/aquameta"",""ReneNyffenegger/blob_wrapper-Oracle"",""dbravender/kengdic"",""ampotty/oracle-em12-reports""]",[]
+J,114,10,"[""lemenkov/jsource"",""jdan/j-by-example""]","[""Functional"",""Interactive mode""]"
+PureBasic,201,103,"[""jalbertbowden/google-fonts""]",[]
+Rust,18808,1679,"[""tsgates/rust.ko"",""cyndis/qmlrs"",""myfreeweb/freepass"",""lilydjwg/swapview"",""fitzgen/oxischeme"",""farcaller/shiny"",""Antti/rust-amqp"",""SSheldon/rust-objc"",""servo/euclid"",""codahale/sketchy""]","[""Functional"",""Imperative"",""Concurrent""]"
+ooc,235,39,"[""fasterthanlime/rock"",""fasterthanlime/nagaqueen"",""fredreichbier/optparse"",""fperrad/ooc-lua"",""fredreichbier/ooc-mongodb"",""fredreichbier/sonofaj"",""fredreichbier/gifnooc"",""fredreichbier/deadlogger"",""fperrad/ooc-tap"",""fperrad/ooc-wmlscript""]",[]
+XQuery,816,289,"[""bencomp/archi-tools"",""lericson/dbtd-lab3"",""ambs/documentation""]",[]
+AutoIt,1351,789,"[""biow0lf/EVE-harvester"",""Nighoo/Portable-VirtualBox"",""yarons/Portable-VirtualBox""]",[]
+Dart,6914,1562,"[""dylanPowers/ipfs-chrome-extension"",""olov/dart-range"",""hpoul/dart-autocomplete-ui"",""mrosati84/Dart-Chat"",""ehq/goban_widget"",""kraman/openshift-dart"",""robsyme/polymer-region-selector"",""kevmoo/pana.dart"",""joubertnel/tedtalk-json"",""hpoul/dart-tapo-calendar""]","[""Functional""]"
+Factor,112,39,"[""mrjbq7/re-factor"",""letoh/hello-x11-factor"",""MartinSeeler/factor-playground"",""obfusk/playing-with-factor"",""bpollack/factor"",""samueltardieu/factor"",""joubertnel/factor"",""abeaumont/factor""]",[]
+LiveScript,1351,185,"[""polm/philtre"",""polm/palladian-facades"",""polm/deltos"",""bzar/generate-perlin"",""gugod/js-bopomofo-to-pinyin"",""gugod/livescript-ptt-crawler"",""jneen/data.stream"",""yllan/env.g0v.tw"",""ibash/grasp"",""Alxandr/totem-script""]",[]
+Racket,5735,1490,"[""offby1/rudybot"",""technomancy/super-explorer"",""qerub/itunes-sexp-service"",""grassdog/The-Little-Schemer"",""csw/lc2k-scheme"",""apg/scanabanana"",""kei-s/sicp-exercise"",""elibarzilay/gabot"",""markfarrell/learn-plt"",""jdavis/tennis-court""]","[""Functional""]"
+Ioke,14,0,[],[]
+Julia,6574,1454,"[""pluskid/Mocha.jl"",""JuliaStats/StatsBase.jl"",""pluskid/MLOpt.jl"",""JuliaArchive/Color.jl"",""maleadt/CUDAnative.jl"",""chezou/TinySegmenter.jl"",""pao/StrPack.jl"",""chezou/MeCab.jl"",""pluskid/SimpleStructs.jl"",""jiahao/NetflixPrize.jl""]","[""Functional"",""Imperative"",""Interactive mode"",""Scripting"",""Concurrent"",""Science""]"
+Hy,110,9,"[""mudphone/Hywaii"",""kartikm/hy-code"",""Singletoned/sushy""]",[]
+SuperCollider,1281,263,"[""rfwatson/supercollider-tmbundle"",""rfwatson/live-loop-tool"",""catfact/monom"",""rfwatson/live-beatbox"",""rfwatson/autodrum"",""colinsullivan/seas-of-subconscious"",""catfact/monome_sc"",""monkstone/sunflow"",""catfact/cotccm"",""catfact/catfact""]",[]
+Pike,91,11,[],"[""Interactive mode""]"
+APL,61,12,"[""brntbeer/vigilant-computing-machine""]","[""Functional""]"
+ABAP,174,93,[],[]
+Squirrel,467,133,"[""pzula/hot-tub-temperature"",""geemus/echo-imp"",""yoshyosh/flowbright""]",[]
+AutoHotkey,2948,1142,"[""adamjimenez/Xbox2Mouse"",""maul-esel/FormsFramework"",""maul-esel/ImportTypeLib"",""thomasleveil/QuakeLikeConsole"",""maul-esel/AHK-Util-Funcs"",""maul-esel/CGUI"",""maul-esel/ComGenerator"",""pr0d1r2/PoE-Item-Info"",""hron/SnapX"",""obra/autohotkey-windows-mac-keyboard""]",[]
+Agda,549,59,"[""pcapriotti/agda-base"",""larrytheliquid/plclub-expless"",""jozefg/regex"",""larrytheliquid/agda-stdlib"",""larrytheliquid/hash-cons"",""yllan/FLOLAC14"",""maxsnew/cgc"",""bradediger/ttt"",""rntz/agda-lib"",""pozorvlak/MetaprogAgda""]","[""Functional""]"
+Rebol,839,338,"[""hostilefork/rebmu"",""earl/rebol3"",""earl/r3-zmq"",""earl/Curecode"",""earl/r3-issues"",""durtal/pinhooker"",""richierocks/memoise"",""richierocks/installr"",""drudru/HexEdit""]","[""Scripting""]"
+Tea,3,0,[],"[""Scripting"",""Functional""]"
+Boo,158,58,"[""Tak/unityscript"",""Tak/boo-md-addins"",""Tak/boo-extensions""]",[]
+MoonScript,320,43,"[""leafo/lua-mailgun"",""leafo/moonscrape"",""leafo/lapis-http"",""leafo/lua-base58"",""leafo/moonscript-textadept"",""leafo/desura-data"",""leafo/ludum-dare-32"",""leafo/giflib"",""leafo/sharecart-1"",""leafo/keys""]",[]
+M,899,419,"[""zenspider/euler"",""CobyR/documents"",""alexmedearis/roundedcornerview""]",[]
+Nimrod,998,120,"[""dom96/nimkernel"",""nim-lang/Aporia"",""dom96/ipsumgenera"",""dom96/gbemulator"",""dustinlacewell/dadren"",""dom96/notifications"",""judofyr/sodium.nim"",""FedericoCeratto/nimi3status"",""judofyr/hox"",""FedericoCeratto/minimize""]",[]
+Turing,57,23,"[""robertzk/RCurl"",""lawremi/XML""]",[]
+Opa,74,29,"[""Aqua-Ye/Opa_CSS_Without_HTML_demo"",""Aqua-Ye/TableBuilder"",""tianyicui/yixin"",""Aqua-Ye/opa-watch"",""Aqua-Ye/webshell""]",[]
+Parrot,58,13,"[""ruz/nqp"",""particle/rakudo"",""rurban/winxed"",""pdcawley/nqp"",""fperrad/nqp"",""ilmari/nqp"",""perlpilot/nqp""]",[]
+DIGITAL Command Language,535,0,"[""duykhoa/ud120-projects"",""cmlh/python-whois"",""artgillespie/ud120-projects"",""pcasaretto/ud120-projects"",""shaliko/ud120-projects"",""eduardo-matos/ud120-projects"",""peterson/ud120-projects""]",[]
+Metal,4,0,[],[]
+Arc,137,51,"[""arclanguage/anarki"",""bixo/bixo"",""akkartik/arc"",""hasenj/sehm"",""hornbeck/arc"",""rocketnia/penknife"",""shader/metagame"",""brianru/junto.io"",""akkartik/yrc"",""awwx/arc-globals-in-table""]",[]
+Cuda,3633,989,"[""JinweiClarkChao/one-two-three...infinity"",""bygreencn/deep-learning-faces"",""julianromera/Alenka"",""julianromera/moderngpu"",""julianromera/back40computing"",""KenjiTakahashi/Alenka"",""alexbw/cunn"",""clementfarabet/cunn"",""clementfarabet/cutorch"",""mihaimaruseac/scaling-crypto""]",[]
+Gosu,555,568,"[""dalehenrich/CypressReferenceImplementation"",""YayConnolly/google_form_to_cal_script"",""antislice/gosu-sample"",""axisofentropy/wh40k""]",[]
+PLpgSQL,2266,613,"[""theory/pgtap"",""shuber/postgres-twitter"",""antzucaro/xonstatdb"",""akaariai/pgsql_shadow_tables"",""kevinsawicki/node-sqlite3"",""solidsnack/pg-sql-variants"",""jhannah/talk-pg-ltree"",""dbravender/hanja-dictionary"",""gavinwahl/colorado-department-of-revenue-salaries"",""mikaelhg/docker-mariadb-test_db""]",[]
+GAP,335,126,"[""abargnesi/language""]",[]
+eC,18,8,[],"[""Imperative""]"
+Mako,67,25,"[""EnigmaCurry/lazy-distro-mirrors"",""sontek/superdash"",""shaiguitar/openbook"",""meunierd/pre-commit.github.io""]",[]
+DOT,0,0,"[""manboubird/web-crawler-notes"",""jpcaissy/minilang"",""maco/gf-family-tree"",""bpodgursky/dagre"",""huned/dagre"",""christianhellsten/ml_class"",""thiagoarrais/mybatis-koans"",""timj/adass23-ndf-economou""]",[]
+XS,88,12,"[""0xxon/perl-nss"",""ruz/HTML-Gumbo"",""fperrad/re-engine-lua"",""Leont/signal-pipe"",""rgs/p5-Die-Ception"",""leonerd/p5-UV"",""bulk88/win32""]",[]
+Max,1501,324,"[""stretta/BEAP"",""trentgill/mlrv2"",""trentgill/trapped"",""sixohsix/CS-X51-Router"",""trentgill/atlas""]",[]
+Terra,15,1,"[""brandonbloom/terra-java""]",[]
+JSONiq,26,6,"[""joelpurra/jq-bigint"",""mivok/jq_scripts"",""szepeviktor/jq-learn"",""jjjake/jq-ia""]",[]
+MAXScript,123,34,[],"[""Scripting""]"
+SaltStack,1313,275,"[""flavio/docker-orchestration-demo"",""gtmanfred/predictive-orchestration"",""keimlink/django-deployment"",""ronnix/salt-gpg-pillars-demo"",""michaelkuty/salt-formula-gource"",""dmacvicar/salt-opensuse-playground"",""evaryont/aethernet"",""evaryont/openssh-formula"",""LarsFronius/sensu-formula"",""leifcr/logrotate-formula""]",[]
+Stata,873,426,"[""LYY/google-hosts"",""EdwardBetts/FincLab""]",[]
+nesC,552,303,"[""shapeoko/Universal-G-Code-Sender"",""x3ro/tinyos-legacy"",""BinaryConstruct/Universal-G-Code-Sender"",""arnaldorusso/windspharm"",""jgeisler0303/RPi-HY28b-adapter""]",[]
+Lasso,106,234,"[""1ed/symfony-docs"",""gentooboontoo/cwls-las-reader"",""craue/symfony-docs"",""hobu/lasvalidate"",""eikes/symfony-docs"",""armetiz/symfony-docs-fr"",""armetiz/symfony-docs""]","[""Scripting""]"
+Puppet,17411,4141,"[""dirkaholic/vagrant-php-dev-box"",""amaia/rails-starter-box"",""sapienza/vagrant-php-box"",""BenoitCattie/puppet-nginx"",""miccheng/vagrant-nodejs"",""duritong/puppet-mysql"",""rob-murray/vagrant-javadev-box"",""camptocamp/puppet-nfs"",""duritong/puppet-munin"",""ajjahn/puppet-samba""]",[]
+Crystal,784,40,"[""will/crystal-pg"",""porras/crul"",""greyblake/crystal-icr"",""mperham/sidekiq.cr"",""sferik/twitter-crystal"",""jhass/carc.in"",""marceloboeira/spotify.cr"",""ddfreyne/rcpu"",""sferik/spellout"",""soveran/ohm-crystal""]",[]
+JFlex,2,1,[],[]
+Self,13,65,"[""russellallen/self"",""AdamSpitz/klein"",""AdamSpitz/self"",""doublec/self-vncviewer"",""russellallen/self-webserver"",""zenspider/self"",""rrthomas/self"",""Bystroushaak/self"",""russellallen/web-builder"",""russellallen/self-vncviewer""]","[""Object-oriented""]"
+HCL,1253,149,"[""sethvargo/terraform-workshop"",""paulczar/terraform-kubernetes-openstack"",""JeanMertz/terraform-dcos"",""bobtfish/terraform-vpc-nat"",""bobtfish/terraform-vpc"",""sethvargo/terraform-workshop-atlas"",""tkellen/infrastructure"",""sethvargo/atlas-demo"",""matsuu/terraform-isucon"",""ruckuus/peekops""]",[]
+Gnuplot,439,114,"[""agentzh/mysql-driver-benchmark"",""shuge/man2"",""TheFox/gnuplot-examples"",""ciaranm/research-overview-talk"",""tiagoantao/lositan"",""nviennot/quantile_estimator"",""kou/rabbit-slide-kou-nginx-tech-talks"",""textarcana/datagrams"",""ciaranm/ijcai2016-really-hard-subgraph-isomorphism-paper"",""ciaranm/sicsa2015-poster""]",[]
+OpenSCAD,2421,879,"[""devonjones/OpenForge"",""justinledwards/BigDelta"",""buserror/buserror-reprap"",""devonjones/openforge-sewer"",""alexspeller/Saturn-Extruder"",""devonjones/openforge-smooth"",""calebhaye/3d-ring"",""mathias/dactyl-keyboard"",""devonjones/openforge-stone"",""moul/3d""]",[]
+Coq,1421,288,"[""jwiegley/coq-pipes"",""reynir/Brainfuck"",""thoughtpolice/coq-skeleton"",""Eelis/hybrid"",""cjerdonek/formal-rcv"",""puffnfresh/cufp-2015-tutorial"",""liufengyun/stoic"",""serras/sf-exercises"",""michaelsproul/L3"",""knuton/la-girafe-sportive""]","[""Functional""]"
+HLSL,61,4,[],[]
+Diff,412,149,"[""chewi/cross-boss"",""jrgifford/rvm"",""rdp/ruby-19-debugger"",""jesperfj/hdev-base"",""vivien/buildroot""]",[]
+mupad,8,2,[],[]
+Eagle,7044,2067,"[""sparkfun/OpenLog"",""binarybucks/homA"",""0xPIT/reflowOvenController"",""ps2/rileylink"",""jgeisler0303/AGCON"",""valo/wireless_sensor"",""issackelly/fireflies"",""dnet/chrl"",""dustin/buggles"",""pda/avraek""]",[]
+Processing,18896,6717,"[""lpereira/finf"",""onk/auto_circle_collage"",""manuel-rabade/thermal_printer"",""dasmithii/RecursiveLatticeGenerator"",""jdorweiler/BalancingRobot"",""d2kagw/learning-arduino"",""prusnak/processing"",""runemadsen/introduction-to-processing"",""tomds/Arduino-Tunes"",""kneath/sketches""]",[]
+Bison,238,68,"[""halogenandtoast/reconstructing-ruby"",""toroidal-code/language-bison"",""nobu/streem"",""proppy/streem"",""yhara/streem"",""halogenandtoast/streem"",""romainneutron/Parser"",""leejarvis/tiger"",""jeremyf/ruby_parser"",""jaredbeck/ruby_parser""]",[]
+Augeas,39,25,"[""hercules-team/augeas"",""lutter/augeas"",""manandbytes/augeas"",""dtrebbien/augeas"",""timurb/augeas"",""jtopjian/augeas"",""falexandrou/dovecot"",""tampakrap/puppet-sudo"",""mmoll/augeas"",""mfournier/augeas""]",[]
+Xtend,589,152,"[""oehme/xtend-contrib"",""oehme/sobula"",""davidB/jme3_ext_deferred"",""oehme/xtend-junit"",""oehme/xtend-querydsl"",""davidB/ld32_the_dispatcher"",""davidB/jme3_ext"",""jgraichen/timetable"",""maul-esel/linear.algebra.matrix""]",[]
+Handlebars,703,174,"[""calincru/KISS"",""mihneadb/no-nonsense"",""wycats/ghostium"",""scottmessinger/ember-string-helpers"",""gilesvangruisen/phantom"",""kevinjqiu/goal-ui"",""pselle/libertyjs.github.io-dev"",""emonty/broken-presentation-framwork"",""juandopazo/formatjs-site"",""jlecomte/pure-site""]",[]
+VCL,97,31,[],[]
+CLIPS,277,51,"[""mateioprea/phutballCLIPS""]",[]
+Nix,647,122,"[""mbbx6spp/mbp-nixos"",""neatonk/nixos-conf"",""aszlig/nixgames"",""cstrahan/nixos-config"",""dejanr/nixos"",""osener/markup.rocks.env"",""valeriangalliat/xkcd-random"",""puffnfresh/hiplambda"",""avnik/nixos-configs"",""doublec/nixpkgs""]",[]
+Game Maker Language,48,0,"[""leereilly/relichunterszero"",""reidab/ogr2osm""]","[""Scripting""]"
+Mirah,61,7,"[""igrigorik/dubious"",""fuentesjr/polyglot-mr-jobs"",""baroquebobcat/mirah-brainfuck"",""tychobrailleur/mirah-spark""]",[]
+UnrealScript,381,122,"[""stfx/ut2004mods""]",[]
+IDL,1446,634,"[""anthonyjsmith/ajs"",""robintw/rtwrtm"",""dpshelio/MyFunctions-1"",""dpshelio/InterestingFunctions""]","[""Interactive mode""]"
+EmberScript,54,6,[],[]
+POV-Ray SDL,0,0,[],[]
+Cap'n Proto,26611,1284,"[""mitar/sandstorm-test-python"",""mnutt/dav-test-server"",""mnutt/alexandria"",""paulproteus/gmg-tester"",""paulproteus/acronymy"",""paulproteus/meteor-gantt"",""paulproteus/sandstorm-sample-static-publishing""]",[]
+Vue,877,103,"[""NemoAlex/glutton"",""mdlawson/vue.js-talk"",""supersheep/vue-hackernews"",""hlapp/phylotastic-ontologies"",""theotherzach/patient-variable-resolver"",""kxxoling/vue-demos"",""kxxoling/qingcheng"",""liudangyi/K-link""]",[]
+Nit,14,1,[],[]
+Elm,2692,144,"[""eeue56/json-to-elm"",""etaque/tacks"",""krisajenkins/elm-rays"",""etaque/elm-transit-router"",""etaque/elm-simple-form"",""etaque/elm-route-parser"",""etaque/elm-routing-example"",""passy/elm-pokemon"",""etaque/elm-transit"",""jystic/elm-font-awesome""]","[""Functional""]"
+Frege,148,62,"[""puffnfresh/frege"",""johnynek/frege"",""dbushenko/restful-todo""]","[""Functional""]"
+Mask,43,5,[],[]
+XML,3592,3072,"[""shepting/kiwi-mac-demo"",""dylanPowers/ipfs-android"",""dlo/github-issue-filter-safari-extension"",""ashmind/StringInterpolationBridge"",""gildegoma/jenkins-docker-ansible"",""joefeser/gitextensions"",""muuki88/Chocolatey-Packages-Zippy"",""bachue/sublime-better-coffeescript"",""magnunleno/erichideki.github.io"",""gajdaw/bento""]",[]
+Bluespec,68,19,[],[]
+MTML,65,6,[],[]
+Gettext Catalog,10312,51,"[""rdp/legado"",""donpdonp/mailpile.js"",""asbjornu/arana"",""elpaso/django-cms"",""collinanderson/django-contrib-comments""]",[]
+REALbasic,78,38,"[""bdrister/AquaticPrime""]",[]
+SQL,542,300,"[""tony-landis/agilebill"",""thelfensdrfer/rndb-ss14"",""seamusabshere/pgloader""]",[]
+Delphi,91,25,"[""tristan2468/Hexy"",""ik5/split_lazarus"",""cpeterso/wxmodem"",""bvp/timetable"",""tuankiet65/chess-player"",""tokibito/delphi-unittest"",""esasse/Delphi-Mocks"",""esasse/delphi-joystick"",""esasse/delphi-notification"",""erictheise/spatial_equilibrium""]",[]
+E,56,10,[],"[""Concurrent""]"
+Eiffel,489,228,"[""gobo-eiffel/gobo"",""gitter-badger/EWF"",""gitter-badger/iron-1""]","[""Object-oriented"",""Concurrent""]"
+Harbour,16,0,[],[]
+Clarion,14,8,[],[]
+Shen,12,2,"[""michaelsbradleyjr/shen.clj"",""panesofglass/shen-libs"",""panesofglass/Shen.java"",""panesofglass/shen-sources""]",[]
+RobotFramework,185,73,[],[]
+Modelica,157,120,"[""thorade/HelmholtzMedia"",""dietmarw/OMCompiler"",""dietmarw/modelica-annex60"",""dietmarw/Modelica_TDL"",""dietmarw/Chemical"",""dietmarw/Modelica-MVEM"",""dietmarw/ipsl"",""dietmarw/LinearOscillator"",""dietmarw/Physiomodel"",""dietmarw/Modelica_DeviceDrivers""]",[]
+Cirru,89,8,"[""octo/swift-is-like-go""]",[]
+FLUX,178,54,[],[]
+Cycript,15,0,"[""keith/injectURLProtocol""]",[]
+Inform 7,99790,1684,"[""Morendil/UnGoutDePoire"",""Morendil/FicPack"",""rocketnia/counterfeit-monkey"",""Calamitous/A-Day-At-Home""]",[]
+SMT,55,21,"[""mattelacchiato/cafesat""]",[]
+API Blueprint,2885,99,"[""greensea/youxiaapi"",""themactep/liftmaster_myq"",""tyok/test-apiary-manifest"",""kyledrake/http-api-spec"",""jsgoecke/model-s-api"",""DylanFM/bushfires"",""grobmeier/blog-blueprint-apiary"",""grobmeier/blog-blueprint-apiary-2"",""Motiejus/specifications"",""baynezy/OrganiserAPI""]",[]
+KRL,125,28,[],[]
+IGOR Pro,26,0,"[""cmci/FrapCalc"",""cmci/vec9""]",[]
+BitBake,614,189,"[""kergoth/meta-clang"",""kergoth/meta-arago"",""kergoth/meta-qt5"",""kergoth/meta-oe"",""fishman/meta-kodi"",""plfiorini/meta-qt5-extra"",""funman/meta-odroid"",""kmwhite/meta-mali"",""bachp/meta-openembedded"",""whirm/meta-golang""]",[]
+ChucK,161,22,"[""L2G/chuck-experiments""]","[""Concurrent""]"
+CartoCSS,287,62,"[""yohanboniface/thank-you-map"",""Caged/maptime"",""mojodna/openstreetmap-carto"",""carsonmcdonald/toner-carto"",""durran/wienerblut"",""katydecorah/make-a-snowfall-map.tm2"",""mattions/pirate-map-alt-font"",""mattions/pirate-map"",""mileswwatkins/api.opencivicdata.org""]",[]
+Bro,162,54,"[""0xxon/bro-scripts"",""0xxon/bro.vim"",""0xxon/bro-junk-drawer""]",[]
+Fancy,18,1,"[""bakkdoor/redis.fy"",""bakkdoor/ripple.fy"",""bakkdoor/amorphic"",""bakkdoor/fsm.fy"",""bakkdoor/msgpack.fy"",""bakkdoor/fancy-vim"",""bakkdoor/fancywiki"",""bakkdoor/shortefy"",""brixen/fancy""]",[]
+Slash,132,117,[],[]
+Myghty,0,0,[],[]
+Papyrus,158,71,"[""SilverIce/PosePicker""]",[]
+GDScript,572,130,"[""olsonjeffery/GodotTiledImporter""]",[]
+AspectJ,405,112,[],[]
+HyPhy,16,1,"[""programble/advent-of-befunge""]",[]
+Max/MSP,1501,324,"[""sbl/sbl-vintage-collection""]",[]
+Web Ontology Language,45,0,"[""chapmanb/cwltool"",""neevor/common-workflow-language"",""brainstorm/cwltool"",""egonw/ontologies"",""egonw/edamontology"",""rvosa/flopoontology"",""hlapp/dsw"",""seandavi/HumanDiseaseOntology"",""rockneurotiko/Curso2015-2016"",""sdumitriu/human-phenotype-ontology""]",[]
+Component Pascal,2908,2229,"[""widdowquinn/SI_Pritchard_Birch_2014"",""chendrix/hero-extant""]",[]
+PogoScript,43,5,"[""joshski/catalogue"",""joshski/blip"",""joshski/sprout"",""joshski/trend-flower"",""wlmcewen/StarLogs""]",[]
+Volt,50,11,[],[]
+RenderScript,20,4,[],[]
+XC,226,84,"[""marcan/xmos-speaker-dsp"",""neatonk/xmos-startkit-examples""]",[]
+Dylan,120,19,"[""zacbrown/opendylan"",""abeaumont/google-code-jam"",""abeaumont/gir-dylan"",""abeaumont/libgit2-dylan"",""abeaumont/shuffle"",""abeaumont/shootout"",""abeaumont/base64"",""abeaumont/serialization"",""abeaumont/inotify-dylan"",""abeaumont/disposal""]","[""Object-oriented"",""Functional""]"

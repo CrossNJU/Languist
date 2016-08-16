@@ -3,6 +3,7 @@
  */
 
 import {userSchema} from '../../models/userSchema'
+import {languageSchema} from '../../models/languageSchema'
 
 function chooseLanguage(login, language, level, callback){
   let condition = {login: login};
