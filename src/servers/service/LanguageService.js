@@ -25,7 +25,10 @@ function getAllLanguage(callback){
   q.exec((err, langs) => {
     let lang_names = [];
     for (let lang of langs){
-      lang_names.push(lang.language);
+      lang_names.push({
+        name: lang.language,
+        repos: lang.repo_num
+      });
     }
     callback(lang_names);
   });
