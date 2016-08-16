@@ -51,11 +51,11 @@ async function getLanguageByName(langNames){
 
 export {getLanguageByUser}
 
-function test(){
-  //connect();
-  //let t = await getLanguageByTag("Functional");
-  let a = {"tt":{a:1, b:2}};
-  console.log(a.tt);
+async function test(){
+  connect();
+  let t = await getLanguageByTag("Functional");
+  //let a = {"tt":{a:1, b:2}};
+  console.log(t);
 }
 
 test();

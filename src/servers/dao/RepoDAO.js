@@ -3,17 +3,27 @@
  */
 
 import {userSchema} from '../../models/userSchema'
+import {connect_callback} from '../config'
 
 async function getStarRepoByUser(login){
-  let promise = await new Promise(function (resolve, reject) {
+  let t = await new Promise(function (resolve, reject) {
     let ans = [];
     userSchema.findOne({login: login}, (err, user) => {
       if (err) reject(err);
       ans = user.star_repos;
+      resolve(ans);
     });
-    resolve(ans);
   });
-  return promise;
+  return t;
 }
 
+async function test(){
+  connect_callback(async (v) => {
+    if (v == 1){
+      let t = await getStarRepoByUser("RickChem");
+      console.log(t);
+    }
+  });
+}
 
+test();
