@@ -171,12 +171,12 @@ async function get_rec_users(login,rec_num){
     }
   }
 
-  console.log(rec_user_login);
+  //console.log(rec_user_login);
 
   return rec_user_login;
 }
 
 export {get_rec_users}
 
-connect();
-get_rec_users('RickChem',20);
+//connect();
+//get_rec_users('RickChem',20);

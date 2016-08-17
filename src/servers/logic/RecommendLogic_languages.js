@@ -167,5 +167,5 @@ async function get_rec_languages(login){
 
 export {get_rec_languages}
 
-connect();
-get_rec_languages('RickChem');
+//connect();
+//get_rec_languages('RickChem');

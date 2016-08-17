@@ -4,6 +4,7 @@
 
 import {get_rec_users} from './RecommendLogic_users'
 import {getStarRepoByUser} from '../dao/RepoDAO'
+import {connect} from '../config'
 
 let rec_repos = [];
 let sim_user_num = 5;
@@ -115,10 +116,13 @@ async function get_rec_repos(login,rec_num){
     }
   }
 
+  //console.log(rec_repos);
   return rec_repos;
 
 }
 export {get_rec_repos}
-console.log(get_rec_repos('RickChem',10));
+
+//connect();
+//get_rec_repos('RickChem',10);
 
 
