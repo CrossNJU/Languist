@@ -1,0 +1,6 @@
+{
+  "name": "LoginCard",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./LoginCard.js"
+}
