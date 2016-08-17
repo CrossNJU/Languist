@@ -23,7 +23,12 @@ function login(username, password, callback){
     else {
       if (user.password == password) {
         //update current user
-        globalSchema.update({global_num: 1}, {current_user: login}, {upsert: true}, (err, res) => {
+        let update = {
+          $set: {
+            current_user: username
+          }
+        };
+        globalSchema.update({global_num: 1}, update, {upsert: true}, (err, res) => {
           console.log(res);
         });
         callback(1);
@@ -45,10 +50,10 @@ function register(username, password, callback){
       callback(1);
     }
   });
-  //update current user
-  globalSchema.update({global_num: 1}, {current_user: login}, {upsert: true}, (err, res) => {
-    console.log(res);
-  });
+  ////update current user
+  //globalSchema.update({global_num: 1}, {current_user: login}, {upsert: true}, (err, res) => {
+  //  console.log(res);
+  //});
 }
 
 function updateWhenLogin(login){
