@@ -102,7 +102,7 @@ async function get_rec_languages(login){
 
   user_langs = await getLanguageByUser(login);
 
-  user_tags = get_user_tag(login);
+  user_tags = await get_user_tag(login);
 
   //取tag排名中的前tag_num的语言,统计语言出现的次数
   let count = 0;
@@ -138,12 +138,13 @@ async function get_rec_languages(login){
   for (let key in lang_count){
     let temp_lang = {
       name: key,
-      score: lang_count[key] + await getLanguageSize(key)/5000
+      score: lang_count[key] + await getLanguageSize(key)/60000000
     };
     lang_info.push(temp_lang);
   }
   lang_info.sort(getSortFun('desc', 'score'));
 
+  console.log(lang_info);
   //取前rec_num返回作为推荐语言
   let re = 0;
   let wlen = lang_info.length;
@@ -159,10 +160,12 @@ async function get_rec_languages(login){
 
   }
 
-  console.log(rec_langs);
+  //console.log(rec_langs);
 
   return rec_langs;
 }
+
+export {get_rec_languages}
 
 connect();
 get_rec_languages('RickChem');
