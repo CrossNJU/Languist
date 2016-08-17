@@ -125,7 +125,7 @@ server.get('/api/repo/star', (req, res)=>{
 
 //home
 server.get('/api/home/flowList', (req, res) => {
-  getFlowListData(req.query.user, req.query.lang, call => {
+  getFlowListData(req.query.user, call => {
     res.send(call);
   });
 });

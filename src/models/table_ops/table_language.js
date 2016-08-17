@@ -67,8 +67,24 @@ function updateLanguageTags(){
   });
 }
 
+function updateLanguageWiki(){
+  const cusor = my_languageSchema.find({}).cursor();
+  let i = 0;
+  cusor.on('data', function (doc) {
+    let update = {
+      $set: {
+        wiki: doc.wiki
+      }
+    };
+    languageSchema.update({language: doc.language}, update, (err, res) => {
+      console.log(i++);
+    })
+  })
+}
+
 export {
   createFromMysql as create_language,
   updateLanguageRankedRepo as language_rankedRepo,
-  updateLanguageTags as language_tags
+  updateLanguageTags as language_tags,
+  updateLanguageWiki as language_wiki
 }

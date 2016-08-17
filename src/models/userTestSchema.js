@@ -1,5 +1,5 @@
 /**
- * Created by raychen on 16/7/26.
+ * Created by raychen on 16/8/17.
  */
 
 import mongoose from 'mongoose'
@@ -9,9 +9,6 @@ var schema =  mongoose.Schema;
 var userSchema = schema({
   login: String,
   level: Number,
-  avatar_url: String,
-  type: String,
-  name: String,
   company: String,
   location: String,
   email: String,
@@ -28,12 +25,7 @@ var userSchema = schema({
   }],
   star_repos: [String],
   access_token: String,
-  password: String,
-  bio: String,
-  blog: String,
-  follower_login: [String],
-  use_languages: [],
-  repos: []
+  password: String
 });
 
 //make model and export

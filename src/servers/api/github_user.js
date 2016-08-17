@@ -50,6 +50,56 @@ function starRepo(login, repo, callback){
   });
 }
 
+function getPublicRepos(login, page, array, callback) {
+  let len = array.length;
+  client.get('users/' + login + '/repos', {page: page, per_page: 100}, function (err, status, body, headers) {
+    if (body === undefined || body.length == 0){
+      callback(array);
+    }else {
+      for (let i = 0; i < body.length; i++) {
+        let json = body[i];
+        array[len] = json.full_name;
+        len++;
+      }
+      getUserStarred(login, page + 1, array, callback);
+    }
+  });
+}
+
+function addAnewUser(json, access_token){
+  var conditions = {login : json.login };
+  var update     = {$set : {
+    login: json.login,
+    avatar_url: json.avatar_url,
+    type: json.type,
+    name: json.name,
+    company: json.company,
+    location: json.location,
+    email: json.email,
+    public_repos: json.public_repos,
+    public_gists: json.public_gists,
+    followers: json.followers,
+    following: json.following,
+    created_at: json.created_at,
+    updated_at: json.updated_at,
+    star_num: -1,
+    star_repos: [],
+    follower_login: [],
+    level: 0,
+    language: [],
+    access_token: access_token,
+    password: "123",
+    bio: json.bio,
+    blog: json.blog,
+    use_languages: [],
+    repos: []}
+  };
+  var options = {upsert : true};
+  userSchema.update(conditions, update, options, function(error, res){
+    console.log("new user!");
+  });
+}
+
 //
 //getUserStarred('tricknotes', 1, [], (v) => {
 //  console.log('done!' + v[0]);
@@ -57,4 +107,4 @@ function starRepo(login, repo, callback){
 //getUserStarred('ChenDanni', 1, [], (v) => {
 //  console.log('done!'+ v);
 //});
-export {getUserStarred, starRepo}
+export {getUserStarred, starRepo, getPublicRepos, addAnewUser}
