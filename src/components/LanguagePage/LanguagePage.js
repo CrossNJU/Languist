@@ -9,6 +9,7 @@ import s from './LanguagePage.scss';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import $ from 'jquery';
+import SearchField from '../SearchField';
 
 const title = 'Add Language';
 
@@ -60,6 +61,8 @@ const title = 'Add Language';
 // ];
 
 class LanguagePage extends Component {
+  langData;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -79,7 +82,7 @@ class LanguagePage extends Component {
   componentDidMount() {
     let user = this.state.user;
     let allLang = [];
-    let userLang = []
+    let userLang = [];
 
     // Get all language
     $.ajax('/api/language/all', {async: false})
@@ -105,8 +108,15 @@ class LanguagePage extends Component {
       });
       return result;
     });
+    this.langData = langData.concat();
+    this.setState({langData: langData});
+  }
 
-    // console.log(langData);
+  handleSearch(keywords) {
+    let langData = this.langData.filter((lang) => {
+      return lang.name.toLowerCase().search(keywords.toLowerCase()) != -1;
+    });
+    console.log('search');
     this.setState({langData: langData});
   }
 
@@ -115,11 +125,7 @@ class LanguagePage extends Component {
       <div className={s.root}>
         <div className={s.container}>
           <Paper>
-            <TextField hintText="Choose languages you are good at or learning"
-                       fullWidth={true}
-                       underlineShow={false}
-                       inputStyle={{padding: '0 16px', boxSizing: 'border-box'}}
-                       hintStyle={{padding: '0 16px'}}/>
+            <SearchField handleSearch={this.handleSearch.bind(this)}/>
             <LangList langData={this.state.langData} user={this.state.user} ref="list"/>
           </Paper>
         </div>
