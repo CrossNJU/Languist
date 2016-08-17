@@ -55,6 +55,7 @@ async function get_rec_repos(login,rec_num){
   let rec_repos = [];
   let count_max = -1;
   let star_max = -1;
+  let user_stars = await getStarRepoByUser(login);
   //得到最相似的前sim_user_num个用户
   let sim_users = await get_rec_users(login,sim_user_num);
 
@@ -74,6 +75,12 @@ async function get_rec_repos(login,rec_num){
         };
         repo_count[repo_name] = repo_info;
       }
+    }
+  }
+  //去除重复
+  for (let i = 0;i < user_stars.length;i++){
+    if (repo_count.hasOwnProperty(user_stars[i].fullname)){
+      delete repo_count[user_stars[i].fullname];
     }
   }
 
@@ -116,13 +123,13 @@ async function get_rec_repos(login,rec_num){
     }
   }
 
-  //console.log(rec_repos);
+  console.log(rec_repos);
   return rec_repos;
 
 }
 export {get_rec_repos}
 
-//connect();
-//get_rec_repos('RickChem',10);
+connect();
+get_rec_repos('RickChem',10);
 
 
