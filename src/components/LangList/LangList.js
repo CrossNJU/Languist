@@ -13,11 +13,11 @@ import $ from 'jquery';
 
 
 class LangList extends Component {
+  langData;
+
   constructor(props) {
     super(props);
-    this.state = {
-      langData: props.langData
-    }
+    this.langData = this.props.langData;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -28,14 +28,11 @@ class LangList extends Component {
         level: 0
       }
     });
-
-    this.setState({
-      langData: langData
-    });
+    this.langData = langData;
   }
 
   handleSubmit() {
-    let langs = this.state.langData;
+    let langs = this.langData;
     console.log(langs);
     langs = langs.filter((lang) => {
       return lang.isSelected;
@@ -49,14 +46,12 @@ class LangList extends Component {
   }
 
   handleChange(lang) {
-    let langData = this.state.langData;
+    let langData = this.langData;
     langData.forEach((l, index) => {
       if(l.name == lang.name) {
         langData[index] = lang;
       }
     });
-    this.setState({langData: langData});
-
   }
 
   renderLanguage() {

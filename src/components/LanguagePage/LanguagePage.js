@@ -10,6 +10,8 @@ import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import $ from 'jquery';
 
+const title = 'Add Language';
+
 // let langData = [
 //   {
 //     name: "JavaScript",
@@ -66,10 +68,18 @@ class LanguagePage extends Component {
     }
   }
 
+  static contextTypes = {
+    onSetTitle: PropTypes.func.isRequired,
+  };
+
+  componentWillMount() {
+    this.context.onSetTitle(title);
+  }
+
   componentDidMount() {
     let user = this.state.user;
-    let langData = [];
     let allLang = [];
+    let userLang = []
 
     // Get all language
     $.ajax('/api/language/all', {async: false})
@@ -81,23 +91,23 @@ class LanguagePage extends Component {
     // Get user language
     $.ajax('/api/home/langList', {async: false, data:{user: user}})
       .done(((userLanguages) => {
+        userLang = userLanguages;
+      }).bind(this));
 
-        // Delete selected language
-        langData = allLang.filter((lang) => {
-          let result = true;
-          userLanguages.forEach((l) => {
-            if(l.name == lang.name) {
-              result = false;
-              // console.log(lang.name);
-            }
-          });
-          return result;
-        });
+    // Delete selected language
+    let langData = allLang.filter((lang) => {
+      let result = true;
+      userLang.forEach((l) => {
+        if(l.name == lang.name) {
+          result = false;
+          // console.log(lang.name);
+        }
+      });
+      return result;
+    });
 
-        // console.log(langData);
-        this.setState({langData: langData});
-
-      }).bind(this))
+    // console.log(langData);
+    this.setState({langData: langData});
   }
 
   render() {
@@ -109,8 +119,7 @@ class LanguagePage extends Component {
                        fullWidth={true}
                        underlineShow={false}
                        inputStyle={{padding: '0 16px', boxSizing: 'border-box'}}
-                       hintStyle={{padding: '0 16px'}}
-            />
+                       hintStyle={{padding: '0 16px'}}/>
             <LangList langData={this.state.langData} user={this.state.user} ref="list"/>
           </Paper>
         </div>

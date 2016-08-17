@@ -1,6 +1,5 @@
 
 @import '../variables.scss';
-@import 'normalize.css';
 
 .root {
 
@@ -30,6 +29,11 @@
     align-items: center;
     flex-basis: auto;
     flex-grow: 0;
+
+    p {
+      width:60px;
+      text-align: right;
+    }
   }
 
 }
