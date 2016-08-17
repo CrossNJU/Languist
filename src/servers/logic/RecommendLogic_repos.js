@@ -49,7 +49,7 @@ function getSortFun(order, sortBy) {
 //  return [];
 //}
 
-async function get_rec_repos(login,rec_num){
+async function get_rec_repos_by_user(login,rec_num){
   let repo_count = [];
   let repo_info = [];
   let rec_repos = [];
@@ -127,9 +127,14 @@ async function get_rec_repos(login,rec_num){
   return rec_repos;
 
 }
-export {get_rec_repos}
+
+function get_rec_repos_by_following(){
+  
+}
+
+export {get_rec_repos_by_user,get_rec_repos_by_following}
 
 connect();
-get_rec_repos('RickChem',10);
+get_rec_repos_by_user('RickChem',10);
 
 
