@@ -30,14 +30,14 @@ class RegisterPage extends Component {
     this.context.onSetTitle(title);
   }
 
-  handleLogin(username, password) {
-    let url = '/api/login';
+  handleRegister(username, password) {
+    let url = '/api/register';
 
     $.ajax(url, {data:{username: username, password: password}})
       .done((message) => {
         console.log(message);
         if(message == "success") {
-          window.location.href = "/home";
+          window.location.href = "/login";
         } else {
           console.log('fail');
         }
@@ -48,7 +48,7 @@ class RegisterPage extends Component {
     return (
       <div className={s.root}>
         <div className={s.container}>
-          <LoginCard handleSubmit={this.handleLogin.bind(this)} type="register"/>
+          <LoginCard handleSubmit={this.handleRegister.bind(this)} type="register"/>
         </div>
       </div>
     );

@@ -18,6 +18,8 @@ import StarIcon from 'material-ui/svg-icons/toggle/star';
 import ArrowIcon from 'material-ui/svg-icons/av/play-arrow';
 import FaceIcon from 'material-ui/svg-icons/action/face'
 
+const title = 'Languist'
+
 let brandColor = '#F2DF83';
 
 let memberIconStyle = {
@@ -48,6 +50,10 @@ class HomePage extends Component {
   static contextTypes = {
     onSetTitle: PropTypes.func.isRequired,
   };
+
+  componentWillMount() {
+    this.context.onSetTitle(title);
+  }
 
   render() {
     return (

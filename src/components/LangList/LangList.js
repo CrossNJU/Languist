@@ -17,23 +17,24 @@ class LangList extends Component {
 
   constructor(props) {
     super(props);
-    this.langData = this.props.langData;
+    this.langData = undefined;
   }
 
   componentWillReceiveProps(nextProps) {
-    let langData = nextProps.langData.map((lang) => {
-      return {
-        name: lang.name,
-        isSelected: false,
-        level: 0
-      }
-    });
-    this.langData = langData;
+    if(!this.langData) {
+      let langData = nextProps.langData.map((lang) => {
+        return {
+          name: lang.name,
+          isSelected: false,
+          level: 0
+        }
+      });
+      this.langData = langData;
+    }
   }
 
   handleSubmit() {
     let langs = this.langData;
-    console.log(langs);
     langs = langs.filter((lang) => {
       return lang.isSelected;
     });
@@ -43,6 +44,7 @@ class LangList extends Component {
           console.log('choose ' + lang.name + " " + message);
         }));
     });
+    // console.log(langs);
   }
 
   handleChange(lang) {
