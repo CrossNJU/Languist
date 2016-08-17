@@ -27,6 +27,8 @@ const router = new Router(on => {
     return component && <App context={state.context}>{component}</App>;
   });
 
+  on("/", async () => <IndexPage/>);
+
   on('/index', async () => <IndexPage/>);
 
   on('/home', async () => <HomePage />);
