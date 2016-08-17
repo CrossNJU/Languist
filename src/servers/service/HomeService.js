@@ -48,7 +48,7 @@ export var getLangListData = (userName, callback) => {
   });
 };
 
-export var getFlowListData = (userName, language, callback) => {
+export var getFlowListData = (userName, callback) => {
   getRepoByUser(userName, language, async (repos) => {
     let ans = [];
     if (repos.length > 0){

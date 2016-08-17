@@ -5,8 +5,8 @@
 import {userSchema} from '../../models/userSchema'
 import {globalSchema} from '../../models/globalSchema'
 import {github_repoSchema} from '../../models/github_repoSchema'
-import {getUserStarred} from '../api/github_user'
-import {getRepoInfo} from '../api/github_repo'
+import {getUserStarred, getPublicRepos, addAnewUser} from '../api/github_user'
+import {getRepoInfo, getRepoLanguages, addNewRepo} from '../api/github_repo'
 var superagent = require('superagent');
 
 var getAccessURL = 'https://github.com/login/oauth/access_token';
@@ -21,7 +21,13 @@ function login(username, password, callback){
   userSchema.findOne({login: username}, (err, user) => {
     if (user == null) callback("no such user!");
     else {
-      if (user.password == password) callback(1);
+      if (user.password == password) {
+        //update current user
+        globalSchema.update({global_num: 1}, {current_user: login}, {upsert: true}, (err, res) => {
+          console.log(res);
+        });
+        callback(1);
+      }
       else if (user.password === undefined) callback("password not set yet!");
       else callback("password error!");
     }
@@ -38,56 +44,61 @@ function register(username, password, callback){
     else {
       callback(1);
     }
-  })
+  });
+  //update current user
+  globalSchema.update({global_num: 1}, {current_user: login}, {upsert: true}, (err, res) => {
+    console.log(res);
+  });
 }
 
-function updateWhenLogin(login, callback){
+function updateWhenLogin(login){
+  //get star repos
   getUserStarred(login, 1, [], (ret) => {
     var conditions = {login : login };
     var update     = {$set : {
       star_num: ret.length,
       star_repos: ret}
     };
+    userSchema.update(conditions, update, (err, res2) => {
+      console.log("update user star repos!");
+      console.log(res2);
+    });
     for (let repo_fullname of ret) {
       getRepoInfo(repo_fullname, info => {
         github_repoSchema.findOne({full_name: repo_fullname}, (err, check)=>{
+          //add new repo
           if (check == null){
-            let update2 = {
-              $set: {
-                full_name: info.full_name,
-                owner: info.owner.login,
-                owner_avatar_url: info.owner.avatar_url,
-                description: info.description,
-                url: info.html_url,
-                clone_url: info.clone_url,
-                subscribers_count: -1,
-                forks_count: info.forks_count,
-                stars_count: info.stargazers_count,
-                contributors_count: -1,
-                contributors: [],
-                collaborators_count: -1,
-                collaborators: [],
-                pullrequests_count: -1,
-                issues_count: info.open_issues_count,
-                size: info.size,
-                updated_at: info.updated_at,
-                created_at: info.created_at,
-                main_language: info.language,
-                languages: []
-              }
-            };
-            github_repoSchema.update({full_name: repo_fullname}, update2, {upsert: true}, (err, res) => {
-              console.log(res);
-            });
+            addNewRepo(info);
           }
         });
       });
     }
+  });
+  //get followers
+  //get use_languages
+  getPublicRepos(login, 1, [], (ret) => {
+    var conditions = {login : login };
+    var update     = {$set : {
+      repos: ret}
+    };
     userSchema.update(conditions, update, (err, res2) => {
-      globalSchema.update({global_num: 1}, {current_user: login}, {upsert: true}, (err, res) => {
-        callback(1);
-      })
+      console.log("update user repos!");
+      console.log(res2);
     });
+    for (let repo of ret){
+      getRepoLanguages(repo, languages => {
+        var conditions = {login : login };
+        for (let language of languages){
+          var update     = {$addToSet : {
+            use_languages: language}
+          };
+          userSchema.update(conditions, update, (err, res2) => {
+            //console.log("add to user languages!");
+            //console.log(res2);
+          });
+        }
+      });
+    }
   });
 }
 
@@ -117,41 +128,18 @@ export var saveUser = (code, callback) => {
           if (err){
             return console.log(err);
           }
+          callback(1);
           let json = JSON.parse(ssres.text);
           //console.log(ssres.text);
+
           //insert new users
           userSchema.findOne({login: json.login}, (err, check) => {
             if (check == null) {
-              var conditions = {login : json.login };
-              var update     = {$set : {
-                login: json.login,
-                avatar_url: json.avatar_url,
-                type: json.type,
-                name: json.name,
-                company: json.company,
-                location: json.location,
-                email: json.email,
-                public_repos: json.public_repos,
-                public_gists: json.public_gists,
-                followers: json.followers,
-                following: json.following,
-                created_at: json.created_at,
-                updated_at: json.updated_at,
-                star_num: -1,
-                star_repos: [],
-                level: 0,
-                language: [],
-                access_token: access_token,
-                password: "123"}
-              };
-              var options = {upsert : true};
-              userSchema.update(conditions, update, options, function(error, res){
-                console.log("new user!");
-              });
+              addAnewUser(json, access_token);
             }else {
             }
           });
-          updateWhenLogin(json.login, callback);
+          updateWhenLogin(json.login);
         });
     });
 };
