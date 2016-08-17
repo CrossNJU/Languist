@@ -2,86 +2,89 @@
  * Created by ChenDanni on 2016/8/15.
  */
 
+import {getUserAndLevelByLanguage} from '../dao/RepoDAO'
+import {getLanguageByUser} from '../dao/languageDAO'
+
 let modulate = 2;
 //let rec_num = 3;
 let rec_user_login = [];
 
-function getLanguageByUser(login){
-  return [{
-    name: "lan1",
-    level: 1,
-    tag:["tag1","tag2","tag3"],
-    size:100
-  },{
-    name: "lan2",
-    level: 2,
-    tag:["tag2","tag3","tag4"],
-    size:100
-  },{
-    name: "lan3",
-    level: 1,
-    tag:["tag1","tag4","tag3"],
-    size:100
-  }];
-}
+//function getLanguageByUser(login){
+//  return [{
+//    name: "lan1",
+//    level: 1,
+//    tag:["tag1","tag2","tag3"],
+//    size:100
+//  },{
+//    name: "lan2",
+//    level: 2,
+//    tag:["tag2","tag3","tag4"],
+//    size:100
+//  },{
+//    name: "lan3",
+//    level: 1,
+//    tag:["tag1","tag4","tag3"],
+//    size:100
+//  }];
+//}
 
-function getUserAndLevelByLanguage(language){
-  if (language == 'lan1'){
-    return [{
-      login: 'u1',
-      lan_level: 4
-    },{
-      login: 'u2',
-      lan_level: 2
-    },{
-      login: 'u3',
-      lan_level: 3
-    },{
-      login: 'u4',
-      lan_level: 4
-    },{
-      login: 'u5',
-      lan_level: 5
-    }]
-  }
-  if (language == 'lan2'){
-    return [{
-      login: 'u11',
-      lan_level: 1
-    },{
-      login: 'u2',
-      lan_level: 2
-    },{
-      login: 'u13',
-      lan_level: 3
-    },{
-      login: 'u14',
-      lan_level: 4
-    },{
-      login: 'u15',
-      lan_level: 5
-    }]
-  }
-  if (language == 'lan3'){
-    return [{
-      login: 'u1',
-      lan_level: 1
-    },{
-      login: 'u21',
-      lan_level: 2
-    },{
-      login: 'u3',
-      lan_level: 3
-    },{
-      login: 'u14',
-      lan_level: 4
-    },{
-      login: 'u5',
-      lan_level: 5
-    }]
-  }
-  return []
-}
+//function getUserAndLevelByLanguage(language){
+//  if (language == 'lan1'){
+//    return [{
+//      login: 'u1',
+//      lan_level: 4
+//    },{
+//      login: 'u2',
+//      lan_level: 2
+//    },{
+//      login: 'u3',
+//      lan_level: 3
+//    },{
+//      login: 'u4',
+//      lan_level: 4
+//    },{
+//      login: 'u5',
+//      lan_level: 5
+//    }]
+//  }
+//  if (language == 'lan2'){
+//    return [{
+//      login: 'u11',
+//      lan_level: 1
+//    },{
+//      login: 'u2',
+//      lan_level: 2
+//    },{
+//      login: 'u13',
+//      lan_level: 3
+//    },{
+//      login: 'u14',
+//      lan_level: 4
+//    },{
+//      login: 'u15',
+//      lan_level: 5
+//    }]
+//  }
+//  if (language == 'lan3'){
+//    return [{
+//      login: 'u1',
+//      lan_level: 1
+//    },{
+//      login: 'u21',
+//      lan_level: 2
+//    },{
+//      login: 'u3',
+//      lan_level: 3
+//    },{
+//      login: 'u14',
+//      lan_level: 4
+//    },{
+//      login: 'u5',
+//      lan_level: 5
+//    }]
+//  }
+//  return []
+//}
 
 function getSortFun(order, sortBy) {
   var ordAlpah = (order == 'asc') ? '>' : '<';
@@ -174,4 +177,4 @@ function get_rec_users(login,rec_num){
 
 export {get_rec_users}
 
-get_rec_users('test',20);
+get_rec_users('RickChem',20);
