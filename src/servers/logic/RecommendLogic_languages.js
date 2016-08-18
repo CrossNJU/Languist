@@ -12,7 +12,6 @@ let user_langs = [];
 let user_tags = [];
 let tag_num = 3;
 let lang_count = {};
-let rec_num = 3;
 
 function getSortFun(order, sortBy) {
   var ordAlpah = (order == 'asc') ? '>' : '<';
@@ -97,7 +96,7 @@ async function get_user_tag(login){
   return tags_sort;
 }
 
-async function get_rec_languages(login){
+async function get_rec_languages(login,rec_num){
   let lang_info = [];
 
   user_langs = await getLanguageByUser(login);
