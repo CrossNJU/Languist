@@ -26,6 +26,38 @@ function getUserStarred(login, page, array, callback) {
   });
 }
 
+function getFollowings(login, page, array, callback) {
+  let len = array.length;
+  client.get('users/' + login + '/following', {page: page, per_page: 100}, function (err, status, body, headers) {
+    if (body === undefined || body.length == 0){
+      callback(array);
+    }else {
+      for (let i = 0; i < body.length; i++) {
+        let json = body[i];
+        array[len] = json.login;
+        len++;
+      }
+      getFollowings(login, page + 1, array, callback);
+    }
+  });
+}
+
+function getPublicRepos(login, page, array, callback) {
+  let len = array.length;
+  client.get('users/' + login + '/repos', {page: page, per_page: 100}, function (err, status, body, headers) {
+    if (body === undefined || body.length == 0){
+      callback(array);
+    }else {
+      for (let i = 0; i < body.length; i++) {
+        let json = body[i];
+        array[len] = json.full_name;
+        len++;
+      }
+      getPublicRepos(login, page + 1, array, callback);
+    }
+  });
+}
+
 function starRepo(login, repo, callback){
   userSchema.findOne({login: login}, (err, user) => {
     var auth_client = github.client(user.access_token);
@@ -47,22 +79,6 @@ function starRepo(login, repo, callback){
         });
       }
     });
-  });
-}
-
-function getPublicRepos(login, page, array, callback) {
-  let len = array.length;
-  client.get('users/' + login + '/repos', {page: page, per_page: 100}, function (err, status, body, headers) {
-    if (body === undefined || body.length == 0){
-      callback(array);
-    }else {
-      for (let i = 0; i < body.length; i++) {
-        let json = body[i];
-        array[len] = json.full_name;
-        len++;
-      }
-      getUserStarred(login, page + 1, array, callback);
-    }
   });
 }
 
@@ -107,4 +123,4 @@ function addAnewUser(json, access_token){
 //getUserStarred('ChenDanni', 1, [], (v) => {
 //  console.log('done!'+ v);
 //});
-export {getUserStarred, starRepo, getPublicRepos, addAnewUser}
+export {getUserStarred, getPublicRepos, getFollowings, starRepo, addAnewUser}

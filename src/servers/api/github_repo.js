@@ -11,24 +11,56 @@ var client = github.client({
 });
 
 function getRepoInfo(fullname, callback) {
-  client.get('/repos/'+fullname, {}, function (err, status, body, headers) {
+  client.get('/repos/' + fullname, {}, function (err, status, body, headers) {
     //console.log(body); //json object
     callback(body);
   });
 }
 
-function getRepoLanguages(fullname, callback){
-  client.get('/repos/'+fullname+'/languages', {}, function (err, status, body, headers) {
+function getRepoLanguages(fullname, callback) {
+  client.get('/repos/' + fullname + '/languages', {}, function (err, status, body, headers) {
     //console.log(body); //json object
     let res = [];
-    for (let key in body){
+    for (let key in body) {
       res.push(key);
     }
     callback(res);
   });
 }
 
-function addNewRepo(info){
+function getStarredUsers(fullname, page, array, callback) {
+  let len = array.length;
+  client.get('repos/' + fullname + '/stargazers', {page: page, per_page: 100}, function (err, status, body, headers) {
+    if (body === undefined || body.length == 0){
+      callback(array);
+    }else {
+      for (let i = 0; i < body.length; i++) {
+        let json = body[i];
+        array[len] = json.login;
+        len++;
+      }
+      getStarredUsers(fullname, page + 1, array, callback);
+    }
+  });
+}
+
+function getContributors(fullname, page, array, callback) {
+  let len = array.length;
+  client.get('repos/' + fullname + '/contributors', {page: page, per_page: 100}, function (err, status, body, headers) {
+    if (body === undefined || body.length == 0){
+      callback(array);
+    }else {
+      for (let i = 0; i < body.length; i++) {
+        let json = body[i];
+        array[len] = json.login;
+        len++;
+      }
+      getContributors(fullname, page + 1, array, callback);
+    }
+  });
+}
+
+function addNewRepo(info) {
   let update2 = {
     $set: {
       full_name: info.full_name,
@@ -88,4 +120,4 @@ function addNewRepo(info){
 //    console.log(res);
 //  });
 //});
-export {getRepoInfo, getRepoLanguages, addNewRepo}
+export {getRepoInfo, getRepoLanguages, getStarredUsers, getContributors, addNewRepo}
