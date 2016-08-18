@@ -171,12 +171,25 @@ async function get_rec_users(login,rec_num){
     }
   }
 
-  //console.log(rec_user_login);
+  //去除重复
+  let index = -1;
+  for (let i = 0;i < rec_user_login.length;i++){
+    if (rec_user_login[i] == login){
+      index = i;
+      break;
+    }
+  }
+  if (index != -1){
+    rec_user_login.splice(index,1);
+  }
+
+  console.log(rec_user_login);
+
 
   return rec_user_login;
 }
 
 export {get_rec_users}
 
-//connect();
-//get_rec_users('RickChem',20);
+connect();
+get_rec_users('RickChem',20);
