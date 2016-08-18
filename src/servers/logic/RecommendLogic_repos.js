@@ -123,18 +123,18 @@ async function get_rec_repos_by_user(login,rec_num){
     }
   }
 
-  console.log(rec_repos);
+  //console.log(rec_repos);
   return rec_repos;
 
 }
 
 function get_rec_repos_by_following(){
-  
+
 }
 
 export {get_rec_repos_by_user,get_rec_repos_by_following}
 
-connect();
-get_rec_repos_by_user('RickChem',10);
+//connect();
+//get_rec_repos_by_user('RickChem',10);
 
 

@@ -5,8 +5,74 @@
 import {github_repoSchema} from '../../models/github_repoSchema';
 import {userSchema} from '../../models/userSchema'
 import {languageSchema} from '../../models/languageSchema';
-import {getRepoByUser} from '../logic/RecommendLogic_lang';
+//import {getRepoByUser} from '../logic/RecommendLogic_lang';
 import {transTime} from '../util/timeUtil'
+import {get_rec_languages} from '../logic/RecommendLogic_languages'
+import {get_rec_repos_by_following, get_rec_repos_by_user} from '../logic/RecommendLogic_repos'
+import {get_rec_users} from '../logic/RecommendLogic_users'
+
+async function combine(repos, users, langs){
+  let ans = [];
+  for (let lang of langs){
+    let single = await new Promise(function(resolve, reject) {
+      languageSchema.findOne({language: lang}, (err, lang_single) => {
+        if (err) reject(err);
+        let ret = {
+          type: 'lang',
+          name: lang,
+          description: lang_single.wiki
+        };
+        resolve(ret);
+      });
+    });
+    ans.push(single);
+  }
+  for (let user of users){
+    let single = await new Promise(function(resolve, reject) {
+      userSchema.findOne({login: user}, (err, user_single) => {
+        if (err) reject(err);
+        let lang_user = [];
+        for (let lang_single of user_single.language){
+          lang_user.push(lang_single.lang_name);
+        }
+        let ret = {
+          type: 'user',
+          avatarUrl: user_single.avatar_url,
+          login: user_single.login,
+          name: user_single.name,
+          bio: user_single.bio,
+          url: user_single.blog,
+          langs: lang_user,
+          join: user_single.created_at,
+          location: user_single.location,
+          follwers: user_single.followers
+        };
+        resolve(ret);
+      });
+    });
+    ans.push(single);
+  }
+  for (let repo of repos){
+    let single = await new Promise(function(resolve, reject) {
+      github_repoSchema.findOne({full_name: repo}, (err, repo_single) => {
+        if (err) reject(err);
+        let ret = {
+          type: 'repo',
+          avatarUrl: repo_single.owner_avatar_url,
+          owner: repo_single.owner,
+          name: repo_single.full_name.split("/")[1],
+          description: repo_single.description,
+          tags: repo_single.languages,
+          update: transTime(repo_single.updated_at),
+          star: repo_single.stars_count
+        };
+        resolve(ret);
+      });
+    });
+    ans.push(single);
+  }
+  return ans;
+}
 
 export var getCoverData = (userName, callback) => {
   let data = {};
@@ -48,35 +114,40 @@ export var getLangListData = (userName, callback) => {
   });
 };
 
-export var getFlowListData = (userName, callback) => {
-  getRepoByUser(userName, language, async (repos) => {
-    let ans = [];
-    if (repos.length > 0){
-      for (let i=0;i<repos.length;i++){
-        let full_name = repos[i];
-        let repo_single = await new Promise((resolve, reject) => {
-          github_repoSchema.findOne({"full_name": full_name}, (err, repo_sing) => {
-            if (err){
-              reject(err);
-            }else {
-              resolve(repo_sing);
-            }
-          });
-        });
-        let update_time = transTime(repo_single.updated_at);
-        ans[i] = {
-          //type:
-          avatarUrl: repo_single.owner_avatar_url,
-          owner: repo_single.owner,
-          name: full_name.split("/")[1],
-          description: repo_single.description,
-          tags: repo_single.languages,
-          update: update_time,
-          star: repo_single.stars_count,
-          url: repo_single.url
-        };
-      }
-    }
-    callback(ans);
-  });
+export var getFlowListData = async (userName, callback) => {
+  //getRepoByUser(userName, language, async (repos) => {
+  //  let ans = [];
+  //  if (repos.length > 0){
+  //    for (let i=0;i<repos.length;i++){
+  //      let full_name = repos[i];
+  //      let repo_single = await new Promise((resolve, reject) => {
+  //        github_repoSchema.findOne({"full_name": full_name}, (err, repo_sing) => {
+  //          if (err){
+  //            reject(err);
+  //          }else {
+  //            resolve(repo_sing);
+  //          }
+  //        });
+  //      });
+  //      let update_time = transTime(repo_single.updated_at);
+  //      ans[i] = {
+  //        //type:
+  //        avatarUrl: repo_single.owner_avatar_url,
+  //        owner: repo_single.owner,
+  //        name: full_name.split("/")[1],
+  //        description: repo_single.description,
+  //        tags: repo_single.languages,
+  //        update: update_time,
+  //        star: repo_single.stars_count,
+  //        url: repo_single.url
+  //      };
+  //    }
+  //  }
+  //  callback(ans);
+  //});
+  let repos = await get_rec_repos_by_user(userName, 10);
+  let langs = await get_rec_languages(userName, 5);
+  let users = await get_rec_users(userName, 5);
+  let ans = await combine(repos, users, langs);
+  callback(ans);
 };
