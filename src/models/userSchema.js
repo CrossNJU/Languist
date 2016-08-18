@@ -6,7 +6,7 @@ import mongoose from 'mongoose'
 var schema =  mongoose.Schema;
 
 //add schema
-var userSchema = schema({
+var user = schema({
   login: String,
   level: Number,
   avatar_url: String,
@@ -37,5 +37,5 @@ var userSchema = schema({
 });
 
 //make model and export
-var userSchema = mongoose.model('user', userSchema);
+var userSchema = mongoose.model('user', user);
 export {userSchema};

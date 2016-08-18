@@ -2,7 +2,7 @@
  * Created by ChenDanni on 2016/8/15.
  */
 
-import {getUserAndLevelByLanguage} from '../dao/RepoDAO'
+import {getUserAndLevelByLanguage} from '../dao/UserDAO'
 import {getLanguageByUser} from '../dao/languageDAO'
 import {connect} from '../config'
 
