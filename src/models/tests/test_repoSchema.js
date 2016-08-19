@@ -9,7 +9,8 @@ var schema =  mongoose.Schema;
 var repo = schema({
   full_name: String,
   stars_count: Number,
-  languages: [String]
+  languages: [String],
+  star_users: [String]
 });
 
 //make model and export

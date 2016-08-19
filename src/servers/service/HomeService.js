@@ -10,6 +10,7 @@ import {transTime} from '../util/timeUtil'
 import {get_rec_languages} from '../logic/RecommendLogic_languages'
 import {get_rec_repos_by_following, get_rec_repos_by_user} from '../logic/RecommendLogic_repos'
 import {get_rec_users} from '../logic/RecommendLogic_users'
+import {connect} from '../config'
 
 async function combine(repos, users, langs){
   let ans = [];
@@ -114,7 +115,7 @@ export var getLangListData = (userName, callback) => {
   });
 };
 
-export var getFlowListData = async (userName, callback) => {
+async function getFlowListData(userName, callback) {
   //getRepoByUser(userName, language, async (repos) => {
   //  let ans = [];
   //  if (repos.length > 0){
@@ -146,8 +147,17 @@ export var getFlowListData = async (userName, callback) => {
   //  callback(ans);
   //});
   let repos = await get_rec_repos_by_user(userName, 10);
+  console.log("repos: ");
+  console.log(repos);
   let langs = await get_rec_languages(userName, 5);
   let users = await get_rec_users(userName, 5);
   let ans = await combine(repos, users, langs);
   callback(ans);
-};
+}
+
+export {getFlowListData}
+
+//connect();
+//getFlowListData("RickChem", res => {
+//  console.log(res);
+//});
