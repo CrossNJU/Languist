@@ -9,6 +9,7 @@ import s from './FlowList.scss';
 import RepoFlowItem from '../RepoFlowItem';
 import UserFlowItem from '../UserFlowItem';
 import LangFlowItem from '../LangFlowItem';
+import LoadingFlowItem from '../LoadingFlowItem';
 
 
 let flowData = [
@@ -67,8 +68,8 @@ class FlowList extends Component {
     super(props);
   }
   renderFlowItems() {
-    // console.log(JSON.parse(JSON.stringify(this.props.data)));
-    // flowData = this.props.data;
+    console.log(JSON.parse(JSON.stringify(this.props.data)));
+    flowData = this.props.data;
     if (flowData.length > 0) {
       let flowItems = flowData.map(flowItem => {
         switch(flowItem.type) {
@@ -84,7 +85,7 @@ class FlowList extends Component {
       });
       return flowItems;
     } else {
-      return (<div>Loading...</div>);
+      return (<LoadingFlowItem />);
     }
   };
 

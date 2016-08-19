@@ -82,24 +82,24 @@ class HomePage extends Component {
     }).bind(this));
 
     // Get repoList
-    url = '/api/home/repoList?user=' + user + '&lang=' + 'JavaScript';
-    $.ajax(url)
-    .done(((data) => {
-      this.setState({repoList: data});
-    }).bind(this))
-    .fail(((xhr, status, err) => {
-      console.error(url, status, err.toString());
-    }).bind(this));
-
-    // Get flowList
-    // url = '/api/home/flowList?user=' + user;
+    // url = '/api/home/repoList?user=' + user + '&lang=' + 'JavaScript';
     // $.ajax(url)
     // .done(((data) => {
-    //   this.setState({flowList: data});
+    //   this.setState({repoList: data});
     // }).bind(this))
     // .fail(((xhr, status, err) => {
     //   console.error(url, status, err.toString());
     // }).bind(this));
+
+    // Get flowList
+    url = '/api/home/flowList?user=' + user;
+    $.ajax(url)
+    .done(((data) => {
+      this.setState({flowList: data});
+    }).bind(this))
+    .fail(((xhr, status, err) => {
+      console.error(url, status, err.toString());
+    }).bind(this));
 
     // Get langList
     url = '/api/home/langList?user=' + user;
@@ -129,7 +129,6 @@ class HomePage extends Component {
               <LanguageList data={this.state.langList} />
             </div>
             <div className={s.main}>
-              <RepoList data={this.state.repoList} />
               <FlowList data={this.state.flowList} />
             </div>
           </div>
