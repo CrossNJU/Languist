@@ -45,7 +45,7 @@ const styles = {
 
 class UserFlowItem extends Component {
   render() {
-    let subtitle = 'Joined on ' + this.props.user.join;
+    let subtitle = 'Joined on ' + this.props.user.join.split('T')[0];
     if (this.props.user.location) {
       subtitle += ' / ' + this.props.user.location;
     }
@@ -56,7 +56,7 @@ class UserFlowItem extends Component {
           titleStyle={styles.title}
           subtitle={subtitle}
           subtitleStyle={styles.subtitle}
-          avatar={require('./avatar-default-s.png')}
+          avatar={this.props.user.avatarUrl || require('./avatar-default-s.png')}
         />
         <CardText style={styles.cardText}>
           {this.props.user.bio}
