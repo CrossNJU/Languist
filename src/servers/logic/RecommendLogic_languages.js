@@ -143,7 +143,7 @@ async function get_rec_languages(login,rec_num){
   }
   lang_info.sort(getSortFun('desc', 'score'));
 
-  console.log(lang_info);
+  //console.log(lang_info);
   //取前rec_num返回作为推荐语言
   let re = 0;
   let wlen = lang_info.length;
