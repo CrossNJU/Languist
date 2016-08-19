@@ -55,7 +55,7 @@ class HomePage extends Component {
     //   console.error(err);
     // }
 
-    const user = 'ChenDanni';
+    const user = 'RickChem';
     this.loadData(user);
   }
 

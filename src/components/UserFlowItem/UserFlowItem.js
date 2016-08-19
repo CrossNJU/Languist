@@ -45,6 +45,7 @@ const styles = {
 
 class UserFlowItem extends Component {
   render() {
+    let title = this.props.user.name ? this.props.user.name + ' (' + this.props.user.login + ')' : this.props.user.login;
     let subtitle = 'Joined on ' + this.props.user.join.split('T')[0];
     if (this.props.user.location) {
       subtitle += ' / ' + this.props.user.location;
@@ -52,7 +53,7 @@ class UserFlowItem extends Component {
     return (
       <Card className={s.item}>
         <CardHeader
-          title={this.props.user.name + ' (' + this.props.user.login + ')'}
+          title={title}
           titleStyle={styles.title}
           subtitle={subtitle}
           subtitleStyle={styles.subtitle}
