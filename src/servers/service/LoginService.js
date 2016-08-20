@@ -5,19 +5,20 @@
 import {userSchema} from '../../models/userSchema'
 import {globalSchema} from '../../models/globalSchema'
 import {github_repoSchema} from '../../models/github_repoSchema'
-import {getUserStarred, getPublicRepos, addAnewUser} from '../api/github_user'
-import {getRepoInfo, getRepoLanguages, addNewRepo} from '../api/github_repo'
+import {github_userSchema} from '../../models/github_userSchema'
+import {getUserInfo, getUserStarred, getPublicRepos, addAnewUser, getFollowings, addAnewGitHubUser} from '../api/github_user'
+import {getRepoInfo, getRepoLanguages, getContributors, getStarredUsers, addNewRepo} from '../api/github_repo'
 var superagent = require('superagent');
 
 var getAccessURL = 'https://github.com/login/oauth/access_token';
 
-function getCurrentUser(callback){
+function getCurrentUser(callback) {
   globalSchema.findOne({global_num: 1}, (err, glo) => {
     callback(glo.current_user);
   });
 }
 
-function login(username, password, callback){
+function login(username, password, callback) {
   userSchema.findOne({login: username}, (err, user) => {
     if (user == null) callback("no such user!");
     else {
@@ -39,10 +40,12 @@ function login(username, password, callback){
   });
 }
 
-function register(username, password, callback){
-  var conditions = {login : username };
-  var update     = {$set : {
-    password: password}
+function register(username, password, callback) {
+  var conditions = {login: username};
+  var update = {
+    $set: {
+      password: password
+    }
   };
   userSchema.update(conditions, update, (err, res) => {
     if (err) callback(err);
@@ -52,52 +55,159 @@ function register(username, password, callback){
   });
 }
 
-function updateWhenLogin(login){
-  //get star repos
-  getUserStarred(login, 1, [], (ret) => {
-    var conditions = {login : login };
-    var update     = {$set : {
-      star_num: ret.length,
-      star_repos: ret}
+function updateRepoCons(fullname, callback = null) {
+  getContributors(fullname, 1, [], (ret2) => {
+    var conditions2 = {full_name: fullname};
+    var update2 = {
+      $set: {
+        contributors: ret2
+      }
     };
-    userSchema.update(conditions, update, (err, res2) => {
-      console.log("update user star repos!");
+    github_repoSchema.update(conditions2, update2, (err, res2) => {
+      console.log("update repo: " + fullname + " cons!");
       console.log(res2);
+      if (callback != null) callback(ret2);
     });
-    for (let repo_fullname of ret) {
-      getRepoInfo(repo_fullname, info => {
-        github_repoSchema.findOne({full_name: repo_fullname}, (err, check)=>{
-          //add new repo
-          if (check == null){
-            addNewRepo(info);
-          }
-        });
+  })
+}
+
+function updateRepoStar(fullname, callback = null) {
+  getStarredUsers(fullname, 1, [], true, (ret2) => {
+    var conditions2 = {full_name: fullname};
+    var update2 = {
+      $set: {
+        starers: ret2
+      }
+    };
+    github_repoSchema.update(conditions2, update2, (err, res2) => {
+      console.log("update repo: " + fullname + " starers!");
+      console.log(res2);
+      if (callback != null) callback(ret2);
+    });
+  });
+}
+
+function updateUserStars(login, callback = null) {
+  getUserStarred(login, 1, [], (ret) => {
+    var conditions = {login: login};
+    var update = {
+      $set: {
+        star_num: ret.length,
+        star_repos: ret
+      }
+    };
+    github_userSchema.update(conditions, update, (err, res2) => {
+      console.log("update user: " + login + " star repos!");
+      console.log(res2);
+      if (callback != null) callback(ret);
+    });
+  });
+}
+
+function updateUserRepos(login, callback = null) {
+  getPublicRepos(login, 1, [], (ret) => {
+    var conditions = {login: login};
+    var update = {
+      $set: {
+        repos: ret
+      }
+    };
+    github_userSchema.update(conditions, update, (err, res2) => {
+      console.log("update user: " + login + " repos!");
+      console.log(res2);
+      if (callback != null) callback(ret);
+    });
+  });
+}
+
+async function upsertRepos(ret) {
+  for (let i = 0; i < ret.length; i++) {
+    let ans = await new Promise(function (resolve, reject) {
+      github_repoSchema.findOne({full_name: ret[i]}, (err, check)=> {
+        //add new repo
+        if (check == null) {
+          getRepoInfo(ret[i], info => {
+            if (info) addNewRepo(info, () => {
+              resolve(1);
+            });
+            else resolve(1);
+          });
+        } else {
+          resolve(1);
+        }
+      });
+    });
+  }
+}
+
+async function upsertUser(ret) {
+  for (let i = 0; i < ret.length; i++) {
+    let ans = await new Promise(function (resolve, reject) {
+      github_userSchema.findOne({login: ret[i]}, (err, check) => {
+        if (check == null) {
+          getUserInfo(ret[i], info => {
+            if (info) addAnewGitHubUser(info, () => {
+              resolve(1);
+            });
+            else resolve(1);
+          });
+        } else resolve(1);
+      });
+    });
+  }
+}
+
+function updateWhenLogin(login) {
+  //get star repos
+  updateUserStars(login, async (ret) => {
+    await upsertRepos(ret);
+    for (let i = 0; i < ret.length; i++) {
+      updateRepoCons(ret[i], async (ret2) => {
+        await upsertUser(ret2);
+        for (let j = 0; j < ret2.length; j++) updateUserRepos(ret2[j]);
+      });
+      updateRepoStar(ret[i], async (ret2) => {
+        await upsertUser(ret2);
+        for (let j = 0; j < ret2.length; j++) updateUserStars(ret2[j]);
+      })
+    }
+  });
+  //get repos
+  updateUserRepos(login, async (ret) => {
+    await upsertRepos(ret);
+    for (let i = 0; i < ret.length; i++) {
+      updateRepoCons(ret[i], async (ret2) => {
+        await upsertUser(ret2);
+        for (let j = 0; j < ret2.length; j++) {
+          updateUserRepos(ret2[j]);
+          updateUserStars(ret2[j]);
+        }
       });
     }
   });
-  //get followers
-  //get repos and use_languages
-  getPublicRepos(login, 1, [], (ret) => {
-    var conditions = {login : login };
-    var update     = {$set : {
-      repos: ret}
+  //get followings
+  getFollowings(login, 1, [], async (ret) => {
+    var conditions = {login: login};
+    var update = {
+      $set: {
+        followings_login: ret
+      }
     };
-    userSchema.update(conditions, update, (err, res2) => {
-      console.log("update user repos!");
+    github_userSchema.update(conditions, update, (err, res2) => {
+      console.log("update user: " + login + " followings!");
       console.log(res2);
     });
-    for (let repo of ret){
-      getRepoLanguages(repo, languages => {
-        var conditions = {login : login };
-        for (let language of languages){
-          var update     = {$addToSet : {
-            use_languages: language}
-          };
-          userSchema.update(conditions, update, (err, res2) => {
-            //console.log("add to user languages!");
-            //console.log(res2);
-          });
-        }
+    await upsertUser(ret);
+    for (let i = 0; i < ret.length; i++) {
+      updateUserRepos(ret[i], async (repos) => {
+        await upsertRepos(repos);
+        for (let j = 0; j < repos.length; j++)
+          updateRepoCons(repos[j]);
+      });
+      updateUserStars(ret[i], async (repos) => {
+        await upsertRepos(repos);
+        for (let j = 0; j < repos.length; j++)
+          updateRepoCons(repos[j]);
       });
     }
   });
@@ -106,9 +216,9 @@ function updateWhenLogin(login){
 export var saveUser = (code, callback) => {
   superagent
     .post(getAccessURL)
-    .send({ client_id: 'd310933db63d64f563a0', client_secret: '82093b09a6840ed8fba314dd7089a7bb45e687fe', code: code})
+    .send({client_id: 'd310933db63d64f563a0', client_secret: '82093b09a6840ed8fba314dd7089a7bb45e687fe', code: code})
     .set('Accept', 'application/json')
-    .end(function(err, sres){
+    .end(function (err, sres) {
       if (err) {
         console.log('err: ' + err);
         callback(0);
@@ -123,24 +233,21 @@ export var saveUser = (code, callback) => {
       }
       superagent
         .get('https://api.github.com/user')
-        .query({ access_token: access_token})
+        .query({access_token: access_token})
         .accept('json')
         .end((err, ssres) => {
-          if (err){
+          if (err) {
             return console.log(err);
           }
           callback(1);
           let json = JSON.parse(ssres.text);
-          //console.log(ssres.text);
 
           //insert new users
-          userSchema.findOne({login: json.login}, (err, check) => {
-            if (check == null) {
-              addAnewUser(json, access_token);
-            }else {
-            }
+          addAnewUser(json, access_token);
+          addAnewGitHubUser(json, () => {
+            //update when login
+            updateWhenLogin(json.login);
           });
-          updateWhenLogin(json.login);
         });
     });
 };

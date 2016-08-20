@@ -17,7 +17,6 @@ var repo = schema({
   forks_count: Number,
   stars_count: Number,
   contributors_count: Number,
-  contributors: [String],
   collaborators_count: Number,
   collaborators: [String],
   pullrequests_count: Number,
@@ -26,7 +25,9 @@ var repo = schema({
   updated_at: String,
   created_at: String,
   main_language: String,
-  languages: [String]
+  languages: [String],
+  contributors: [String],
+  starers: [String]
 });
 
 //make model and export

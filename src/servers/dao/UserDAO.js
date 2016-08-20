@@ -4,6 +4,7 @@
 
 import {userSchema} from '../../models/userSchema'
 import {github_repoSchema} from '../../models/github_repoSchema'
+import {github_userSchema} from '../../models/github_userSchema'
 import {connect_callback} from '../config'
 
 import {getFollowings} from '../api/github_user'
@@ -38,8 +39,8 @@ async function getUserAndLevelByLanguage(language){
 
 async function getFollowingByUser(login) {
   let t = await new Promise(function (resolve, reject) {
-    getFollowings(login, 1, [], (users) => {
-      resolve(users);
+    github_userSchema.findOne({login: login}, (err, user) => {
+      resolve(user.followings_login);
     });
   });
   return t;
@@ -47,8 +48,8 @@ async function getFollowingByUser(login) {
 
 async function getStarUserByRepo(full_name) {
   let t = await new Promise(function (resolve, reject) {
-    getStarredUsers(full_name, 1, [], (users) => {
-      resolve(users);
+    github_repoSchema.findOne({full_name: full_name}, (err, repo) => {
+      resolve(repo.starers);
     });
   });
   return t;
@@ -56,8 +57,8 @@ async function getStarUserByRepo(full_name) {
 
 async function getContributorsByRepo(full_name) {
   let t = await new Promise(function (resolve, reject) {
-    getContributors(full_name, 1, [], (users) => {
-      resolve(users);
+    github_repoSchema.findOne({full_name: full_name}, (err, repo) => {
+      resolve(repo.contributors);
     });
   });
   return t;

@@ -3,12 +3,22 @@
  */
 
 import {userSchema} from '../../models/userSchema'
+import {github_userSchema} from '../../models/github_userSchema'
+import {connect} from '../config'
 
 var github = require('octonode');
 var client = github.client({
   username: 'RickChem',
   password: 'cr112358132134'
 });
+
+function getUserInfo(login, callback){
+  client.get('/users/' + login, {}, function (err, status, body, headers) {
+    //console.log(body); //json object
+    //console.log("callback: "+ fullname +"[.]");
+    callback(body);
+  });
+}
 
 function getUserStarred(login, page, array, callback) {
   //console.log("in");
@@ -20,10 +30,7 @@ function getUserStarred(login, page, array, callback) {
     }else {
       for (let i = 0; i < body.length; i++) {
         let json = body[i];
-        array[len] = {
-          fullname: json.full_name,
-          stars: json.stargazers_count
-        };
+        array[len] = json.full_name;
         len++;
       }
       getUserStarred(login, page + 1, array, callback);
@@ -79,7 +86,7 @@ function starRepo(login, repo, callback){
             star_repos: repo
           }
         };
-        userSchema.update({login: login}, update, (err, res) => {
+        github_userSchema.update({login: login}, update, (err, res) => {
           callback(1);
         });
       }
@@ -88,6 +95,21 @@ function starRepo(login, repo, callback){
 }
 
 function addAnewUser(json, access_token){
+  var conditions = {login : json.login };
+  var update     = {$set : {
+    login: json.login,
+    level: 0,
+    access_token: access_token,
+    password: "123",
+    language: []}
+  };
+  var options = {upsert : true};
+  userSchema.update(conditions, update, options, function(error, res){
+    console.log("new user!");
+  });
+}
+
+function addAnewGitHubUser(json, callback=null){
   var conditions = {login : json.login };
   var update     = {$set : {
     login: json.login,
@@ -105,19 +127,17 @@ function addAnewUser(json, access_token){
     updated_at: json.updated_at,
     star_num: -1,
     star_repos: [],
-    follower_login: [],
-    level: 0,
+    followings_login: [],
     language: [],
-    access_token: access_token,
-    password: "123",
     bio: json.bio,
     blog: json.blog,
     use_languages: [],
     repos: []}
   };
   var options = {upsert : true};
-  userSchema.update(conditions, update, options, function(error, res){
-    console.log("new user!");
+  github_userSchema.update(conditions, update, options, function(error, res){
+    console.log("new github user:"+json.login);
+    if (callback!=null) callback();
   });
 }
 
@@ -128,4 +148,10 @@ function addAnewUser(json, access_token){
 //getUserStarred('ChenDanni', 1, [], (v) => {
 //  console.log('done!'+ v);
 //});
-export {getUserStarred, getPublicRepos, getFollowings, starRepo, addAnewUser}
+export {getUserInfo, getUserStarred, getPublicRepos, getFollowings, starRepo, addAnewUser, addAnewGitHubUser}
+
+
+//getUserInfo("egower", (body) => {
+//  connect();
+//  addAnewGitHubUser(body);
+//});

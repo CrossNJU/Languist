@@ -9,32 +9,12 @@ var schema =  mongoose.Schema;
 var user = schema({
   login: String,
   level: Number,
-  avatar_url: String,
-  type: String,
-  name: String,
-  company: String,
-  location: String,
-  email: String,
-  public_repos: Number,
-  public_gists: Number,
-  followers: Number,
-  following: Number,
-  created_at: String,
-  updated_at: String,
-  star_num: Number,
+  access_token: String,
+  password: String,
   language: [{
     lang_name: String,
     lang_level: Number
-  }],
-  access_token: String,
-  password: String,
-  bio: String,
-  blog: String,
-  follower_login: [String],
-  use_languages: [],
-
-  star_repos: [String],
-  repos: []
+  }]
 });
 
 //make model and export

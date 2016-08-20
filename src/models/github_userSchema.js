@@ -8,24 +8,25 @@ var schema =  mongoose.Schema;
 //add schema
 var github_user = schema({
   login: String,
-  name: String,
-  type: String,
   avatar_url: String,
-  html_url: String,
-  followers_count: Number,
-  followings_count: Number,
-  repo_star_count: Number,
-  starred_count: Number,
-  subscription_count: Number,
-  public_gists: Number,
-  public_repo: Number,
-  email: String,
-  location: String,
-  blog: String,
+  type: String,
+  name: String,
   company: String,
-  create_at: Number,
-  repos: [String],
-  languages: [String]
+  location: String,
+  email: String,
+  public_repos: Number,
+  public_gists: Number,
+  followers: Number,
+  following: Number,
+  created_at: String,
+  updated_at: String,
+  star_num: Number,
+  bio: String,
+  blog: String,
+  followings_login: [String],
+  use_languages: [],
+  star_repos: [String],
+  repos: []
 });
 
 //make model and export

@@ -13,6 +13,7 @@ var client = github.client({
 function getRepoInfo(fullname, callback) {
   client.get('/repos/' + fullname, {}, function (err, status, body, headers) {
     //console.log(body); //json object
+    //console.log("callback: "+ fullname +"[.]");
     callback(body);
   });
 }
@@ -28,7 +29,7 @@ function getRepoLanguages(fullname, callback) {
   });
 }
 
-function getStarredUsers(fullname, page, array, callback) {
+function getStarredUsers(fullname, page, array, end, callback) {
   let len = array.length;
   client.get('repos/' + fullname + '/stargazers', {page: page, per_page: 100}, function (err, status, body, headers) {
     if (body === undefined || body.length == 0){
@@ -39,7 +40,8 @@ function getStarredUsers(fullname, page, array, callback) {
         array[len] = json.login;
         len++;
       }
-      getStarredUsers(fullname, page + 1, array, callback);
+      if (!end) getStarredUsers(fullname, page + 1, array, false, callback);
+      else callback(array);
     }
   });
 }
@@ -60,7 +62,7 @@ function getContributors(fullname, page, array, callback) {
   });
 }
 
-function addNewRepo(info) {
+function addNewRepo(info, callback=null) {
   let update2 = {
     $set: {
       full_name: info.full_name,
@@ -73,7 +75,6 @@ function addNewRepo(info) {
       forks_count: info.forks_count,
       stars_count: info.stargazers_count,
       contributors_count: -1,
-      contributors: [],
       collaborators_count: -1,
       collaborators: [],
       pullrequests_count: -1,
@@ -82,12 +83,15 @@ function addNewRepo(info) {
       updated_at: info.updated_at,
       created_at: info.created_at,
       main_language: info.language,
-      languages: []
+      languages: [],
+      contributors: [],
+      starers: []
     }
   };
   github_repoSchema.update({full_name: info.full_name}, update2, {upsert: true}, (err, res) => {
-    console.log("new repo!");
+    console.log("new repo:"+info.full_name);
     console.log(res);
+    if (callback != null) callback();
   });
 }
 

@@ -3,9 +3,9 @@
  */
 
 import {github_repoSchema} from '../../models/github_repoSchema';
+import {github_userSchema} from '../../models/github_userSchema'
 import {userSchema} from '../../models/userSchema'
 import {languageSchema} from '../../models/languageSchema';
-//import {getRepoByUser} from '../logic/RecommendLogic_lang';
 import {transTime} from '../util/timeUtil'
 import {get_rec_languages} from '../logic/RecommendLogic_languages'
 import {get_rec_repos_by_following, get_rec_repos_by_user} from '../logic/RecommendLogic_repos'
@@ -79,17 +79,19 @@ export var getCoverData = (userName, callback) => {
   let data = {};
   let condition = {login: userName};
   userSchema.findOne(condition, (err, user)=> {
-    data.avatar_url = user.avatar_url;
-    data.name = user.login;
     data.langs = user.language.length;
-    callback(data);
+    github_userSchema.findOne(condition, (err, user_git) => {
+      data.avatar_url = user_git.avatar_url;
+      data.name = user_git.login;
+      callback(data);
+    });
   });
 };
 
 export var getCountData = (userName, callback) => {
   let data = {};
   let condition = {login: userName};
-  userSchema.findOne(condition, (err, user) => {
+  github_userSchema.findOne(condition, (err, user) => {
     if (err) {
       console.log('err occurs: ' + err.message);
     } else {
@@ -156,7 +158,7 @@ async function getFlowListData(userName, callback) {
 
 export {getFlowListData}
 
-connect();
-getFlowListData("RickChem", res => {
-  console.log("ok");
-});
+//connect();
+//getFlowListData("RickChem", res => {
+//  console.log("ok");
+//});
