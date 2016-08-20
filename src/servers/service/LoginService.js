@@ -50,10 +50,6 @@ function register(username, password, callback){
       callback(1);
     }
   });
-  ////update current user
-  //globalSchema.update({global_num: 1}, {current_user: login}, {upsert: true}, (err, res) => {
-  //  console.log(res);
-  //});
 }
 
 function updateWhenLogin(login){
@@ -80,7 +76,7 @@ function updateWhenLogin(login){
     }
   });
   //get followers
-  //get use_languages
+  //get repos and use_languages
   getPublicRepos(login, 1, [], (ret) => {
     var conditions = {login : login };
     var update     = {$set : {

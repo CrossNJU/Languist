@@ -147,17 +147,16 @@ async function getFlowListData(userName, callback) {
   //  callback(ans);
   //});
   let repos = await get_rec_repos_by_user(userName, 10);
-  console.log("repos: ");
-  console.log(repos);
   let langs = await get_rec_languages(userName, 5);
   let users = await get_rec_users(userName, 5);
+  console.log(users);
   let ans = await combine(repos, users, langs);
   callback(ans);
 }
 
 export {getFlowListData}
 
-//connect();
-//getFlowListData("RickChem", res => {
-//  console.log(res);
-//});
+connect();
+getFlowListData("RickChem", res => {
+  console.log("ok");
+});

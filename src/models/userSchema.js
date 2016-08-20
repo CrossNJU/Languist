@@ -26,13 +26,14 @@ var user = schema({
     lang_name: String,
     lang_level: Number
   }],
-  star_repos: [String],
   access_token: String,
   password: String,
   bio: String,
   blog: String,
   follower_login: [String],
   use_languages: [],
+
+  star_repos: [String],
   repos: []
 });
 

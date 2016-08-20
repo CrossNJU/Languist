@@ -11,14 +11,19 @@ var client = github.client({
 });
 
 function getUserStarred(login, page, array, callback) {
+  //console.log("in");
   let len = array.length;
   client.get('users/' + login + '/starred', {page: page, per_page: 100}, function (err, status, body, headers) {
+    //console.log("in");
     if (body === undefined || body.length == 0){
       callback(array);
     }else {
       for (let i = 0; i < body.length; i++) {
         let json = body[i];
-        array[len] = json.full_name;
+        array[len] = {
+          fullname: json.full_name,
+          stars: json.stargazers_count
+        };
         len++;
       }
       getUserStarred(login, page + 1, array, callback);
@@ -117,8 +122,8 @@ function addAnewUser(json, access_token){
 }
 
 //
-//getUserStarred('tricknotes', 1, [], (v) => {
-//  console.log('done!' + v[0]);
+//getUserStarred('RickChem', 1, [], (v) => {
+//  console.log(v);
 //});
 //getUserStarred('ChenDanni', 1, [], (v) => {
 //  console.log('done!'+ v);
