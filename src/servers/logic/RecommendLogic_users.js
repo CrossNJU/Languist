@@ -93,6 +93,31 @@ function getSortFun(order, sortBy) {
   return sortFun;
 }
 
+//两个用户之间的语言相似度
+async function get_lan_sim(user1,user2){
+  let user1_lan = await getLanguageByUser(user1);
+  let user2_lan = await getLanguageByUser(user2);
+  let sim = 0;
+
+  for (let i = 0;i < user1_lan.length;i++){
+    for (let j = 0;j < user2_lan.length;j++){
+      if (user1_lan[i].name == user2_lan[j].name){
+        sim++;
+        sim += (5 - Math.abs(user1_lan[i].level - user2_lan[j].lan_level))/modulate;
+        break;
+      }
+    }
+  }
+  sim /= (1 + 5/modulate)*Math.sqrt(user1_lan.length*user2_lan.length);
+  return sim;
+}
+//两个用户之间的tag相似度
+
+//得到两个用户之间的相似度
+async function get_user_sim(user1,user2){
+  return get_lan_sim(user1,user2);
+}
+
 //确定有相同lan的user的初步范围 并按语言相似度排序
 async function get_lan_sims(login){
   let lan_sim_info = [];
@@ -137,7 +162,7 @@ function get_tag_sims(login){
 
 }
 
-async function get_user_sim(login){
+async function get_user_sims(login){
 
   //初步确定相似user范围 并按语言相似度排序
   let user_lan_sims = await get_lan_sims(login);
@@ -152,7 +177,7 @@ async function get_user_sim(login){
 //返回推荐用户的login列表
 async function get_rec_users(login,rec_num){
   //得到 用户相似度
-  let user_sims = await get_user_sim(login);
+  let user_sims = await get_user_sims(login);
 
   //console.log(user_sims);
 
@@ -188,6 +213,60 @@ async function get_rec_users(login,rec_num){
 
   return rec_user_login;
 }
+
+//推荐用户star仓库的contributor
+//user->star_repos->contributors
+async function get_rec_users_by_star_contributor(login,rec_num){
+  let rec_user_login = [];
+  let init_rec = [];
+  let star_repos = getStarRepoByUser(login);
+  let contributors_count = [];
+    //统计contributor
+  for (let i = 0;i < star_repos.length;i++){
+    let repo_fullname = star_repos[i].fullname;
+    let temp_contr = getContributorByRepo(repo_fullname);
+    for (let j = 0;j < temp_contr.length;j++){
+      let contr_name = temp_contr[j];
+      if (contributors_count.hasOwnProperty[contr_name]){
+        contributors_count[contr_name]++;
+      }else{
+        contributors_count[contr_name] = 1;
+      }
+    }
+  }
+  //如果有，删除自己
+  if(contributors_count.hasOwnProperty(login)){
+     delete contributors_count[login];
+  }
+
+    //考虑相似度并转换成json数组
+  for (let contr in contributors_count){
+    contributors_count[contr] += get_user_sim(login,contr);
+    let temp_init = {
+      login: contr,
+      sim: contributors_count[contr]
+    };
+    init_rec.push(temp_init);
+  }
+  init_rec.sort(getSortFun('desc','sim'));
+
+  let re_count = 0;
+  for (let i = 0;i < init_rec.length;i++){
+    if (i < re_count) {break;}
+    let temp_login = init_rec[i].login;
+    rec_user_login.push(temp_login);
+    re_count++;
+    if (re_count >= rec_num){
+      re_count = 0;
+      break;
+    }
+  }
+
+  return rec_user_login;
+
+}
+
+
 
 export {get_rec_users}
 
