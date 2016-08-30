@@ -36,19 +36,21 @@ async function combine(repos, users, langs){
         for (let lang_single of user_single.language){
           lang_user.push(lang_single.lang_name);
         }
-        let ret = {
-          type: 'user',
-          avatarUrl: user_single.avatar_url,
-          login: user_single.login,
-          name: user_single.name,
-          bio: user_single.bio,
-          url: user_single.blog,
-          langs: lang_user,
-          join: user_single.created_at,
-          location: user_single.location,
-          follwers: user_single.followers
-        };
-        resolve(ret);
+        github_userSchema.findOne({login: user}, (err, github_user) => {
+          let ret = {
+            type: 'user',
+            avatarUrl: github_user.avatar_url,
+            login: user_single.login,
+            name: github_user.name,
+            bio: github_user.bio,
+            url: github_user.blog,
+            langs: lang_user,
+            join: github_user.created_at,
+            location: github_user.location,
+            follwers: github_user.followers
+          };
+          resolve(ret);
+        });
       });
     });
     ans.push(single);
@@ -148,13 +150,13 @@ async function getFlowListData(userName, callback) {
   //  }
   //  callback(ans);
   //});
-  console.log("in");
+  //console.log("in");
   let repos = await get_rec_repos_by_user(userName, 10);
-  console.log("repo return");
+  //console.log("repo return");
   let langs = await get_rec_languages(userName, 5);
-  console.log("lang return");
+  //console.log("lang return");
   let users = await get_rec_users(userName, 5);
-  console.log("user return");
+  //console.log("user return");
   let ans = await combine(repos, users, langs);
   callback(ans);
 }
