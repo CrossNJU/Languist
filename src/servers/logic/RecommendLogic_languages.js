@@ -167,12 +167,26 @@ async function get_rec_languages(login,rec_num){
 //user->following->languages
 async function get_rec_languages_by_following(login,rec_num){
   let followings = getFollowingByUser(login);
+  let user_lan = getLanguageByUser(login);
   let init_lan = [];
   let lan_array = [];
+  let rec_lan = [];
+  let same = false;
   //following->languages
   for (let i = 0;i < followings.length;i++) {
-    temp_lan = getLanguageByUser(followings[i].login);
+    let temp_lan = getLanguageByUser(followings[i].login);
     for (let j = 0; j < temp_lan.length; j++) {
+      for (let k = 0;k < user_lan.length;k++){
+        if (user_lan[k].name == temp_lan[j].name){
+          j++;
+          same = true;
+          break;
+        }
+      }
+      if (same == true){
+        same = false;
+        continue;
+      }
       if (init_lan.hasOwnProperty(temp_lan[j].name)) {
         init_lan[temp_lan[j].name]++;
       } else {
@@ -189,6 +203,14 @@ async function get_rec_languages_by_following(login,rec_num){
     lan_array.push(temp_lan);
   }
   lan_array.sort(getSortFun('desc','count'));
+
+  for (let i = 0;i < rec_num;i++){
+    if (i > lan_array.length){
+      break;
+    }
+    rec_lan.push(lan_array[i].name);
+  }
+  return rec_lan;
 
 }
 
