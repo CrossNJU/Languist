@@ -34,6 +34,7 @@ import {} from './servers/service/UserService'
 //others
 import {starRepo} from './servers/api/github_user'
 
+var session = require('express-session');
 connect();
 
 const server = global.server = express();
@@ -52,6 +53,11 @@ server.use(express.static(path.join(__dirname, 'public')));
 server.use(cookieParser());
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
+server.use(session({
+  secret: 'keyboard cat',
+  resave: true,
+  saveUninitialized: true,
+  cookie: { maxAge: 60000 }}));
 
 //
 // Authentication
@@ -100,6 +106,9 @@ server.get('/api/login/success', (req, res)=>{
 server.get('/api/login', (req, res) => {
   login(req.query.username, req.query.password, (res2) => {
     if (res2 == 1) {
+      req.session.username = req.query.username;
+      //console.log(req.query.username);
+      //req.session.save((err) => {console.error(err)});
       res.send("success");
     }else
       res.send(res2);
@@ -146,10 +155,12 @@ server.get('/api/home/cover', (req, res)=>{
 });
 
 //get current user
+server.get('/api/test/current_user', (req, res) => {
+  req.session.username = 'CR';
+  res.send(req.session.username);
+});
 server.get('/api/current_user', (req, res) => {
-  getCurrentUser(rest => {
-    res.send(rest);
-  })
+  res.send(req.session.username);
 });
 
 //choose language
