@@ -12,6 +12,8 @@ var superagent = require('superagent');
 
 var getAccessURL = 'https://github.com/login/oauth/access_token';
 
+var test_login = false;
+
 function getCurrentUser(callback) {
   globalSchema.findOne({global_num: 1}, (err, glo) => {
     callback(glo.current_user);
@@ -246,7 +248,7 @@ export var saveUser = (code, callback) => {
           addAnewUser(json, access_token);
           addAnewGitHubUser(json, () => {
             //update when login
-            updateWhenLogin(json.login);
+            if (!test_login) updateWhenLogin(json.login);
           });
         });
     });

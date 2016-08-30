@@ -148,10 +148,13 @@ async function getFlowListData(userName, callback) {
   //  }
   //  callback(ans);
   //});
+  console.log("in");
   let repos = await get_rec_repos_by_user(userName, 10);
+  console.log("repo return");
   let langs = await get_rec_languages(userName, 5);
+  console.log("lang return");
   let users = await get_rec_users(userName, 5);
-  console.log(users);
+  console.log("user return");
   let ans = await combine(repos, users, langs);
   callback(ans);
 }

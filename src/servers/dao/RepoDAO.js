@@ -4,13 +4,14 @@
 
 import {userSchema} from '../../models/userSchema'
 import {github_repoSchema} from '../../models/github_repoSchema'
+import {github_userSchema} from '../../models/github_userSchema'
 import {connect} from '../config'
 
 import {getPublicRepos, getUserStarred} from '../api/github_user'
 
 async function getStarRepoByUser(login) {
   let t = await new Promise(function (resolve, reject) {
-    userSchema.findOne({login: login}, async (err, user) => {
+    github_userSchema.findOne({login: login}, async (err, user) => {
       if (err) reject(err);
       let ans = [];
       for (let repo of user.star_repos){
@@ -33,7 +34,7 @@ async function getStarRepoByUser(login) {
 
 async function getPublicRepoByUser(login) {
   let t = await new Promise(function (resolve, reject) {
-    userSchema.findOne({login: login}, async (err, user) => {
+    github_userSchema.findOne({login: login}, async (err, user) => {
       if (err) reject(err);
       resolve(user.repos);
     });

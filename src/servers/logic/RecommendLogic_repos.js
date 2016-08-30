@@ -135,6 +135,6 @@ function get_rec_repos_by_following(){
 export {get_rec_repos_by_user,get_rec_repos_by_following}
 
 //connect();
-//get_rec_repos_by_user('RickChem',10);
+//get_rec_repos_by_user('ChenDanni',10);
 
 
