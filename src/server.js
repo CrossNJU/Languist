@@ -155,10 +155,10 @@ server.get('/api/home/cover', (req, res)=>{
 });
 
 //get current user
-server.get('/api/test/current_user', (req, res) => {
-  req.session.username = 'CR';
-  res.send(req.session.username);
-});
+//server.get('/api/test/current_user', (req, res) => {
+//  req.session.username = 'CR';
+//  res.send(req.session.username);
+//});
 server.get('/api/current_user', (req, res) => {
   res.send(req.session.username);
 });
