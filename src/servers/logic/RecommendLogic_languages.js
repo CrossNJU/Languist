@@ -164,6 +164,34 @@ async function get_rec_languages(login,rec_num){
   return rec_langs;
 }
 
+//user->following->languages
+async function get_rec_languages_by_following(login,rec_num){
+  let followings = getFollowingByUser(login);
+  let init_lan = [];
+  let lan_array = [];
+  //following->languages
+  for (let i = 0;i < followings.length;i++) {
+    temp_lan = getLanguageByUser(followings[i].login);
+    for (let j = 0; j < temp_lan.length; j++) {
+      if (init_lan.hasOwnProperty(temp_lan[j].name)) {
+        init_lan[temp_lan[j].name]++;
+      } else {
+        init_lan[temp_lan[j].name] = 1;
+      }
+    }
+  }
+  //sort
+  for (let language in init_lan){
+    let temp_lan = {
+      name: language,
+      count: init_lan[language]
+    };
+    lan_array.push(temp_lan);
+  }
+  lan_array.sort(getSortFun('desc','count'));
+
+}
+
 export {get_rec_languages}
 
 //connect();
