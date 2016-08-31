@@ -8,7 +8,7 @@ import {connect} from '../config'
 
 let modulate = 2;
 //let rec_num = 3;
-let rec_user_login = [];
+
 
 //function getLanguageByUser(login){
 //  return [{
@@ -176,6 +176,7 @@ async function get_user_sims(login){
 
 //返回推荐用户的login列表
 async function get_rec_users(login,rec_num){
+  let rec_user_login = [];
   //得到 用户相似度
   let user_sims = await get_user_sims(login);
 
@@ -208,7 +209,8 @@ async function get_rec_users(login,rec_num){
     rec_user_login.splice(index,1);
   }
 
-  //console.log(rec_user_login);
+  console.log("here2");
+  console.log(rec_user_login);
 
 
   return rec_user_login;
