@@ -49,7 +49,8 @@ async function getFollowingByUser(login) {
 async function getStarUserByRepo(full_name) {
   let t = await new Promise(function (resolve, reject) {
     github_repoSchema.findOne({full_name: full_name}, (err, repo) => {
-      resolve(repo.starers);
+      if (repo == null) resolve(null);
+      else resolve(repo.starers);
     });
   });
   return t;
