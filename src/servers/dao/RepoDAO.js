@@ -10,7 +10,7 @@ import {connect} from '../config'
 import {getPublicRepos, getUserStarred} from '../api/github_user'
 
 async function getRepoInfo(fullname){
-  let t = await new Promise(function(resolve, reject) => {
+  let t = await new Promise(function(resolve, reject) {
     github_repoSchema.findOne({full_name: fullname}, (err, repo_single) => {
       if (err) reject(err);
       resolve(repo_single);
@@ -43,12 +43,20 @@ async function getStarRepoByUser(login) {
 }
 
 async function getPublicRepoByUser(login) {
+
+  // console.log('inin');
+
   let t = await new Promise(function (resolve, reject) {
     github_userSchema.findOne({login: login}, async (err, user) => {
       if (err) reject(err);
+      if (user == null) resolve(null);
       resolve(user.repos);
     });
   });
+
+  // console.log('t');
+  // console.log(t);
+
   return t;
 }
 
