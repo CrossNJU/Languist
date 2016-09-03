@@ -28,7 +28,8 @@ async function getStarRepoByUser(login) {
         let repo_det = await new Promise(function(resolve2, reject2) {
           github_repoSchema.findOne({full_name: repo}, (err, repo_one) => {
             if (err) reject2(err);
-            resolve2(repo_one.stars_count);
+            if (repo_one == null) resolve2(null);
+            else resolve2(repo_one.stars_count);
           });
         });
         ans.push({

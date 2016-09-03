@@ -208,24 +208,82 @@ async function get_rec_repos_by_star_repos_owner(login,rec_num) {
 
 //user->star->repos->users also star it->repos
 async function get_rec_repos_by_also_star(login,re_num){
-  let user_stars = await getStarRepoByUser(login);
-  let user_repos = await getPublicRepoByUser(login);
+  let stars_handle = await getStarRepoByUser(login);
+  let user_stars = [];
+  let user_repos = await getPublicRepoByUser(login); //name_list
+  let init_starers = [];
+  let init_repos_name = [];
+  let init_repos = [];
+  let rec_repos = [];
+
+  for (let i = 0;i < stars_handle.length;i++)
+    user_stars.push(stars_handle[i].fullname);
 
   for (let i = 0;i < user_stars.length;i++){
     let temp_starers = await getStarUserByRepo(user_stars[i]);
-    console.log(temp_starers);
+    for (let j = 0;j < temp_starers.length;j++){
+      if (!(init_starers.indexOf(temp_starers[j]) > -1)){
+        init_starers.push(temp_starers[j]);
+      }
+    }
   }
+
+  console.log(init_starers[394]);
+  let test = await getStarRepoByUser(leeroybrun);
+  console.log('test');
+  console.log(test);
+
+  for (let i = 0;i < init_starers.length;i++){
+    let temp_repos = await getStarRepoByUser(init_starers[i]);
+    for (let j = 0;j < temp_repos.length;j++){
+      let fullname = temp_repos[j].fullname;
+      if ((!(init_repos_name.indexOf(fullname) > -1))
+        &&(!(user_stars.indexOf(fullname) > -1))&&(!(user_repos.indexOf(fullname) > -1))){
+        init_repos_name.push(fullname);
+      }
+    }
+    // console.log(init_repos_name);
+    // console.log(i);
+  }
+
+  console.log(init_repos_name.length);
+
+  for (let i = 0;i < init_repos_name.length;i++){
+    console.log('ininin');
+    let repo = {
+      fullname: init_repos_name[i],
+      stars: await getRepoInfo(init_repos_name[i]).stars_count
+    };
+    init_repos.push(repo);
+    console.log(init_repos);
+  }
+
+  init_repos.sort(getSortFun('desc','stars'));
+
+  console.log(init_repos);
+
+  for (let i = 0;i < rec_num;i++){
+    if (i > init_repos.length) break;
+    rec_repos.push(init_repos[i]);
+  }
+
+  return rec_repos;
 
 }
 
 //user->following->repos
 async function get_rec_repos_by_following(login,rec_num){
   let user_following = await getFollowingByUser(login); // name_list
-  let user_stars = await getStarRepoByUser(login);   // 去除重复
+  let stars_handle = await getStarRepoByUser(login);   // 去除重复
+  let user_stars = [];
   let user_repos = await getPublicRepoByUser(login); // 去除重复
   let init_repos_name = [];
   let init_repos = [];
   let rec_repos = [];
+
+  for (let i = 0;i < stars_handle.length;i++){
+    user_stars.push(stars_handle[i].fullname);
+  }
 
   for (let i = 0;i < user_following.length;i++){
     let temp_repos = await getPublicRepoByUser(user_following[i]); //name_list
