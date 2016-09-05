@@ -154,7 +154,6 @@ async function get_rec_repos_by_user(login,rec_num){
 
 }
 
-//star repositories同一作者的不同项目(user可能会follow学习)
 //user->star repos->owners->repos
 async function get_rec_repos_by_star_repos_owner(login,rec_num) {
   let user_stars = await getStarRepoByUser(login);
@@ -206,7 +205,7 @@ async function get_rec_repos_by_star_repos_owner(login,rec_num) {
   return rec_repos;
 }
 
-//user->star->repos->users also star it->repos
+//user->star->repos->users also star it->repos   //!!!!!!!!!!!!!!! need test !!!!!!!!!!!!!!!!!!!
 async function get_rec_repos_by_also_star(login,re_num){
   let stars_handle = await getStarRepoByUser(login);
   let user_stars = [];
@@ -314,12 +313,48 @@ async function get_rec_repos_by_following(login,rec_num){
 }
 
 
+//仓库详情->相关仓库推荐
+//repo->contributors->repos
+async function get_rec_repos_by_contributor(fullname,rec_num){
+  let contributors = getContributorsByRepo(fullname);
+  let init_repos_names = [];
+  let init_repos = [];
+  let rec_repos = [];
+
+  for (let i = 0;i < contributors.name;i++){
+    let temp_repos = getPublicRepoByUser(contributors[i]);
+    for (let j = 0;j < temp_repos.length;j++){
+      if (!(init_repos_names.indexOf(temp_repos[j]) > -1)){
+        init_repos_names.push(temp_repos[j]);
+      }
+    }
+  }
+  for (let i = 0;i < init_repos_names.length;i++){
+    let temp_repo = {
+      fullname: init_repos_names[i],
+      stars: getRepoInfo(init_repos_names[i]).stars_count
+    };
+    init_repos.push(temp_repo);
+  }
+  init_repos.sort(getSortFun('desc','stars'));
+
+  for (let i = 0;i < rec_num;i++){
+    if (i > init_repos.length) break;
+    rec_repos.push(init_repos[i].fullname);
+  }
+  return rec_repos;
+}
 
 
-export {get_rec_repos_by_user,get_rec_repos_by_star_repos_owner,get_rec_repos_by_also_star,get_rec_repos_by_following}
+
+
+
+export {get_rec_repos_by_user,get_rec_repos_by_star_repos_owner,
+  get_rec_repos_by_also_star,get_rec_repos_by_following,get_rec_repos_by_contributor}
 
 connect();
 // get_rec_repos_by_user('ChenDanni',10);
 // get_rec_repos_by_star_repos('ChenDanni',10);
 // get_rec_repos_by_following('ChenDanni',5);
-get_rec_repos_by_also_star('ChenDanni',5);
+// get_rec_repos_by_also_star('ChenDanni',5);
+// get_rec_repos_by_contributor('jquery/jquery',5);
