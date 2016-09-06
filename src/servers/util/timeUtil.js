@@ -11,8 +11,34 @@ function getTimeFromLong(time){
   return date;
 }
 
-//console.log(getTimeFromLong(1200293516000));
+// console.log(getTimeFromLong(1200293516000));
+
+function translateTime(time) {
+  time = time.replace(/-/g,'/');
+  time = time.replace(/T/,' ');
+  time = time.replace(/Z/,'');
+  return time;
+}
+
+async function calTime(time1,time2){
+  time1 = translateTime(time1);
+  time2 = translateTime(time2);
+
+  let start_date = new Date(time1);
+  let end_date = new Date(time2);
+  if (end_date - start_date < 0){
+    console.log("time1 is larger than time2.ERROR TIME!");
+    return -1;
+  }else{
+    let num = (end_date - start_date)/(1000*3600*24);
+    let days = parseInt(Math.ceil(num)) - 1;
+    return days;
+  }
+}
+calTime('2015-04-15T13:28:22Z','2015-04-16T13:28:21Z');
+
 
 export {
-  getTimeFromLong as transTime
+  getTimeFromLong as transTime,
+  calTime
 }
