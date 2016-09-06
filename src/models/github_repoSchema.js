@@ -26,7 +26,10 @@ var repo = schema({
   created_at: String,
   main_language: String,
   languages: [String],
-  contributors: [String],
+  contributors: [{
+    login: String,
+    contributions: Number
+  }],
   starers: [String]
 });
 

@@ -32,7 +32,7 @@ import {getFlowListData, getCountData, getLangListData, getCoverData} from './se
 import {addLang, getAllLanguage} from './servers/service/LanguageService'
 import {} from './servers/service/UserService'
 //others
-import {starRepo} from './servers/api/github_user'
+import {starRepo, followUser} from './servers/api/github_user'
 
 var session = require('express-session');
 connect();
@@ -127,6 +127,13 @@ server.get('/api/test_login', test_login);
 //star repo
 server.get('/api/repo/star', (req, res)=>{
   starRepo(req.query.user, req.query.repo, resa => {
+    if (resa == 1) res.send("success");
+    else res.send("fail");
+  });
+});
+//follow user
+server.get('/api/user/follow', (req, res)=>{
+  followUser(req.query.user, req.query.follow, resa => {
     if (resa == 1) res.send("success");
     else res.send("fail");
   });

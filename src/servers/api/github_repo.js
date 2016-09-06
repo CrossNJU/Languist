@@ -10,6 +10,8 @@ var client = github.client({
   password: 'cr112358132134'
 });
 
+var number_per_page = 100;
+
 function getRepoInfo(fullname, callback) {
   client.get('/repos/' + fullname, {}, function (err, status, body, headers) {
     //console.log(body); //json object
@@ -29,37 +31,45 @@ function getRepoLanguages(fullname, callback) {
   });
 }
 
-function getStarredUsers(fullname, page, array, end, callback) {
+function getStarredUsers(fullname, page, array, numbers, callback) {
   let len = array.length;
-  client.get('repos/' + fullname + '/stargazers', {page: page, per_page: 100}, function (err, status, body, headers) {
-    if (body === undefined || body.length == 0){
-      callback(array);
-    }else {
-      for (let i = 0; i < body.length; i++) {
-        let json = body[i];
-        array[len] = json.login;
-        len++;
+  if (numbers == 0) callback(array);
+  else {
+    client.get('repos/' + fullname + '/stargazers', {page: page, per_page: number_per_page>numbers?numbers:number_per_page}, function (err, status, body, headers) {
+      if (body === undefined || body.length == 0){
+        callback(array);
+      }else {
+        for (let i = 0; i < body.length; i++) {
+          let json = body[i];
+          array[len] = json.login;
+          len++;
+        }
+        getStarredUsers(fullname, page + 1, array, numbers>number_per_page?numbers-number_per_page:0, callback);
       }
-      if (!end) getStarredUsers(fullname, page + 1, array, false, callback);
-      else callback(array);
-    }
-  });
+    });
+  }
 }
 
-function getContributors(fullname, page, array, callback) {
+function getContributors(fullname, page, array, numbers, callback) {
   let len = array.length;
-  client.get('repos/' + fullname + '/contributors', {page: page, per_page: 100}, function (err, status, body, headers) {
-    if (body === undefined || body.length == 0){
-      callback(array);
-    }else {
-      for (let i = 0; i < body.length; i++) {
-        let json = body[i];
-        array[len] = json.login;
-        len++;
+  if (numbers == 0) callback(array);
+  else {
+    client.get('repos/' + fullname + '/contributors', {page: page, per_page: number_per_page>numbers?numbers:number_per_page}, function (err, status, body, headers) {
+      if (body === undefined || body.length == 0){
+        callback(array);
+      }else {
+        for (let i = 0; i < body.length; i++) {
+          let json = body[i];
+          array[len] = {
+            login: json.login,
+            contributions: json.contributions
+          };
+          len++;
+        }
+        getContributors(fullname, page + 1, array, numbers>number_per_page?numbers-number_per_page:0, callback);
       }
-      getContributors(fullname, page + 1, array, callback);
-    }
-  });
+    });
+  }
 }
 
 function addNewRepo(info, callback=null) {
@@ -89,8 +99,8 @@ function addNewRepo(info, callback=null) {
     }
   };
   github_repoSchema.update({full_name: info.full_name}, update2, {upsert: true}, (err, res) => {
-    console.log("new repo:"+info.full_name);
-    console.log(res);
+    //console.log("new repo:"+info.full_name);
+    //console.log(res);
     if (callback != null) callback();
   });
 }
