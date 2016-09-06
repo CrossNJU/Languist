@@ -135,7 +135,7 @@ async function get_rec_repos_by_user(login,rec_num){
     }
   }
 
-  // console.log(rec_repos);
+   console.log(rec_repos);
   return rec_repos;
 
 }
@@ -201,6 +201,7 @@ async function get_rec_repos_by_also_star(login,rec_num){
   let init_repos = [];
   let rec_repos = [];
 
+  //console.log("in");
   for (let i = 0;i < stars_handle.length;i++)
     user_stars.push(stars_handle[i].fullname);
 
@@ -213,12 +214,15 @@ async function get_rec_repos_by_also_star(login,rec_num){
     }
   }
 
-  console.log(init_starers[394]);
-  let test = await getStarRepoByUser(leeroybrun);
-  console.log('test');
-  console.log(test);
+  //console.log("in");
+  //console.log(init_starers[394]);
+  //let test = await getStarRepoByUser(leeroybrun);
+  //console.log('test');
+  //console.log(test);
 
+  console.log(init_starers.length);
   for (let i = 0;i < init_starers.length;i++){
+    console.log(init_starers[i]);
     let temp_repos = await getStarRepoByUser(init_starers[i]);
     for (let j = 0;j < temp_repos.length;j++){
       let fullname = temp_repos[j].fullname;
@@ -231,7 +235,7 @@ async function get_rec_repos_by_also_star(login,rec_num){
     // console.log(i);
   }
 
-  console.log(init_repos_name.length);
+  console.log("in");
 
   for (let i = 0;i < init_repos_name.length;i++){
     console.log('ininin');
@@ -240,18 +244,18 @@ async function get_rec_repos_by_also_star(login,rec_num){
       stars: await getRepoInfo(init_repos_name[i]).stars_count
     };
     init_repos.push(repo);
-    console.log(init_repos);
+    //console.log(init_repos);
   }
 
   init_repos.sort(getSortFun('desc','stars'));
 
-  console.log(init_repos);
+  //console.log(init_repos);
 
   for (let i = 0;i < rec_num;i++){
     if (i > init_repos.length) break;
     rec_repos.push(init_repos[i]);
   }
-
+  console.log(rec_repos);
   return rec_repos;
 
 }
@@ -336,9 +340,10 @@ async function get_rec_repos_by_contributor(fullname,rec_num){
 export {get_rec_repos_by_user,get_rec_repos_by_star_repos_owner,
   get_rec_repos_by_also_star,get_rec_repos_by_following,get_rec_repos_by_contributor}
 
-connect();
+//connect();
 // get_rec_repos_by_user('ChenDanni',10);
 // get_rec_repos_by_star_repos('ChenDanni',10);
-get_rec_repos_by_following('ChenDanni',100);
+//get_rec_repos_by_following('ChenDanni',100);
 // get_rec_repos_by_also_star('ChenDanni',5);
 // get_rec_repos_by_contributor('jquery/jquery',5);
+//get_rec_repos_by_also_star('RickChem', 10);

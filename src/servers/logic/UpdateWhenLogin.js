@@ -272,7 +272,7 @@ function updateWhenLogin(login) {
 
 export {updateWhenLogin, upsertRepo, upsertUser}
 
-let test_login = 'RickChem';
-upsertUser(test_login, () => {
-  updateWhenLogin('RickChem');
-});
+//let test_login = 'RickChem';
+//upsertUser(test_login, () => {
+//  updateWhenLogin(test_login);
+//});

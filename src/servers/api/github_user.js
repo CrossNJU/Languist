@@ -153,7 +153,9 @@ function addAnewUser(json, access_token){
     level: 0,
     access_token: access_token,
     password: "123",
-    language: []}
+    language: [],
+    recommend: [],
+    rec_date: (new Date()).toLocaleString().split(' ')[0]}
   };
   var options = {upsert : true};
   userSchema.update(conditions, update, options, function(error, res){
