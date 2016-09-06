@@ -15,14 +15,14 @@ var user = schema({
     lang_name: String,
     lang_level: Number
   }],
+  //0-user, 1-repo, 2-lang
+  //1-un rec, 0-today, -1-last day...
+  //0-null, 1-like, -1-dislike
   recommend: [{
-    name: String,
-    //0-user, 1-repo, 2-lang
-    type: Number,
-    //1-un rec, 0-today, -1-last day...
-    date: Number,
-    //0-null, 1-like, -1-dislike
-    like: Number
+    m_name: String,
+    m_type: Number,
+    m_date: Number,
+    m_like: Number
   }],
   rec_date: String
 });

@@ -253,9 +253,9 @@ async function get_rec_repos_by_also_star(login,rec_num){
 
   for (let i = 0;i < rec_num;i++){
     if (i > init_repos.length) break;
-    rec_repos.push(init_repos[i]);
+    rec_repos.push(init_repos[i].fullname);
   }
-  console.log(rec_repos);
+  //console.log(rec_repos);
   return rec_repos;
 
 }
