@@ -209,7 +209,7 @@ async function get_rec_users(login,rec_num){
     rec_user_login.splice(index,1);
   }
 
-  console.log("here2");
+  //console.log("here2");
   console.log(rec_user_login);
 
 
@@ -311,10 +311,11 @@ async function get_rec_users_by_follwing_repo(login,rec_num){
     }
     rec_contr.push(contr_array[i].login);
   }
+  console.log(rec_contr);
   return rec_contr;
 }
 
 export {get_rec_users}
 
 //connect();
-//get_rec_users('RickChem',20);
+//get_rec_users_by_follwing_repo('RickChem',20);

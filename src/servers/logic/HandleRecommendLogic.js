@@ -8,7 +8,7 @@ import {github_userSchema} from '../../models/github_userSchema'
 import {languageSchema} from '../../models/languageSchema';
 import {transTime} from '../util/timeUtil'
 import {get_rec_languages} from './RecommendLogic_languages'
-import {get_rec_repos_by_following, get_rec_repos_by_user} from './RecommendLogic_repos'
+import {get_rec_repos_by_following, get_rec_repos_by_user, get_rec_repos_by_also_star} from './RecommendLogic_repos'
 import {get_rec_users} from './RecommendLogic_users'
 
 function getALanguage(lang) {
@@ -101,7 +101,7 @@ function getInterval(time_bef) {
 
 async function fetchData(userName, callback) {
   console.log('inin');
-  let repos = await get_rec_repos_by_user(userName, 100);
+  let repos = await get_rec_repos_by_also_star(userName, 100);
   console.log('after');
   console.log(repos);
   let users = await get_rec_users(userName, 35);

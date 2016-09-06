@@ -220,9 +220,9 @@ async function get_rec_repos_by_also_star(login,rec_num){
   //console.log('test');
   //console.log(test);
 
-  console.log(init_starers.length);
+  //console.log(init_starers.length);
   for (let i = 0;i < init_starers.length;i++){
-    console.log(init_starers[i]);
+    //console.log(init_starers[i]);
     let temp_repos = await getStarRepoByUser(init_starers[i]);
     for (let j = 0;j < temp_repos.length;j++){
       let fullname = temp_repos[j].fullname;
@@ -235,10 +235,10 @@ async function get_rec_repos_by_also_star(login,rec_num){
     // console.log(i);
   }
 
-  console.log("in");
+  //console.log("in");
 
   for (let i = 0;i < init_repos_name.length;i++){
-    console.log('ininin');
+    //console.log('ininin');
     let repo = {
       fullname: init_repos_name[i],
       stars: await getRepoInfo(init_repos_name[i]).stars_count
