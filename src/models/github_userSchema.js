@@ -26,7 +26,9 @@ var github_user = schema({
   followings_login: [String],
   use_languages: [],
   star_repos: [String],
-  repos: []
+  repos: [],
+  joinRepos: [],
+  joinRepo_count: Number
 });
 
 //make model and export

@@ -8,60 +8,76 @@ import {github_userSchema} from '../../models/github_userSchema'
 import {connect} from '../config'
 
 import {getPublicRepos, getUserStarred} from '../api/github_user'
+import {upsertUser, upsertRepo, updateUserStars, updateUserRepos} from '../logic/UpdateWhenLogin'
+import {getGithubUserInfo} from './UserDAO'
 
 async function getRepoInfo(fullname){
   let t = await new Promise(function(resolve, reject) {
     github_repoSchema.findOne({full_name: fullname}, (err, repo_single) => {
       if (err) reject(err);
-      resolve(repo_single);
+      if (repo_single == null) {
+        upsertRepo(fullname, () => {
+          github_repoSchema.findOne({full_name: fullname}, (err, repo_single2) => {
+            resolve(repo_single2);
+          })
+        })
+      }else
+        resolve(repo_single);
     });
   });
   return t;
 }
 
 async function getStarRepoByUser(login) {
-  let t = await new Promise(function (resolve, reject) {
-    github_userSchema.findOne({login: login}, async (err, user) => {
-      if (err) reject(err);
-      let ans = [];
-      for (let repo of user.star_repos){
-        let repo_det = await new Promise(function(resolve2, reject2) {
-          github_repoSchema.findOne({full_name: repo}, (err, repo_one) => {
-            if (err) reject2(err);
-            if (repo_one == null) resolve2(null);
-            else resolve2(repo_one.stars_count);
-          });
+  let t = await new Promise(async function (resolve, reject) {
+    let ans = [];
+    //console.log(login);
+    let user = await getGithubUserInfo(login);
+    let user_stars = user.star_repos;
+    if (user_stars.length == 0){
+      user_stars = await new Promise(function(resolve2, reject2){
+        updateUserStars(login, true, async (stars) => {
+          resolve2(stars);
         });
+      })
+    }
+      for (let repo of user_stars){
+        let repo_det = await getRepoInfo(repo);
         ans.push({
           fullname: repo,
-          stars: repo_det
+          stars: repo_det.stars_count
         })
       }
       resolve(ans);
-    });
   });
   return t;
 }
 
 async function getPublicRepoByUser(login) {
-
-  // console.log('inin');
-
-  let t = await new Promise(function (resolve, reject) {
-    github_userSchema.findOne({login: login}, async (err, user) => {
-      if (err) reject(err);
-      if (user == null) resolve(null);
-      resolve(user.repos);
-    });
+  let t = await new Promise(async function (resolve, reject) {
+    let user = await getGithubUserInfo(login);
+    if (user.repos.length == null){
+      updateUserRepos(login, true, (repos) =>{
+        resolve(repos);
+      })
+    }else resolve(user.repos);
   });
-
-  // console.log('t');
-  // console.log(t);
-
   return t;
 }
 
-export {getStarRepoByUser, getPublicRepoByUser, getRepoInfo}
+//async function getJoinRepoByUser(login) {
+//  let t = await new Promise(function (resolve, reject) {
+//    let user = getGithubUserInfo(login);
+//    if (user.repos.length == null){
+//      updateUserRepos(login, true, (repos) =>{
+//        resolve(repos);
+//      })
+//    }else resolve(user.repos);
+//  });
+//  return t;
+//}
+
+export {getStarRepoByUser, getPublicRepoByUser, getRepoInfo}//, getJoinRepoByUser}
 
 async function test() {
   connect();

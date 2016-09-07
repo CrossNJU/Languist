@@ -235,7 +235,7 @@ async function get_rec_repos_by_also_star(login,rec_num){
     // console.log(i);
   }
 
-  //console.log("in");
+  console.log("in");
 
   for (let i = 0;i < init_repos_name.length;i++){
     //console.log('ininin');
@@ -257,7 +257,7 @@ async function get_rec_repos_by_also_star(login,rec_num){
     if (i > init_repos.length) break;
     rec_repos.push(init_repos[i].fullname);
   }
-  //console.log(rec_repos);
+  console.log('get rec repos!');
   return rec_repos;
 
 }

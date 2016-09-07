@@ -134,6 +134,7 @@ function getInterval(time_bef) {
 
 async function fetchData(userName, callback) {
   let repos = await get_rec_repos_by_also_star(userName, 100);
+  console.log('after rec repo');
   let users = await fakeUsers(35);
   let langs = await fakeLangs(15);
   let rec = [];
@@ -239,9 +240,10 @@ async function recNew(repos, users, langs, userName, cur_rec, interval){
   return lang_num;
 }
 
-function getStart(userName){
+function getStart(userName, callback){
   fetchData(userName, (cur_rec) => {
     recNew([], [], [], userName, cur_rec, 0);
+    callback();
   });
 }
 
@@ -256,9 +258,20 @@ async function getNextDayRecommendData(userName) {
   let interval = getInterval(cur_user.rec_date);
   let repos = [], users = [], langs = [];
   let cur_rec = cur_user.recommend;
-  let lang_num = 0;
-  if (interval == 0) {
-    //console.log('in');
+  if (cur_rec.length == 0) {
+    //console.log('in cur = 0');
+    let ans = await new Promise(function(resolve, reject){
+      getStart(userName, async () => {
+        let t = await getNextDayRecommendData(userName);
+        resolve(t);
+      });
+    });
+    return ans;
+  } else {
+    //console.log('in combine');
+    let lang_num = 0;
+    if (interval == 0) {
+      //console.log('in');
       for (let rec of cur_rec) {
         if (rec.m_type == 0 && rec.m_date == 0) {
           users.push(rec.m_name);
@@ -269,11 +282,13 @@ async function getNextDayRecommendData(userName) {
           lang_num++;
         }
       }
-  } else {
-    lang_num = recNew(repos, users, langs, userName, cur_rec, interval);
+    } else {
+      lang_num = recNew(repos, users, langs, userName, cur_rec, interval);
+    }
+    //console.log(repos.length+users.length+langs.length);
+    //console.log('done combine');
+    return combine(repos, users, langs, lang_num);
   }
-  //console.log(repos.length+users.length+langs.length);
-  return combine(repos, users, langs, lang_num);
 }
 
 export {getNextDayRecommendData}

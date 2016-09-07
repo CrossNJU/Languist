@@ -62,6 +62,7 @@ function updateRepoStar(fullname, callback) {
 
 function updateUserStars(login, is_insert, callback) {
   github_userSchema.findOne({login: login}, (err, user) => {
+    //console.log(login);
     if (user.star_repos.length == 0) {
       getUserStarred(login, 1, [], is_insert, get_size, (ret) => {
         var conditions = {login: login};
@@ -270,7 +271,7 @@ function updateWhenLogin(login) {
   });
 }
 
-export {updateWhenLogin, upsertRepo, upsertUser}
+export {updateWhenLogin, upsertRepo, upsertUser, updateRepoCons, updateRepoStar, updateUserFollowing, updateUserRepos, updateUserStars}
 
 //let test_login = 'RickChem';
 //upsertUser(test_login, () => {

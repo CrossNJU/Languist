@@ -128,7 +128,7 @@ server.get('/api/login', (req, res) => {
 server.get('/api/register', (req, res) => {
   register(req.query.username, req.query.password, (res2) => {
     if (res2 == SUCCESS) {
-      res.send({res: SUCCESS});
+      res.send(ret_success);
     } else
       res.send({res: res2});
   })

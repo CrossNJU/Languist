@@ -4,6 +4,7 @@
 
 import {userSchema} from '../../models/userSchema'
 import {github_userSchema} from '../../models/github_userSchema'
+import {get_rec_repos_by_contributor} from '../logic/RecommendLogic_repos'
 
 function addARepoToSet(login, full_name, set_name, callback) {
   github_userSchema.findOne({login: login}, (err, user) => {
@@ -46,4 +47,12 @@ function addAReopSet(login, set_name, callback) {
   })
 }
 
-export {addAReopSet, addARepoToSet}
+function getRelatedRecommend(full_name){
+  let rec_num = 10;
+  let recs = get_rec_repos_by_contributor(full_name, rec_num);
+  return recs;
+}
+
+export {addAReopSet, addARepoToSet, getRelatedRecommend}
+
+//getRelatedRecommend('')
