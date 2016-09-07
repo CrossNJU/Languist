@@ -24,7 +24,11 @@ var user = schema({
     m_date: Number,
     m_like: Number
   }],
-  rec_date: String
+  rec_date: String,
+  repo_sets: [{
+    set_name: String,
+    set_repos: [String]
+  }]
 });
 
 //make model and export

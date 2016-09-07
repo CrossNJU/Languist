@@ -5,14 +5,18 @@
 import {userSchema} from '../../models/userSchema'
 import {languageSchema} from '../../models/languageSchema'
 
-//name;
-//description；
-//level;
-//tag；
-//size;
-
-function getUserLangugage(login, callback){
-
+function evaluateRecommend(login, name, type, like) {
+  userSchema.findOne({login: login}, (err, user) => {
+    let rec = user.recommend;
+    let index = rec.findIndex(j => {
+      return (j.m_type == type) && (j.m_name == name)
+    });
+    rec[index].m_like = like;
+    userSchema.update({login: login}, {$set: {recommend: rec}}, (err, res) => {
+      console.log('update recommend feedback!');
+      console.log(res);
+    })
+  });
 }
 
-//export {getAllLanguage}
+export {evaluateRecommend}

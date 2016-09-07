@@ -4,6 +4,11 @@
 
 import mongoose from 'mongoose'
 
+export const SUCCESS = 1;
+export const FAIL = 0;
+export const NOT_FOUND = -1;
+export const PASSWORD_ERROR = -2;
+
 function mon_conn(){
   mongoose.connect('mongodb://localhost/languist');
   var db = mongoose.connection;

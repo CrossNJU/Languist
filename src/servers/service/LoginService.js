@@ -6,6 +6,7 @@ import {userSchema} from '../../models/userSchema'
 import {addAnewUser, addAnewGitHubUser} from '../api/github_user'
 import {updateWhenLogin} from '../logic/UpdateWhenLogin'
 import {} from '../logic/UpdateLater'
+import {SUCCESS, FAIL, PASSWORD_ERROR, NOT_FOUND} from '../config'
 var superagent = require('superagent');
 
 var getAccessURL = 'https://github.com/login/oauth/access_token';
@@ -14,13 +15,13 @@ var test_login = false;
 
 function login(username, password, callback) {
   userSchema.findOne({login: username}, (err, user) => {
-    if (user == null) callback("no such user!");
+    if (user == null) callback(NOT_FOUND);
     else {
       if (user.password == password) {
-        callback(1);
+        callback(SUCCESS);
       }
-      else if (user.password === undefined) callback("password not set yet!");
-      else callback("password error!");
+      else if (user.password === undefined) callback(PASSWORD_ERROR);
+      else callback(FAIL);
     }
   });
 }
@@ -33,9 +34,9 @@ function register(username, password, callback) {
     }
   };
   userSchema.update(conditions, update, (err, res) => {
-    if (err) callback(err);
+    if (err) callback(FAIL);
     else {
-      callback(1);
+      callback(SUCCESS);
     }
   });
 }
@@ -68,7 +69,7 @@ export var saveUser = (code, callback) => {
           if (err) {
             return console.log(err);
           }
-          callback(1);
+          callback(SUCCESS);
           let json = JSON.parse(ssres.text);
 
           //insert new users

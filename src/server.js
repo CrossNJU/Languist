@@ -24,13 +24,14 @@ import assets from './assets';
 import { port, auth, analytics } from './config';
 
 //config and test
-import {connect, disconnect} from './servers/config'
+import {connect, disconnect, SUCCESS, FAIL} from './servers/config'
 import {home, test_login} from './servers/test/testController';
 //services
-import {saveUser, getCurrentUser, login, register} from './servers/service/LoginService';
+import {saveUser, login, register} from './servers/service/LoginService';
 import {getFlowListData, getCountData, getLangListData, getCoverData} from './servers/service/HomeService'
 import {addLang, getAllLanguage} from './servers/service/LanguageService'
-import {} from './servers/service/UserService'
+import {evaluateRecommend} from './servers/service/UserService'
+import {addAReopSet, addARepoToSet} from './servers/service/RepoService'
 //others
 import {starRepo, followUser} from './servers/api/github_user'
 
@@ -51,13 +52,14 @@ global.navigator.userAgent = global.navigator.userAgent || 'all';
 // -----------------------------------------------------------------------------
 server.use(express.static(path.join(__dirname, 'public')));
 server.use(cookieParser());
-server.use(bodyParser.urlencoded({ extended: true }));
+server.use(bodyParser.urlencoded({extended: true}));
 server.use(bodyParser.json());
 server.use(session({
   secret: 'keyboard cat',
   resave: true,
   saveUninitialized: true,
-  cookie: { maxAge: 60000 }}));
+  cookie: {maxAge: 60000}
+}));
 
 //
 // Authentication
@@ -72,30 +74,32 @@ server.use(expressJwt({
 server.use(passport.initialize());
 
 server.get('/login/facebook',
-  passport.authenticate('facebook', { scope: ['email', 'user_location'], session: false })
+  passport.authenticate('facebook', {scope: ['email', 'user_location'], session: false})
 );
 server.get('/login/facebook/return',
-  passport.authenticate('facebook', { failureRedirect: '/login', session: false }),
+  passport.authenticate('facebook', {failureRedirect: '/login', session: false}),
   (req, res) => {
     const expiresIn = 60 * 60 * 24 * 180; // 180 days
-    const token = jwt.sign(req.user, auth.jwt.secret, { expiresIn });
-    res.cookie('id_token', token, { maxAge: 1000 * expiresIn, httpOnly: true });
+    const token = jwt.sign(req.user, auth.jwt.secret, {expiresIn});
+    res.cookie('id_token', token, {maxAge: 1000 * expiresIn, httpOnly: true});
     res.redirect('/');
   }
 );
 
 //
 // Register API middleware
-// -----------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 server.use('/graphql', expressGraphQL(req => ({
   schema,
   graphiql: true,
-  rootValue: { request: req },
+  rootValue: {request: req},
   pretty: process.env.NODE_ENV !== 'production',
 })));
 
-//login and register
-server.get('/api/login/success', (req, res)=>{
+// ---------------------------------------------------------------------------------------------------------------my part
+
+//login success
+server.get('/api/login/success', (req, res)=> {
   saveUser(req.query.code, (ress) => {
     if (ress == 1) {
       res.redirect('/register');
@@ -103,69 +107,77 @@ server.get('/api/login/success', (req, res)=>{
     else res.redirect('/login');
   });
 });
+//login
 server.get('/api/login', (req, res) => {
   login(req.query.username, req.query.password, (res2) => {
-    if (res2 == 1) {
+    if (res2 == SUCCESS) {
       req.session.username = req.query.username;
-      //console.log(req.query.username);
-      //req.session.save((err) => {console.error(err)});
-      res.send("success");
-    }else
+      res.send(SUCCESS);
+    } else
       res.send(res2);
   })
 });
+//register
 server.get('/api/register', (req, res) => {
   register(req.query.username, req.query.password, (res2) => {
-    if (res2 == 1) {
-      res.send("success");
-    }else
+    if (res2 == SUCCESS) {
+      res.send(SUCCESS);
+    } else
       res.send(res2);
   })
 });
-server.get('/api/test_login', test_login);
+//test login
+//server.get('/api/test_login', test_login);
 
 //star repo
-server.get('/api/repo/star', (req, res)=>{
+server.get('/api/repo/star', (req, res)=> {
   starRepo(req.query.user, req.query.repo, resa => {
-    if (resa == 1) res.send("success");
-    else res.send("fail");
+    if (resa == SUCCESS) res.send(SUCCESS);
+    else res.send(FAIL);
   });
 });
 //follow user
-server.get('/api/user/follow', (req, res)=>{
+server.get('/api/user/follow', (req, res)=> {
   followUser(req.query.user, req.query.follow, resa => {
-    if (resa == 1) res.send("success");
-    else res.send("fail");
+    if (resa == SUCCESS) res.send(SUCCESS);
+    else res.send(FAIL);
   });
 });
 
-//home
+//get recommend data
 server.get('/api/home/flowList', (req, res) => {
   getFlowListData(req.query.user, ret => {
     res.send(ret);
   });
 });
+//home-count
 server.get('/api/home/count', (req, res) => {
   getCountData(req.query.user, call => {
     res.send(call);
   });
 });
+//home-language list
 server.get('/api/home/langList', (req, res) => {
   getLangListData(req.query.user, call => {
     res.send(call);
   });
 });
-server.get('/api/home/cover', (req, res)=>{
+//home-cover
+server.get('/api/home/cover', (req, res)=> {
   getCoverData(req.query.user, call => {
     res.send(call);
   });
 });
 
+//evaluate the recommend
+server.get('/api/rec/evaluate', (req, res) => {
+  evaluateRecommend(req.query.login, req.query.name, req.query.type, req.query.value, (resa) => {
+    if (resa == SUCCESS) res.send(SUCCESS);
+    else res.send(FAIL);
+  })
+});
+
 //get current user
-//server.get('/api/test/current_user', (req, res) => {
-//  req.session.username = 'CR';
-//  res.send(req.session.username);
-//});
 server.get('/api/current_user', (req, res) => {
   res.send(req.session.username);
 });
@@ -173,24 +185,42 @@ server.get('/api/current_user', (req, res) => {
 //choose language
 server.get('/api/lang/choose', (req, res) => {
   addLang(req.query.login, req.query.lang, req.query.level, ret => {
-    if (ret == 1) res.send('success');
-    else res.send('fail');
+    if (ret == SUCCESS) res.send(SUCCESS);
+    else res.send(FAIL);
   });
 });
+
+//get all language
 server.get('/api/language/all', (req, res) => {
   getAllLanguage((langs) => {
     res.send(langs);
   })
 });
 
+//add a repo to a repo set
+server.get('/api/repo/addToSet', (req, res) => {
+  addARepoToSet(req.query.login, req.query.fullname, req.query.setname, (resa) => {
+    if (resa == SUCCESS) res.send(SUCCESS);
+    else res.send(resa);
+  })
+});
+
+//add a repo set
+server.get('/api/repo/addSet', (req, res) => {
+  addAReopSet(req.query.login, req.query.setname, (resa) => {
+    if (resa == SUCCESS) res.send(SUCCESS);
+    else res.send(resa);
+  });
+});
+
 //
 // Register server-side rendering middleware
-// -----------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 server.get('*', async (req, res, next) => {
   try {
     let statusCode = 200;
     const template = require('./views/index.jade');
-    const data = { title: '', description: '', css: '', body: '', entry: assets.main.js };
+    const data = {title: '', description: '', css: '', body: '', entry: assets.main.js};
 
     if (process.env.NODE_ENV === 'production') {
       data.trackingId = analytics.google.trackingId;
@@ -204,7 +234,7 @@ server.get('*', async (req, res, next) => {
       onPageNotFound: () => (statusCode = 404),
     };
 
-    await Router.dispatch({ path: req.path, query: req.query, context }, (state, component) => {
+    await Router.dispatch({path: req.path, query: req.query, context}, (state, component) => {
       data.body = ReactDOM.renderToString(component);
       data.css = css.join('');
     });
