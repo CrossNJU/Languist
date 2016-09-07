@@ -39,6 +39,8 @@ var session = require('express-session');
 connect();
 
 const server = global.server = express();
+const ret_success = 'success';
+const error_code = 'fail';
 
 //
 // Tell any CSS tooling (such as Material UI) to use all vendor prefixes if the
@@ -112,7 +114,7 @@ server.get('/api/login', (req, res) => {
   login(req.query.username, req.query.password, (res2) => {
     if (res2 == SUCCESS) {
       req.session.username = req.query.username;
-      res.send(SUCCESS);
+      res.send(ret_success);
     } else
       res.send(res2);
   })
@@ -121,7 +123,7 @@ server.get('/api/login', (req, res) => {
 server.get('/api/register', (req, res) => {
   register(req.query.username, req.query.password, (res2) => {
     if (res2 == SUCCESS) {
-      res.send(SUCCESS);
+      res.send(ret_success);
     } else
       res.send(res2);
   })
@@ -132,15 +134,15 @@ server.get('/api/register', (req, res) => {
 //star repo
 server.get('/api/repo/star', (req, res)=> {
   starRepo(req.query.user, req.query.repo, resa => {
-    if (resa == SUCCESS) res.send(SUCCESS);
-    else res.send(FAIL);
+    if (resa == SUCCESS) res.send(ret_success);
+    else res.send(error_code);
   });
 });
 //follow user
 server.get('/api/user/follow', (req, res)=> {
   followUser(req.query.user, req.query.follow, resa => {
-    if (resa == SUCCESS) res.send(SUCCESS);
-    else res.send(FAIL);
+    if (resa == SUCCESS) res.send(ret_success);
+    else res.send(error_code);
   });
 });
 
@@ -172,8 +174,8 @@ server.get('/api/home/cover', (req, res)=> {
 //evaluate the recommend
 server.get('/api/rec/evaluate', (req, res) => {
   evaluateRecommend(req.query.login, req.query.name, req.query.type, req.query.value, (resa) => {
-    if (resa == SUCCESS) res.send(SUCCESS);
-    else res.send(FAIL);
+    if (resa == SUCCESS) res.send(ret_success);
+    else res.send(error_code);
   })
 });
 
@@ -185,8 +187,8 @@ server.get('/api/current_user', (req, res) => {
 //choose language
 server.get('/api/lang/choose', (req, res) => {
   addLang(req.query.login, req.query.lang, req.query.level, ret => {
-    if (ret == SUCCESS) res.send(SUCCESS);
-    else res.send(FAIL);
+    if (ret == SUCCESS) res.send(ret_success);
+    else res.send(error_code);
   });
 });
 
@@ -200,7 +202,7 @@ server.get('/api/language/all', (req, res) => {
 //add a repo to a repo set
 server.get('/api/repo/addToSet', (req, res) => {
   addARepoToSet(req.query.login, req.query.fullname, req.query.setname, (resa) => {
-    if (resa == SUCCESS) res.send(SUCCESS);
+    if (resa == SUCCESS) res.send(ret_success);
     else res.send(resa);
   })
 });
@@ -208,7 +210,7 @@ server.get('/api/repo/addToSet', (req, res) => {
 //add a repo set
 server.get('/api/repo/addSet', (req, res) => {
   addAReopSet(req.query.login, req.query.setname, (resa) => {
-    if (resa == SUCCESS) res.send(SUCCESS);
+    if (resa == SUCCESS) res.send(ret_success);
     else res.send(resa);
   });
 });
