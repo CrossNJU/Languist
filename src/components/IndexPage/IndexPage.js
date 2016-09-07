@@ -69,7 +69,8 @@ class HomePage extends Component {
             <RaisedButton label={"SIGN UP WITH GITHUB"}
                           secondary = {true}
                           style={{width: '283px', height: '46px', marginTop: '96px'}}
-                          labelStyle={{fontSize: '22px', lineHeight: '46px'}}/>
+                          labelStyle={{fontSize: '22px', lineHeight: '46px'}}
+                          href="https://github.com/login/oauth/authorize?client_id=d310933db63d64f563a0"/>
           </div>
 
           <div className={`${s.content} ${s.content_2}`}>
@@ -102,7 +103,8 @@ class HomePage extends Component {
             <RaisedButton label={"SIGN UP WITH GITHUB"}
                           secondary = {true}
                           style={{width: '283px', height: '46px'}}
-                          labelStyle={{fontSize: '22px', lineHeight: '46px'}}/>
+                          labelStyle={{fontSize: '22px', lineHeight: '46px'}}
+                          href="https://github.com/login/oauth/authorize?client_id=d310933db63d64f563a0"/>
           </div>
         </div>
       </div>
