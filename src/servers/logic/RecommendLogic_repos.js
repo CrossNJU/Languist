@@ -239,9 +239,11 @@ async function get_rec_repos_by_also_star(login,rec_num){
 
   for (let i = 0;i < init_repos_name.length;i++){
     //console.log('ininin');
+    let repo_single = await getRepoInfo(init_repos_name[i]);
+    let repo_stars = repo_single.stars_count;
     let repo = {
       fullname: init_repos_name[i],
-      stars: await getRepoInfo(init_repos_name[i]).stars_count
+      stars: repo_stars
     };
     init_repos.push(repo);
     //console.log(init_repos);
@@ -342,7 +344,7 @@ export {get_rec_repos_by_user,get_rec_repos_by_star_repos_owner,
 
 //connect();
 // get_rec_repos_by_user('ChenDanni',10);
-// get_rec_repos_by_star_repos('ChenDanni',10);
+// get_rec_repos_by_also_star('RickChem',100);
 //get_rec_repos_by_following('ChenDanni',100);
 // get_rec_repos_by_also_star('ChenDanni',5);
 // get_rec_repos_by_contributor('jquery/jquery',5);

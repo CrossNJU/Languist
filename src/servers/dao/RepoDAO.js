@@ -65,7 +65,7 @@ export {getStarRepoByUser, getPublicRepoByUser, getRepoInfo}
 
 async function test() {
   connect();
-  let t = await getPublicRepoByUser("RickChem");
+  let t = await getRepoInfo("jceb/vim-orgmode");
   console.log(t);
 }
 
