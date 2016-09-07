@@ -45,6 +45,24 @@ const styles = {
 };
 
 class RepoFlowItem extends Component {
+  renderStarButton() {
+    if (this.props.repo.set) {
+      return (
+        <RaisedButton
+          icon={<Star />}
+          label={this.props.repo.set || 'UNGROUPED'}
+          labelColor="#F2DF83"
+          onTouchTap={this.handleExpand} />
+      )
+    }
+    return (
+      <RaisedButton
+        icon={<Star />}
+        label={'Star (' + this.props.repo.star + ')'}
+        secondary={true}
+        onTouchTap={this.handleExpand} />
+    )
+  }
   render() {
     return (
       <Card className={s.item}>
@@ -77,11 +95,7 @@ class RepoFlowItem extends Component {
           </div>
         </CardText>
         <CardActions style={styles.cardActions}>
-          <RaisedButton
-            icon={<Star />}
-            label={'Star (' + this.props.repo.star + ')'}
-            secondary={true}
-            onTouchTap={this.handleExpand} />
+          {this.renderStarButton()}
           <RaisedButton
             icon={<Code />}
             label="View"

@@ -21,7 +21,8 @@ let repoData = [
       'Framework'
     ],
     update: 'July 11, 2016',
-    star: 2731
+    star: 2731,
+    set: 'React'
   },
   {
     avatarUrl: '',
@@ -35,7 +36,8 @@ let repoData = [
       'UI'
     ],
     update: 'July 11, 2016',
-    star: 1523
+    star: 1523,
+    set: 'UI'
   },
   {
     avatarUrl: '',
@@ -49,7 +51,8 @@ let repoData = [
       'Starter Kit'
     ],
     update: 'July 11, 2016',
-    star: 9298
+    star: 9298,
+    set: 'UNGROUPED'
   }
 ];
 
@@ -58,8 +61,8 @@ class RepoList extends Component {
     super(props);
   }
   renderRepos() {
-    console.log(JSON.parse(JSON.stringify(this.props.data)));
-    repoData = this.props.data;
+    // console.log(JSON.parse(JSON.stringify(this.props.data)));
+    // repoData = this.props.data;
     if (repoData.length > 0) {
       let repos = repoData.map(repo => {
         return (<RepoFlowItem key={repo.owner + repo.name} repo={repo} />);
