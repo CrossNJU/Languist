@@ -66,16 +66,27 @@ class LangItem extends Component {
     };
   }
 
+  componentWillMount() {
+    this.setState({
+      isSelected: this.props.lang.isSelected,
+      level: this.props.lang.level
+    })
+  }
+
   handleClick() {
-    let isSelected = (!this.refs.toggle.state.switched);
+    let isSelected = !this.refs.toggle.state.switched;
     this.setState({isSelected: isSelected});
-    this.props.handleChange({name: this.props.lang.name, isSelected: isSelected, level: this.state.level})
+    // this.props.handleChange({name: this.props.lang.name, isSelected: isSelected, level: this.props.lang.level})
+    this.props.lang.isSelected = isSelected;
+    this.props.handleChange(this.props.lang);
   };
 
   handleQuestion(level) {
     this.setState({level: level});
-    console.log(level);
-    this.props.handleChange({name: this.props.lang.name, isSelected: this.state.isSelected, level: level})
+    // console.log(level);
+    // this.props.handleChange({name: this.props.lang.name, isSelected: this.props.lang.isSelected, level: level});
+    this.props.lang.level = level;
+    this.props.handleChange(this.props.lang);
   }
 
   render() {

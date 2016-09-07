@@ -8,52 +8,37 @@ import s from './LangList.scss';
 
 import List from "material-ui/List/List";
 import LangItem from '../LangItem';
-import RaisedButton from 'material-ui/RaisedButton';
-import $ from 'jquery';
+
 
 
 class LangList extends Component {
-  langData;
+  // originalLang;
 
   constructor(props) {
     super(props);
-    this.langData = undefined;
+    // this.originalLang = undefined;
   }
 
-  componentWillReceiveProps(nextProps) {
-    if(!this.langData) {
-      let langData = nextProps.langData.map((lang) => {
-        return {
-          name: lang.name,
-          isSelected: false,
-          level: 0
-        }
-      });
-      this.langData = langData;
-    }
-  }
-
-  handleSubmit() {
-    let langs = this.langData;
-    langs = langs.filter((lang) => {
-      return lang.isSelected;
-    });
-    langs.forEach((lang) => {
-      $.ajax('api/lang/choose', {async: false, data: {lang:lang.name, level: lang.level, login: this.props.user}})
-        .done((function (message) {
-          console.log('choose ' + lang.name + " " + message);
-        }));
-    });
-    // console.log(langs);
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   if(!this.originalLang) {
+  //     this.originalLang = nextProps.originalLang.map((lang) => {
+  //       return {
+  //         name: lang.name,
+  //         isSelected: false,
+  //         level: 0
+  //       }
+  //     });
+  //   }
+  // }
 
   handleChange(lang) {
-    let langData = this.langData;
+    let langData = this.props.langData;
     langData.forEach((l, index) => {
       if(l.name == lang.name) {
         langData[index] = lang;
       }
     });
+    this.props.handleChange(langData);
   }
 
   renderLanguage() {
@@ -70,10 +55,6 @@ class LangList extends Component {
         <List style={{padding:'0px'}}>
           {this.renderLanguage()}
         </List>
-        <div className={s.btn__group}>
-          <RaisedButton label="DONE" primary={true} onClick={this.handleSubmit.bind(this)}/>
-          <RaisedButton label="CANCEL"/>
-        </div>
       </div>
     )
   }

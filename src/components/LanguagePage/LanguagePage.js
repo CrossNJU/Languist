@@ -7,13 +7,12 @@ import LangList from '../LangList';
 
 import s from './LanguagePage.scss';
 import Paper from 'material-ui/Paper';
-import TextField from 'material-ui/TextField';
 import $ from 'jquery';
 import SearchField from '../SearchField';
+import RaisedButton from 'material-ui/RaisedButton';
 
-const title = 'Add Language';
 
-// let langData = [
+// let originalLang = [
 //   {
 //     name: "JavaScript",
 //     isSelected: false,
@@ -60,13 +59,16 @@ const title = 'Add Language';
 //   }
 // ];
 
+const title = 'Add Language';
+
 class LanguagePage extends Component {
+  originalLang;
   langData;
 
   constructor(props) {
     super(props);
     this.state = {
-      user: "RickChem",
+      user: "",
       langData: []
     }
   }
@@ -80,44 +82,86 @@ class LanguagePage extends Component {
   }
 
   componentDidMount() {
-    let user = this.state.user;
+    let user = null;
     let allLang = [];
     let userLang = [];
 
+    // $.ajax('/api/current_user', {async: false})
+    //   .done(((userData) => {
+    //     if(userData) {
+    //       user = userData;
+    //     } else {
+    //       window.location.href = "/login";
+    //     }
+    //   }).bind(this));
+
+    user = 'RickChem';
+
     // Get all language
-    $.ajax('/api/language/all', {async: false})
-      .done(((allLanguages) => {
-        // console.log(allLanguages);
-        allLang = allLanguages;
-      }).bind(this));
+    if(user) {
+      $.ajax('/api/language/all', {async: false})
+        .done(((allLanguages) => {
+          // console.log(allLanguages);
+          allLang = allLanguages;
+        }).bind(this));
 
-    // Get user language
-    $.ajax('/api/home/langList', {async: false, data:{user: user}})
-      .done(((userLanguages) => {
-        userLang = userLanguages;
-      }).bind(this));
+      // Get user language
+      $.ajax('/api/home/langList', {async: false, data:{user: user}})
+        .done(((userLanguages) => {
+          userLang = userLanguages;
+        }).bind(this));
 
-    // Delete selected language
-    let langData = allLang.filter((lang) => {
-      let result = true;
-      userLang.forEach((l) => {
-        if(l.name == lang.name) {
-          result = false;
-          // console.log(lang.name);
+      // Delete selected language
+      let langData = allLang.filter((lang) => {
+        let result = true;
+        userLang.forEach((l) => {
+          if(l.name == lang.name) {
+            result = false;
+            // console.log(lang.name);
+          }
+        });
+        return result;
+      }).map((lang) => {
+        return {
+          name: lang.name,
+          isSelected: false,
+          repos: lang.repos,
+          level: 0
         }
       });
-      return result;
-    });
-    this.langData = langData.concat();
-    this.setState({langData: langData});
+
+      this.originalLang = langData.concat();
+      this.langData = langData;
+
+      this.setState({user:user, langData: langData});
+    }
   }
 
   handleSearch(keywords) {
-    let langData = this.langData.filter((lang) => {
+    let langData = this.originalLang.filter((lang) => {
       return lang.name.toLowerCase().search(keywords.toLowerCase()) != -1;
     });
     console.log('search');
+    this.langData = langData;
     this.setState({langData: langData});
+  }
+
+  handleSubmit() {
+    // console.log(this.langData);
+    let langs = this.langData;
+    langs = langs.filter((lang) => {
+      return lang.isSelected;
+    });
+    langs.forEach((lang) => {
+      $.ajax('api/lang/choose', {async: false, data: {lang:lang.name, level: lang.level, login: this.props.user}})
+        .done((function (message) {
+          console.log('choose ' + lang.name + " " + message);
+        }));
+    });
+  }
+
+  handleChange(languages) {
+    this.langData = languages;
   }
 
   render() {
@@ -126,7 +170,12 @@ class LanguagePage extends Component {
         <div className={s.container}>
           <Paper>
             <SearchField handleSearch={this.handleSearch.bind(this)}/>
-            <LangList langData={this.state.langData} user={this.state.user} ref="list"/>
+            <LangList langData={this.state.langData} user={this.state.user} handleChange={this.handleChange.bind(this)} ref="list"/>
+            <div className={s.btn__group}>
+              {/*<RaisedButton label="DONE" primary={true}/>*/}
+              <RaisedButton label="DONE" primary={true} onClick={this.handleSubmit.bind(this)}/>
+              <RaisedButton label="CANCEL"/>
+            </div>
           </Paper>
         </div>
       </div>
