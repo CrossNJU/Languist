@@ -5,6 +5,7 @@
 import {getLanguageByUser} from '../dao/languageDAO'
 import {getLanguageByTag} from '../dao/languageDAO'
 import {getLanguageSize} from '../dao/languageDAO'
+import {getUserAndLevelByLanguage, getFollowingByUser, getStarUserByRepo, getContributorsByRepo} from '../dao/UserDAO'
 import {connect} from '../config'
 
 let rec_langs = [];
@@ -19,46 +20,6 @@ function getSortFun(order, sortBy) {
   return sortFun;
 }
 
-////test
-//function getLanguageByUser(login){
-//  return [{
-//    name: "lan1",
-//    level: 1,
-//    tag:["tag1","tag2","tag3"],
-//    size:100
-//  },{
-//    name: "lan2",
-//    level: 2,
-//    tag:["tag2","tag3","tag4"],
-//    size:100
-//  },{
-//    name: "lan3",
-//    level: 1,
-//    tag:["tag1","tag4","tag3"],
-//    size:100
-//  }];
-//}
-//
-//function getLanguageByTag(tag){
-//  if (tag == 'tag1') {
-//    return [{'name':'lan1'},{'name':'lan2'},{'name':'lan3'}];
-//  }
-//  if (tag == 'tag2') {
-//    return [{'name':'lan2'},{'name':'lan3'},{'name':'lan4'}];
-//  }
-//  if (tag == 'tag3') {
-//    return [{'name':'lan3'},{'name':'lan4'},{'name':'lan6'}];
-//  }
-//  if (tag == 'tag4') {
-//    return [{'name':'lan4'},{'name':'lan5'},{'name':'lan6'}];
-//  }
-//  return {}
-//}
-//
-//function getLanguageSize(language){
-//  return 1000;
-//}
-////test
 
 //得到user的tag情况
 //user_tags{
@@ -166,15 +127,17 @@ async function get_rec_languages(login,rec_num){
 
 //user->following->languages
 async function get_rec_languages_by_following(login,rec_num){
-  let followings = getFollowingByUser(login);
-  let user_lan = getLanguageByUser(login);
+  let followings = await getFollowingByUser(login);
+  let user_lan = await getLanguageByUser(login);
   let init_lan = [];
   let lan_array = [];
   let rec_lan = [];
   let same = false;
+
   //following->languages
   for (let i = 0;i < followings.length;i++) {
-    let temp_lan = getLanguageByUser(followings[i].login);
+    let temp_lan = await getLanguageByUser(followings[i]);
+
     for (let j = 0; j < temp_lan.length; j++) {
       for (let k = 0;k < user_lan.length;k++){
         if (user_lan[k].name == temp_lan[j].name){
@@ -194,6 +157,7 @@ async function get_rec_languages_by_following(login,rec_num){
       }
     }
   }
+
   //sort
   for (let language in init_lan){
     let temp_lan = {
@@ -202,19 +166,24 @@ async function get_rec_languages_by_following(login,rec_num){
     };
     lan_array.push(temp_lan);
   }
+
   lan_array.sort(getSortFun('desc','count'));
 
   for (let i = 0;i < rec_num;i++){
-    if (i > lan_array.length){
+    if (i >= lan_array.length){
       break;
     }
     rec_lan.push(lan_array[i].name);
   }
+  console.log(rec_lan);
   return rec_lan;
 
 }
 
-export {get_rec_languages}
+async 
 
-//connect();
+export {get_rec_languages,get_rec_languages_by_following}
+
+connect();
 //get_rec_languages('RickChem');
+get_rec_languages_by_following('ChenDanni',5);
