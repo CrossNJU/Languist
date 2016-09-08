@@ -46,17 +46,18 @@ class HomePage extends Component {
   async componentDidMount() {
     console.log('componentDidMount');
 
-    // try {
-    //   // Get username
-    //   const user = await $.ajax('/api/current_user');
-    //   // Get other data
-    //   await this.loadData(user);
-    // } catch(err) {
-    //   console.error(err);
-    // }
+    try {
+      // Get username
+      const user = await $.ajax('/api/current_user');
+      console.log('Current user is', user);
+      // Get other data
+      await this.loadData(user);
+    } catch(err) {
+      console.error(err);
+    }
 
-    const user = 'RickChem';
-    this.loadData(user);
+    // const user = 'RickChem';
+    // this.loadData(user);
   }
 
   loadData(user) {
