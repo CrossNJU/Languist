@@ -1,0 +1,12 @@
+/**
+ * Created by chenm on 2016/7/14.
+ */
+@import '../variables.scss';
+
+.btn__group {
+  padding: 30px 16px;
+
+  >div {
+    margin-right: 1em;
+  }
+}
