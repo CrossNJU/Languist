@@ -119,7 +119,7 @@ server.get('/api/login', (req, res) => {
   login(req.query.username, req.query.password, (res2) => {
     if (res2 == SUCCESS) {
       req.session.username = req.query.username;
-      res.send(ret_success);
+      res.send({res: SUCCESS});
     } else
       res.send({res: res2});
   })
@@ -128,7 +128,7 @@ server.get('/api/login', (req, res) => {
 server.get('/api/register', (req, res) => {
   register(req.query.username, req.query.password, (res2) => {
     if (res2 == SUCCESS) {
-      res.send(ret_success);
+      res.send({res: SUCCESS});
     } else
       res.send({res: res2});
   })
