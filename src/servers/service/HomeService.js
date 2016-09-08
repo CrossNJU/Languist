@@ -51,6 +51,7 @@ export var getLangListData = (userName, callback) => {
 
 async function getFlowListData(userName, callback) {
   let ans = await getNextDayRecommendData(userName);
+  console.log(ans);
   callback(ans);
 }
 

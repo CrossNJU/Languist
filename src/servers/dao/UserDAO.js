@@ -9,6 +9,24 @@ import {connect_callback} from '../config'
 
 import {getFollowings} from '../api/github_user'
 import {getStarredUsers, getContributors} from '../api/github_repo'
+import {upsertUser, updateUserFollowing, updateRepoStar} from '../logic/UpdateWhenLogin'
+import {getRepoInfo} from './RepoDAO'
+
+async function getGithubUserInfo(login){
+  let t = await new Promise(function(resolve, reject) {
+    github_userSchema.findOne({login:login}, (err, user) => {
+      if (err) reject(err);
+      if (user == null) {
+        upsertUser(login, () => {
+          github_userSchema.findOne({login:login}, (err, user2) => {
+            resolve(user2)
+          })
+        })
+      }else resolve(user);
+    });
+  });
+  return t;
+}
 
 function findLevel(user, langName){
   for (let lang of user.language){
@@ -38,34 +56,48 @@ async function getUserAndLevelByLanguage(language){
 }
 
 async function getFollowingByUser(login) {
-  let t = await new Promise(function (resolve, reject) {
-    github_userSchema.findOne({login: login}, (err, user) => {
+  let t = await new Promise(async function (resolve, reject) {
+    let user = await getGithubUserInfo(login);
+    if (user.followings_login.length == 0){
+      updateUserFollowing(login, (follows) => {
+        resolve(follows);
+      })
+    }else {
       resolve(user.followings_login);
-    });
+    }
   });
   return t;
 }
 
 async function getStarUserByRepo(full_name) {
-  let t = await new Promise(function (resolve, reject) {
-    github_repoSchema.findOne({full_name: full_name}, (err, repo) => {
-      if (repo == null) resolve(null);
-      else resolve(repo.starers);
-    });
+  let t = await new Promise(async function (resolve, reject) {
+    let repo = await getRepoInfo(full_name);
+    if (repo.starers.length == 0){
+      updateRepoStar(full_name, (stars) => {
+        resolve(stars);
+      })
+    }else {
+      resolve(repo.starers);
+    }
   });
   return t;
 }
 
 async function getContributorsByRepo(full_name) {
-  let t = await new Promise(function (resolve, reject) {
-    github_repoSchema.findOne({full_name: full_name}, (err, repo) => {
+  let t = await new Promise(async function (resolve, reject) {
+    let repo = await getRepoInfo(full_name);
+    if (repo.contributors.length == 0){
+      updateRepoStar(full_name, (contributors) => {
+        resolve(contributors);
+      })
+    }else {
       resolve(repo.contributors);
-    });
+    }
   });
   return t;
 }
 
-export {getUserAndLevelByLanguage, getFollowingByUser, getStarUserByRepo, getContributorsByRepo}
+export {getGithubUserInfo, getUserAndLevelByLanguage, getFollowingByUser, getStarUserByRepo, getContributorsByRepo}
 
 async function test() {
   let t = await getContributorsByRepo("CrossNJU/PASS");

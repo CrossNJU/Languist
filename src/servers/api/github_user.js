@@ -100,6 +100,30 @@ function getPublicRepos(login, page, array, is_insert, numbers, callback) {
   }
 }
 
+function getJoinRepos(login, page, array, is_insert, numbers, callback) {
+  let len = array.length;
+  if (numbers == 0) callback(array);
+  else {
+    client.get('users/' + login + '/subscriptions', {page: page, per_page: number_per_page>numbers?numbers:number_per_page}, function (err, status, body, headers) {
+      if (body === undefined || body.length == 0){
+        callback(array);
+      }else {
+        for (let i = 0; i < body.length; i++) {
+          let json = body[i];
+          array[len] = json.full_name;
+          len++;
+          if (is_insert) {
+            newRepoWithoutFromAPI(json.full_name, (b) => {
+              if (b) addNewRepo(json);
+            });
+          }
+        }
+        getJoinRepos(login, page + 1, array, is_insert, numbers>number_per_page?numbers-number_per_page:0, callback);
+      }
+    });
+  }
+}
+
 function starRepo(login, repo, callback){
   userSchema.findOne({login: login}, (err, user) => {
     var auth_client = github.client(user.access_token);
@@ -187,7 +211,9 @@ function addAnewGitHubUser(json, callback=null){
     bio: json.bio,
     blog: json.blog,
     use_languages: [],
-    repos: []}
+    repos: [],
+    joinRepos: [],
+    joinRepo_count: -1}
   };
   var options = {upsert : true};
   github_userSchema.update(conditions, update, options, function(error, res){
