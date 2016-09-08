@@ -22,6 +22,8 @@ import LanguagePage from './components/LanguagePage';
 import IndexPage from './components/IndexPage';
 import BasePage from './components/BasePage';
 import StarPage from './components/StarPage';
+import FollowPage from './components/FollowPage';
+import RelatedPage from './components/RelatedPage';
 
 const router = new Router(on => {
   on('*', async (state, next) => {
@@ -46,6 +48,12 @@ const router = new Router(on => {
   on('/language', async () => <LanguagePage />);
 
   on('/star', async () => <StarPage />);
+
+  on('/follow', async (state) => {
+    return <FollowPage query={state.query}/>;
+  });
+
+  on('/related', async() => <RelatedPage />);
 
   on('*', async (state) => {
     const query = `/graphql?query={content(path:"${state.path}"){path,title,content,component}}`;
