@@ -6,6 +6,8 @@ import {github_userSchema} from '../../models/github_userSchema'
 import {userSchema} from '../../models/userSchema'
 import {connect} from '../config'
 import {getNextDayRecommendData} from '../logic/HandleRecommendLogic'
+import {getSignal} from '../config'
+var async = require("async");
 
 export var getCoverData = (userName, callback) => {
   let data = {};
@@ -50,7 +52,28 @@ export var getLangListData = (userName, callback) => {
 };
 
 async function getFlowListData(userName, callback) {
-  let ans = await getNextDayRecommendData(userName);
+  console.log(getSignal());
+  let before = await new Promise((resolve, reject) => {
+    async.until(function() {
+        return getSignal() > 0;
+      },
+      function(cb) {
+        //console.log('try');
+        setTimeout(cb, 500);
+      },
+      function(err) {
+        // 4s have passed
+        console.log('done!');
+        console.log(err); // -> undefined
+        if (err) reject(err);
+        resolve(1);
+      });
+  });
+  let ans = [];
+  if (before == 1) {
+    console.log('get it!');
+    ans = await getNextDayRecommendData(userName);
+  }
   console.log(ans);
   callback(ans);
 }

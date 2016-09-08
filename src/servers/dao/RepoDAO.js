@@ -8,7 +8,7 @@ import {github_userSchema} from '../../models/github_userSchema'
 import {connect} from '../config'
 
 import {getPublicRepos, getUserStarred} from '../api/github_user'
-import {upsertUser, upsertRepo, updateUserStars, updateUserRepos} from '../logic/UpdateWhenLogin'
+import {upsertUser, upsertRepo, updateUserStars, updateUserRepos, updateUserJoinRepo} from '../logic/UpdateWhenLogin'
 import {getGithubUserInfo} from './UserDAO'
 
 async function getRepoInfo(fullname){
@@ -56,7 +56,7 @@ async function getStarRepoByUser(login) {
 async function getPublicRepoByUser(login) {
   let t = await new Promise(async function (resolve, reject) {
     let user = await getGithubUserInfo(login);
-    if (user.repos.length == null){
+    if (user.repos.length == 0){
       updateUserRepos(login, true, (repos) =>{
         resolve(repos);
       })
@@ -65,19 +65,19 @@ async function getPublicRepoByUser(login) {
   return t;
 }
 
-//async function getJoinRepoByUser(login) {
-//  let t = await new Promise(function (resolve, reject) {
-//    let user = getGithubUserInfo(login);
-//    if (user.repos.length == null){
-//      updateUserRepos(login, true, (repos) =>{
-//        resolve(repos);
-//      })
-//    }else resolve(user.repos);
-//  });
-//  return t;
-//}
+async function getJoinRepoByUser(login) {
+  let t = await new Promise(function (resolve, reject) {
+    let user = getGithubUserInfo(login);
+    if (user.joinRepos.length == 0){
+      updateUserJoinRepo(login, true, (repos) =>{
+        resolve(repos);
+      })
+    }else resolve(user.joinRepos);
+  });
+  return t;
+}
 
-export {getStarRepoByUser, getPublicRepoByUser, getRepoInfo}//, getJoinRepoByUser}
+export {getStarRepoByUser, getPublicRepoByUser, getRepoInfo, getJoinRepoByUser}
 
 async function test() {
   connect();

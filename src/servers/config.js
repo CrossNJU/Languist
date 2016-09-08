@@ -9,6 +9,8 @@ export const FAIL = 0;
 export const NOT_FOUND = -1;
 export const PASSWORD_ERROR = -2;
 
+var signal = 1;
+
 function mon_conn(){
   mongoose.connect('mongodb://localhost/languist');
   var db = mongoose.connection;
@@ -42,7 +44,17 @@ function mon_conn2(callback){
   });
 }
 
+function getSignal(){
+  return signal;
+}
+
+function setSignal(value){
+  signal = value;
+}
+
 export {
   mon_conn as connect,
   mon_disconn as disconnect,
-  mon_conn2 as connect_callback}
+  mon_conn2 as connect_callback,
+  getSignal,
+  setSignal}

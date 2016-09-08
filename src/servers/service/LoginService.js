@@ -89,7 +89,9 @@ export var saveUser = (code, callback) => {
           });
           addAnewGitHubUser(json, () => {
             //update when login
-            if (!test_login) updateWhenLogin(json.login);
+            if (!test_login) {
+              updateWhenLogin(json.login);
+            }
           });
         });
     });
