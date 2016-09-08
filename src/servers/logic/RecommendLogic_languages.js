@@ -180,10 +180,8 @@ async function get_rec_languages_by_following(login,rec_num){
 
 }
 
-async 
-
 export {get_rec_languages,get_rec_languages_by_following}
 
-connect();
+//connect();
 //get_rec_languages('RickChem');
-get_rec_languages_by_following('ChenDanni',5);
+//get_rec_languages_by_following('ChenDanni',5);
