@@ -89,6 +89,17 @@ class LangItem extends Component {
     this.props.handleChange(this.props.lang);
   }
 
+  renderRepos() {
+    if(this.props.lang.repos) {
+      return (
+        <div className={s['lang__list__item__right']}>
+          <img src={require('./logo-s@2x.png')}/>
+          <p>{this.props.lang.repos}</p>
+        </div>
+      )
+    }
+  }
+
   render() {
     return (
       <div className={s.root}>
@@ -102,10 +113,7 @@ class LangItem extends Component {
                       defaultToggled={this.state.isSelected}
                       onToggle={this.handleClick.bind(this)}/>
             </div>
-            <div className={s['lang__list__item__right']}>
-              <img src={require('./logo-s@2x.png')}/>
-              <p>{this.props.lang.repos}</p>
-            </div>
+            {this.renderRepos()}
           </div>
         </ListItem>
         <div className={s.lang__questions} ref="question" style={{display: this.state.isSelected?"block":"none"}}>
