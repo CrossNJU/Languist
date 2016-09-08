@@ -21,6 +21,10 @@ const title = 'Log In';
 class LoginPage extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      userNameError: "",
+      passwordError: ""
+    }
   }
 
   static contextTypes = {
@@ -37,20 +41,28 @@ class LoginPage extends Component {
     $.ajax(url, {data:{username: username, password: password}})
       .done((message) => {
         console.log(message);
-        if(message == "success") {
-          window.location.href = "/home";
-        } else {
-          console.log('fail');
+        switch (message.res) {
+          case 1:
+            window.location.href='/home';
+            break;
+          case 0:
+            this.setState({userNameError: "", passwordError: 'The password is incorrect'});
+            break;
+          case -1:
+            this.setState({userNameError: 'The username is not found', passwordError:""});
+            break;
+          case -2:
+            this.setState({userNameError: 'The password is not set', passwordError:""});
+            break;
         }
       })
-
   }
 
   render() {
     return (
       <div className={s.root}>
         <div className={s.container}>
-          <LoginCard handleSubmit={this.handleLogin.bind(this)} type="login"/>
+          <LoginCard handleSubmit={this.handleLogin.bind(this)} type="login" userNameError={this.state.userNameError} passwordError={this.state.passwordError}/>
         </div>
       </div>
     );

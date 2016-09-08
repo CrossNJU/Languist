@@ -7,7 +7,7 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import React, { Component, PropTypes } from 'react';
+import React, {Component, PropTypes} from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import Link from '../Link';
@@ -30,7 +30,7 @@ const buttonLableStyle = {
   fontWeight: 'normal'
 };
 const buttonStyle = {
-  marginTop: '10px'
+  marginTop: '15px'
 };
 
 class LoginCard extends Component {
@@ -46,14 +46,15 @@ class LoginCard extends Component {
   }
 
   renderBtn() {
-    if(this.props.type == 'login') {
+    if (this.props.type == 'login') {
       return (
         <div className={s.inputGroup}>
-          <RaisedButton label={"LOGIN"}
-                        primary={true}
-                        style={buttonStyle}
-                        labelStyle={buttonLableStyle}
-                        onClick={this.handleSubmit.bind(this)}/>
+          <RaisedButton
+            label={"LOGIN"}
+            primary={true}
+            style={buttonStyle}
+            labelStyle={buttonLableStyle}
+            onClick={this.handleSubmit.bind(this)}/>
           <Link className={s.link} to="/">
             Forget password?
           </Link>
@@ -67,8 +68,8 @@ class LoginCard extends Component {
     } else {
       return (
         <div className={s.inputGroup}>
-          <TextField hintText="Confirm Password" type="password"  fullWidth={true} ref="password_again"/>
-          <RaisedButton label={"LOGIN"}
+          <TextField hintText="Confirm Password" type="password" fullWidth={true} ref="password_again"/>
+          <RaisedButton label={"SIGN UP"}
                         primary={true}
                         style={buttonStyle}
                         labelStyle={buttonLableStyle}
@@ -82,8 +83,8 @@ class LoginCard extends Component {
     return (
       <Paper className={s.content}>
         <p className={s.title}>Hi, Languist :-)</p>
-        <TextField hintText="Username" fullWidth={true} ref="username"/>
-        <TextField hintText="Password" type="password"  fullWidth={true} ref="password"/>
+        <TextField hintText="Username" fullWidth={true} ref="username" errorText={this.props.userNameError}/>
+        <TextField hintText="Password" type="password" fullWidth={true} ref="password" errorText={this.props.passwordError}/>
         {this.renderBtn()}
       </Paper>
     );
