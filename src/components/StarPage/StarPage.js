@@ -11,53 +11,24 @@ import React, { Component, PropTypes } from 'react';
 import $ from 'jquery';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './StarPage.scss';
-import Cover from '../Cover';
 import RepoSetFilter from '../RepoSetFilter';
 import RepoList from '../RepoList';
+import TitleBar from '../TitleBar';
+import AddSetDialog from '../AddSetDialog';
 
-const title = 'Star';
-
-let currentRepoSetFilter = 'Ungrouped';
-let repoSetFilterData = [
-  {
-    name: 'All',
-    count: 34
-  },
-  {
-    name: 'Ungrouped',
-    count: 18
-  },
-  {
-    name: 'React',
-    count: 3
-  },
-  {
-    name: 'UI',
-    count: 4
-  },
-  {
-    name: 'CSS Framework',
-    count: 4
-  },
-  {
-    name: 'iOS',
-    count: 3
-  }
-];
+const title = 'Starred';
 
 class StarPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       user: "",
-      cover: {
-        avatar_rul: '',
-        name: 'PolarisChen\'s Starred',
-        langs: 0
-      },
       setList: [],
       currentSet: 'All',
-      repoList: []
+      repoList: [],
+
+      // Add set dialog
+      isSetDialogOpen: false,
     };
     console.log('constructor');
   }
@@ -111,21 +82,32 @@ class StarPage extends Component {
       }).bind(this));
   }
 
+  handleOpenSetDialog() {
+    this.setState({isSetDialogOpen: true});
+  }
+  handleCloseSetDialog(isSuccess) {
+    if(isSuccess){
+      this.getSetList(this.state.user);
+    }
+    this.setState({isSetDialogOpen: false});
+  }
+
   render() {
-    console.log('render StarPage');
+    console.log('render FollowPage');
     return (
-      <div className="BasePage">
-        <Cover data={this.state.cover}/>
+      <div className="StarPage">
+        <TitleBar text={this.state.user + '\'s Starred'} />
         <div className={s.root}>
           <div className={s.container}>
             <div className={s.sidebar}>
-              <RepoSetFilter data={this.state.setList} current={this.state.currentSet}/>
+              <RepoSetFilter data={this.state.setList} current={this.state.currentSet} handleClickAdd={this.handleOpenSetDialog.bind(this)}/>
             </div>
             <div className={s.main}>
               <RepoList data={this.state.repoList}/>
             </div>
           </div>
         </div>
+        <AddSetDialog isOpen={this.state.isSetDialogOpen} handleClose={this.handleCloseSetDialog.bind(this)} user={this.state.user}/>
       </div>
     );
   }

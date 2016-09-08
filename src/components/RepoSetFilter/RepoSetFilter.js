@@ -21,6 +21,7 @@ class RepoSetFilter extends Component {
           fullWidth={true}
           primary={true}
           label="Add New Repo Set"
+          onClick={this.props.handleClickAdd}
         />
       </div>
     )
