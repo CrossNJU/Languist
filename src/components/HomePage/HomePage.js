@@ -61,7 +61,7 @@ class HomePage extends Component {
         // Get other data
         await this.loadData(user);
       } else {
-        // window.location.href = '/login';
+        window.location.href = '/login';
       }
 
       this.setState({user: user});
@@ -85,7 +85,7 @@ class HomePage extends Component {
         if(data && data.length != 0) {
           this.setState({langList: data});
         }else {
-          // window.location.href = '/language';
+          window.location.href = '/language';
         }
       }).bind(this))
       .fail(((xhr, status, err) => {

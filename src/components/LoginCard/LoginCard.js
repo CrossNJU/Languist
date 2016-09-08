@@ -45,6 +45,12 @@ class LoginCard extends Component {
     this.props.handleSubmit(username, password);
   }
 
+  handleEnter(event) {
+    if(event.key == 'Enter') {
+      this.handleSubmit();
+    }
+  }
+
   renderBtn() {
     if (this.props.type == 'login') {
       return (
@@ -83,8 +89,8 @@ class LoginCard extends Component {
     return (
       <Paper className={s.content}>
         <p className={s.title}>Hi, Languist :-)</p>
-        <TextField hintText="Username" fullWidth={true} ref="username" errorText={this.props.userNameError}/>
-        <TextField hintText="Password" type="password" fullWidth={true} ref="password" errorText={this.props.passwordError}/>
+        <TextField hintText="Username" fullWidth={true} ref="username" errorText={this.props.userNameError} onKeyPress={this.handleEnter.bind(this)}/>
+        <TextField hintText="Password" type="password" fullWidth={true} ref="password" errorText={this.props.passwordError} onKeyPress={this.handleEnter.bind(this)}/>
         {this.renderBtn()}
       </Paper>
     );

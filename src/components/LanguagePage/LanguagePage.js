@@ -83,7 +83,7 @@ class LanguagePage extends Component {
     this.context.onSetTitle(title);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     let user = null;
     let allLang = [];
     let userLang = [];
@@ -181,7 +181,7 @@ class LanguagePage extends Component {
             <div className={s.btn__group}>
               {/*<RaisedButton label="DONE" primary={true}/>*/}
               <RaisedButton label="DONE" primary={true} onClick={this.handleSubmit.bind(this)}/>
-              <RaisedButton label="CANCEL"/>
+              <RaisedButton label="CANCEL" href='/home'/>
             </div>
           </Paper>
         </div>
