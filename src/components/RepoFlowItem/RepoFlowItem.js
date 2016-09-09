@@ -8,6 +8,7 @@ import s from './RepoFlowItem.scss';
 
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import Chip from 'material-ui/Chip';
 
 import Code from 'material-ui/svg-icons/action/code';
@@ -41,10 +42,24 @@ const styles = {
     marginLeft: 10,
     paddingTop: 16,
     paddingBottom: 6
+  },
+  optionalAction: {
+    float: 'right',
+    color: '#DDD'
   }
 };
 
 class RepoFlowItem extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {hovering: false};
+  }
+  handleMouseOver() {
+    this.setState({hovering: true});
+  }
+  handleMouseOut() {
+    this.setState({hovering: false});
+  }
   renderStarButton() {
     if (this.props.repo.set) {
       return (
@@ -63,9 +78,14 @@ class RepoFlowItem extends Component {
         onTouchTap={this.handleExpand} />
     )
   }
+  renderNotInterestedButton() {
+    if (this.props.optional && this.state.hovering) {
+      return (<FlatButton style={styles.optionalAction} label='Not interested' />);
+    }
+  }
   render() {
     return (
-      <Card className={s.item}>
+      <Card className={s.item} onMouseEnter={this.handleMouseOver.bind(this)} onMouseLeave={this.handleMouseOut.bind(this)}>
         <CardHeader
           title={this.props.repo.owner + '/' + this.props.repo.name}
           titleStyle={styles.title}
@@ -101,6 +121,7 @@ class RepoFlowItem extends Component {
             label="View"
             labelColor="#666"
             onTouchTap={this.handleReduce} />
+          {this.renderNotInterestedButton()}
         </CardActions>
       </Card>
     );

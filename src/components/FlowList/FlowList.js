@@ -74,7 +74,7 @@ class FlowList extends Component {
       let flowItems = flowData.map(flowItem => {
         switch(flowItem.type) {
           case 'repo':
-            return <RepoFlowItem key={flowItem.owner + flowItem.name} repo={flowItem} />;
+            return <RepoFlowItem key={flowItem.owner + flowItem.name} repo={flowItem} optional={true} />;
           case 'user':
             return <UserFlowItem key={flowItem.login} user={flowItem} />;
           case 'lang':
