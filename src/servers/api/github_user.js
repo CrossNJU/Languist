@@ -36,7 +36,7 @@ function getUserStarred(login, page, array, is_insert, numbers, callback) {
   let len = array.length;
   if (numbers == 0) callback(array);
   else {
-    client.get('users/' + login + '/starred', {page: page, per_page: number_per_page>numbers?numbers:number_per_page}, function (err, status, body, headers) {
+    client.get('users/' + login + '/starred', {page: page, per_page: number_per_page>numbers?numbers:number_per_page, sort: 'updated', direction: 'desc'}, function (err, status, body, headers) {
       //console.log("in");
       if (body === undefined || body.length == 0){
         callback(array);
@@ -80,7 +80,7 @@ function getPublicRepos(login, page, array, is_insert, numbers, callback) {
   let len = array.length;
   if (numbers == 0) callback(array);
   else {
-    client.get('users/' + login + '/repos', {page: page, per_page: number_per_page>numbers?numbers:number_per_page}, function (err, status, body, headers) {
+    client.get('users/' + login + '/repos', {page: page, per_page: number_per_page>numbers?numbers:number_per_page, sort: 'updated', direction: 'desc'}, function (err, status, body, headers) {
       if (body === undefined || body.length == 0){
         callback(array);
       }else {
@@ -104,7 +104,7 @@ function getJoinRepos(login, page, array, is_insert, numbers, callback) {
   let len = array.length;
   if (numbers == 0) callback(array);
   else {
-    client.get('users/' + login + '/subscriptions', {page: page, per_page: number_per_page>numbers?numbers:number_per_page}, function (err, status, body, headers) {
+    client.get('users/' + login + '/subscriptions', {page: page, per_page: number_per_page>numbers?numbers:number_per_page, sort: 'updated', direction: 'desc'}, function (err, status, body, headers) {
       if (body === undefined || body.length == 0){
         callback(array);
       }else {
@@ -235,4 +235,13 @@ export {getUserInfo, getUserStarred, getPublicRepos, getFollowings, starRepo, fo
 //getUserInfo("egower", (body) => {
 //  connect();
 //  addAnewGitHubUser(body);
+//});
+
+//client.limit(function (err, left, max) {
+//  console.log(left); // 4999
+//  console.log(max);  // 5000
+//});
+
+//getPublicRepos('RickChem', 1, [], false, 20, (ret) => {
+//  console.log(ret);
 //});

@@ -397,9 +397,9 @@ async function get_rec_repos_by_contributor(fullname,rec_num){
 export {get_rec_repos_by_user,get_rec_repos_by_star_repos_owner,
   get_rec_repos_by_also_star,get_rec_repos_by_following,get_rec_repos_by_contributor}
 
-connect();
+//connect();
 // get_rec_repos_by_user('ChenDanni',10);
-get_rec_repos_by_also_star('RickChem',100);
+//get_rec_repos_by_also_star('RickChem',100);
 //get_rec_repos_by_following('ChenDanni',100);
 // get_rec_repos_by_also_star('ChenDanni',5);
 // get_rec_repos_by_contributor('jquery/jquery',5);
