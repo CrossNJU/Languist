@@ -3,7 +3,7 @@
  */
 
 import {get_rec_users} from './RecommendLogic_users'
-import {getStarRepoByUser, getRepoInfo,getPublicRepoByUser} from '../dao/RepoDAO'
+import {getStarRepoByUser, getRepoInfo,getPublicRepoByUser,getJoinRepoByUser} from '../dao/RepoDAO'
 import {getUserAndLevelByLanguage, getFollowingByUser, getStarUserByRepo, getContributorsByRepo} from '../dao/UserDAO'
 import {calTime} from '../util/timeUtil'
 import {connect} from '../config'
@@ -18,15 +18,15 @@ function getSortFun(order, sortBy) {
 }
 
 /*
-*统计repo的tag
-* [{
-* fullname: str,
-* tags:{
-*   tag1: num,
-*   tag2: num
-* }
-* }]
-* */
+ *统计repo的tag
+ * [{
+ * fullname: str,
+ * tags:{
+ *   tag1: num,
+ *   tag2: num
+ * }
+ * }]
+ * */
 async function handle_repos_tags(repos){
   let repos_tag_count = [];
 
@@ -135,7 +135,7 @@ async function get_rec_repos_by_user(login,rec_num){
     }
   }
 
-   console.log(rec_repos);
+  console.log(rec_repos);
   return rec_repos;
 
 }
@@ -191,7 +191,7 @@ async function get_rec_repos_by_star_repos_owner(login,rec_num) {
   return rec_repos;
 }
 
-//user->star->repos->users also star it->repos   //!!!!!!!!!!!!!!! need test !!!!!!!!!!!!!!!!!!!
+//user->star->repos->users also star it->repos
 async function get_rec_repos_by_also_star(login,rec_num){
   let stars_handle = await getStarRepoByUser(login);
   let user_stars = [];
@@ -203,7 +203,7 @@ async function get_rec_repos_by_also_star(login,rec_num){
 
   //console.log("in");
   for (let i = 0;i < stars_handle.length;i++)
-    user_stars.push(stars_handle[i].fullname);
+    user_stars.push(stars_handle[i]);
 
   for (let i = 0;i < user_stars.length;i++){
     let temp_starers = await getStarUserByRepo(user_stars[i]);
@@ -214,18 +214,12 @@ async function get_rec_repos_by_also_star(login,rec_num){
     }
   }
 
-  //console.log("in");
-  //console.log(init_starers[394]);
-  //let test = await getStarRepoByUser(leeroybrun);
-  //console.log('test');
-  //console.log(test);
-
   //console.log(init_starers.length);
   for (let i = 0;i < init_starers.length;i++){
     //console.log(init_starers[i]);
     let temp_repos = await getStarRepoByUser(init_starers[i]);
     for (let j = 0;j < temp_repos.length;j++){
-      let fullname = temp_repos[j].fullname;
+      let fullname = temp_repos[j];
       if ((!(init_repos_name.indexOf(fullname) > -1))
         &&(!(user_stars.indexOf(fullname) > -1))&&(!(user_repos.indexOf(fullname) > -1))){
         init_repos_name.push(fullname);
@@ -235,7 +229,7 @@ async function get_rec_repos_by_also_star(login,rec_num){
     // console.log(i);
   }
 
-  console.log("in");
+  //console.log("in");
 
   for (let i = 0;i < init_repos_name.length;i++){
     //console.log('ininin');
@@ -257,7 +251,7 @@ async function get_rec_repos_by_also_star(login,rec_num){
     if (i > init_repos.length) break;
     rec_repos.push(init_repos[i].fullname);
   }
-  console.log('get rec repos!');
+  // console.log(rec_repos);
   return rec_repos;
 
 }
@@ -305,6 +299,67 @@ async function get_rec_repos_by_following(login,rec_num){
 
 }
 
+//user->join repos->contributors->star repos
+async function get_rec_repos_by_colleagues(login,rec_num){
+  let percent = 0.5;
+  let join_repos = getJoinRepoByUser(login);
+  let colleagues = [];
+  let colleagues_count = [];
+  let init_repos = [];
+  let handle_repos = [];
+  let rec_repos = [];
+
+  for (let i = 0;i < join_repos.length;i++){
+    let temp_contributors = await getContributorsByRepo(join_repos[i].full_name);
+    for (let j = 0;j < temp_contributors.length;j++){
+      let user_name = temp_contributors[j].name;
+      if (colleagues.hasOwnProperty(user_name)){
+        colleagues[user_name] += temp_contributors[j].contributions;
+      }else {
+        colleagues[name] = temp_contributors[j].contributions;
+      }
+    }
+  }
+
+  for (let colleague in colleagues){
+    if (colleague != login){
+      let temp_con = {
+        name : colleague,
+        count : colleagues[colleague]
+      };
+      colleagues_count.push(temp_con);
+    }
+  }
+  colleagues_count.sort(getSortFun('desc','count'));
+
+  for (let i = 0;i < colleagues_count.length*percent;i++){
+    let star_repos = await getStarRepoByUser(colleagues_count[i].name);
+    for (let j = 0;j < star_repos.length;j++){
+      if (!(init_repos.indexOf(star_repos[j]) > -1)){
+        init_repos.push(star_repos[j]);
+      }
+    }
+  }
+
+  for (let i = 0;i < init_repos.length;i++){
+    let repo = {
+      name: init_repos[i],
+      stars: await getRepoInfo(init_repos[i]).stars_count
+    };
+    handle_repos.push(repo);
+  }
+
+  handle_repos.sort(getSortFun('desc','stars'));
+
+  for (let i = 0;i < rec_num;i++){
+    if (i > handle_repos.length) break;
+    rec_repos.push(handle_repos.name);
+  }
+
+  return rec_repos;
+
+}
+
 
 //仓库详情->相关仓库推荐
 //repo->contributors->repos
@@ -342,9 +397,9 @@ async function get_rec_repos_by_contributor(fullname,rec_num){
 export {get_rec_repos_by_user,get_rec_repos_by_star_repos_owner,
   get_rec_repos_by_also_star,get_rec_repos_by_following,get_rec_repos_by_contributor}
 
-//connect();
+connect();
 // get_rec_repos_by_user('ChenDanni',10);
-// get_rec_repos_by_also_star('RickChem',100);
+get_rec_repos_by_also_star('RickChem',100);
 //get_rec_repos_by_following('ChenDanni',100);
 // get_rec_repos_by_also_star('ChenDanni',5);
 // get_rec_repos_by_contributor('jquery/jquery',5);
