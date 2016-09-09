@@ -21,6 +21,7 @@ import FlowList from '../FlowList';
 import FlowSeparator from '../FlowSeparator';
 import FlowAction from '../FlowAction';
 import RepoFlowItem from '../RepoFlowItem';
+import SearchBar from '../SearchBar';
 
 const title = 'Home';
 
@@ -145,11 +146,12 @@ class BasePage extends Component {
     console.log('render BasePage');
     return (
       <div className="BasePage">
-        <Cover data={this.state.cover}/>
+        <Cover data={this.state.cover} />
+        <SearchBar />
         <div className={s.root}>
           <div className={s.container}>
             <div className={s.sidebar}>
-              <Count data={this.state.count}/>
+              <Count data={this.state.count} />
               <RepoSetFilter data={repoSetFilterData} current={currentRepoSetFilter} />
               <Filter data={userFilterData} current={currentUserFilter} />
               <Filter data={languageFilterData} current={currentLanguageFilter} />

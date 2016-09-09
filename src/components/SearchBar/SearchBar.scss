@@ -1,0 +1,14 @@
+
+@import '../variables.scss';
+
+.root {
+  background: $primary-color;
+}
+
+.container {
+  margin: 0 auto;
+  padding: 50px 0;
+  max-width: 520px;
+  display: flex;
+  flex-direction: row;
+}
