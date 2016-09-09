@@ -120,7 +120,7 @@ class RepoFlowItem extends Component {
             icon={<Code />}
             label="View"
             labelColor="#666"
-            onTouchTap={this.handleReduce} />
+            href={'https://github.com/'+this.props.repo.owner+'/'+this.props.repo.name} />
           {this.renderNotInterestedButton()}
         </CardActions>
       </Card>
