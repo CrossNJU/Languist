@@ -20,6 +20,7 @@ import UserList from '../UserList';
 import FlowList from '../FlowList';
 import FlowSeparator from '../FlowSeparator';
 import FlowAction from '../FlowAction';
+import RepoFlowItem from '../RepoFlowItem';
 
 const title = 'Home';
 
@@ -91,6 +92,22 @@ let languageFilterData = [
   }
 ];
 
+let repo = {
+  avatarUrl: '',
+  owner: 'kriasoft',
+  name: 'react-starter-kit',
+  description: 'React Starter Kit — isomorphic web app boilerplate (Node.js, Express, GraphQL, React.js, Babel 6, PostCSS, Webpack, Browsersync) https://www.reactstarterkit.com',
+  tags: [
+    'JavaScript',
+    'Framework',
+    'React',
+    'Starter Kit'
+  ],
+  update: 'July 11, 2016',
+  star: 9298,
+  set: 'UNGROUPED'
+};
+
 class BasePage extends Component {
   constructor(props) {
     super(props);
@@ -136,6 +153,7 @@ class BasePage extends Component {
               <RepoSetFilter data={repoSetFilterData} current={currentRepoSetFilter} />
               <Filter data={userFilterData} current={currentUserFilter} />
               <Filter data={languageFilterData} current={currentLanguageFilter} />
+              <RepoFlowItem repo={repo} />
             </div>
             <div className={s.main}>
               <RepoList />
