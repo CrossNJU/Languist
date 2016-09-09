@@ -66,7 +66,9 @@ class UserList extends Component {
   }
   renderUserItems() {
     // console.log(JSON.parse(JSON.stringify(this.props.data)));
-    // userData = this.props.data;
+    if(this.props.data) {
+      userData = this.props.data;
+    }
     if (userData.length > 0) {
       let items = userData.map(flowItem => {
         return <UserFlowItem key={flowItem.login} user={flowItem} />;
