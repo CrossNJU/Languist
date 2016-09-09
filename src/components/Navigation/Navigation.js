@@ -14,6 +14,17 @@ import s from './Navigation.scss';
 import Link from '../Link';
 
 import FlatButton from 'material-ui/FlatButton';
+import IconButton from 'material-ui/IconButton';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import Search from 'material-ui/svg-icons/action/search';
+import Account from 'material-ui/svg-icons/action/account-circle';
+
+const styles = {
+  button: {
+    color: '#FFF'
+  }
+}
 
 class Navigation extends Component {
 
@@ -26,8 +37,16 @@ class Navigation extends Component {
     if (isLogin) {
       return (
         <div className={cx(s.root, this.props.className)} role="navigation">
-          <Link className={s.link} to="/Search">Search</Link>
-          <Link className={s.link} to="/User">User</Link>
+          <IconButton iconStyle={styles.button}><Search /></IconButton>
+          <IconMenu
+            iconButtonElement={<IconButton iconStyle={styles.button}><Account /></IconButton>}
+            anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+            targetOrigin={{horizontal: 'right', vertical: 'top'}}
+          >
+            <MenuItem primaryText="Send feedback" />
+            <MenuItem primaryText="About us" />
+            <MenuItem primaryText="Sign out" />
+          </IconMenu>
         </div>
       );
     } else {

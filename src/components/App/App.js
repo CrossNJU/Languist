@@ -27,6 +27,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 
+
 const muiTheme = getMuiTheme({
   fontFamily: 'Segoe UI, \'HelveticaNeue-Light\', sans-serif',
   palette: {
@@ -95,7 +96,7 @@ class App extends Component {
   render() {
     return !this.props.error ? (
       <MuiThemeProvider muiTheme={muiTheme}>
-      <div>
+      <div className={s.container}>
         <Header />
         {this.props.children}
         <Footer />
