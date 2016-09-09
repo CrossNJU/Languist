@@ -18,6 +18,7 @@ import Filter from '../Filter';
 import RepoList from '../RepoList';
 import UserList from '../UserList';
 import FlowList from '../FlowList';
+import FlowSeparator from '../FlowSeparator';
 
 const title = 'Home';
 
@@ -137,6 +138,7 @@ class BasePage extends Component {
             </div>
             <div className={s.main}>
               <RepoList />
+              <FlowSeparator text='Sep. 9th' />
               <UserList />
             </div>
           </div>

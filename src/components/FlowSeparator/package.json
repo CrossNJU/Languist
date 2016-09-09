@@ -1,0 +1,6 @@
+{
+  "name": "FlowSeparator",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./FlowSeparator.js"
+}
