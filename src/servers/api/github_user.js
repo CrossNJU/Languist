@@ -237,10 +237,10 @@ export {getUserInfo, getUserStarred, getPublicRepos, getFollowings, starRepo, fo
 //  addAnewGitHubUser(body);
 //});
 
-//client.limit(function (err, left, max) {
+// client.limit(function (err, left, max) {
 //  console.log(left); // 4999
 //  console.log(max);  // 5000
-//});
+// });
 
 //getPublicRepos('RickChem', 1, [], false, 20, (ret) => {
 //  console.log(ret);
