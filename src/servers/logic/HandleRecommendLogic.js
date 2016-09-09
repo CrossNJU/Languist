@@ -291,7 +291,7 @@ async function getNextDayRecommendData(userName) {
   }
 }
 
-export {getNextDayRecommendData}
+export {getNextDayRecommendData, getARepo}
 
 //fakeUsers(20);
 //fakeLangs(10);

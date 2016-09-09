@@ -6,6 +6,7 @@ import {userSchema} from '../../models/userSchema'
 import {github_userSchema} from '../../models/github_userSchema'
 import {get_rec_repos_by_contributor} from '../logic/RecommendLogic_repos'
 import {updateRepoCons, updateUserRepos, upsertUser, upsertRepo} from '../logic/UpdateWhenLogin'
+import {getARepo} from '../logic/HandleRecommendLogic'
 
 var async = require('async');
 
@@ -47,6 +48,36 @@ function addAReopSet(login, set_name, callback) {
         callback(1);
       })
     }
+  })
+}
+
+function getRepoSet(login, set_name, callback) {
+  userSchema.findOne({login: login}, async (err, user) => {
+    let sets = user.repo_sets;
+    let index = sets.findIndex(j => j.set_name == set_name);
+    if (index < 0) callback(-1);
+    else {
+      let ans = [];
+      let repos = sets[index].set_repos;
+      for (let i=0;i<repos.length;i++){
+        let repo_det = await getARepo(repos[i]);
+        ans.push(repo_det);
+      }
+      callback(ans);
+    }
+  })
+}
+
+function getRepoSetList(login, callback){
+  userSchema.findOne({login: login}, (err, user) => {
+    let ans = [];
+    for (let i=0;i<user.repo_sets.length;i++){
+      ans.push({
+        setName: user.repo_sets[i].set_name,
+        repoNum: user.repo_sets[i].set_repos.length
+      });
+    }
+    callback(ans);
   })
 }
 
@@ -99,6 +130,6 @@ async function getRelatedRecommend(full_name) {
   return ans;
 }
 
-export {addAReopSet, addARepoToSet, getRelatedRecommend}
+export {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecommend}
 
 //getRelatedRecommend('')

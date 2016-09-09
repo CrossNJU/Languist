@@ -31,7 +31,7 @@ import {saveUser, login, register} from './servers/service/LoginService';
 import {getFlowListData, getCountData, getLangListData, getCoverData} from './servers/service/HomeService'
 import {addLang, getAllLanguage} from './servers/service/LanguageService'
 import {evaluateRecommend} from './servers/service/UserService'
-import {addAReopSet, addARepoToSet} from './servers/service/RepoService'
+import {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList} from './servers/service/RepoService'
 import {searchRepo} from './servers/api/github_search'
 //others
 import {starRepo, followUser} from './servers/api/github_user'
@@ -223,6 +223,18 @@ server.get('/api/repo/addSet', (req, res) => {
 //search repo
 server.get('/api/search/repo', (req, res) => {
   searchRepo(req.query.q, req.query.sort, req.query.order, req.query.page, (resa) => {
+    res.send(resa);
+  })
+});
+
+server.get('/api/repo/setList', (req, res) => {
+  getRepoSetList(req.query.user, (resa) => {
+    res.send(resa);
+  })
+});
+
+server.get('/api/repo/set', (req, res) => {
+  getRepoSet(req.query.user, req.query.setName, (resa) => {
     res.send(resa);
   })
 });
