@@ -6,6 +6,7 @@ import {getLanguageByUser} from '../dao/languageDAO'
 import {getLanguageByTag} from '../dao/languageDAO'
 import {getLanguageSize} from '../dao/languageDAO'
 import {getUserAndLevelByLanguage, getFollowingByUser, getStarUserByRepo, getContributorsByRepo} from '../dao/UserDAO'
+import {getStarRepoByUser, getPublicRepoByUser, getRepoInfo,getJoinRepoByUser} from '../dao/RepoDAO'
 import {connect} from '../config'
 
 let rec_langs = [];
@@ -19,7 +20,6 @@ function getSortFun(order, sortBy) {
   var sortFun = new Function('a', 'b', 'return a.' + sortBy + ordAlpah + 'b.' + sortBy + '?1:-1');
   return sortFun;
 }
-
 
 //得到user的tag情况
 //user_tags{
@@ -180,8 +180,57 @@ async function get_rec_languages_by_following(login,rec_num){
 
 }
 
-export {get_rec_languages,get_rec_languages_by_following}
+//user->repos->languages    此时user若没有选仓库中用到的语言,推荐仓库中他用到过的语言给他
+//也可用于user还没有选语言的时候
+async function get_rec_languages_by_repos(login,rec_num) {
+  let repos = await getJoinRepoByUser(login);
+  let selected_lan = await getLanguageByUser(login);
+  let user_lans = [];
+  let init_lans = [];
+  let lan_arrays = [];
+  let rec_lan = [];
 
-//connect();
+  for (let i = 0;i < selected_lan.length;i++){
+    user_lans.push(selected_lan[i].name);
+  }
+
+  for (let i = 0;i < repos.length;i++){
+    let temp_repo = await getRepoInfo(repos[i]);
+    let temp_lans = temp_repo.languages;
+
+    for (let j = 0;j < temp_lans.length;j++){
+      if (!(user_lans.indexOf(temp_lans[j]) > -1)){
+        if (init_lans.hasOwnProperty(temp_lans[j])){
+          init_lans[temp_lans[j]] ++;
+        }else {
+          init_lans[temp_lans[j]] = 1;
+        }
+      }
+    }
+  }
+
+  for (let language in init_lans){
+    let temp = {
+      name: language,
+      count: init_lans[language]
+    };
+    lan_arrays.push(temp);
+  }
+  lan_arrays.sort(getSortFun('desc','count'));
+
+  for (let i = 0;i < rec_num;i++){
+    if (i >= lan_arrays.length){
+      break;
+    }
+    rec_lan.push(lan_arrays[i].name);
+  }
+  console.log(rec_lan);
+  return rec_lan;
+}
+
+export {get_rec_languages,get_rec_languages_by_following,get_rec_languages_by_repos}
+
+// connect();
 //get_rec_languages('RickChem');
-//get_rec_languages_by_following('ChenDanni',5);
+// get_rec_languages_by_following('ChenDanni',5);
+// get_rec_languages_by_repos('ChenDanni',5);
