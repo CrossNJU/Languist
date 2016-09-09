@@ -7,9 +7,9 @@ import {github_repoSchema} from '../../models/github_repoSchema';
 import {github_userSchema} from '../../models/github_userSchema'
 import {languageSchema} from '../../models/languageSchema';
 import {transTime} from '../util/timeUtil'
-import {get_rec_languages} from './RecommendLogic_languages'
+import {get_rec_languages, get_rec_languages_by_repos} from './RecommendLogic_languages'
 import {get_rec_repos_by_following, get_rec_repos_by_user, get_rec_repos_by_also_star} from './RecommendLogic_repos'
-import {get_rec_users} from './RecommendLogic_users'
+import {get_rec_users, get_rec_users_by_star_contributor} from './RecommendLogic_users'
 import {connect} from '../config'
 
 async function fakeUsers(number){
@@ -56,7 +56,7 @@ function getARepo(repo) {
   return new Promise(function (resolve, reject) {
     github_repoSchema.findOne({full_name: repo}, (err, repo_single) => {
       if (err) reject(err);
-      //console.log(repo);
+      console.log('repo:'+repo);
       let ret = {
         type: 'repo',
         avatarUrl: repo_single.owner_avatar_url,
@@ -75,7 +75,7 @@ function getARepo(repo) {
 function getAUser(user) {
   return new Promise(function (resolve, reject) {
     userSchema.findOne({login: user}, (err, user_single) => {
-      //console.log(user);
+      console.log('user:'+user);
       if (err) reject(err);
       let lang_user = [];
       if (user_single != null){
@@ -84,6 +84,7 @@ function getAUser(user) {
         }
       }
       github_userSchema.findOne({login: user}, (err, github_user) => {
+        //console.log(user);
         let ret = {
           type: 'user',
           avatarUrl: github_user.avatar_url,
@@ -103,6 +104,10 @@ function getAUser(user) {
 }
 
 async function combine(repos, users, langs, lang_num) {
+  console.log('combine:');
+  console.log(repos);
+  console.log(langs);
+  console.log(users);
   let ans = [], index = [];
   for (let i = 0; i < 20; i++) index[i] = i;
   while (index.length > 0) {
@@ -135,8 +140,10 @@ function getInterval(time_bef) {
 async function fetchData(userName, callback) {
   let repos = await get_rec_repos_by_also_star(userName, 100);
   console.log('after fetch rec repo data!');
-  let users = await fakeUsers(35);
-  let langs = await fakeLangs(15);
+  let users = await get_rec_users_by_star_contributor(userName, 35);
+  console.log('after fetch rec user data!');
+  let langs = await get_rec_languages_by_repos(userName, 15);
+  console.log('after fetch rec lang data!');
   let rec = [];
   for (let i = 0; i < users.length; i++) {
     rec.push({
@@ -300,6 +307,9 @@ export {getNextDayRecommendData, getARepo}
 //fakeLangs(10);
 //{recommend:[{name:'CR',type:0,date:0,like:1}]}
 //userSchema.update({login:"chenmuen"}, {$set:{rec_date:"2016-09-07"}}, (err, res) => {
+//  console.log(res);
+//});
+// userSchema.update({login:"chenmuen"}, {$set:{recommend:[]}}, (err, res) => {
 //  console.log(res);
 //});
 //userSchema.findOne({login:'chenmuen'}, (err, user) => {
