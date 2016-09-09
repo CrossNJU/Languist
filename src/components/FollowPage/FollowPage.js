@@ -62,11 +62,46 @@ class FollowPage extends Component {
     console.log('componentDidMount');
     try {
       // let user = await $.ajax('/api/current_user');
-      let user = 'chenmuen';
-      await this.setState({user:user});
+      let user = 'RickChem';
+      this.getCount(user);
+      this.getFollowList(user, 'Following');
+      this.setState({user:user});
     } catch(err) {
       console.error(err);
     }
+  }
+
+  getCount(user) {
+    let url = '/api/user/folInfo';
+    $.ajax(url, {data: {user: user}})
+      .done(((data)=> {
+        this.state.followers.count=data.followers;
+        this.state.following.count=data.followings;
+        console.log(data.followers);
+        this.setState({followers: this.state.followers, following: this.state.following});
+      }))
+  }
+
+  getFollowList(user, type) {
+    let url;
+    switch (type) {
+      case 'Following':
+         url = '/api/user/following';
+        break;
+      case 'Followers':
+        url = '/api/user/follower';
+        break;
+    }
+
+    $.ajax(url, {data: {user: user}})
+      .done(((userList)=> {
+        this.setState({userList: userList});
+      }));
+  }
+
+  handleClickFilter(type) {
+    this.getFollowList(this.state.user,type);
+    this.setState({current: type});
   }
 
   render() {
@@ -78,10 +113,11 @@ class FollowPage extends Component {
           <div className={s.container}>
             <div className={s.sidebar}>
               <Filter data={[this.state.following, this.state.followers]}
-                      current={this.state.current}/>
+                      current={this.state.current}
+                      handleClick={this.handleClickFilter.bind(this)}/>
             </div>
             <div className={s.main}>
-              <UserList />
+              <UserList data={this.state.userList}/>
             </div>
           </div>
         </div>

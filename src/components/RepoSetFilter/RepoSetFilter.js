@@ -28,7 +28,7 @@ class RepoSetFilter extends Component {
   }
   render() {
     return (
-      <Filter current={this.props.current} data={this.props.data}>{this.renderAction()}</Filter>
+      <Filter current={this.props.current} data={this.props.data} handleClick={this.props.handleClickFilter}>{this.renderAction()}</Filter>
     );
   }
 }
