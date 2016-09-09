@@ -100,7 +100,7 @@ async function getContributorsByRepo(full_name) {
 export {getGithubUserInfo, getUserAndLevelByLanguage, getFollowingByUser, getStarUserByRepo, getContributorsByRepo}
 
 async function test() {
-  let t = await getContributorsByRepo("CrossNJU/PASS");
+  let t = await getRepoInfo("CrossNJU/PASS");
   console.log(t);
 }
 

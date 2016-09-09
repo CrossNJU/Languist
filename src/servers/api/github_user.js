@@ -229,7 +229,7 @@ function addAnewGitHubUser(json, callback=null){
 //getUserStarred('ChenDanni', 1, [], (v) => {
 //  console.log('done!'+ v);
 //});
-export {getUserInfo, getUserStarred, getPublicRepos, getFollowings, starRepo, followUser, addAnewUser, addAnewGitHubUser}
+export {getUserInfo, getUserStarred, getPublicRepos, getFollowings, starRepo, followUser, addAnewUser, addAnewGitHubUser, getJoinRepos}
 
 
 //getUserInfo("egower", (body) => {

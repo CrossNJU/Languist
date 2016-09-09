@@ -66,8 +66,8 @@ async function getPublicRepoByUser(login) {
 }
 
 async function getJoinRepoByUser(login) {
-  let t = await new Promise(function (resolve, reject) {
-    let user = getGithubUserInfo(login);
+  let t = await new Promise(async function (resolve, reject) {
+    let user = await getGithubUserInfo(login);
     if (user.joinRepos.length == 0){
       updateUserJoinRepo(login, true, (repos) =>{
         resolve(repos);
@@ -80,9 +80,12 @@ async function getJoinRepoByUser(login) {
 export {getStarRepoByUser, getPublicRepoByUser, getRepoInfo, getJoinRepoByUser}
 
 async function test() {
-  connect();
-  let t = await getRepoInfo("jceb/vim-orgmode");
+  //connect();
+  let t = await getGithubUserInfo("chenmuen");
   console.log(t);
+  //github_userSchema.findOne({login:'chenmuen'}, (err, user) => {
+  //  console.log(user);
+  //})
 }
 
 //test();
