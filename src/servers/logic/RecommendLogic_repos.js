@@ -303,25 +303,41 @@ async function get_rec_repos_by_following(login,rec_num){
 //user->join repos->contributors->star repos
 async function get_rec_repos_by_colleagues(login,rec_num){
   let percent = 0.5;
-  let join_repos = getJoinRepoByUser(login);
+  let join_repos = await getJoinRepoByUser(login);
+  let star_repos = await getStarRepoByUser(login);
   let colleagues = [];
   let colleagues_count = [];
   let init_repos = [];
   let handle_repos = [];
   let rec_repos = [];
+  let handle_repeat = [];
+  let contr_percent = 5;
 
+  for (let i = 0;i < star_repos.length;i++)
+    handle_repeat.push(star_repos[i]);
   for (let i = 0;i < join_repos.length;i++){
-    let temp_contributors = await getContributorsByRepo(join_repos[i].full_name);
-    for (let j = 0;j < temp_contributors.length;j++){
-      let user_name = temp_contributors[j].name;
-      if (colleagues.hasOwnProperty(user_name)){
-        colleagues[user_name] += temp_contributors[j].contributions;
-      }else {
-        colleagues[name] = temp_contributors[j].contributions;
-      }
+    if (!(handle_repeat.indexOf(join_repos[i]) > -1)){
+      handle_repeat.push(join_repos[i]);
     }
   }
 
+  for (let i = 0;i < join_repos.length;i++){
+    let temp_contributors = await getContributorsByRepo(join_repos[i]);
+
+    // console.log(temp_contributors);
+
+    for (let j = 0;j < temp_contributors.length;j++){
+      let user_name = temp_contributors[j].login;
+      if (user_name == login){
+        continue;
+      }
+      if (colleagues.hasOwnProperty(user_name)){
+        colleagues[user_name] += temp_contributors[j].contributions;
+      }else {
+        colleagues[user_name] = temp_contributors[j].contributions;
+      }
+    }
+  }
   for (let colleague in colleagues){
     if (colleague != login){
       let temp_con = {
@@ -333,19 +349,22 @@ async function get_rec_repos_by_colleagues(login,rec_num){
   }
   colleagues_count.sort(getSortFun('desc','count'));
 
+  if (colleagues_count.length <= 10) percent = 1;
+
   for (let i = 0;i < colleagues_count.length*percent;i++){
     let star_repos = await getStarRepoByUser(colleagues_count[i].name);
     for (let j = 0;j < star_repos.length;j++){
-      if (!(init_repos.indexOf(star_repos[j]) > -1)){
+      if ((!(init_repos.indexOf(star_repos[j]) > -1))&&(!(handle_repeat.indexOf(star_repos[j]) > -1))){
         init_repos.push(star_repos[j]);
       }
     }
   }
 
   for (let i = 0;i < init_repos.length;i++){
+    let repo_info = await getRepoInfo(init_repos[i]);
     let repo = {
       name: init_repos[i],
-      stars: await getRepoInfo(init_repos[i]).stars_count
+      stars: repo_info.stars_count
     };
     handle_repos.push(repo);
   }
@@ -354,7 +373,7 @@ async function get_rec_repos_by_colleagues(login,rec_num){
 
   for (let i = 0;i < rec_num;i++){
     if (i > handle_repos.length) break;
-    rec_repos.push(handle_repos.name);
+    rec_repos.push(handle_repos[i].name);
   }
 
   return rec_repos;
@@ -396,12 +415,14 @@ async function get_rec_repos_by_contributor(fullname,rec_num){
 }
 
 export {get_rec_repos_by_user,get_rec_repos_by_star_repos_owner,
-  get_rec_repos_by_also_star,get_rec_repos_by_following,get_rec_repos_by_contributor,handle_repos}
+  get_rec_repos_by_also_star,get_rec_repos_by_following,get_rec_repos_by_contributor,
+  get_rec_repos_by_colleagues,handle_repos}
 
-//connect();
+// connect();
 // get_rec_repos_by_user('ChenDanni',10);
 //get_rec_repos_by_also_star('RickChem',100);
 //get_rec_repos_by_following('ChenDanni',100);
 // get_rec_repos_by_also_star('ChenDanni',5);
 // get_rec_repos_by_contributor('jquery/jquery',5);
 //get_rec_repos_by_also_star('RickChem', 10);
+// get_rec_repos_by_colleagues('ChenDanni',10);
