@@ -22,8 +22,9 @@ import FlowSeparator from '../FlowSeparator';
 import FlowAction from '../FlowAction';
 import RepoFlowItem from '../RepoFlowItem';
 import SearchBar from '../SearchBar';
+import TitleBar from '../TitleBar';
 
-const title = 'Home';
+const title = 'PolarisChen\'s Starred';
 
 let currentRepoSetFilter = 'Ungrouped';
 let repoSetFilterData = [
@@ -146,7 +147,7 @@ class BasePage extends Component {
     console.log('render BasePage');
     return (
       <div className="BasePage">
-        <Cover data={this.state.cover} />
+        <TitleBar text={title} />
         <SearchBar />
         <div className={s.root}>
           <div className={s.container}>
