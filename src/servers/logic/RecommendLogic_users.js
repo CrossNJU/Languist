@@ -2,7 +2,8 @@
  * Created by ChenDanni on 2016/8/15.
  */
 
-import {getUserAndLevelByLanguage} from '../dao/UserDAO'
+import {getGithubUserInfo, getUserAndLevelByLanguage, getFollowingByUser, getStarUserByRepo, getContributorsByRepo, getUserLanguage} from '../dao/UserDAO'
+import {getStarRepoByUser, getPublicRepoByUser, getRepoInfo, getJoinRepoByUser} from '../dao/RepoDAO'
 import {getLanguageByUser} from '../dao/languageDAO'
 import {connect} from '../config'
 
@@ -95,9 +96,14 @@ function getSortFun(order, sortBy) {
 
 //两个用户之间的语言相似度
 async function get_lan_sim(user1,user2){
+  // console.log('in');
   let user1_lan = await getLanguageByUser(user1);
   let user2_lan = await getLanguageByUser(user2);
+
   let sim = 0;
+
+  if (user1_lan == null || user1_lan == []) return 0;
+  if (user2_lan == null || user2_lan == []) return 0;
 
   for (let i = 0;i < user1_lan.length;i++){
     for (let j = 0;j < user2_lan.length;j++){
@@ -217,25 +223,31 @@ async function get_rec_users(login,rec_num){
 }
 
 //推荐用户star仓库的contributor
-//user->star_repos->contributors
+//user->star_repos->contributors      need test
 async function get_rec_users_by_star_contributor(login,rec_num){
   let rec_user_login = [];
   let init_rec = [];
-  let star_repos = getStarRepoByUser(login);
+  let star_repos = await getStarRepoByUser(login);
   let contributors_count = [];
+  let follower_para = 0.3;
+  let contributor_para = 1.5;
+  let sim_para = 200;
+
     //统计contributor
   for (let i = 0;i < star_repos.length;i++){
-    let repo_fullname = star_repos[i].fullname;
-    let temp_contr = getContributorByRepo(repo_fullname);
+    let temp_contr = await getContributorsByRepo(star_repos[i]);
     for (let j = 0;j < temp_contr.length;j++){
-      let contr_name = temp_contr[j];
+      let contr_name = temp_contr[j].login;
       if (contributors_count.hasOwnProperty[contr_name]){
-        contributors_count[contr_name]++;
+        contributors_count[contr_name] += contributor_para * temp_contr[j].contributions;
       }else{
-        contributors_count[contr_name] = 1;
+        let user_info = await getGithubUserInfo(contr_name);
+        contributors_count[contr_name] = follower_para * user_info.followers +
+                                          temp_contr[j].contributions;
       }
     }
   }
+
   //如果有，删除自己
   if(contributors_count.hasOwnProperty(login)){
      delete contributors_count[login];
@@ -243,7 +255,8 @@ async function get_rec_users_by_star_contributor(login,rec_num){
 
     //考虑相似度并转换成json数组
   for (let contr in contributors_count){
-    contributors_count[contr] += get_user_sim(login,contr);
+    let similarity = await get_user_sim(login,contr);
+    contributors_count[contr] += sim_para * similarity;
     let temp_init = {
       login: contr,
       sim: contributors_count[contr]
@@ -315,7 +328,8 @@ async function get_rec_users_by_follwing_repo(login,rec_num){
   return rec_contr;
 }
 
-export {get_rec_users}
+export {get_rec_users,get_rec_users_by_star_contributor}
 
-//connect();
+// connect();
 //get_rec_users_by_follwing_repo('RickChem',20);
+// get_rec_users_by_star_contributor('ChenDanni',10);

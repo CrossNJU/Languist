@@ -10,7 +10,7 @@ async function getLanguageByUser(login){
   let t =  await new Promise(function(resolve, reject){
     userSchema.findOne({login: login}, async (err, user) => {
       if (user == null) {
-        reject(err);
+        resolve(null);
       }
       let user_langs = user.language;
       let ans = [];
