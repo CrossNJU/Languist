@@ -117,7 +117,7 @@ class UserFlowItem extends Component {
             icon={<PersonOutline />}
             label="View"
             labelColor="#666"
-            onTouchTap={this.handleReduce} />
+            href={'https://github.com/'+this.props.user.login} />
           {this.renderInviteButton()}
         </CardActions>
       </Card>
