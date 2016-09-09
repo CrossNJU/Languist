@@ -291,19 +291,19 @@ async function get_rec_users_by_follwing_repo(login,rec_num){
   let rec_contr = [];
   let appear_percent = 5;
   let contr_percent = 0.5;
+  let similarity_percent = 100;
+  let handle_repeat = followings;
+  handle_repeat.push(login);
 
   for (let i = 0;i < followings.length;i++){
     let temp_f_repos = await getJoinRepoByUser(followings[i]);
     temp_f_repos = await handle_repos(temp_f_repos);
     for (let j = 0;j < temp_f_repos.length;j++){
       let repo_contr = await getContributorsByRepo(temp_f_repos[j]);
-
-      console.log(repo_contr);
-
       for (let k = 0;k < repo_contr.length;k++){
         let user_login = repo_contr[k].login;
         let user_contributions = repo_contr[k].contributions;
-        if (user_login != login){
+        if (!(handle_repeat.indexOf(user_login) > -1)){
           //contributor加入初始化contributor列表，统计
           if (init_contr.hasOwnProperty(user_login)){
             init_contr[user_login] += appear_percent + contr_percent * user_contributions;
@@ -317,7 +317,8 @@ async function get_rec_users_by_follwing_repo(login,rec_num){
 
   //考虑user相似度
   for (let contributor in init_contr){
-    init_contr[contributor] += await get_user_sim(login,contributor);
+    let similarity = await get_user_sim(login,contributor);
+    init_contr[contributor] += similarity_percent * similarity;
   }
 
   for (let contributor in init_contr){
@@ -329,7 +330,7 @@ async function get_rec_users_by_follwing_repo(login,rec_num){
   }
   contr_array.sort(getSortFun('desc','count'));
 
-  console.log(contr_array);
+  // console.log(contr_array.length);
 
   for (let i = 0;i < rec_num;i++){
     if (i > contr_array.length){
