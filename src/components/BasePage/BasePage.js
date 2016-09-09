@@ -19,6 +19,7 @@ import RepoList from '../RepoList';
 import UserList from '../UserList';
 import FlowList from '../FlowList';
 import FlowSeparator from '../FlowSeparator';
+import FlowAction from '../FlowAction';
 
 const title = 'Home';
 
@@ -140,6 +141,7 @@ class BasePage extends Component {
               <RepoList />
               <FlowSeparator text='Sep. 9th' />
               <UserList />
+              <FlowAction />
             </div>
           </div>
         </div>
