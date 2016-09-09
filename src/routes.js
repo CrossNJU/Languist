@@ -20,6 +20,7 @@ import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
 import LanguagePage from './components/LanguagePage';
 import IndexPage from './components/IndexPage';
+import BasePage from './components/BasePage';
 
 const router = new Router(on => {
   on('*', async (state, next) => {
@@ -32,6 +33,8 @@ const router = new Router(on => {
   on('/index', async () => <IndexPage/>);
 
   on('/home', async () => <HomePage />);
+
+  on('/base', async () => <BasePage />);
 
   on('/contact', async () => <ContactPage />);
 

@@ -1,0 +1,6 @@
+{
+  "name": "BasePage",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./BasePage.js"
+}
