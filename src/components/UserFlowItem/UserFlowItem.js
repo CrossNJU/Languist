@@ -10,6 +10,7 @@ import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'mat
 import RaisedButton from 'material-ui/RaisedButton';
 import Chip from 'material-ui/Chip';
 
+import Person from 'material-ui/svg-icons/social/person';
 import PersonAdd from 'material-ui/svg-icons/social/person-add';
 import PersonOutline from 'material-ui/svg-icons/social/person-outline';
 
@@ -44,6 +45,25 @@ const styles = {
 };
 
 class UserFlowItem extends Component {
+  renderButton() {
+    if (!this.props.user.isFollowing) {
+      return (
+        <RaisedButton
+          icon={<PersonAdd />}
+          label={'Follow (' + this.props.user.followers + ')'}
+          secondary={true}
+          onTouchTap={this.handleExpand} />
+      )
+    } else {
+      return (
+        <RaisedButton
+          icon={<Person />}
+          label={'Following'}
+          labelColor="#F2DF83"
+          onTouchTap={this.handleExpand} />
+      )
+    }
+  }
   render() {
     let title = this.props.user.name ? this.props.user.name + ' (' + this.props.user.login + ')' : this.props.user.login;
     let subtitle = 'Joined on ' + this.props.user.join.split('T')[0];
@@ -81,11 +101,7 @@ class UserFlowItem extends Component {
           </div>
         </CardText>
         <CardActions style={styles.cardActions}>
-          <RaisedButton
-            icon={<PersonAdd />}
-            label={'Follow (' + this.props.user.followers + ')'}
-            secondary={true}
-            onTouchTap={this.handleExpand} />
+          {this.renderButton()}
           <RaisedButton
             icon={<PersonOutline />}
             label="View"

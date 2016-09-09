@@ -16,6 +16,7 @@ import Count from '../Count';
 import RepoSetFilter from '../RepoSetFilter';
 import Filter from '../Filter';
 import RepoList from '../RepoList';
+import UserList from '../UserList';
 import FlowList from '../FlowList';
 
 const title = 'Home';
@@ -136,6 +137,7 @@ class BasePage extends Component {
             </div>
             <div className={s.main}>
               <RepoList />
+              <UserList />
             </div>
           </div>
         </div>
