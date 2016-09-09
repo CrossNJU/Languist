@@ -27,7 +27,7 @@ class LangFlowItem extends Component {
             icon={<Add />}
             label={'Add'}
             primary={true}
-            onTouchTap={this.handleTap} />
+            onClick={this.handleAdd.bind(this)} />
         </div>
       </Paper>
     );
