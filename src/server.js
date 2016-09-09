@@ -108,7 +108,8 @@ server.use('/graphql', expressGraphQL(req => ({
 //login success
 server.get('/api/login/success', (req, res)=> {
   saveUser(req.query.code, (ress) => {
-    if (ress == 1) {
+    if (ress != null) {
+      req.session.tempname = ress;
       res.redirect('/register');
     }
     else res.redirect('/login');
@@ -187,6 +188,11 @@ server.get('/api/rec/evaluate', (req, res) => {
 //get current user
 server.get('/api/current_user', (req, res) => {
   res.send(req.session.username);
+});
+
+//get temp user
+server.get('/api/temp_user', (req, res) => {
+  res.send(req.session.tempname);
 });
 
 //choose language
