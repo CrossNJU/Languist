@@ -76,7 +76,7 @@ class FlowList extends Component {
           case 'repo':
             return <RepoFlowItem key={flowItem.owner + flowItem.name} repo={flowItem} />;
           case 'user':
-            return <UserFlowItem kay={flowItem.login} user={flowItem} />;
+            return <UserFlowItem key={flowItem.login} user={flowItem} />;
           case 'lang':
             return <LangFlowItem key={flowItem.name} lang={flowItem} />;
           default:
