@@ -42,7 +42,7 @@ async function handle_init_repos(repos){
 }
 
 //根据create time和update time 筛除废仓库
-async function handle_pubic_repos(repos){
+async function handle_repos(repos){
 
   let re_repos = [];
 
@@ -52,11 +52,12 @@ async function handle_pubic_repos(repos){
 
     let days = await calTime(repo_info.created_at,repo_info.updated_at);
 
-    if (days >= 10)
+    if (days >= 10){
       re_repos.push(repos[i]);
+    }
   }
 
-  return rec_repos;
+  return re_repos;
 
 }
 
@@ -272,7 +273,7 @@ async function get_rec_repos_by_following(login,rec_num){
 
   for (let i = 0;i < user_following.length;i++){
     let temp_repos = await getPublicRepoByUser(user_following[i]); //name_list
-    temp_repos = await handle_pubic_repos(temp_repos);
+    temp_repos = await handle_repos(temp_repos);
     // console.log(temp_repos);
     for (let j = 0;j < temp_repos.length;j++){
       if ((!(user_stars.indexOf(temp_repos[j]) > -1))&&(!(user_repos.indexOf(temp_repos[j]) > -1))){ //去除已经star和参加的repo
@@ -371,7 +372,7 @@ async function get_rec_repos_by_contributor(fullname,rec_num){
 
   for (let i = 0;i < contributors.name;i++){
     let temp_repos = await getPublicRepoByUser(contributors[i]);
-    temp_repos = await handle_pubic_repos(temp_repos);
+    temp_repos = await handle_repos(temp_repos);
     for (let j = 0;j < temp_repos.length;j++){
       if (!(init_repos_names.indexOf(temp_repos[j]) > -1)){
         init_repos_names.push(temp_repos[j]);
@@ -395,7 +396,7 @@ async function get_rec_repos_by_contributor(fullname,rec_num){
 }
 
 export {get_rec_repos_by_user,get_rec_repos_by_star_repos_owner,
-  get_rec_repos_by_also_star,get_rec_repos_by_following,get_rec_repos_by_contributor}
+  get_rec_repos_by_also_star,get_rec_repos_by_following,get_rec_repos_by_contributor,handle_repos}
 
 //connect();
 // get_rec_repos_by_user('ChenDanni',10);
