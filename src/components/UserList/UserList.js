@@ -23,7 +23,8 @@ let userData = [
     join: 'July 11, 2016',
     location: 'Nanjing, China',
     followers: 12,
-    isFollowing: true
+    isFollowing: true,
+    isLanguist: true
   },
   {
     avatarUrl: '',
@@ -38,7 +39,8 @@ let userData = [
     join: 'July 11, 2016',
     location: 'Nanjing, China',
     followers: 12,
-    isFollowing: false
+    isFollowing: false,
+    isLanguist: false
   },
   {
     avatarUrl: '',
@@ -53,7 +55,8 @@ let userData = [
     join: 'July 11, 2016',
     location: 'Nanjing, China',
     followers: 12,
-    isFollowing: true
+    isFollowing: true,
+    isLanguist: false
   }
 ];
 
