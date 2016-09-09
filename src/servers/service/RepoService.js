@@ -5,7 +5,9 @@
 import {userSchema} from '../../models/userSchema'
 import {github_userSchema} from '../../models/github_userSchema'
 import {get_rec_repos_by_contributor} from '../logic/RecommendLogic_repos'
-import {updateRepoCons, updateUserRepos} from '../logic/UpdateWhenLogin'
+import {updateRepoCons, updateUserRepos, upsertUser, upsertRepo} from '../logic/UpdateWhenLogin'
+
+var async = require('async');
 
 function addARepoToSet(login, full_name, set_name, callback) {
   github_userSchema.findOne({login: login}, (err, user) => {
@@ -48,14 +50,53 @@ function addAReopSet(login, set_name, callback) {
   })
 }
 
-function updateSingleRepoRecommend(full_name) {
-
+function updateSingleRepoRecommend(full_name, callback) {
+  let met0 = [];
+  met0.push((call0) => {
+    updateRepoCons(full_name, (contributors) => {
+      let met1 = [];
+      for (let i = 0; i < contributors.length; i++) {
+        met1.push((call1) => {
+          upsertUser(contributors[i], () => {
+            updateUserRepos(contributors[i], true, (repos) => {
+              let met2 = [];
+              for (let j = 0; j < repos.length; j++) {
+                met2.push((call2) => {
+                  upsertRepo(repos[j], () => {
+                    console.log('done from REPO contributor: ' + contributors[i] + ' to its repo: ' + repos[j] + '!');
+                    call2('done 2!');
+                  })
+                });
+              }
+              async.parallel(met2, (err, res) => {
+                console.log(res);
+                call1('done 1!');
+              });
+            })
+          })
+        });
+      }
+      async.parallel(met1, (err, res) => {
+        console.log(res);
+        call0('done 0!');
+      });
+    })
+  });
+  async.parallel(met0, (err, res) => {
+    console.log(res);
+    callback();
+  })
 }
 
-function getRelatedRecommend(full_name){
-  let rec_num = 10;
-  let recs = get_rec_repos_by_contributor(full_name, rec_num);
-  return recs;
+async function getRelatedRecommend(full_name) {
+  let ans = await new Promise((resolve, reject) => {
+    updateSingleRepoRecommend(full_name, async ()=> {
+      let rec_num = 10;
+      let recs = await get_rec_repos_by_contributor(full_name, rec_num);
+      resolve(recs);
+    });
+  });
+  return ans;
 }
 
 export {addAReopSet, addARepoToSet, getRelatedRecommend}

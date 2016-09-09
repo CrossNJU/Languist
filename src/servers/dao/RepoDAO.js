@@ -31,24 +31,12 @@ async function getRepoInfo(fullname){
 async function getStarRepoByUser(login) {
   let t = await new Promise(async function (resolve, reject) {
     let ans = [];
-    //console.log(login);
     let user = await getGithubUserInfo(login);
-    let user_stars = user.star_repos;
-    if (user_stars.length == 0){
-      user_stars = await new Promise(function(resolve2, reject2){
+    if (user.star_repos.length == 0){
         updateUserStars(login, true, async (stars) => {
-          resolve2(stars);
+          resolve(stars);
         });
-      })
-    }
-      for (let repo of user_stars){
-        let repo_det = await getRepoInfo(repo);
-        ans.push({
-          fullname: repo,
-          stars: repo_det.stars_count
-        })
-      }
-      resolve(ans);
+    }else resolve(user.star_repos);
   });
   return t;
 }
