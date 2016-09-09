@@ -20,6 +20,10 @@ const title = 'Register';
 class RegisterPage extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      userNameError: "",
+      passwordError: ""
+    }
   }
 
   static contextTypes = {
@@ -36,10 +40,13 @@ class RegisterPage extends Component {
     $.ajax(url, {data:{username: username, password: password}})
       .done((message) => {
         console.log(message);
-        if(message == "success") {
-          window.location.href = "/login";
-        } else {
-          console.log('fail');
+        switch (message.res) {
+          case 1:
+            window.location.href='/home';
+            break;
+          case 0:
+            this.setState({userNameError: 'Register failed', passwordError: ''});
+            break;
         }
       })
   }
@@ -48,7 +55,7 @@ class RegisterPage extends Component {
     return (
       <div className={s.root}>
         <div className={s.container}>
-          <LoginCard handleSubmit={this.handleRegister.bind(this)} type="register"/>
+          <LoginCard handleSubmit={this.handleRegister.bind(this)} type="register" userNameError={this.state.userNameError} passwordError={this.state.passwordError}/>
         </div>
       </div>
     );

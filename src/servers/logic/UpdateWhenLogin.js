@@ -4,7 +4,7 @@
 
 import {github_repoSchema} from '../../models/github_repoSchema'
 import {github_userSchema} from '../../models/github_userSchema'
-import {getUserInfo, getUserStarred, getPublicRepos, addAnewUser, getFollowings, addAnewGitHubUser} from '../api/github_user'
+import {getUserInfo, getUserStarred, getPublicRepos, addAnewUser, getFollowings, addAnewGitHubUser, getJoinRepos} from '../api/github_user'
 import {getRepoInfo, getRepoLanguages, getContributors, getStarredUsers, addNewRepo} from '../api/github_repo'
 import {setSignal} from '../config'
 
@@ -127,7 +127,7 @@ function updateUserFollowing(login, callback) {
 function updateUserJoinRepo(login, is_insert, callback) {
   github_userSchema.findOne({login: login}, (err, user) => {
     if (user.joinRepos.length == 0) {
-      getPublicRepos(login, 1, [], is_insert, get_size, (ret) => {
+      getJoinRepos(login, 1, [], is_insert, get_size, (ret) => {
         var conditions = {login: login};
         var update = {
           $set: {

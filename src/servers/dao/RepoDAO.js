@@ -31,24 +31,12 @@ async function getRepoInfo(fullname){
 async function getStarRepoByUser(login) {
   let t = await new Promise(async function (resolve, reject) {
     let ans = [];
-    //console.log(login);
     let user = await getGithubUserInfo(login);
-    let user_stars = user.star_repos;
-    if (user_stars.length == 0){
-      user_stars = await new Promise(function(resolve2, reject2){
+    if (user.star_repos.length == 0){
         updateUserStars(login, true, async (stars) => {
-          resolve2(stars);
+          resolve(stars);
         });
-      })
-    }
-      for (let repo of user_stars){
-        let repo_det = await getRepoInfo(repo);
-        ans.push({
-          fullname: repo,
-          stars: repo_det.stars_count
-        })
-      }
-      resolve(ans);
+    }else resolve(user.star_repos);
   });
   return t;
 }
@@ -66,8 +54,8 @@ async function getPublicRepoByUser(login) {
 }
 
 async function getJoinRepoByUser(login) {
-  let t = await new Promise(function (resolve, reject) {
-    let user = getGithubUserInfo(login);
+  let t = await new Promise(async function (resolve, reject) {
+    let user = await getGithubUserInfo(login);
     if (user.joinRepos.length == 0){
       updateUserJoinRepo(login, true, (repos) =>{
         resolve(repos);
@@ -80,9 +68,12 @@ async function getJoinRepoByUser(login) {
 export {getStarRepoByUser, getPublicRepoByUser, getRepoInfo, getJoinRepoByUser}
 
 async function test() {
-  connect();
-  let t = await getRepoInfo("jceb/vim-orgmode");
+  //connect();
+  let t = await getGithubUserInfo("chenmuen");
   console.log(t);
+  //github_userSchema.findOne({login:'chenmuen'}, (err, user) => {
+  //  console.log(user);
+  //})
 }
 
 //test();

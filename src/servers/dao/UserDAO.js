@@ -28,6 +28,16 @@ async function getGithubUserInfo(login){
   return t;
 }
 
+async function getUserLanguage(login){
+  let t = await new Promise((resolve, reject) => {
+    userSchema.findOne({login:login}, (err, user) => {
+      if (user == null) resolve(null);
+      else resolve(user.languages);
+    });
+  });
+  return t;
+}
+
 function findLevel(user, langName){
   for (let lang of user.language){
     if (lang.lang_name == langName) return lang.lang_level;
@@ -97,10 +107,10 @@ async function getContributorsByRepo(full_name) {
   return t;
 }
 
-export {getGithubUserInfo, getUserAndLevelByLanguage, getFollowingByUser, getStarUserByRepo, getContributorsByRepo}
+export {getGithubUserInfo, getUserAndLevelByLanguage, getFollowingByUser, getStarUserByRepo, getContributorsByRepo, getUserLanguage}
 
 async function test() {
-  let t = await getContributorsByRepo("CrossNJU/PASS");
+  let t = await getRepoInfo("CrossNJU/PASS");
   console.log(t);
 }
 

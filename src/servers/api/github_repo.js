@@ -73,6 +73,11 @@ function getContributors(fullname, page, array, numbers, callback) {
 }
 
 function addNewRepo(info, callback=null) {
+  //let langs = await new Promise((resolve, reject) => {
+  //  getRepoLanguages(info.full_name, (langs) => {
+  //    resolve(langs);
+  //  });
+  //});
   let update2 = {
     $set: {
       full_name: info.full_name,

@@ -74,7 +74,7 @@ async function getFlowListData(userName, callback) {
     console.log('get it!');
     ans = await getNextDayRecommendData(userName);
   }
-  console.log(ans);
+  //console.log(ans);
   callback(ans);
 }
 

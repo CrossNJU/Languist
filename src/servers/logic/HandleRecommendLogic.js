@@ -134,7 +134,7 @@ function getInterval(time_bef) {
 
 async function fetchData(userName, callback) {
   let repos = await get_rec_repos_by_also_star(userName, 100);
-  console.log('after rec repo');
+  console.log('after fetch rec repo data!');
   let users = await fakeUsers(35);
   let langs = await fakeLangs(15);
   let rec = [];
@@ -169,8 +169,8 @@ async function fetchData(userName, callback) {
   };
   //console.log(rec);
   userSchema.update({login: userName}, update, (err, res) => {
-    console.log('fetch again from algorithm');
-    console.log(res);
+    //console.log('fetch again from algorithm');
+    //console.log(res);
     callback(rec);
   })
 }
@@ -218,6 +218,7 @@ async function recNew(repos, users, langs, userName, cur_rec, interval){
     random_index = getRandomIndex(lang_rec.length, lang_num);
     for (let i = 0; i < random_index.length; i++) langs.push(lang_rec[random_index[i]]);
 
+    //console.log('in rec new');
     //console.log(repos);
     //update
     for (let i = 0; i < cur_rec.length; i++) {
@@ -235,7 +236,7 @@ async function recNew(repos, users, langs, userName, cur_rec, interval){
     };
     userSchema.update({login: userName}, update, (err, res) => {
       console.log('update recommend dates');
-      console.log(res);
+      //console.log(res);
     });
   return lang_num;
 }
@@ -283,7 +284,9 @@ async function getNextDayRecommendData(userName) {
         }
       }
     } else {
-      lang_num = recNew(repos, users, langs, userName, cur_rec, interval);
+      lang_num = await recNew(repos, users, langs, userName, cur_rec, interval);
+      console.log('after rec new');
+      //console.log(repos);
     }
     //console.log(repos.length+users.length+langs.length);
     //console.log('done combine');
@@ -291,14 +294,23 @@ async function getNextDayRecommendData(userName) {
   }
 }
 
-export {getNextDayRecommendData}
+export {getNextDayRecommendData, getARepo}
 
 //fakeUsers(20);
 //fakeLangs(10);
 //{recommend:[{name:'CR',type:0,date:0,like:1}]}
-//userSchema.update({login:"RickChem"}, {$set:{recommend:[]}}, (err, res) => {
+//userSchema.update({login:"chenmuen"}, {$set:{rec_date:"2016-09-07"}}, (err, res) => {
 //  console.log(res);
 //});
-//getStart('RickChem');
+//userSchema.findOne({login:'chenmuen'}, (err, user) => {
+//  let rec = user.recommend;
+//  let count = 0;
+//  for(let i=0;i<rec.length;i++){
+//    if (rec[i].m_date<=0) count ++;
+//  }
+//  console.log(count);
+//  console.log(rec.length);
+//});
+////getStart('RickChem');
 //console.log(getRandomIndex(12, 10));
 //getNextDayRecommendData('RickChem');
