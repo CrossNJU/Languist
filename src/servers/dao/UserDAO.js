@@ -9,7 +9,7 @@ import {connect_callback} from '../config'
 
 import {getFollowings} from '../api/github_user'
 import {getStarredUsers, getContributors} from '../api/github_repo'
-import {upsertUser, updateUserFollowing, updateRepoStar} from '../logic/UpdateWhenLogin'
+import {upsertUser, updateUserFollowing, updateRepoStar, updateRepoCons} from '../logic/UpdateWhenLogin'
 import {getRepoInfo} from './RepoDAO'
 
 async function getGithubUserInfo(login){
@@ -97,8 +97,8 @@ async function getContributorsByRepo(full_name) {
   let t = await new Promise(async function (resolve, reject) {
     let repo = await getRepoInfo(full_name);
     if (repo.contributors.length == 0){
-      updateRepoStar(full_name, (contributors) => {
-        resolve(contributors);
+      updateRepoCons(full_name, (contributors) => {
+        resolve(getContributorsByRepo(full_name));
       })
     }else {
       resolve(repo.contributors);
