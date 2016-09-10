@@ -196,17 +196,26 @@ async function get_rec_languages_by_repos(login,rec_num) {
 
   for (let i = 0;i < repos.length;i++){
     let temp_repo = await getRepoInfo(repos[i]);
-    let temp_lans = temp_repo.languages;
+    // let temp_lans = temp_repo.languages;
+    let temp_lan = temp_repo.main_language;
 
-    for (let j = 0;j < temp_lans.length;j++){
-      if (!(user_lans.indexOf(temp_lans[j]) > -1)){
-        if (init_lans.hasOwnProperty(temp_lans[j])){
-          init_lans[temp_lans[j]] ++;
-        }else {
-          init_lans[temp_lans[j]] = 1;
-        }
+    // for (let j = 0;j < temp_lans.length;j++){
+    //   if (!(user_lans.indexOf(temp_lans[j]) > -1)){
+    //     if (init_lans.hasOwnProperty(temp_lans[j])){
+    //       init_lans[temp_lans[j]] ++;
+    //     }else {
+    //       init_lans[temp_lans[j]] = 1;
+    //     }
+    //   }
+    // }
+    if (!(user_lans.indexOf(temp_lan) > -1)){
+      if (init_lans.hasOwnProperty(temp_lan)){
+        init_lans[temp_lan] ++;
+      }else {
+        init_lans[temp_lan] = 1;
       }
     }
+
   }
 
   for (let language in init_lans){
