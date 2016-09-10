@@ -11,6 +11,10 @@ import Paper from 'material-ui/Paper';
 import Add from 'material-ui/svg-icons/content/add';
 
 class LangFlowItem extends Component {
+  handleAdd() {
+    this.props.handleAdd(this.props.lang.name);
+  }
+
   render() {
     return (
       <Paper className={s.item}>

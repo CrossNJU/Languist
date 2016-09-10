@@ -78,7 +78,7 @@ class FlowList extends Component {
           case 'user':
             return <UserFlowItem key={flowItem.login} user={flowItem} />;
           case 'lang':
-            return <LangFlowItem key={flowItem.name} lang={flowItem} />;
+            return <LangFlowItem key={flowItem.name} lang={flowItem} handleAdd={this.props.handleAddLanguage}/>;
           default:
             return;
         }
