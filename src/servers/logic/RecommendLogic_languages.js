@@ -109,7 +109,7 @@ async function get_rec_languages(login,rec_num){
   let re = 0;
   let wlen = lang_info.length;
   for (let i = 0;i < wlen;i++){
-    if (wlen < re){break;}
+    if (wlen <= re){break;}
 
     rec_langs.push(lang_info[i].name);
     re++;
