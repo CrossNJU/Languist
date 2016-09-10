@@ -249,10 +249,14 @@ async function recNew(repos, users, langs, userName, cur_rec, interval){
   return lang_num;
 }
 
-function getStart(userName, callback){
-  fetchData(userName, async (cur_rec) => {
-    let t = await recNew([], [], [], userName, cur_rec, 0);
-    callback();
+async function getStart(userName){
+  return new Promise((resolve, reject) => {
+    fetchData(userName, async (cur_rec) => {
+      console.log(cur_rec);
+      let t = await recNew([], [], [], userName, cur_rec, 0);
+      console.log('after rec New in get started!');
+      resolve(1);
+    });
   });
 }
 
@@ -269,11 +273,12 @@ async function getNextDayRecommendData(userName) {
   let cur_rec = cur_user.recommend;
   if (cur_rec.length == 0) {
     console.log('in cur = 0');
-    let ans = await new Promise(function(resolve, reject){
-      getStart(userName, async () => {
+    let ans = await new Promise(async function(resolve, reject){
+      let done = await getStart(userName);
+      if (done == 1) {
         let t = await getNextDayRecommendData(userName);
         resolve(t);
-      });
+      }
     });
     console.log('after first!');
     return ans;
