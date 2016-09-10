@@ -21,6 +21,7 @@ import ErrorPage from './components/ErrorPage';
 import LanguagePage from './components/LanguagePage';
 import IndexPage from './components/IndexPage';
 import BasePage from './components/BasePage';
+import StarPage from './components/StarPage';
 
 const router = new Router(on => {
   on('*', async (state, next) => {
@@ -43,6 +44,8 @@ const router = new Router(on => {
   on('/register', async () => <RegisterPage />);
 
   on('/language', async () => <LanguagePage />);
+
+  on('/star', async () => <StarPage />);
 
   on('*', async (state) => {
     const query = `/graphql?query={content(path:"${state.path}"){path,title,content,component}}`;
