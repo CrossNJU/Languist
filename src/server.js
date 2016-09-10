@@ -30,11 +30,11 @@ import {home, test_login} from './servers/test/testController';
 import {saveUser, login, register} from './servers/service/LoginService';
 import {getFlowListData, getCountData, getLangListData, getCoverData} from './servers/service/HomeService'
 import {addLang, getAllLanguage} from './servers/service/LanguageService'
-import {evaluateRecommend} from './servers/service/UserService'
-import {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList} from './servers/service/RepoService'
-import {searchRepo} from './servers/api/github_search'
+import {evaluateRecommend, getUserFollowings, getUserFollowingsAndFollowersNum} from './servers/service/UserService'
+import {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecommend} from './servers/service/RepoService'
 //others
 import {starRepo, followUser} from './servers/api/github_user'
+import {searchRepo} from './servers/api/github_search'
 
 var session = require('express-session');
 connect();
@@ -233,14 +233,37 @@ server.get('/api/search/repo', (req, res) => {
   })
 });
 
+//get set list
 server.get('/api/repo/setList', (req, res) => {
   getRepoSetList(req.query.user, (resa) => {
     res.send(resa);
   })
 });
 
+//get set
 server.get('/api/repo/set', (req, res) => {
   getRepoSet(req.query.user, req.query.setName, (resa) => {
+    res.send(resa);
+  })
+});
+
+//get followings
+server.get('/api/user/following', (req, res) => {
+  getUserFollowings(req.query.user, (resa) => {
+    res.send(resa);
+  })
+});
+
+//get followersNum and followingsNum (eg.{followings:1, followers:1})
+server.get('/api/user/folInfo', (req, res) => {
+  getUserFollowingsAndFollowersNum(req.query.user, (resa) => {
+    res.send(resa);
+  })
+});
+
+//get recommend repo
+server.get('/api/repo/related', (req, res) => {
+  getRelatedRecommend(req.query.fullName, (resa) => {
     res.send(resa);
   })
 });

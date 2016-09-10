@@ -56,7 +56,7 @@ function getRepoSet(login, set_name, callback) {
     if (set_name == 'All') {
       let ans = [];
       let repos = user.star_repos;
-      for (let i=0;i<repos.length;i++){
+      for (let i = 0; i < repos.length; i++) {
         let repo_det = await getARepo(repos[i]);
         ans.push(repo_det);
       }
@@ -68,7 +68,7 @@ function getRepoSet(login, set_name, callback) {
       else {
         let ans = [];
         let repos = sets[index].set_repos;
-        for (let i=0;i<repos.length;i++){
+        for (let i = 0; i < repos.length; i++) {
           let repo_det = await getARepo(repos[i]);
           ans.push(repo_det);
         }
@@ -78,10 +78,10 @@ function getRepoSet(login, set_name, callback) {
   })
 }
 
-function getRepoSetList(login, callback){
+function getRepoSetList(login, callback) {
   userSchema.findOne({login: login}, (err, user) => {
     let ans = [];
-    for (let i=0;i<user.repo_sets.length;i++){
+    for (let i = 0; i < user.repo_sets.length; i++) {
       ans.push({
         setName: user.repo_sets[i].set_name,
         repoNum: user.repo_sets[i].set_repos.length
@@ -129,15 +129,17 @@ function updateSingleRepoRecommend(full_name, callback) {
   })
 }
 
-async function getRelatedRecommend(full_name) {
-  let ans = await new Promise((resolve, reject) => {
-    updateSingleRepoRecommend(full_name, async ()=> {
-      let rec_num = 10;
-      let recs = await get_rec_repos_by_contributor(full_name, rec_num);
-      resolve(recs);
-    });
+async function getRelatedRecommend(full_name, callback) {
+  updateSingleRepoRecommend(full_name, async ()=> {
+    let rec_num = 10;
+    let recs = await get_rec_repos_by_contributor(full_name, rec_num);
+    let ans = [];
+    for (let i = 0; i < recs; i++) {
+      let repo = await getARepo(recs[i]);
+      ans.push(repo);
+    }
+    callback(ans);
   });
-  return ans;
 }
 
 export {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecommend}

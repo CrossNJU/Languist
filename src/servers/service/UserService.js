@@ -4,6 +4,8 @@
 
 import {userSchema} from '../../models/userSchema'
 import {languageSchema} from '../../models/languageSchema'
+import {github_userSchema} from '../../models/github_userSchema'
+import {getAUser} from '../logic/HandleRecommendLogic'
 
 function evaluateRecommend(login, name, type, like) {
   userSchema.findOne({login: login}, (err, user) => {
@@ -19,4 +21,25 @@ function evaluateRecommend(login, name, type, like) {
   });
 }
 
-export {evaluateRecommend}
+function getUserFollowings(login, callback) {
+  github_userSchema.findOne({login: login}, async (err, user) => {
+    let followings = user.followings_login;
+    let ans = [];
+    for (let i = 0; i < followings.length; i++) {
+      let single = await getAUser(followings[i]);
+      ans.push(single);
+    }
+    callback(ans);
+  })
+}
+
+function getUserFollowingsAndFollowersNum(login, callback){
+  github_userSchema.findOne({login: login}, async (err, user) => {
+    callback({
+      followings: user.followings_count,
+      followers: user.followers_count
+    });
+  })
+}
+
+export {evaluateRecommend, getUserFollowings, getUserFollowingsAndFollowersNum}
