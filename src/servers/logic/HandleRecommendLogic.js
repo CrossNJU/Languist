@@ -138,6 +138,7 @@ function getInterval(time_bef) {
 }
 
 async function fetchData(userName, callback) {
+  console.log(userName);
   let repos = await get_rec_repos_by_also_star(userName, 100);
   console.log('after fetch rec repo data!');
   let users = await get_rec_users_by_star_contributor(userName, 35);
@@ -249,8 +250,8 @@ async function recNew(repos, users, langs, userName, cur_rec, interval){
 }
 
 function getStart(userName, callback){
-  fetchData(userName, (cur_rec) => {
-    recNew([], [], [], userName, cur_rec, 0);
+  fetchData(userName, async (cur_rec) => {
+    let t = await recNew([], [], [], userName, cur_rec, 0);
     callback();
   });
 }
@@ -267,16 +268,18 @@ async function getNextDayRecommendData(userName) {
   let repos = [], users = [], langs = [];
   let cur_rec = cur_user.recommend;
   if (cur_rec.length == 0) {
-    //console.log('in cur = 0');
+    console.log('in cur = 0');
     let ans = await new Promise(function(resolve, reject){
       getStart(userName, async () => {
         let t = await getNextDayRecommendData(userName);
         resolve(t);
       });
     });
+    console.log('after first!');
     return ans;
   } else {
-    //console.log('in combine');
+    console.log('in combine');
+    //console.log(cur_rec);
     let lang_num = 0;
     if (interval == 0) {
       //console.log('in');
@@ -309,7 +312,7 @@ export {getNextDayRecommendData, getARepo}
 //userSchema.update({login:"chenmuen"}, {$set:{rec_date:"2016-09-07"}}, (err, res) => {
 //  console.log(res);
 //});
-// userSchema.update({login:"chenmuen"}, {$set:{recommend:[]}}, (err, res) => {
+// userSchema.update({login:"ChenDanni"}, {$set:{recommend:[]}}, (err, res) => {
 //  console.log(res);
 //});
 //userSchema.findOne({login:'chenmuen'}, (err, user) => {
@@ -324,3 +327,7 @@ export {getNextDayRecommendData, getARepo}
 ////getStart('RickChem');
 //console.log(getRandomIndex(12, 10));
 //getNextDayRecommendData('RickChem');
+
+//fetchData('ChenDanni', (ret) => {
+//  console.log(ret);
+//})
