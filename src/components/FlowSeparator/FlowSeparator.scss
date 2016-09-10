@@ -1,0 +1,15 @@
+
+@import '../variables.scss';
+
+.item {
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+  padding: 14px 16px;
+  justify-content: center;
+  .title {
+    color: $primary-color;
+    font-size: 16px;
+    font-weight: 400;
+  }
+}

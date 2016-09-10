@@ -53,17 +53,27 @@ function addAReopSet(login, set_name, callback) {
 
 function getRepoSet(login, set_name, callback) {
   userSchema.findOne({login: login}, async (err, user) => {
-    let sets = user.repo_sets;
-    let index = sets.findIndex(j => j.set_name == set_name);
-    if (index < 0) callback(-1);
-    else {
+    if (set_name == 'All') {
       let ans = [];
-      let repos = sets[index].set_repos;
+      let repos = user.star_repos;
       for (let i=0;i<repos.length;i++){
         let repo_det = await getARepo(repos[i]);
         ans.push(repo_det);
       }
       callback(ans);
+    } else {
+      let sets = user.repo_sets;
+      let index = sets.findIndex(j => j.set_name == set_name);
+      if (index < 0) callback(-1);
+      else {
+        let ans = [];
+        let repos = sets[index].set_repos;
+        for (let i=0;i<repos.length;i++){
+          let repo_det = await getARepo(repos[i]);
+          ans.push(repo_det);
+        }
+        callback(ans);
+      }
     }
   })
 }
@@ -132,4 +142,6 @@ async function getRelatedRecommend(full_name) {
 
 export {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecommend}
 
-//getRelatedRecommend('')
+//getRepoSetList('chenmuen', (ret) => {
+//  console.log(ret);
+//});

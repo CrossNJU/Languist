@@ -18,8 +18,13 @@ import Filter from '../Filter';
 import RepoList from '../RepoList';
 import UserList from '../UserList';
 import FlowList from '../FlowList';
+import FlowSeparator from '../FlowSeparator';
+import FlowAction from '../FlowAction';
+import RepoFlowItem from '../RepoFlowItem';
+import SearchBar from '../SearchBar';
+import TitleBar from '../TitleBar';
 
-const title = 'Home';
+const title = 'PolarisChen\'s Starred';
 
 let currentRepoSetFilter = 'Ungrouped';
 let repoSetFilterData = [
@@ -89,6 +94,22 @@ let languageFilterData = [
   }
 ];
 
+let repo = {
+  avatarUrl: '',
+  owner: 'kriasoft',
+  name: 'react-starter-kit',
+  description: 'React Starter Kit — isomorphic web app boilerplate (Node.js, Express, GraphQL, React.js, Babel 6, PostCSS, Webpack, Browsersync) https://www.reactstarterkit.com',
+  tags: [
+    'JavaScript',
+    'Framework',
+    'React',
+    'Starter Kit'
+  ],
+  update: 'July 11, 2016',
+  star: 9298,
+  set: 'UNGROUPED'
+};
+
 class BasePage extends Component {
   constructor(props) {
     super(props);
@@ -126,18 +147,22 @@ class BasePage extends Component {
     console.log('render BasePage');
     return (
       <div className="BasePage">
-        <Cover data={this.state.cover}/>
+        <TitleBar text={title} />
+        <SearchBar />
         <div className={s.root}>
           <div className={s.container}>
             <div className={s.sidebar}>
-              <Count data={this.state.count}/>
+              <Count data={this.state.count} />
               <RepoSetFilter data={repoSetFilterData} current={currentRepoSetFilter} />
               <Filter data={userFilterData} current={currentUserFilter} />
               <Filter data={languageFilterData} current={currentLanguageFilter} />
+              <RepoFlowItem repo={repo} />
             </div>
             <div className={s.main}>
               <RepoList />
+              <FlowSeparator text='Sep. 9th' />
               <UserList />
+              <FlowAction />
             </div>
           </div>
         </div>

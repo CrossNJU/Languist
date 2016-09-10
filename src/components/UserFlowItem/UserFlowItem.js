@@ -45,7 +45,7 @@ const styles = {
 };
 
 class UserFlowItem extends Component {
-  renderButton() {
+  renderFollowButton() {
     if (!this.props.user.isFollowing) {
       return (
         <RaisedButton
@@ -60,6 +60,17 @@ class UserFlowItem extends Component {
           icon={<Person />}
           label={'Following'}
           labelColor="#F2DF83"
+          onTouchTap={this.handleExpand} />
+      )
+    }
+  }
+  renderInviteButton() {
+    if (!this.props.user.isLanguist) {
+      return (
+        <RaisedButton
+          icon={<PersonAdd />}
+          label={'Invite to Languist'}
+          labelColor="#666"
           onTouchTap={this.handleExpand} />
       )
     }
@@ -101,12 +112,13 @@ class UserFlowItem extends Component {
           </div>
         </CardText>
         <CardActions style={styles.cardActions}>
-          {this.renderButton()}
+          {this.renderFollowButton()}
           <RaisedButton
             icon={<PersonOutline />}
             label="View"
             labelColor="#666"
-            onTouchTap={this.handleReduce} />
+            href={'https://github.com/'+this.props.user.login} />
+          {this.renderInviteButton()}
         </CardActions>
       </Card>
     );

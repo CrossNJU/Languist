@@ -69,8 +69,8 @@ export var saveUser = (code, callback) => {
           if (err) {
             return console.log(err);
           }
-          callback(SUCCESS);
           let json = JSON.parse(ssres.text);
+          callback(json.login);
 
           //insert new users
           userSchema.findOne({login: json.login}, (err, user) => {
