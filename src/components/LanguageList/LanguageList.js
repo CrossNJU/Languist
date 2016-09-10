@@ -70,7 +70,7 @@ class LanguageList extends Component {
   renderLanguages() {
     console.log(JSON.parse(JSON.stringify(this.props.data)));
     langData = this.props.data;
-    if (langData.length > 0) { 
+    if (langData.length > 0) {
       let languages = langData.map(language => {
         return <LanguageItem key={language.name} lang={language} />;
       });
@@ -97,6 +97,7 @@ class LanguageList extends Component {
             fullWidth={true}
             primary={true}
             label="Add New Language"
+            href="/language"
           />
         </div>
       </Paper>

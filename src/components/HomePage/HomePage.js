@@ -16,6 +16,7 @@ import Count from '../Count';
 import LanguageList from '../LanguageList';
 import RepoList from '../RepoList';
 import FlowList from '../FlowList';
+import AddLanguageDialog from '../AddLanguageDialog';
 
 const title = 'Home';
 
@@ -23,6 +24,7 @@ class HomePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      user: '',
       count: {
         followingCount: 0,
         followersCount: 0,
@@ -35,7 +37,11 @@ class HomePage extends Component {
       },
       repoList: [],
       flowList: [],
-      langList: []
+      langList: [],
+
+      //Dialog
+      isOpenDialog: false,
+      addLang: '',
     };
     console.log('constructor');
   }
@@ -50,8 +56,16 @@ class HomePage extends Component {
       // Get username
       const user = await $.ajax('/api/current_user');
       console.log('Current user is', user);
-      // Get other data
-      await this.loadData(user);
+
+      if(user) {
+        // Get other data
+        await this.loadData(user);
+      } else {
+        // window.location.href = '/login';
+      }
+
+      this.setState({user: user});
+
     } catch(err) {
       console.error(err);
     }
@@ -62,6 +76,26 @@ class HomePage extends Component {
 
   loadData(user) {
     let url = '/api/home/';
+    let isHaveLanguage = true;
+
+    // Get langList
+    url = '/api/home/langList?user=' + user;
+    $.ajax(url)
+      .done(((data) => {
+        if(data && data.length != 0) {
+          this.setState({langList: data});
+        }else {
+          // window.location.href = '/language';
+        }
+      }).bind(this))
+      .fail(((xhr, status, err) => {
+        console.error(url, status, err.toString());
+      }).bind(this));
+
+    // if(!isHaveLanguage) {
+    //   return ;
+    // }
+
     // Get count
     url = '/api/home/count?user=' + user;
     $.ajax(url)
@@ -101,16 +135,15 @@ class HomePage extends Component {
     .fail(((xhr, status, err) => {
       console.error(url, status, err.toString());
     }).bind(this));
+  }
 
-    // Get langList
-    url = '/api/home/langList?user=' + user;
-    $.ajax(url)
-    .done(((data) => {
-      this.setState({langList: data});
-    }).bind(this))
-    .fail(((xhr, status, err) => {
-      console.error(url, status, err.toString());
-    }).bind(this));
+  // Add langauge dialog
+  handleAddLanguage(language) {
+    this.setState({addLang: language, isOpenDialog: true});
+  };
+
+  handleDialogClose() {
+    this.setState({addLang: '', isOpenDialog: false});
   }
 
   componentWillMount() {
@@ -130,10 +163,15 @@ class HomePage extends Component {
               <LanguageList data={this.state.langList} />
             </div>
             <div className={s.main}>
-              <FlowList data={this.state.flowList} />
+              <FlowList data={this.state.flowList} handleAddLangauge={this.handleAddLanguage.bind(this)}/>
             </div>
           </div>
         </div>
+        <AddLanguageDialog
+          isOpen={this.state.isOpenDialog}
+          language={{name: this.state.addLang, isSelected: true, level: 0}}
+          user={this.state.user}
+          handleClose={this.handleDialogClose.bind(this)}/>
       </div>
     );
   }

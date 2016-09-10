@@ -11,6 +11,7 @@ import $ from 'jquery';
 import SearchField from '../SearchField';
 import RaisedButton from 'material-ui/RaisedButton';
 
+import AddLanguageDialog from '../AddLanguageDialog';
 
 // let originalLang = [
 //   {
@@ -69,7 +70,8 @@ class LanguagePage extends Component {
     super(props);
     this.state = {
       user: "",
-      langData: []
+      langData: [],
+      isOpen: true
     }
   }
 
@@ -86,16 +88,16 @@ class LanguagePage extends Component {
     let allLang = [];
     let userLang = [];
 
-    // $.ajax('/api/current_user', {async: false})
-    //   .done(((userData) => {
-    //     if(userData) {
-    //       user = userData;
-    //     } else {
-    //       window.location.href = "/login";
-    //     }
-    //   }).bind(this));
+    $.ajax('/api/current_user', {async: false})
+      .done(((userData) => {
+        if(userData) {
+          user = userData;
+        } else {
+          window.location.href = "/login";
+        }
+      }).bind(this));
 
-    user = 'RickChem';
+    // user = 'chenmuen';
 
     // Get all language
     if(user) {
@@ -153,15 +155,20 @@ class LanguagePage extends Component {
       return lang.isSelected;
     });
     langs.forEach((lang) => {
-      $.ajax('api/lang/choose', {async: false, data: {lang:lang.name, level: lang.level, login: this.props.user}})
+      $.ajax('api/lang/choose', {async: false, data: {lang:lang.name, level: lang.level, login: this.state.user}})
         .done((function (message) {
           console.log('choose ' + lang.name + " " + message);
+          window.location.href = '/home';
         }));
     });
   }
 
   handleChange(languages) {
     this.langData = languages;
+  }
+
+  handleClose() {
+    this.setState({isOpen: false});
   }
 
   render() {
