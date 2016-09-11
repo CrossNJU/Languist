@@ -23,8 +23,8 @@ function evaluateRecommend(login, name, type) {
 }
 
 function getUserFollowings(login, callback) {
-  github_userSchema.findOne({login: login}, async (err, user) => {
-    let followings = user.followings_login;
+  userSchema.findOne({login: login}, async (err, user) => {
+    let followings = user.followings;
     let ans = [];
     for (let i = 0; i < followings.length; i++) {
       let single = await getAUser(followings[i]);
@@ -34,15 +34,27 @@ function getUserFollowings(login, callback) {
   })
 }
 
-function getUserFollowingsAndFollowersNum(login, callback){
-  github_userSchema.findOne({login: login}, async (err, user) => {
+function getUserFollowers(login, callback) {
+  userSchema.findOne({login: login}, async (err, user) => {
+    let followers = user.followers;
+    let ans = [];
+    for (let i = 0; i < followers.length; i++) {
+      let single = await getAUser(followers[i]);
+      ans.push(single);
+    }
+    callback(ans);
+  })
+}
+
+function getUserFollowingsAndFollowersNum(login, callback) {
+  userSchema.findOne({login: login}, (err, user) => {
     callback({
-      followings: user.followings_count,
-      followers: user.followers_count
+      followings: user.followings.length,
+      followers: user.followers.length
     });
   })
 }
 
-export {evaluateRecommend, getUserFollowings, getUserFollowingsAndFollowersNum}
+export {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowingsAndFollowersNum}
 
 //getUserFollowingsAndFollowersNum()

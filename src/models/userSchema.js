@@ -11,6 +11,9 @@ var user = schema({
   level: Number,
   access_token: String,
   password: String,
+  star_repos: [String],
+  followers: [String],
+  followings: [String],
   language: [{
     lang_name: String,
     lang_level: Number

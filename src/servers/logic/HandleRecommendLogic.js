@@ -129,7 +129,7 @@ function getAUser(user) {
           langs: lang_user,
           join: github_user.created_at,
           location: github_user.location,
-          follwers: github_user.followers
+          followers: github_user.followers
         };
         resolve(ret);
       });

@@ -2,9 +2,10 @@
  * Created by raychen on 16/9/5.
  */
 
+import {userSchema} from '../../models/userSchema'
 import {github_repoSchema} from '../../models/github_repoSchema'
 import {github_userSchema} from '../../models/github_userSchema'
-import {getUserInfo, getUserStarred, getPublicRepos, addAnewUser, getFollowings, addAnewGitHubUser, getJoinRepos} from '../api/github_user'
+import {getUserInfo, getUserStarred, getPublicRepos, addAnewUser, getFollowings, addAnewGitHubUser, getJoinRepos, getFollowers} from '../api/github_user'
 import {getRepoInfo, getRepoLanguages, getContributors, getStarredUsers, addNewRepo} from '../api/github_repo'
 import {setSignal} from '../config'
 
@@ -442,7 +443,46 @@ function updateWhenLogin(login) {
   })
 }
 
-export {updateWhenLogin, upsertRepo, upsertUser, updateRepoCons, updateRepoStar, updateUserFollowing, updateUserRepos, updateUserStars, updateUserJoinRepo}
+function updateInitialInfo(login) {
+  getFollowers(login, 1, [], -1, (followers) => {
+    //console.log(followers);
+    userSchema.update({login: login}, {$set: {followers: followers}}, (err, res) => {
+      console.log('update system user followers!');
+      console.log(res);
+      for (let i = 0; i < followers.length; i++) {
+        upsertUser(followers[i], () => {
+          console.log('new user: ' + followers[i])
+        });
+      }
+    })
+  });
+  getFollowings(login, 1, [], -1, (followings) => {
+    //console.log(followings);
+    userSchema.update({login: login}, {$set: {followings: followings}}, (err, res) => {
+      console.log('update system user followings!');
+      console.log(res);
+      for (let i = 0; i < followings.length; i++) {
+        upsertUser(followings[i], () => {
+          console.log('new user: ' + followings[i])
+        });
+      }
+    })
+  });
+  getUserStarred(login, 1, [], true, -1, (stars) => {
+    //console.log(stars);
+    userSchema.update({login: login}, {$set: {star_repos: stars}}, (err, res) => {
+      console.log('update system user star repos!');
+      console.log(res);
+      for (let i = 0; i < stars.length; i++) {
+        upsertRepo(stars[i], () => {
+          console.log('new user: ' + stars[i])
+        });
+      }
+    })
+  })
+}
+
+export {updateWhenLogin, upsertRepo, upsertUser, updateRepoCons, updateRepoStar, updateUserFollowing, updateUserRepos, updateUserStars, updateUserJoinRepo, updateInitialInfo}
 
 //let test_login = 'ChenDanni';
 //upsertUser(test_login, () => {
@@ -451,4 +491,4 @@ export {updateWhenLogin, upsertRepo, upsertUser, updateRepoCons, updateRepoStar,
 //  });
 //});
 
-
+//updateInitialInfo('RickChem');
