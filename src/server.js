@@ -30,7 +30,7 @@ import {home, test_login} from './servers/test/testController';
 import {saveUser, login, register} from './servers/service/LoginService';
 import {getFlowListData, getCountData, getLangListData, getCoverData} from './servers/service/HomeService'
 import {addLang, getAllLanguage} from './servers/service/LanguageService'
-import {evaluateRecommend, getUserFollowings, getUserFollowingsAndFollowersNum} from './servers/service/UserService'
+import {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowingsAndFollowersNum} from './servers/service/UserService'
 import {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecommend, getRepoInfos, addMore} from './servers/service/RepoService'
 //others
 import {starRepo, followUser} from './servers/api/github_user'
@@ -250,6 +250,13 @@ server.get('/api/repo/set', (req, res) => {
 //get followings
 server.get('/api/user/following', (req, res) => {
   getUserFollowings(req.query.user, (resa) => {
+    res.send(resa);
+  })
+});
+
+//get followers
+server.get('/api/user/follower', (req, res) => {
+  getUserFollowers(req.query.user, (resa) => {
     res.send(resa);
   })
 });

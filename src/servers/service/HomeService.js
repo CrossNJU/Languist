@@ -25,13 +25,13 @@ export var getCoverData = (userName, callback) => {
 export var getCountData = (userName, callback) => {
   let data = {};
   let condition = {login: userName};
-  github_userSchema.findOne(condition, (err, user) => {
+  userSchema.findOne(condition, (err, user) => {
     if (err) {
       console.log('err occurs: ' + err.message);
     } else {
-      data.followingCount = user.following;
-      data.followersCount = user.followers;
-      data.starredCount = user.star_num;
+      data.followingCount = user.followings.length;
+      data.followersCount = user.followers.length;
+      data.starredCount = user.star_repos.length;
       callback(data);
     }
   });

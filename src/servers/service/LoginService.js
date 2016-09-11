@@ -4,7 +4,7 @@
 
 import {userSchema} from '../../models/userSchema'
 import {addAnewUser, addAnewGitHubUser} from '../api/github_user'
-import {updateWhenLogin} from '../logic/UpdateWhenLogin'
+import {updateWhenLogin, updateInitialInfo} from '../logic/UpdateWhenLogin'
 import {} from '../logic/UpdateLater'
 import {SUCCESS, FAIL, PASSWORD_ERROR, NOT_FOUND} from '../config'
 var superagent = require('superagent');
@@ -75,7 +75,9 @@ export var saveUser = (code, callback) => {
           //insert new users
           userSchema.findOne({login: json.login}, (err, user) => {
             if (user == null){
-              addAnewUser(json, access_token);
+              addAnewUser(json, access_token, () => {
+                updateInitialInfo(json.login);
+              });
             } else {
               let update = {
                 $set: {
@@ -85,6 +87,7 @@ export var saveUser = (code, callback) => {
               userSchema.update({login: json.login}, update, (err, res) => {
                 console.log('update new access token!');
               });
+              updateInitialInfo(json.login);
             }
           });
           addAnewGitHubUser(json, () => {
