@@ -28,6 +28,10 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 
+import injectTapEventPlugin from 'react-tap-event-plugin';
+// Needed for onTouchTap
+// http://stackoverflow.com/a/34015469/988941
+injectTapEventPlugin();
 
 const muiTheme = getMuiTheme({
   fontFamily: 'Segoe UI, \'HelveticaNeue-Light\', sans-serif',
@@ -95,23 +99,24 @@ class App extends Component {
 
   checkLogin() {
     console.log('checkLogin App');
-    try {
-      // Get username
-      const user = $.ajax('/api/current_user');
-      console.log('Current user is', user);
-      if(user) {
-        this.setState({login: true});
-      }
-    } catch(err) {
-      console.error(err);
-    }
+    $.ajax('/api/current_user')
+    .done(((user) => {
+      this.setState({login: true});
+    }).bind(this))
+    .fail(((xhr, status, err) => {
+      console.error(url, status, err.toString());
+    }).bind(this));
   }
 
   componentWillMount() {
     console.log('componentWillMount App');
     const { insertCss } = this.props.context;
     this.removeCss = insertCss(s);
-    this.checkLogin();
+  }
+
+  componentDidMount() {
+    console.log('componentDidMount App');
+    // this.checkLogin();
   }
 
   componentWillUnmount() {
