@@ -62,6 +62,7 @@ export var saveUser = (code, callback) => {
         callback(0);
         return;
       }
+      //set client of github user to get data
       setClient(access_token);
       superagent
         .get('https://api.github.com/user')

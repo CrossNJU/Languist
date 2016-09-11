@@ -470,7 +470,8 @@ function updateInitialInfo(login) {
   });
   getUserStarred(login, 1, [], true, -1, (stars) => {
     //console.log(stars);
-    userSchema.update({login: login}, {$set: {star_repos: stars}}, (err, res) => {
+    let repo_set = [{set_name: 'Ungrouped', set_repos: stars}];
+    userSchema.update({login: login}, {$set: {star_repos: stars, repo_sets: repo_set}}, (err, res) => {
       console.log('update system user star repos!');
       console.log(res);
       for (let i = 0; i < stars.length; i++) {
