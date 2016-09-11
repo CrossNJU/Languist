@@ -13,12 +13,20 @@
   margin: 0 auto;
   padding: 14px 0 18px;
   max-width: $max-content-width;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
 }
 
 .brand {
   font-size: 28px;
+  flex-basis: 0;
+  flex-grow: 1;
 }
 
 .nav {
-  float: right;
+  display: flex;
+  flex-direction: row;
+  flex-basis: 1;
+  flex-grow: auto;
 }

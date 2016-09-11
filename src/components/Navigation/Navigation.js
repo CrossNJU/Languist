@@ -1,10 +1,5 @@
 /**
- * React Starter Kit (https://www.reactstarterkit.com/)
- *
- * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
+ * Created by PolarisChen on 16/9/11.
  */
 
 import React, { Component, PropTypes } from 'react';
@@ -37,7 +32,7 @@ class Navigation extends Component {
     if (isLogin) {
       return (
         <div className={cx(s.root, this.props.className)} role="navigation">
-          <IconButton iconStyle={styles.button}><Search /></IconButton>
+          <IconButton iconStyle={styles.button} href="/search"><Search /></IconButton>
           <IconMenu
             iconButtonElement={<IconButton iconStyle={styles.button}><Account /></IconButton>}
             anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
