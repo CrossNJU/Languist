@@ -31,7 +31,7 @@ import {saveUser, login, register} from './servers/service/LoginService';
 import {getFlowListData, getCountData, getLangListData, getCoverData} from './servers/service/HomeService'
 import {addLang, getAllLanguage} from './servers/service/LanguageService'
 import {evaluateRecommend, getUserFollowings, getUserFollowingsAndFollowersNum} from './servers/service/UserService'
-import {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecommend} from './servers/service/RepoService'
+import {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecommend, getRepoInfos, addMore} from './servers/service/RepoService'
 //others
 import {starRepo, followUser} from './servers/api/github_user'
 import {searchRepo} from './servers/api/github_search'
@@ -264,6 +264,21 @@ server.get('/api/user/folInfo', (req, res) => {
 //get recommend repo
 server.get('/api/repo/related', (req, res) => {
   getRelatedRecommend(req.query.fullName, (resa) => {
+    res.send(resa);
+  })
+});
+
+//get repo infos
+server.get('/api/repo/info', (req, res) => {
+  getRepoInfos(req.query.fullName, (resa) => {
+    res.send(resa);
+  })
+});
+
+//add more
+//需要传入第几次add more
+server.get('/api/recommend/more', (req, res) => {
+  addMore(req.query.login, req.query.times, (resa) => {
     res.send(resa);
   })
 });

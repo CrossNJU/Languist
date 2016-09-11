@@ -7,9 +7,13 @@
 //  console.log(t);
 //}
 
-//let a = [1,2,3,4];
-//a.splice(3,1);
+//let a = [{a:1},{a:2},{a:3},{a:4}];
+//a.splice(0,1);
 //console.log(a);
+
+let a = [4,1,5,2];
+a.sort((o1,o2) => {return o1<o2});
+console.log(a);
 
 //let a = ['a','b','cc'];
 //for (let i=0;i< a.length;i++){
@@ -21,10 +25,11 @@
 //let time = t.toLocaleString();
 //let t2 = new Date('2016-09-04');
 //console.log(t2.toLocaleString());
-  import {connect} from './config'
-import {updateUserStars,updateUserRepos, upsertRepo, updateRepoStar, upsertUser} from './logic/UpdateWhenLogin'
-var async = require("async");
-connect();
+
+//  import {connect} from './config'
+//import {updateUserStars,updateUserRepos, upsertRepo, updateRepoStar, upsertUser} from './logic/UpdateWhenLogin'
+//var async = require("async");
+//connect();
 
 //upsertUser('ChenDanni', () => {
 //  async.parallel([
@@ -103,17 +108,17 @@ connect();
 //    // the results array will equal ['one','two'] even though
 //    // the second function had a shorter timeout.
 //  });
-setTimeout(() => {signa = 1;}, 1000);
-let signa = 0;
-async.until(function() {
-    return signa > 0;
-  },
-  function(cb) {
-    console.log('try');
-    setTimeout(cb, 200);
-  },
-  function(err) {
-    // 4s have passed
-    console.log('done!');
-    console.log(err); // -> undefined
-  });
+//setTimeout(() => {signa = 1;}, 1000);
+//let signa = 0;
+//async.until(function() {
+//    return signa > 0;
+//  },
+//  function(cb) {
+//    console.log('try');
+//    setTimeout(cb, 200);
+//  },
+//  function(err) {
+//    // 4s have passed
+//    console.log('done!');
+//    console.log(err); // -> undefined
+//  });
