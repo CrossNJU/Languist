@@ -7,14 +7,15 @@ import {languageSchema} from '../../models/languageSchema'
 import {github_userSchema} from '../../models/github_userSchema'
 import {getAUser} from '../logic/HandleRecommendLogic'
 
-function evaluateRecommend(login, name, type, like) {
+function evaluateRecommend(login, name, type) {
   userSchema.findOne({login: login}, (err, user) => {
-    let rec = user.recommend;
+    let rec = user.now_recommend;
     let index = rec.findIndex(j => {
       return (j.m_type == type) && (j.m_name == name)
     });
-    rec[index].m_like = like;
-    userSchema.update({login: login}, {$set: {recommend: rec}}, (err, res) => {
+    let dislike = rec[index];
+    rec.splice(index, 1);
+    userSchema.update({login: login}, {$set: {now_recommend: rec}, $addToSet: {dislike: dislike}}, (err, res) => {
       console.log('update recommend feedback!');
       console.log(res);
     })
@@ -43,3 +44,5 @@ function getUserFollowingsAndFollowersNum(login, callback){
 }
 
 export {evaluateRecommend, getUserFollowings, getUserFollowingsAndFollowersNum}
+
+//getUserFollowingsAndFollowersNum()

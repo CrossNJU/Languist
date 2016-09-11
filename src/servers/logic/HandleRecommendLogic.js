@@ -25,6 +25,25 @@ function getRandomIndex(array_len, len) {
   return ret;
 }
 
+//---------------------------  common function to get detail  --------------------------------------------------
+async function getDetail(array) {
+  let ans = [];
+  for (let i = 0; i < array.length; i++) {
+    if (array[i].m_type == 0) {
+      let single = await getAUser(array[i].m_name);
+      ans.push(single);
+    } else if (array[i].m_type == 1) {
+      let single = await getARepo(array[i].m_name);
+      ans.push(single);
+    } else if (array[i].m_type == 2) {
+      let single = await getALanguage(array[i].m_name);
+      ans.push(single);
+    }
+  }
+  return ans;
+}
+
+
 //---------------------------  fake data  --------------------------------------------------
 async function fakeUsers(number) {
   return await new Promise(function (resolve, reject) {
@@ -71,7 +90,7 @@ function getARepo(repo) {
   return new Promise(function (resolve, reject) {
     github_repoSchema.findOne({full_name: repo}, (err, repo_single) => {
       if (err) reject(err);
-      console.log('repo:' + repo);
+      //console.log('repo:' + repo);
       let ret = {
         type: 'repo',
         avatarUrl: repo_single.owner_avatar_url,
@@ -90,7 +109,7 @@ function getARepo(repo) {
 function getAUser(user) {
   return new Promise(function (resolve, reject) {
     userSchema.findOne({login: user}, (err, user_single) => {
-      console.log('user:' + user);
+      //console.log('user:' + user);
       if (err) reject(err);
       let lang_user = [];
       if (user_single != null) {
@@ -118,8 +137,8 @@ function getAUser(user) {
   });
 }
 
-//---------------------------  random conbine (repo,user,lang)'s name to detail  --------------------------------------------------
-async function combine(repos, users, langs, lang_num) {
+//---------------------------  random conbine (repo,user,lang)'s name --------------------------------------------------
+function combine(repos, users, langs, lang_num) {
   console.log('combine:');
   console.log(repos.length + ' ' + users.length + ' ' + langs.length);
   let ans = [], index = [];
@@ -130,14 +149,14 @@ async function combine(repos, users, langs, lang_num) {
     //console.log(lang_num);
     //console.log(index[r]-lang_num-5);
     if (index[r] < lang_num) {
-      let single = await getALanguage(langs[index[r]]);
-      ans.push(single);
+      let single = langs[index[r]];
+      ans.push({m_name: single, m_type: 2});
     } else if (index[r] < lang_num + 5) {
-      let single = await getAUser(users[index[r] - lang_num]);
-      ans.push(single);
+      let single = users[index[r] - lang_num];
+      ans.push({m_name: single, m_type: 0});
     } else {
-      let single = await getARepo(repos[index[r] - lang_num - 5]);
-      ans.push(single);
+      let single = repos[index[r] - lang_num - 5];
+      ans.push({m_name: single, m_type: 1});
     }
     index.splice(r, 1);
   }
@@ -167,24 +186,21 @@ async function fetchData(userName, callback) {
     rec.push({
       m_name: users[i],
       m_type: 0,
-      m_date: 1,
-      m_like: 0
+      m_date: 1
     });
   }
   for (let i = 0; i < langs.length; i++) {
     rec.push({
       m_name: langs[i],
       m_type: 2,
-      m_date: 1,
-      m_like: 0
+      m_date: 1
     });
   }
   for (let i = 0; i < repos.length; i++) {
     rec.push({
       m_name: repos[i],
       m_type: 1,
-      m_date: 1,
-      m_like: 0
+      m_date: 1
     });
   }
   let update = {
@@ -201,7 +217,7 @@ async function fetchData(userName, callback) {
 }
 
 //---------------------------  switch data, not fetch again(unless all recommended)  --------------------------------------------------
-async function recNew(repos, users, langs, userName, cur_rec, interval) {
+async function recNew(repos, users, langs, userName, cur_rec, interval, dislike) {
   let repo_rec = [], user_rec = [], lang_rec = [];
   for (let rec of cur_rec) {
     if (rec.m_date > 0) {
@@ -233,6 +249,17 @@ async function recNew(repos, users, langs, userName, cur_rec, interval) {
   random_index = getRandomIndex(lang_rec.length, lang_num);
   for (let i = 0; i < random_index.length; i++) langs.push(lang_rec[random_index[i]]);
 
+  let now = combine(repos, users, langs, lang_num);
+
+  //delete unliked repos
+  for (let i = 0; i < dislike.length; i++) {
+    let index = now.findIndex(j => {
+      return (j.m_type == dislike[i].m_type) && (j.m_name == dislike[i].m_name)
+    });
+    if (index >= 0) {
+      now.splice(index, 1);
+    }
+  }
   //console.log('in rec new');
   //console.log(repos);
   //update
@@ -246,14 +273,15 @@ async function recNew(repos, users, langs, userName, cur_rec, interval) {
   let update = {
     $set: {
       recommend: cur_rec,
-      rec_date: (new Date()).toLocaleString().split(' ')[0]
+      rec_date: (new Date()).toLocaleString().split(' ')[0],
+      now_recommend: now
     }
   };
   userSchema.update({login: userName}, update, (err, res) => {
     console.log('update recommend dates');
     //console.log(res);
   });
-  return lang_num;
+  return now;
 }
 
 //---------------------------  update when login  --------------------------------------------------
@@ -264,7 +292,7 @@ async function getStart(userName) {
       resolve(ret);
     })
   });
-  let lang_num = await recNew([], [], [], userName, cur_rec, 0);
+  let array = await recNew([], [], [], userName, cur_rec, 0, []);
   return 1;
 }
 
@@ -292,33 +320,26 @@ async function getNextDayRecommendData(userName) {
     console.log('after first!');
     return ans;
   } else {
-    console.log('in combine');
+    console.log('in recommend!');
     //console.log(cur_rec);
-    let lang_num = 0;
+    let ans = [];
     if (interval == 0) {
       //console.log('in');
-      for (let rec of cur_rec) {
-        if (rec.m_type == 0 && rec.m_date == 0) {
-          users.push(rec.m_name);
-        } else if (rec.m_type == 1 && rec.m_date == 0) {
-          repos.push(rec.m_name);
-        } else if (rec.m_type == 2 && rec.m_date == 0) {
-          langs.push(rec.m_name);
-          lang_num++;
-        }
-      }
+      ans =  getDetail(cur_user.now_recommend);
     } else {
-      lang_num = await recNew(repos, users, langs, userName, cur_rec, interval);
+      let now = await recNew(repos, users, langs, userName, cur_rec, interval, cur_user.dislike);
       console.log('after rec new');
+      ans = getDetail(now);
       //console.log(repos);
     }
     //console.log(repos.length+users.length+langs.length);
     //console.log('done combine');
-    return combine(repos, users, langs, lang_num);
+    //console.log(ans);
+    return ans;
   }
 }
 
-export {getNextDayRecommendData, getARepo, getAUser}
+export {getNextDayRecommendData, getARepo, getAUser, getDetail}
 
 //fakeUsers(20);
 //fakeLangs(10);

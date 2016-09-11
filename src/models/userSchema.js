@@ -22,12 +22,19 @@ var user = schema({
     m_name: String,
     m_type: Number,
     m_date: Number,
-    m_like: Number
   }],
   rec_date: String,
   repo_sets: [{
     set_name: String,
     set_repos: [String]
+  }],
+  now_recommend:[{
+    m_name: String,
+    m_type: Number
+  }],
+  dislike:[{
+    m_name: String,
+    m_type: Number
   }]
 });
 

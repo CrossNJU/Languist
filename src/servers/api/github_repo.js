@@ -100,7 +100,8 @@ function addNewRepo(info, callback=null) {
       main_language: info.language,
       languages: [],
       contributors: [],
-      starers: []
+      starers: [],
+      related: []
     }
   };
   github_repoSchema.update({full_name: info.full_name}, update2, {upsert: true}, (err, res) => {

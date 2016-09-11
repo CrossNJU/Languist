@@ -33,10 +33,16 @@ function getUserInfo(login, callback){
 
 function getUserStarred(login, page, array, is_insert, numbers, callback) {
   //console.log("in");
+  let per_page = number_per_page>numbers?numbers:number_per_page;
+  let next_per_page = numbers>number_per_page?numbers-number_per_page:0;
+  if (numbers < 0) {
+    per_page = 100;
+    next_per_page = -1;
+  }
   let len = array.length;
   if (numbers == 0) callback(array);
   else {
-    client.get('users/' + login + '/starred', {page: page, per_page: number_per_page>numbers?numbers:number_per_page, sort: 'updated', direction: 'desc'}, function (err, status, body, headers) {
+    client.get('users/' + login + '/starred', {page: page, per_page: per_page, sort: 'updated', direction: 'desc'}, function (err, status, body, headers) {
       //console.log("in");
       if (body === undefined || body.length == 0){
         callback(array);
@@ -51,17 +57,23 @@ function getUserStarred(login, page, array, is_insert, numbers, callback) {
             });
           }
         }
-        getUserStarred(login, page + 1, array, is_insert, numbers>number_per_page?numbers-number_per_page:0, callback);
+        getUserStarred(login, page + 1, array, is_insert, next_per_page, callback);
       }
     });
   }
 }
 
 function getFollowings(login, page, array, numbers, callback) {
+  let per_page = number_per_page>numbers?numbers:number_per_page;
+  let next_per_page = numbers>number_per_page?numbers-number_per_page:0;
+  if (numbers < 0) {
+    per_page = 100;
+    next_per_page = -1;
+  }
   let len = array.length;
   if (numbers == 0) callback(array);
   else {
-    client.get('users/' + login + '/following', {page: page, per_page: number_per_page>numbers?numbers:number_per_page}, function (err, status, body, headers) {
+    client.get('users/' + login + '/following', {page: page, per_page: per_page}, function (err, status, body, headers) {
       if (body === undefined || body.length == 0){
         callback(array);
       }else {
@@ -70,17 +82,23 @@ function getFollowings(login, page, array, numbers, callback) {
           array[len] = json.login;
           len++;
         }
-        getFollowings(login, page + 1, array, numbers>number_per_page?numbers-number_per_page:0, callback);
+        getFollowings(login, page + 1, array, next_per_page, callback);
       }
     });
   }
 }
 
 function getPublicRepos(login, page, array, is_insert, numbers, callback) {
+  let per_page = number_per_page>numbers?numbers:number_per_page;
+  let next_per_page = numbers>number_per_page?numbers-number_per_page:0;
+  if (numbers < 0) {
+    per_page = 100;
+    next_per_page = -1;
+  }
   let len = array.length;
   if (numbers == 0) callback(array);
   else {
-    client.get('users/' + login + '/repos', {page: page, per_page: number_per_page>numbers?numbers:number_per_page, sort: 'updated', direction: 'desc'}, function (err, status, body, headers) {
+    client.get('users/' + login + '/repos', {page: page, per_page: per_page, sort: 'updated', direction: 'desc'}, function (err, status, body, headers) {
       if (body === undefined || body.length == 0){
         callback(array);
       }else {
@@ -94,17 +112,23 @@ function getPublicRepos(login, page, array, is_insert, numbers, callback) {
             });
           }
         }
-        getPublicRepos(login, page + 1, array, is_insert, numbers>number_per_page?numbers-number_per_page:0, callback);
+        getPublicRepos(login, page + 1, array, is_insert, next_per_page, callback);
       }
     });
   }
 }
 
 function getJoinRepos(login, page, array, is_insert, numbers, callback) {
+  let per_page = number_per_page>numbers?numbers:number_per_page;
+  let next_per_page = numbers>number_per_page?numbers-number_per_page:0;
+  if (numbers < 0) {
+    per_page = 100;
+    next_per_page = -1;
+  }
   let len = array.length;
   if (numbers == 0) callback(array);
   else {
-    client.get('users/' + login + '/subscriptions', {page: page, per_page: number_per_page>numbers?numbers:number_per_page, sort: 'updated', direction: 'desc'}, function (err, status, body, headers) {
+    client.get('users/' + login + '/subscriptions', {page: page, per_page: per_page, sort: 'updated', direction: 'desc'}, function (err, status, body, headers) {
       if (body === undefined || body.length == 0){
         callback(array);
       }else {
@@ -118,7 +142,7 @@ function getJoinRepos(login, page, array, is_insert, numbers, callback) {
             });
           }
         }
-        getJoinRepos(login, page + 1, array, is_insert, numbers>number_per_page?numbers-number_per_page:0, callback);
+        getJoinRepos(login, page + 1, array, is_insert, next_per_page, callback);
       }
     });
   }
@@ -180,7 +204,9 @@ function addAnewUser(json, access_token){
     language: [],
     recommend: [],
     rec_date: (new Date()).toLocaleString().split(' ')[0],
-    repo_sets: []}
+    repo_sets: [{set_name:'Ungrouped', set_repos:[]}],
+    now_recommend: [],
+    dislike: []}
   };
   var options = {upsert : true};
   userSchema.update(conditions, update, options, function(error, res){

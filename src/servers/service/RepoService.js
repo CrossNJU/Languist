@@ -4,9 +4,10 @@
 
 import {userSchema} from '../../models/userSchema'
 import {github_userSchema} from '../../models/github_userSchema'
+import {github_repoSchema} from '../../models/github_repoSchema'
 import {get_rec_repos_by_contributor} from '../logic/RecommendLogic_repos'
 import {updateRepoCons, updateUserRepos, upsertUser, upsertRepo} from '../logic/UpdateWhenLogin'
-import {getARepo} from '../logic/HandleRecommendLogic'
+import {getARepo, getDetail} from '../logic/HandleRecommendLogic'
 
 var async = require('async');
 
@@ -130,20 +131,65 @@ function updateSingleRepoRecommend(full_name, callback) {
 }
 
 async function getRelatedRecommend(full_name, callback) {
-  updateSingleRepoRecommend(full_name, async ()=> {
-    let rec_num = 10;
-    let recs = await get_rec_repos_by_contributor(full_name, rec_num);
-    let ans = [];
-    for (let i = 0; i < recs; i++) {
-      let repo = await getARepo(recs[i]);
-      ans.push(repo);
+  github_repoSchema.findOne({full_name: full_name}, async (err, repo) => {
+    if (repo.related.length != 0) {
+      let ans = [];
+      for (let i = 0; i < repo.related.length; i++) {
+        let repo = await getARepo(repo.related[i]);
+        ans.push(repo);
+      }
+      callback(ans);
+    } else {
+      updateSingleRepoRecommend(full_name, async ()=> {
+        let rec_num = 10;
+        let recs = await get_rec_repos_by_contributor(full_name, rec_num);
+        github_repoSchema.update({full_name: full_name}, {$set: {related: recs}}, (err, res) => {
+          console.log('update a repo:' + full_name + ' related!');
+          console.log(res);
+        });
+        let ans = [];
+        for (let i = 0; i < recs.length; i++) {
+          let repo = await getARepo(recs[i]);
+          ans.push(repo);
+        }
+        callback(ans);
+      });
     }
-    callback(ans);
   });
 }
 
-export {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecommend}
+function getRepoInfos(full_name, callback){
+  let ans = getARepo(full_name);
+  callback(ans);
+}
 
-//getRepoSetList('chenmuen', (ret) => {
+function addMore(login, timesBefore, callback){
+  userSchema.findOne({login:login}, (err,user) => {
+    let rec_all = user.recommend;
+    let date_set = [];
+    for (let i=0;i<rec_all.length;i++){
+      let index = date_set.findIndex(j => j == rec_all[i].m_date);
+      if (index < 0 && rec_all[i].m_date<0) date_set.push(rec_all[i].m_date);
+    }
+    date_set.sort((o1, o2) => {return o1<o2});
+    if (timesBefore>date_set) callback([]);
+    else {
+      let ans = [];
+      let date = date_set[timesBefore-1];
+      for (let i=0;i<rec_all.length;i++){
+        if (rec_all[i].m_date == date) ans.push({m_name:rec_all[i].m_date, m_type:rec_all[i].m_type});
+      }
+      callback(getDetail(ans));
+    }
+  });
+}
+
+export {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecommend, getRepoInfos, addMore}
+
+//userSchema.update({login:'RickChem'}, {$set:{repo_sets: [{set_name:'test1', set_repos:['DanARay/mineSnake', 'DanARay/wordsReader']}]}}, (err, res)=> {
+//  console.log(res);
+//});
+//getRepoSet('RickChem', 'test1', (ret) => {
 //  console.log(ret);
 //});
+

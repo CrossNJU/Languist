@@ -30,7 +30,8 @@ var repo = schema({
     login: String,
     contributions: Number
   }],
-  starers: [String]
+  starers: [String],
+  related: [String]
 });
 
 //make model and export
