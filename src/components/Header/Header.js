@@ -22,7 +22,7 @@ class Header extends Component {
       <div className={s.root}>
         <div className={s.container}>
           <Navigation className={s.nav} login={this.props.login} />
-          <Link className={s.brand} to="/">
+          <Link className={s.brand} to="/home">
             <img src={require('./logo-brand-text@2x.png')} height="32" alt="Languist" />
           </Link>
         </div>

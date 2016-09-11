@@ -116,7 +116,7 @@ class App extends Component {
 
   componentDidMount() {
     console.log('componentDidMount App');
-    // this.checkLogin();
+    this.checkLogin();
   }
 
   componentWillUnmount() {

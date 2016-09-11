@@ -40,7 +40,7 @@ class Navigation extends Component {
           <IconButton iconStyle={styles.button}><Search /></IconButton>
           <IconMenu
             iconButtonElement={<IconButton iconStyle={styles.button}><Account /></IconButton>}
-            anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+            anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
             targetOrigin={{horizontal: 'right', vertical: 'top'}}
           >
             <MenuItem primaryText="Send feedback" />
