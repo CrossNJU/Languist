@@ -33,7 +33,7 @@ class Navigation extends Component {
   };
 
   render() {
-    let isLogin = false;
+    let isLogin = this.props.login;
     if (isLogin) {
       return (
         <div className={cx(s.root, this.props.className)} role="navigation">

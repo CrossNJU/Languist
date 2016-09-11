@@ -8,6 +8,7 @@
  */
 
 import React, { Component, PropTypes } from 'react';
+import $ from 'jquery';
 import emptyFunction from 'fbjs/lib/emptyFunction';
 import s from './App.scss';
 import Header from '../Header';
@@ -84,9 +85,33 @@ class App extends Component {
     };
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      login: false
+    }
+    console.log('constructor App');
+  }
+
+  checkLogin() {
+    console.log('checkLogin App');
+    try {
+      // Get username
+      const user = $.ajax('/api/current_user');
+      console.log('Current user is', user);
+      if(user) {
+        this.setState({login: true});
+      }
+    } catch(err) {
+      console.error(err);
+    }
+  }
+
   componentWillMount() {
+    console.log('componentWillMount App');
     const { insertCss } = this.props.context;
     this.removeCss = insertCss(s);
+    this.checkLogin();
   }
 
   componentWillUnmount() {
@@ -97,7 +122,7 @@ class App extends Component {
     return !this.props.error ? (
       <MuiThemeProvider muiTheme={muiTheme}>
       <div className={s.container}>
-        <Header />
+        <Header login={this.state.login} />
         {this.props.children}
         <Footer />
       </div>
