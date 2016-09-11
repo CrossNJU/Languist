@@ -7,12 +7,10 @@ import {github_userSchema} from '../../models/github_userSchema'
 import {github_repoSchema} from '../../models/github_repoSchema'
 import {addNewRepo} from './github_repo'
 import {connect} from '../config'
+import {getClient} from './github_conf'
 
 var github = require('octonode');
-var client = github.client({
-  username: 'RickChem',
-  password: 'cr112358132134'
-});
+var client = github.client();
 
 var number_per_page = 100;
 
@@ -24,6 +22,7 @@ function newRepoWithoutFromAPI(full_name, callback) {
 }
 
 function getUserInfo(login, callback) {
+  client = getClient();
   client.get('/users/' + login, {}, function (err, status, body, headers) {
     //console.log(body); //json object
     //console.log("callback: "+ fullname +"[.]");
@@ -32,6 +31,7 @@ function getUserInfo(login, callback) {
 }
 
 function getUserStarred(login, page, array, is_insert, numbers, callback) {
+  client = getClient();
   //console.log("in");
   let per_page = number_per_page > numbers ? numbers : number_per_page;
   let next_per_page = numbers > number_per_page ? numbers - number_per_page : 0;
@@ -69,6 +69,7 @@ function getUserStarred(login, page, array, is_insert, numbers, callback) {
 }
 
 function getFollowings(login, page, array, numbers, callback) {
+  client = getClient();
   let per_page = number_per_page > numbers ? numbers : number_per_page;
   let next_per_page = numbers > number_per_page ? numbers - number_per_page : 0;
   if (numbers < 0) {
@@ -97,6 +98,7 @@ function getFollowings(login, page, array, numbers, callback) {
 }
 
 function getFollowers(login, page, array, numbers, callback) {
+  client = getClient();
   let per_page = number_per_page > numbers ? numbers : number_per_page;
   let next_per_page = numbers > number_per_page ? numbers - number_per_page : 0;
   if (numbers < 0) {
@@ -125,6 +127,7 @@ function getFollowers(login, page, array, numbers, callback) {
 }
 
 function getPublicRepos(login, page, array, is_insert, numbers, callback) {
+  client = getClient();
   let per_page = number_per_page > numbers ? numbers : number_per_page;
   let next_per_page = numbers > number_per_page ? numbers - number_per_page : 0;
   if (numbers < 0) {
@@ -160,6 +163,7 @@ function getPublicRepos(login, page, array, is_insert, numbers, callback) {
 }
 
 function getJoinRepos(login, page, array, is_insert, numbers, callback) {
+  client = getClient();
   let per_page = number_per_page > numbers ? numbers : number_per_page;
   let next_per_page = numbers > number_per_page ? numbers - number_per_page : 0;
   if (numbers < 0) {

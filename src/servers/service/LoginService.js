@@ -4,6 +4,7 @@
 
 import {userSchema} from '../../models/userSchema'
 import {addAnewUser, addAnewGitHubUser} from '../api/github_user'
+import {setClient} from '../api/github_conf'
 import {updateWhenLogin, updateInitialInfo} from '../logic/UpdateWhenLogin'
 import {} from '../logic/UpdateLater'
 import {SUCCESS, FAIL, PASSWORD_ERROR, NOT_FOUND} from '../config'
@@ -61,6 +62,7 @@ export var saveUser = (code, callback) => {
         callback(0);
         return;
       }
+      setClient(access_token);
       superagent
         .get('https://api.github.com/user')
         .query({access_token: access_token})

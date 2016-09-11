@@ -3,16 +3,15 @@
  */
 
 import {github_repoSchema} from '../../models/github_repoSchema'
+import {getClient} from './github_conf'
 
 var github = require('octonode');
-var client = github.client({
-  username: 'RickChem',
-  password: 'cr112358132134'
-});
+var client = github.client();
 
 var number_per_page = 100;
 
 function getRepoInfo(fullname, callback) {
+  client = getClient();
   client.get('/repos/' + fullname, {}, function (err, status, body, headers) {
     //console.log(body); //json object
     //console.log("callback: "+ fullname +"[.]");
@@ -21,6 +20,7 @@ function getRepoInfo(fullname, callback) {
 }
 
 function getRepoLanguages(fullname, callback) {
+  client = getClient();
   client.get('/repos/' + fullname + '/languages', {}, function (err, status, body, headers) {
     //console.log(body); //json object
     let res = [];
@@ -32,6 +32,7 @@ function getRepoLanguages(fullname, callback) {
 }
 
 function getStarredUsers(fullname, page, array, numbers, callback) {
+  client = getClient();
   let len = array.length;
   if (numbers == 0) callback(array);
   else {
@@ -51,6 +52,7 @@ function getStarredUsers(fullname, page, array, numbers, callback) {
 }
 
 function getContributors(fullname, page, array, numbers, callback) {
+  client = getClient();
   let len = array.length;
   if (numbers == 0) callback(array);
   else {
