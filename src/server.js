@@ -185,7 +185,7 @@ server.get('/api/home/cover', (req, res)=> {
 
 //evaluate the recommend
 server.get('/api/rec/evaluate', (req, res) => {
-  evaluateRecommend(req.query.login, req.query.name, req.query.type, req.query.value, (resa) => {
+  evaluateRecommend(req.query.login, req.query.name, req.query.type, (resa) => {
     if (resa == SUCCESS) res.send({res: SUCCESS});
     else res.send({res: FAIL});
   })
