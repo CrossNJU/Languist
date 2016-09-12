@@ -17,6 +17,7 @@ import LanguageList from '../LanguageList';
 import RepoList from '../RepoList';
 import FlowList from '../FlowList';
 import AddLanguageDialog from '../AddLanguageDialog';
+import StarDialog from '../StarDialog';
 
 const title = 'Home';
 
@@ -44,6 +45,11 @@ class HomePage extends Component {
       //Dialog
       isOpenDialog: false,
       addLang: '',
+
+      // Star dialog
+      isStarDialogOpen: false,
+      currentStar: 'facebook/react',
+      setList: []
     };
     console.log('constructor');
   }
@@ -143,6 +149,24 @@ class HomePage extends Component {
     .fail(((xhr, status, err) => {
       console.error(url, status, err.toString());
     }).bind(this));
+
+    this.getSetList(user);
+  }
+
+  async getSetList(user) {
+    let url = '/api/repo/setList';
+    $.ajax(url, {data: {user: user}})
+      .done(((data) => {
+        let setList = [];
+        let all = {name: 'All', count: 0};
+        setList.push(all);
+        data.forEach((set) => {
+          all.count += set.repoNum;
+          setList.push({name: set.setName, count: set.repoNum});
+        });
+
+        this.setState({setList: setList});
+      }).bind(this));
   }
 
   // Add langauge dialog
@@ -196,6 +220,30 @@ class HomePage extends Component {
     }).bind(this));
   }
 
+  // Handle StarDialog
+  handleOpenStarDialog(repo) {
+    console.log(repo);
+    this.setState({isStarDialogOpen: true, currentStar: repo});
+  }
+
+  handleCloseStarDialog(isSuccess, set) {
+    let newState = {};
+    newState.isStarDialogOpen = false;
+    newState.currentStar = '';
+    console.log('Set ' + set);
+    console.log(this.state.currentStar);
+    if (isSuccess) {
+      this.getSetList(this.state.user);
+      this.state.repoList.forEach((repo)=> {
+        if(repo.full_name == this.state.currentStar) {
+          repo.set = set;
+        }
+      });
+      newState.repoList = this.state.repoList;
+    }
+    this.setState(newState);
+  }
+
   componentWillMount() {
     console.log('componentWillMount');
     this.context.onSetTitle(title);
@@ -216,10 +264,11 @@ class HomePage extends Component {
               <FlowList
                 user={this.state.user}
                 data={this.state.flowList}
+                hasMore={this.state.hasMore}
                 handleAddLanguage={this.handleAddLanguage.bind(this)}
                 handleUnlike={this.handleUnlike.bind(this)}
                 handleLoad={this.handleLoad.bind(this)}
-                hasMore={this.state.hasMore}
+                handleStar={this.handleOpenStarDialog.bind(this)}/>
               />
             </div>
           </div>
@@ -229,6 +278,14 @@ class HomePage extends Component {
           language={{name: this.state.addLang, isSelected: true, level: 0}}
           user={this.state.user}
           handleClose={this.handleDialogClose.bind(this)}/>
+        <StarDialog isOpen={this.state.isStarDialogOpen}
+                    setList=
+                      {this.state.setList.filter((set)=> {
+                        return set.name != 'All'
+                      })}
+                    handleClose={this.handleCloseStarDialog.bind(this)}
+                    repo = {this.state.currentStar}
+                    user = {this.state.user}/>
       </div>
     );
   }

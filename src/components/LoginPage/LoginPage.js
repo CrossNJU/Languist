@@ -62,7 +62,7 @@ class LoginPage extends Component {
     return (
       <div className={s.root}>
         <div className={s.container}>
-          <LoginCard handleSubmit={this.handleLogin.bind(this)} type="login" userNameError={this.state.userNameError} passwordError={this.state.passwordError}/>
+          <LoginCard handleSubmit={this.handleLogin.bind(this)} userNameError={this.state.userNameError} passwordError={this.state.passwordError}/>
         </div>
       </div>
     );

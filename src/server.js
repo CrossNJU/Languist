@@ -60,7 +60,7 @@ server.use(session({
   secret: 'keyboard cat',
   resave: true,
   saveUninitialized: true,
-  cookie: {maxAge: 60000}
+  cookie: {maxAge: 3600000}
 }));
 
 //
@@ -120,8 +120,6 @@ server.get('/api/login', (req, res) => {
   login(req.query.username, req.query.password, (res2) => {
     if (res2 == SUCCESS) {
       req.session.username = req.query.username;
-      console.log('cookie time: ');
-      console.log(req.session.cookie.maxAge);
       res.send({res: SUCCESS});
     } else
       res.send({res: res2});
@@ -312,6 +310,12 @@ server.get('/api/user/starRepo', (req, res)=>{
   getUserStarRepo(req.query.login, (resa) => {
     res.send(resa);
   });
+});
+
+server.get('/api/test/session', (req, res)=>{
+
+  //console.log('cookie time: ');
+  res.send({res:req.session.cookie.maxAge});
 });
 
 //
