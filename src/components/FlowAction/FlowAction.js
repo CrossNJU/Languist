@@ -23,8 +23,9 @@ class FlowAction extends Component {
         <FlatButton
           className={s.action}
           primary={true}
-          label='Load Older Recommendations'
+          label={this.props.hasMore ? 'Load Older Recommendations' : 'We would recommend you new repos and users at 5:00 every day.'}
           onTouchTap={this.handleLoad.bind(this)}
+          disabled={!this.props.hasMore}
         />
       </Paper>
     );

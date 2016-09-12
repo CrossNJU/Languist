@@ -40,6 +40,7 @@ class HomePage extends Component {
       flowList: [],
       langList: [],
       currentRecommend: 0,
+      hasMore: true,
 
       //Dialog
       isOpenDialog: false,
@@ -202,13 +203,17 @@ class HomePage extends Component {
     console.log(url);
     $.ajax(url)
     .done(((data) => {
-      let unit = {
-        title: recommendCount === -1 ? 'Yesterday' : title,
-        data: data
+      if (data.length > 0) {
+        let unit = {
+          title: recommendCount === -1 ? 'Yesterday' : title,
+          data: data
+        }
+        let list = this.state.flowList.slice();
+        list.push(unit);
+        this.setState({flowList: list, currentRecommend: recommendCount});
+      } else {
+        this.setState({hasMore: false});
       }
-      let list = this.state.flowList.slice();
-      list.push(unit);
-      this.setState({flowList: list, currentRecommend: recommendCount});
     }).bind(this))
     .fail(((xhr, status, err) => {
       console.error(url, status, err.toString());
@@ -259,10 +264,12 @@ class HomePage extends Component {
               <FlowList
                 user={this.state.user}
                 data={this.state.flowList}
+                hasMore={this.state.hasMore}
                 handleAddLanguage={this.handleAddLanguage.bind(this)}
                 handleUnlike={this.handleUnlike.bind(this)}
                 handleLoad={this.handleLoad.bind(this)}
-                handleStar={this.handleOpenStarDialog.bind(this)}/>
+                handleStar={this.handleOpenStarDialog.bind(this)}
+              />
             </div>
           </div>
         </div>
