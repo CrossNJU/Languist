@@ -67,7 +67,7 @@ class RepoList extends Component {
     }
     if (repoData.length > 0) {
       let repos = repoData.map(repo => {
-        return (<RepoFlowItem key={repo.owner + repo.name} repo={repo} />);
+        return (<RepoFlowItem key={repo.owner + repo.name} repo={repo} handleStar={this.props.handleStar}/>);
       });
       return repos;
     } else {

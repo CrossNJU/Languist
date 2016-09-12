@@ -136,9 +136,10 @@ async function getRelatedRecommend(full_name, callback) {
     if (repo.related.length != 0) {
       let ans = [];
       for (let i = 0; i < repo.related.length; i++) {
-        let repo = await getARepo(repo.related[i]);
-        ans.push(repo);
+        let repo_det = await getARepo(repo.related[i]);
+        ans.push(repo_det);
       }
+      //console.log(ans);
       callback(ans);
     } else {
       updateSingleRepoRecommend(full_name, async ()=> {
@@ -161,33 +162,70 @@ async function getRelatedRecommend(full_name, callback) {
   });
 }
 
-async function getRepoInfos(full_name, callback){
+async function getRepoInfos(full_name, callback) {
   let ans = await getARepo(full_name);
   callback(ans);
 }
 
-function addMore(login, timesBefore, callback){
-  userSchema.findOne({login:login}, (err,user) => {
+function addMore(login, timesBefore, callback) {
+  userSchema.findOne({login: login}, (err, user) => {
     let rec_all = user.recommend;
     let date_set = [];
-    for (let i=0;i<rec_all.length;i++){
+    for (let i = 0; i < rec_all.length; i++) {
       let index = date_set.findIndex(j => j == rec_all[i].m_date);
-      if (index < 0 && rec_all[i].m_date<0) date_set.push(rec_all[i].m_date);
+      if (index < 0 && rec_all[i].m_date < 0) date_set.push(rec_all[i].m_date);
     }
-    date_set.sort((o1, o2) => {return o1<o2});
-    if (timesBefore>date_set) callback([]);
+    date_set.sort((o1, o2) => {
+      return o1 < o2
+    });
+    if (timesBefore > date_set) callback([]);
     else {
       let ans = [];
-      let date = date_set[timesBefore-1];
-      for (let i=0;i<rec_all.length;i++){
-        if (rec_all[i].m_date == date) ans.push({m_name:rec_all[i].m_date, m_type:rec_all[i].m_type});
+      let date = date_set[timesBefore - 1];
+      for (let i = 0; i < rec_all.length; i++) {
+        if (rec_all[i].m_date == date) ans.push({m_name: rec_all[i].m_date, m_type: rec_all[i].m_type});
       }
-      callback(getDetail(ans));
+      let t = getDetail(ans);
+      callback(t);
     }
   });
 }
 
-export {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecommend, getRepoInfos, addMore}
+async function addInfoToList(login, flowlist, include_user, callback) {
+  let user = await new Promise((resolve, reject) => {
+    userSchema.findOne({login: login}, (err, user) => {
+      resolve(user);
+    });
+  });
+  let sets = user.repo_sets;
+  let followings = user.followings;
+  for (let i = 0; i < flowlist.length; i++) {
+    if (flowlist[i].type == 'repo') {
+      let full_name = flowlist[i].full_name;
+      let ans = [];
+      for (let j = 0; j < sets.length; j++) {
+        let index = sets[j].set_repos.findIndex(k => k == full_name);
+        if (index >= 0) ans.push(sets[j].set_name);
+      }
+      flowlist[i].set = ans;
+    } else if (include_user && flowlist[i].type == 'user') {
+      let is_following = false, is_languist = false;
+      let index = followings.findIndex(j => j == flowlist[i].login);
+      if (index >= 0) is_following = true;
+      let test = await new Promise((resolve, reject) => {
+        userSchema.findOne({login: flowlist[i].login}, (err, user)=> {
+          resolve(user);
+        })
+      });
+      if (test != null) is_languist = true;
+      flowlist[i].is_following = is_following;
+      flowlist[i].is_languist = is_languist;
+    }
+  }
+  callback();
+}
+
+export {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecommend, getRepoInfos, addMore, addInfoToList}
 
 //userSchema.update({login:'RickChem'}, {$set:{repo_sets: [{set_name:'test1', set_repos:['DanARay/mineSnake', 'DanARay/wordsReader']}]}}, (err, res)=> {
 //  console.log(res);
@@ -196,7 +234,7 @@ export {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecomm
 //  console.log(ret);
 //});
 
-//connect();
-//getRelatedRecommend('nodejs/node', (repos) => {
-//  console.log('recommended!');
-//});
+connect();
+getRelatedRecommend('nodejs/node', (repos) => {
+  console.log('recommended!');
+});

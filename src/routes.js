@@ -47,13 +47,17 @@ const router = new Router(on => {
 
   on('/language', async () => <LanguagePage />);
 
-  on('/star', async () => <StarPage />);
+  on('/starred', async (state) => {
+    return <StarPage query={state.query}/>;
+  });
 
   on('/follow', async (state) => {
     return <FollowPage query={state.query}/>;
   });
 
-  on('/related', async() => <RelatedPage />);
+  on('/related', async(state) => {
+    return <RelatedPage query={state.query}/>;
+  });
 
   on('*', async (state) => {
     const query = `/graphql?query={content(path:"${state.path}"){path,title,content,component}}`;

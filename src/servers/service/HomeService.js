@@ -5,7 +5,7 @@
 import {github_userSchema} from '../../models/github_userSchema'
 import {userSchema} from '../../models/userSchema'
 import {connect} from '../config'
-import {getNextDayRecommendData} from '../logic/HandleRecommendLogic'
+import {getNextDayRecommendData, getStart} from '../logic/HandleRecommendLogic'
 import {getSignal} from '../config'
 var async = require("async");
 
@@ -71,8 +71,14 @@ async function getFlowListData(userName, callback) {
   });
   let ans = [];
   if (before == 1) {
-    console.log('get it!');
+    console.log('get the first data from web!');
     ans = await getNextDayRecommendData(userName);
+    if (ans == []){
+      let now = await getStart(userName);
+      ans = await getNextDayRecommendData(userName);
+      console.log('start to recommend: ');
+      console.log(now);
+    }
   }
   //console.log(ans);
   callback(ans);

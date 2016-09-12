@@ -12,6 +12,9 @@ import {get_rec_repos_by_following, get_rec_repos_by_user, get_rec_repos_by_also
 import {get_rec_users, get_rec_users_by_star_contributor} from './RecommendLogic_users'
 import {connect} from '../config'
 
+var time_left = 24*60*60;
+var time_signal = 0;
+
 //---------------------------  common function to get random index  --------------------------------------------------
 function getRandomIndex(array_len, len) {
   if (len > array_len) return [];
@@ -99,7 +102,8 @@ function getARepo(repo) {
         description: repo_single.description,
         tags: repo_single.languages,
         update: transTime(repo_single.updated_at),
-        star: repo_single.stars_count
+        star: repo_single.stars_count,
+        full_name: repo
       };
       resolve(ret);
     });
@@ -127,7 +131,7 @@ function getAUser(user) {
           bio: github_user.bio,
           url: github_user.blog,
           langs: lang_user,
-          join: github_user.created_at,
+          join: transTime(github_user.created_at),
           location: github_user.location,
           followers: github_user.followers
         };
@@ -217,8 +221,18 @@ async function fetchData(userName, callback) {
 }
 
 //---------------------------  switch data, not fetch again(unless all recommended)  --------------------------------------------------
-async function recNew(repos, users, langs, userName, cur_rec, interval, dislike) {
-  let repo_rec = [], user_rec = [], lang_rec = [];
+async function recNew(userName) {
+  let cur_user = await new Promise(function (resolve, reject) {
+    userSchema.findOne({login: userName}, (err, user) => {
+      if (err) reject(err);
+      else if (user == null) reject('null');
+      else resolve(user);
+    })
+  });
+  let cur_rec = cur_user.recommend;
+  let dislike = cur_user.dislike;
+
+  let repo_rec = [], user_rec = [], lang_rec = [], repos = [], users = [], langs = [];
   for (let rec of cur_rec) {
     if (rec.m_date > 0) {
       if (rec.m_type == 0) user_rec.push(rec.m_name);
@@ -265,7 +279,7 @@ async function recNew(repos, users, langs, userName, cur_rec, interval, dislike)
   //update
   for (let i = 0; i < cur_rec.length; i++) {
     if (cur_rec[i].m_date <= 0) {
-      cur_rec[i].m_date -= interval;
+      cur_rec[i].m_date -= 1;
     } else if (repos.findIndex(j => j == cur_rec[i].m_name) >= 0 || users.findIndex(j => j == cur_rec[i].m_name) >= 0 || langs.findIndex(j => j == cur_rec[i].m_name) >= 0) {
       cur_rec[i].m_date = 0;
     }
@@ -287,13 +301,14 @@ async function recNew(repos, users, langs, userName, cur_rec, interval, dislike)
 //---------------------------  update when login  --------------------------------------------------
 async function getStart(userName) {
   console.log('get started!');
+  circle(userName);
   let cur_rec = await new Promise(function (resolve, reject) {
-    fetchData(userName, (ret) => {
-      resolve(ret);
+    fetchData(userName, async (ret) => {
+      let array = await recNew(userName);
+      resolve(array);
     })
   });
-  let array = await recNew([], [], [], userName, cur_rec, 0, []);
-  return 1;
+  return cur_rec;
 }
 
 //---------------------------  main function  --------------------------------------------------
@@ -305,41 +320,65 @@ async function getNextDayRecommendData(userName) {
       else resolve(user);
     })
   });
-  let interval = getInterval(cur_user.rec_date);
-  let repos = [], users = [], langs = [];
-  let cur_rec = cur_user.recommend;
-  if (cur_rec.length == 0) {
-    //console.log('in cur = 0');
-    let ans = await new Promise(async function (resolve, reject) {
-      let done = await getStart(userName);
-      if (done == 1) {
-        let t = await getNextDayRecommendData(userName);
-        resolve(t);
-      }
-    });
-    console.log('after first!');
-    return ans;
-  } else {
+  if (cur_user.now_recommend.length == 0) return [];
+  //let interval = getInterval(cur_user.rec_date);
+  //let repos = [], users = [], langs = [];
+  //let cur_rec = cur_user.recommend;
+  //if (cur_rec.length == 0) {
+  //  //console.log('in cur = 0');
+  //  let ans = await new Promise(async function (resolve, reject) {
+  //    let done = await getStart(userName);
+  //    if (done == 1) {
+  //      let t = await getNextDayRecommendData(userName);
+  //      resolve(t);
+  //    }
+  //  });
+  //  console.log('after first!');
+  //  return ans;
+  //} else {
     console.log('in recommend!');
     //console.log(cur_rec);
-    let ans = [];
-    if (interval == 0) {
+    //let ans = [];
+    //if (interval == 0) {
       //console.log('in');
-      ans =  getDetail(cur_user.now_recommend);
-    } else {
-      let now = await recNew(repos, users, langs, userName, cur_rec, interval, cur_user.dislike);
-      console.log('after rec new');
-      ans = getDetail(now);
-      //console.log(repos);
-    }
+    let ans =  getDetail(cur_user.now_recommend);
+    //} else {
+    //  let now = await recNew(repos, users, langs, userName, cur_rec, interval, cur_user.dislike);
+    //  console.log('after rec new');
+    //  ans = getDetail(now);
+    //  //console.log(repos);
+    //}
     //console.log(repos.length+users.length+langs.length);
     //console.log('done combine');
     //console.log(ans);
     return ans;
-  }
+  //}
 }
 
-export {getNextDayRecommendData, getARepo, getAUser, getDetail}
+function circle(userName){
+  let time = new Date(); // now time
+  time_left = 4 - time.getHours();
+  if (time_left < 0) time_left += 24;
+  time_left += 1;
+  time_left = time_left*60*60;
+  async.until(function() {
+      return time_signal > 0;
+    },
+    function(cb) {
+      //console.log('try');
+      time_left --;
+      if (time_left == 0) {time_left = 24; time_signal = 1;}
+      setTimeout(cb, 1000);
+    },
+    function(err) {
+      console.log('done! hours is:'+(new Date().getHours()));
+      time_signal = 0;
+      recNew(userName);
+      circle(userName);
+    });
+}
+
+export {getNextDayRecommendData, getARepo, getAUser, getDetail, getStart}
 
 //fakeUsers(20);
 //fakeLangs(10);

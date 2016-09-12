@@ -268,7 +268,8 @@ function addAnewUser(json, access_token, callback = null) {
       dislike: [],
       star_repos: [],
       followers: [],
-      followings: []
+      followings: [],
+      feedback: [],
     }
   };
   var options = {upsert: true};

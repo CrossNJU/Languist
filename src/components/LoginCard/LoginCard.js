@@ -19,6 +19,8 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Divider from 'material-ui/Divider';
 
+import {client_id} from '../../servers/config'
+
 const title = 'Log In';
 
 const dividerStyle = {
@@ -66,7 +68,7 @@ class LoginCard extends Component {
           </Link>
           <Divider style={dividerStyle}/>
           <RaisedButton label="SIGN UP WITH GITHUB"
-                        href="https://github.com/login/oauth/authorize?client_id=d310933db63d64f563a0"
+                        href={"https://github.com/login/oauth/authorize?client_id="+client_id}
                         style={buttonStyle} secondary={true}
                         labelStyle={buttonLableStyle}/>
         </div>

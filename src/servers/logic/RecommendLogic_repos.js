@@ -2,14 +2,11 @@
  * Created by ChenDanni on 2016/8/15.
  */
 
-import {get_rec_users} from './RecommendLogic_users'
+import {get_rec_users_by_language} from './RecommendLogic_users'
 import {getStarRepoByUser, getRepoInfo,getPublicRepoByUser,getJoinRepoByUser} from '../dao/RepoDAO'
 import {getUserAndLevelByLanguage, getFollowingByUser, getStarUserByRepo, getContributorsByRepo} from '../dao/UserDAO'
 import {calTime} from '../util/timeUtil'
 import {connect} from '../config'
-
-let rec_repos = [];
-let sim_user_num = 5;
 
 function getSortFun(order, sortBy) {
   var ordAlpah = (order == 'asc') ? '>' : '<';
@@ -58,22 +55,32 @@ async function get_rec_repos_by_user(login,rec_num){
   let rec_repos = [];
   let count_max = -1;
   let star_max = -1;
+  let sim_user_num = 5;
   let user_stars = await getStarRepoByUser(login);
+  let user_join = await getJoinRepoByUser(login);
+  let handle_repeat = [];
+
+  handle_repeat = user_stars;
+  for (let i = 0;i < user_join.length;i++){
+    if (handle_repeat.indexOf(user_join[i].full_name))
+      handle_repeat.push(user_join[i]);
+  }
+
   //得到最相似的前sim_user_num个用户
-  let sim_users = await get_rec_users(login,sim_user_num);
+  let sim_users = await get_rec_users_by_language(login,sim_user_num);
 
   //统计count/star
   for (let i = 0;i < sim_users.length;i++){
-    let temp_login = sim_users[i];
-    let temp_repos = await getStarRepoByUser(temp_login);
+    let temp_repos = await getStarRepoByUser(sim_users[i]);
 
     for (let j = 0;j < temp_repos.length;j++){
-      let repo_name = temp_repos[j].fullname;
+      let repo_name = temp_repos[j];
       if (repo_count.hasOwnProperty(repo_name)){
         repo_count[repo_name].count += 1;
       }else {
+        let repo = await getRepoInfo(temp_repos[j]);
         let repo_info = {
-          stars: temp_repos[j].stars,
+          stars: repo.stars_count,
           count:1
         };
         repo_count[repo_name] = repo_info;
@@ -81,9 +88,9 @@ async function get_rec_repos_by_user(login,rec_num){
     }
   }
   //去除重复
-  for (let i = 0;i < user_stars.length;i++){
-    if (repo_count.hasOwnProperty(user_stars[i].fullname)){
-      delete repo_count[user_stars[i].fullname];
+  for (let i = 0;i < handle_repeat.length;i++){
+    if (repo_count.hasOwnProperty(handle_repeat[i])){
+      delete repo_count[handle_repeat[i]];
     }
   }
 
@@ -107,23 +114,16 @@ async function get_rec_repos_by_user(login,rec_num){
   for (let i = 0;i < repo_info.length;i++){
     let stars = repo_info[i].stars;
     let count = repo_info[i].count;
-    repo_info[i].score = (0.7*count)/count_max + (0.3*stars)/star_max;
+    repo_info[i].score = (0.8*count)/count_max + (0.2*stars)/star_max;
   }
-
   //先按推荐度排序
   repo_info.sort(getSortFun('desc','score'));
 
-  let rec = 0;
-  for (let i = 0;i < repo_info.length;i++){
-    if (i < rec) break;
-
-    rec_repos.push(repo_info[i].fullname);
-
-    rec++;
-    if (rec >= rec_num){
-      rec = 0;
+  for (let i = 0;i < rec_num;i++){
+    if (i >= repo_info.length){
       break;
     }
+    rec_repos.push(repo_info[i].fullname);
   }
 
   // console.log(rec_repos);
@@ -451,7 +451,7 @@ async function get_rec_repos(login,user_percent,star_owner_percent,also_star_per
     }
   }
 
-  // console.log(rec_repos);
+  // console.log(rec_repos.length);
 
   return rec_repos;
 }
@@ -459,20 +459,30 @@ async function get_rec_repos(login,user_percent,star_owner_percent,also_star_per
 //  Related Repos推荐列表
 //--------------------------
 async function get_related_rec_repos(fullname,contributor_percent){
+  let base = 100;
+  let contributor_num = base * contributor_percent;
+  let contributor_rec = await get_rec_repos_by_contributor(fullname,contributor_num);
 
+  let rec_repos = [];
+
+  rec_repos = contributor_rec;
+
+  // console.log(rec_repos);
+  return rec_repos;
 }
 
 
 export {get_rec_repos_by_user,get_rec_repos_by_star_repos_owner,
   get_rec_repos_by_also_star,get_rec_repos_by_following,get_rec_repos_by_contributor,
-  get_rec_repos_by_colleagues,handle_repos,get_rec_repos}
+  get_rec_repos_by_colleagues,handle_repos,get_rec_repos,get_related_rec_repos}
 
 // connect();
 // get_rec_repos_by_user('ChenDanni',10);
 // get_rec_repos_by_also_star('RickChem',100);
-//get_rec_repos_by_following('ChenDanni',100);
+// get_rec_repos_by_following('ChenDanni',100);
 // get_rec_repos_by_star_repos_owner('ChenDanni',5);
 // get_rec_repos_by_contributor('d3/d3',5);
-//get_rec_repos_by_also_star('RickChem', 10);
+// get_rec_repos_by_also_star('RickChem', 10);
 // get_rec_repos_by_colleagues('ChenDanni',10);
 // get_rec_repos('ChenDanni',1,1,1,1,1);
+// get_related_rec_repos('d3/d3',1);

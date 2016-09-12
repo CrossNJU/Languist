@@ -70,17 +70,18 @@ class RepoFlowItem extends Component {
     this.state = {hovering: false};
   }
   handleStar() {
-    let user = this.props.currentUser;
-    let repo = this.props.repo.owner+'/'+this.props.repo.name;
-    let url = `/api/repo/star?user=${user}&repo=${repo}`;
-    console.log('###',url);
-    $.ajax(url)
-      .done(((data) => {
-        console.log("$$$",data);
-      }).bind(this))
-      .fail(((xhr, status, err) => {
-        console.error(url, status, err.toString());
-      }).bind(this));
+    // let user = this.props.currentUser;
+    // let repo = this.props.repo.owner+'/'+this.props.repo.name;
+    // let url = `/api/repo/star?user=${user}&repo=${repo}`;
+    // console.log('###',url);
+    // $.ajax(url)
+    //   .done(((data) => {
+    //     console.log("$$$",data);
+    //   }).bind(this))
+    //   .fail(((xhr, status, err) => {
+    //     console.error(url, status, err.toString());
+    //   }).bind(this));
+    this.props.handleStar(this.props.repo.owner+'/'+this.props.repo.name);
   }
   handleUnlike() {
     let param = {

@@ -57,7 +57,15 @@ function getUserFollowingsAndFollowersNum(login, callback) {
   })
 }
 
-export {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowingsAndFollowersNum}
+function addFeedback(login, feedback, callback){
+  userSchema.update({login:login}, {$addToSet:{feedback:feedback}}, (err, res) => {
+    console.log('add feedback!');
+    console.log(res);
+    callback(1);
+  });
+}
+
+export {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowingsAndFollowersNum, addFeedback}
 
 //getUserFollowingsAndFollowersNum()
 //connect();
