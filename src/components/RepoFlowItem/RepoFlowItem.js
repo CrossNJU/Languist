@@ -127,6 +127,19 @@ class RepoFlowItem extends Component {
       );
     }
   }
+  renderRelatedButton() {
+    if (!this.props.single) {
+      return (
+        <RaisedButton
+          className={s.mainButton}
+          icon={<Code />}
+          label="View Related"
+          labelColor="#666"
+          href={`/related?fullName=${this.props.repo.owner}/${this.props.repo.name}`}
+        />
+      )
+    }
+  }
   render() {
     return (
       <Card className={s.item} onMouseEnter={this.handleMouseOver.bind(this)} onMouseLeave={this.handleMouseOut.bind(this)}>
@@ -161,13 +174,7 @@ class RepoFlowItem extends Component {
         <CardActions style={styles.cardActions}>
           <div style={styles.mainActions}>
             {this.renderStarButton()}
-            <RaisedButton
-              className={s.mainButton}
-              icon={<Code />}
-              label="View Related"
-              labelColor="#666"
-              href={`/related?fullName=${this.props.repo.owner}/${this.props.repo.name}`}
-            />
+            {this.renderRelatedButton()}
           </div>
           <div style={styles.optionalActions}>
             {this.renderNotInterestedButton()}
