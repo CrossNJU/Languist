@@ -55,7 +55,7 @@ const muiTheme = getMuiTheme({
     color: '#F2DF83',
   },
   raisedButton: {
-    fontWeight: '500',
+    fontWeight: '500'
   }
 });
 
