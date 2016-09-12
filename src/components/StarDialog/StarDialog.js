@@ -70,7 +70,7 @@ class StarDialog extends Component {
 
     if(res.res == 1) {
       console.log('add to succeed');
-      this.handleClose(true);
+      this.handleClose(true, this.state.isNewSet?newSet:this.state.setName);
     }else {
       this.setState({error: 'Star Failed', isLoading: false});
     }
