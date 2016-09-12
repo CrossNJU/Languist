@@ -129,7 +129,7 @@ class FlowUnitList extends Component {
     if (this.props.list.length > 0) {
       let fus = this.props.list.map(unit => {
         console.log('UNIT', unit);
-        return <FlowUnit key={unit.title} data={unit.data} title={unit.title} />
+        return <FlowUnit key={unit.title} data={unit.data} title={unit.title} user={this.props.user} />
       });
       return fus;
     } else {
@@ -158,7 +158,7 @@ class FlowList extends Component {
   render() {
     return (
       <div className={s.container}>
-        <FlowUnitList list={this.props.data} />
+        <FlowUnitList list={this.props.data} user={this.props.user} />
         {this.renderLoadAction()}
       </div>
     );
