@@ -150,10 +150,7 @@ class FlowList extends Component {
     super(props);
   }
   renderLoadAction() {
-    let hasMore = true;
-    if (hasMore) {
-      return <FlowAction handleLoad={this.props.handleLoad} />
-    }
+    return <FlowAction handleLoad={this.props.handleLoad} hasMore={this.props.hasMore} />
   }
   render() {
     return (
