@@ -5,9 +5,9 @@
   display: flex;
   position: relative;
   flex-direction: column;
+  align-content: stretch;
   margin-top: 20px;
   padding: 10px 0 18px;
-  align-content: stretch;
 }
 
 .tags {

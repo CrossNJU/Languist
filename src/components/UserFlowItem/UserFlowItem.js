@@ -8,6 +8,7 @@ import s from './UserFlowItem.scss';
 
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import Chip from 'material-ui/Chip';
 
@@ -63,6 +64,16 @@ const styles = {
 };
 
 class UserFlowItem extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {hovering: false};
+  }
+  handleMouseOver() {
+    this.setState({hovering: true});
+  }
+  handleMouseOut() {
+    this.setState({hovering: false});
+  }
   renderFollowButton() {
     if (!this.props.user.isFollowing) {
       return (
@@ -90,10 +101,15 @@ class UserFlowItem extends Component {
         <RaisedButton
           className={s.mainButton}
           icon={<PersonAdd />}
-          label={'Invite to Languist'}
+          label={'Invite'}
           labelColor="#666"
           onTouchTap={this.handleExpand} />
       )
+    }
+  }
+  renderNotInterestedButton() {
+    if (this.props.optional && this.state.hovering) {
+      return (<FlatButton style={styles.optionalAction} label='Not interested' />);
     }
   }
   render() {
@@ -103,7 +119,7 @@ class UserFlowItem extends Component {
       subtitle += ' / ' + this.props.user.location;
     }
     return (
-      <Card className={s.item}>
+      <Card className={s.item} onMouseEnter={this.handleMouseOver.bind(this)} onMouseLeave={this.handleMouseOut.bind(this)}>
         <CardHeader
           title={title}
           titleStyle={styles.title}
@@ -133,14 +149,19 @@ class UserFlowItem extends Component {
           </div>
         </CardText>
         <CardActions style={styles.cardActions}>
-          {this.renderFollowButton()}
-          <RaisedButton
-            className={s.mainButton}
-            icon={<Star />}
-            label="View Starred"
-            labelColor="#666"
-          />
-          {this.renderInviteButton()}
+          <div style={styles.mainActions}>
+            {this.renderFollowButton()}
+            <RaisedButton
+              className={s.mainButton}
+              icon={<Star />}
+              label="View Starred"
+              labelColor="#666"
+            />
+            {this.renderInviteButton()}
+          </div>
+          <div style={styles.optionalActions}>
+            {this.renderNotInterestedButton()}
+          </div>
         </CardActions>
         <div className={s.iconButtonWrap}>
           <IconButton
