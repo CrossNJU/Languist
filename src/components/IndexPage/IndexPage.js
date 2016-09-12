@@ -20,6 +20,8 @@ import FaceIcon from 'material-ui/svg-icons/action/face'
 
 const title = 'Languist'
 
+let signUpUrl = 'https://github.com/login/oauth/authorize?client_id=c1bb199ad072f9f1639d';
+
 let brandColor = '#F2DF83';
 
 let memberIconStyle = {
@@ -70,7 +72,7 @@ class HomePage extends Component {
                           secondary = {true}
                           style={{width: '283px', height: '46px', marginTop: '96px'}}
                           labelStyle={{fontSize: '22px', lineHeight: '46px'}}
-                          href="https://github.com/login/oauth/authorize?client_id=d310933db63d64f563a0"/>
+                          href={signUpUrl}/>
           </div>
 
           <div className={`${s.content} ${s.content_2}`}>
@@ -104,7 +106,7 @@ class HomePage extends Component {
                           secondary = {true}
                           style={{width: '283px', height: '46px'}}
                           labelStyle={{fontSize: '22px', lineHeight: '46px'}}
-                          href="https://github.com/login/oauth/authorize?client_id=d310933db63d64f563a0"/>
+                          href={signUpUrl}/>
           </div>
         </div>
       </div>

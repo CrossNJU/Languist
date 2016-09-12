@@ -13,7 +13,7 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './RegisterPage.scss';
 import $ from 'jquery';
 
-import LoginCard from '../LoginCard';
+import RegisterCard from '../RegisterCard';
 
 const title = 'Register';
 
@@ -55,7 +55,7 @@ class RegisterPage extends Component {
     return (
       <div className={s.root}>
         <div className={s.container}>
-          <LoginCard handleSubmit={this.handleRegister.bind(this)} type="register" userNameError={this.state.userNameError} passwordError={this.state.passwordError}/>
+          <RegisterCard handleSubmit={this.handleRegister.bind(this)} userNameError={this.state.userNameError} passwordError={this.state.passwordError}/>
         </div>
       </div>
     );

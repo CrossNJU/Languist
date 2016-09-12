@@ -1,0 +1,6 @@
+{
+  "name": "FeedbackDialog",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./FeedbackDialog.js"
+}
