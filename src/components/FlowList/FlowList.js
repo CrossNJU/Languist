@@ -93,6 +93,7 @@ class FlowUnit extends Component {
                 user={flowItem}
                 optional={true}
                 handleUnlike={this.props.handleUnlike}
+                handleFollow={this.props.handleFollow}
               />
             );
           case 'lang':
@@ -130,7 +131,18 @@ class FlowUnitList extends Component {
     if (this.props.list.length > 0) {
       let fus = this.props.list.map(unit => {
         console.log('UNIT', unit);
-        return <FlowUnit key={unit.title} data={unit.data} title={unit.title} handleStar={this.props.handleStar} user={this.props.user}/>
+        return (
+          <FlowUnit
+            key={unit.title}
+            data={unit.data}
+            title={unit.title}
+            handleStar={this.props.handleStar}
+            handleFollow={this.props.handleFollow}
+            handleUnlike={this.props.handleUnlike}
+            handleAdd={this.props.handleAdd}
+            user={this.props.user}
+          />
+        )
       });
       return fus;
     } else {
@@ -156,7 +168,14 @@ class FlowList extends Component {
   render() {
     return (
       <div className={s.container}>
-        <FlowUnitList list={this.props.data} handleStar={this.props.handleStar} user={this.props.user}/>
+        <FlowUnitList
+          list={this.props.data}
+          handleStar={this.props.handleStar}
+          handleFollow={this.props.handleFollow}
+          handleUnlike={this.props.handleUnlike}
+          handleAdd={this.props.handleAdd}
+          user={this.props.user}
+        />
         {this.renderLoadAction()}
       </div>
     );

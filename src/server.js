@@ -259,14 +259,18 @@ server.get('/api/repo/set', (req, res) => {
 //get followings
 server.get('/api/user/following', (req, res) => {
   getUserFollowings(req.query.user, (resa) => {
-    res.send(resa);
+    addInfoToList(req.query.user, resa, true, () => {
+      res.send(resa);
+    });
   })
 });
 
 //get followers
 server.get('/api/user/follower', (req, res) => {
   getUserFollowers(req.query.user, (resa) => {
-    res.send(resa);
+    addInfoToList(req.query.user, resa, true, () => {
+      res.send(resa);
+    });
   })
 });
 

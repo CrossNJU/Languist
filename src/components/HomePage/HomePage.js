@@ -124,16 +124,6 @@ class HomePage extends Component {
       console.error(url, status, err.toString());
     }).bind(this));
 
-    // Get repoList
-    // url = '/api/home/repoList?user=' + user + '&lang=' + 'JavaScript';
-    // $.ajax(url)
-    // .done(((data) => {
-    //   this.setState({repoList: data});
-    // }).bind(this))
-    // .fail(((xhr, status, err) => {
-    //   console.error(url, status, err.toString());
-    // }).bind(this));
-
     // Get flowList
     url = '/api/home/flowList?user=' + user;
     $.ajax(url)
@@ -188,6 +178,35 @@ class HomePage extends Component {
     .fail(((xhr, status, err) => {
       console.error(url, status, err.toString());
     }).bind(this));
+  }
+
+  handleFollow(follow) {
+    let user = this.state.user;
+    let url = `/api/user/follow?user=${user}&follow=${follow}`;
+    console.log('###',url);
+    $.ajax(url)
+      .done(((data) => {
+        console.log("$$$",data);
+        if (data.res === 1) {
+          this.setFollowing(follow);
+        }
+      }).bind(this))
+      .fail(((xhr, status, err) => {
+        console.error(url, status, err.toString());
+      }).bind(this));
+  }
+
+  setFollowing(follow) {
+    let list = this.state.flowList.slice();
+    list.forEach((unit) => {
+      let data = unit.data;
+      data.forEach((item) => {
+        if (item.type === 'user' && item.login === follow) {
+          item.isFollowing = true;
+        }
+      })
+    });
+    this.setState(flowList: list);
   }
 
   handleLoad() {
@@ -270,6 +289,7 @@ class HomePage extends Component {
                 handleUnlike={this.handleUnlike.bind(this)}
                 handleLoad={this.handleLoad.bind(this)}
                 handleStar={this.handleOpenStarDialog.bind(this)}
+                handleFollow={this.handleFollow.bind(this)}
               />
             </div>
           </div>
