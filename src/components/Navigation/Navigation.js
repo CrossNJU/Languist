@@ -27,6 +27,14 @@ class Navigation extends Component {
     className: PropTypes.string,
   };
 
+  constructor(props) {
+    super(props);
+  }
+
+  handleLogout() {
+    this.props.handleLogout();
+  }
+
   render() {
     let isLogin = this.props.login;
     if (isLogin) {
@@ -40,7 +48,7 @@ class Navigation extends Component {
           >
             <MenuItem primaryText="Send feedback" />
             <MenuItem primaryText="About us" />
-            <MenuItem primaryText="Sign out" />
+            <MenuItem primaryText="Sign out" onTouchTap={this.handleLogout.bind(this)} />
           </IconMenu>
         </div>
       );

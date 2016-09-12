@@ -126,11 +126,23 @@ class App extends Component {
     this.removeCss();
   }
 
+  handleLogout() {
+    console.log('LOGOUT');
+    $.ajax('/api/logout')
+    .done(((res) => {
+      // console.log(res);
+      window.location.href = '/login';
+    }).bind(this))
+    .fail(((xhr, status, err) => {
+      console.error(url, status, err.toString());
+    }).bind(this));
+  }
+
   render() {
     return !this.props.error ? (
       <MuiThemeProvider muiTheme={muiTheme}>
       <div className={s.container}>
-        <Header login={this.state.login} />
+        <Header login={this.state.login} handleLogout={this.handleLogout} />
         {this.props.children}
         <Footer />
       </div>

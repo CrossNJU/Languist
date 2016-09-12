@@ -158,6 +158,10 @@ class HomePage extends Component {
     }).bind(this));
   }
 
+  handleLoad() {
+
+  }
+
   componentWillMount() {
     console.log('componentWillMount');
     this.context.onSetTitle(title);
@@ -180,6 +184,7 @@ class HomePage extends Component {
                 data={this.state.flowList}
                 handleAddLanguage={this.handleAddLanguage.bind(this)}
                 handleUnlike={this.handleUnlike.bind(this)}
+                handleLoad={this.handleLoad.bind(this)}
               />
             </div>
           </div>

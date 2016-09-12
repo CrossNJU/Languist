@@ -11,7 +11,9 @@ import Navigation from '../Navigation';
 import Paper from 'material-ui/Paper';
 
 class Header extends Component {
-
+  constructor(props) {
+    super(props);
+  }
   render() {
     return (
       <div className={s.root}>
@@ -19,7 +21,7 @@ class Header extends Component {
           <Link className={s.brand} to="/home">
             <img src={require('./logo-brand-text@2x.png')} height="32" alt="Languist" />
           </Link>
-          <Navigation className={s.nav} login={this.props.login} />
+          <Navigation className={s.nav} login={this.props.login} handleLogout={this.props.handleLogout} />
         </div>
       </div>
     );
