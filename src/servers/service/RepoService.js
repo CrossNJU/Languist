@@ -185,7 +185,8 @@ function addMore(login, timesBefore, callback) {
       for (let i = 0; i < rec_all.length; i++) {
         if (rec_all[i].m_date == date) ans.push({m_name: rec_all[i].m_date, m_type: rec_all[i].m_type});
       }
-      callback(getDetail(ans));
+      let t = getDetail(ans);
+      callback(t);
     }
   });
 }
