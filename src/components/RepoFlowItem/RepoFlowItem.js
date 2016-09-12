@@ -136,7 +136,7 @@ class RepoFlowItem extends Component {
           icon={<Code />}
           label="View Related"
           labelColor="#666"
-          href={`/related?fullName=${this.props.repo.owner}/${this.props.repo.name}`}
+          href={`/related?repo=${this.props.repo.owner}/${this.props.repo.name}`}
         />
       )
     }
