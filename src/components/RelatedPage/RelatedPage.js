@@ -26,21 +26,33 @@ import TitleBar from '../TitleBar';
 
 const title = 'Related Recommends';
 
+// let repo = {
+//   avatarUrl: '',
+//   owner: 'kriasoft',
+//   name: 'react-starter-kit',
+//   description: 'React Starter Kit — isomorphic web app boilerplate (Node.js, Express, GraphQL, React.js, Babel 6, PostCSS, Webpack, Browsersync) https://www.reactstarterkit.com',
+//   tags: [
+//     'JavaScript',
+//     'Framework',
+//     'React',
+//     'Starter Kit'
+//   ],
+//   update: 'July 11, 2016',
+//   star: 9298,
+//   set: 'UNGROUPED'
+// };
 
 let repo = {
   avatarUrl: '',
-  owner: 'kriasoft',
-  name: 'react-starter-kit',
-  description: 'React Starter Kit — isomorphic web app boilerplate (Node.js, Express, GraphQL, React.js, Babel 6, PostCSS, Webpack, Browsersync) https://www.reactstarterkit.com',
+  owner: 'Unknown',
+  name: 'Unknown',
+  description: 'Unknown',
   tags: [
-    'JavaScript',
-    'Framework',
-    'React',
-    'Starter Kit'
+
   ],
-  update: 'July 11, 2016',
-  star: 9298,
-  set: 'UNGROUPED'
+  update: 'Unknown',
+  star: 0,
+  set: 'Unknown'
 };
 
 class RelatedPage extends Component {
@@ -94,7 +106,7 @@ class RelatedPage extends Component {
         <div className={s.root}>
           <div className={s.container}>
             <div className={s.sidebar}>
-              <RepoFlowItem repo={this.state.repo} />
+              <RepoFlowItem repo={this.state.repo} single={true}/>
             </div>
             <div className={s.main}>
               <RepoList data={this.state.repoList}/>

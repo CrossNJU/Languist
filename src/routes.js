@@ -55,7 +55,9 @@ const router = new Router(on => {
     return <FollowPage query={state.query}/>;
   });
 
-  on('/related', async() => <RelatedPage />);
+  on('/related', async(state) => {
+    return <RelatedPage query={state.query}/>;
+  });
 
   on('*', async (state) => {
     const query = `/graphql?query={content(path:"${state.path}"){path,title,content,component}}`;
