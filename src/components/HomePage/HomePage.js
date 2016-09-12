@@ -190,6 +190,19 @@ class HomePage extends Component {
     }).bind(this));
   }
 
+  handleFollow(follow) {
+    let user = this.state.user;
+    let url = `/api/user/follow?user=${user}&follow=${follow}`;
+    console.log('###',url);
+    $.ajax(url)
+      .done(((data) => {
+        console.log("$$$",data);
+      }).bind(this))
+      .fail(((xhr, status, err) => {
+        console.error(url, status, err.toString());
+      }).bind(this));
+  }
+
   handleLoad() {
     let recommendCount = this.state.currentRecommend;
     recommendCount--;
@@ -269,6 +282,7 @@ class HomePage extends Component {
                 handleUnlike={this.handleUnlike.bind(this)}
                 handleLoad={this.handleLoad.bind(this)}
                 handleStar={this.handleOpenStarDialog.bind(this)}
+                handleFollow={this.handleFollow.bind(this)}
               />
             </div>
           </div>

@@ -70,17 +70,7 @@ class UserFlowItem extends Component {
     this.state = {hovering: false};
   }
   handleFollow() {
-    let user = this.props.currentUser;
-    let follow = this.props.user.login;
-    let url = `/api/user/follow?user=${user}&follow=${follow}`;
-    console.log('###',url);
-    $.ajax(url)
-      .done(((data) => {
-        console.log("$$$",data);
-      }).bind(this))
-      .fail(((xhr, status, err) => {
-        console.error(url, status, err.toString());
-      }).bind(this));
+    this.props.handleFollow(this.props.user.login)
   }
   handleUnlike() {
     let param = {
