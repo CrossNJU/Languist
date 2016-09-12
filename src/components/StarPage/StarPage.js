@@ -102,7 +102,7 @@ class StarPage extends Component {
   }
 
   // Handle StarDialog
-  handleOpenstarDialog() {
+  handleOpenStarDialog() {
     this.setState({isStarDialogOpen: true});
   }
 
@@ -145,7 +145,9 @@ class StarPage extends Component {
                     setList={this.state.setList.filter((set)=> {
                       return set.name != 'All'
                     })}
-                    handleClose={this.handleCloseStarDialog.bind(this)}/>
+                    handleClose={this.handleCloseStarDialog.bind(this)}
+                    repo = 'facebook/react'
+                    user="RickChem"/>
       </div>
     );
   }
