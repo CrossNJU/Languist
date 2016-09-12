@@ -35,7 +35,7 @@ class StarPage extends Component {
 
       // Star dialog
       isStarDialogOpen: false,
-      currentStar: 'facebook/react',
+      currentStar: '',
     };
     console.log('constructor');
   }
@@ -58,8 +58,8 @@ class StarPage extends Component {
       if(this.props.query.user) {
         user = this.props.query.user;
       } else {
-        // const user = await $.ajax('/api/current_user');
-        user = 'RickChem';
+        user = await $.ajax('/api/current_user');
+        // user = 'RickChem';
         console.log('owner');
       }
 
