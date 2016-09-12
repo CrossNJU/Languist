@@ -139,6 +139,7 @@ class FlowUnitList extends Component {
             handleStar={this.props.handleStar}
             handleFollow={this.props.handleFollow}
             handleUnlike={this.props.handleUnlike}
+            handleAdd={this.props.handleAdd}
             user={this.props.user}
           />
         )
@@ -167,7 +168,14 @@ class FlowList extends Component {
   render() {
     return (
       <div className={s.container}>
-        <FlowUnitList list={this.props.data} handleStar={this.props.handleStar} handleFollow={this.props.handleFollow} user={this.props.user}/>
+        <FlowUnitList
+          list={this.props.data}
+          handleStar={this.props.handleStar}
+          handleFollow={this.props.handleFollow}
+          handleUnlike={this.props.handleUnlike}
+          handleAdd={this.props.handleAdd}
+          user={this.props.user}
+        />
         {this.renderLoadAction()}
       </div>
     );
