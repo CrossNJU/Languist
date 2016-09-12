@@ -7,7 +7,7 @@ import {addAnewUser, addAnewGitHubUser} from '../api/github_user'
 import {setClient} from '../api/github_conf'
 import {updateWhenLogin, updateInitialInfo} from '../logic/UpdateWhenLogin'
 import {} from '../logic/UpdateLater'
-import {SUCCESS, FAIL, PASSWORD_ERROR, NOT_FOUND} from '../config'
+import {SUCCESS, FAIL, PASSWORD_ERROR, NOT_FOUND, client_id, client_secret} from '../config'
 var superagent = require('superagent');
 
 var getAccessURL = 'https://github.com/login/oauth/access_token';
@@ -47,7 +47,7 @@ function register(username, password, callback) {
 export var saveUser = (code, callback) => {
   superagent
     .post(getAccessURL)
-    .send({client_id: 'd310933db63d64f563a0', client_secret: '82093b09a6840ed8fba314dd7089a7bb45e687fe', code: code})
+    .send({client_id: client_id, client_secret: client_secret, code: code})
     .set('Accept', 'application/json')
     .end(function (err, sres) {
       if (err) {

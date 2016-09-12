@@ -30,8 +30,8 @@ import {home, test_login} from './servers/test/testController';
 import {saveUser, login, register} from './servers/service/LoginService';
 import {getFlowListData, getCountData, getLangListData, getCoverData} from './servers/service/HomeService'
 import {addLang, getAllLanguage} from './servers/service/LanguageService'
-import {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowingsAndFollowersNum} from './servers/service/UserService'
-import {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecommend, getRepoInfos, addMore} from './servers/service/RepoService'
+import {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowingsAndFollowersNum, addFeedback} from './servers/service/UserService'
+import {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecommend, getRepoInfos, addMore, addInfoToList} from './servers/service/RepoService'
 //others
 import {starRepo, followUser} from './servers/api/github_user'
 import {searchRepo} from './servers/api/github_search'
@@ -129,7 +129,7 @@ server.get('/api/login', (req, res) => {
 server.get('/api/register', (req, res) => {
   register(req.query.username, req.query.password, (res2) => {
     if (res2 == SUCCESS) {
-      res.send({res: SUCCESS});
+      res.redirect('/home');
     } else
       res.send({res: res2});
   })
@@ -161,7 +161,9 @@ server.get('/api/user/follow', (req, res)=> {
 //get recommend data
 server.get('/api/home/flowList', (req, res) => {
   getFlowListData(req.query.user, ret => {
-    res.send(ret);
+    addInfoToList(req.query.user, ret, true, () => {
+      res.send(ret);
+    });
   });
 });
 //home-count
@@ -289,11 +291,18 @@ server.get('/api/repo/info', (req, res) => {
 });
 
 //add more
-//需要传入第几次add more
 server.get('/api/recommend/more', (req, res) => {
   addMore(req.query.login, req.query.times, (resa) => {
     res.send(resa);
   })
+});
+
+//add feedback
+server.get('/api/feedback/add', (req, res)=>{
+  addFeedback(req.query.login, req.query.feedback, (resa) => {
+    if (resa == SUCCESS) res.send({res: SUCCESS});
+    else res.send({res: resa});
+  });
 });
 
 //

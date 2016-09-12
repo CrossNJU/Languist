@@ -38,7 +38,8 @@ var user = schema({
   dislike:[{
     m_name: String,
     m_type: Number
-  }]
+  }],
+  feedback: [String]
 });
 
 //make model and export
