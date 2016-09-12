@@ -17,16 +17,6 @@ function getSortFun(order, sortBy) {
   return sortFun;
 }
 
-/*
- *统计repo的tag
- * [{
- * fullname: str,
- * tags:{
- *   tag1: num,
- *   tag2: num
- * }
- * }]
- * */
 async function handle_repos_tags(repos){
   let repos_tag_count = [];
 
@@ -167,8 +157,8 @@ async function get_rec_repos_by_star_repos_owner(login,rec_num) {
 
         let temp = await getRepoInfo(repo_list[j]);
 
-        console.log('temp ;;;;;;');
-        console.log(temp);          //这里不能拿到仓库,仓库为null
+        // console.log('temp ;;;;;;');
+        // console.log(temp);          //这里不能拿到仓库,仓库为null
 
         let temp_repo = {
           fullname: temp.fullname,
@@ -180,13 +170,13 @@ async function get_rec_repos_by_star_repos_owner(login,rec_num) {
     console.log('out');
   }
 
-  console.log('init_repos  ');
-  console.log(init_repos);
+  // console.log('init_repos  ');
+  // console.log(init_repos);
 
 //init_repo按star排序
   init_repos.sort(getSortFun('desc','stars'));
   for (let i = 0;i < rec_num;i++){
-    if (i > init_repos.length) break;
+    if (i >= init_repos.length) break;
     rec_repos.push(init_repos[i].fullname);
   }
   return rec_repos;
@@ -249,10 +239,10 @@ async function get_rec_repos_by_also_star(login,rec_num){
   //console.log(init_repos);
 
   for (let i = 0;i < rec_num;i++){
-    if (i > init_repos.length) break;
+    if (i >= init_repos.length) break;
     rec_repos.push(init_repos[i].fullname);
   }
-  // console.log(rec_repos);
+  console.log(rec_repos);
   return rec_repos;
 
 }
@@ -292,7 +282,7 @@ async function get_rec_repos_by_following(login,rec_num){
   init_repos.sort(getSortFun('desc','stars'));
 
   for (let i = 0;i < rec_num;i++){
-    if (i > init_repos.length) break;
+    if (i >= init_repos.length) break;
     rec_repos.push(init_repos[i].fullname);
   }
   console.log(rec_repos);
@@ -332,9 +322,9 @@ async function get_rec_repos_by_colleagues(login,rec_num){
         continue;
       }
       if (colleagues.hasOwnProperty(user_name)){
-        colleagues[user_name] += temp_contributors[j].contributions;
+        colleagues[user_name] += temp_contributors[j].contributions * contr_percent;
       }else {
-        colleagues[user_name] = temp_contributors[j].contributions;
+        colleagues[user_name] = temp_contributors[j].contributions * contr_percent;
       }
     }
   }
@@ -372,7 +362,7 @@ async function get_rec_repos_by_colleagues(login,rec_num){
   handle_repos.sort(getSortFun('desc','stars'));
 
   for (let i = 0;i < rec_num;i++){
-    if (i > handle_repos.length) break;
+    if (i >= handle_repos.length) break;
     rec_repos.push(handle_repos[i].name);
   }
 
@@ -389,8 +379,13 @@ async function get_rec_repos_by_contributor(fullname,rec_num){
   let init_repos = [];
   let rec_repos = [];
 
-  for (let i = 0;i < contributors.name;i++){
-    let temp_repos = await getPublicRepoByUser(contributors[i]);
+  // console.log(contributors);
+
+  for (let i = 0;i < contributors.length;i++){
+
+    // console.log(contributors[i].login.length);
+
+    let temp_repos = await getPublicRepoByUser(contributors[i].login);
     temp_repos = await handle_repos(temp_repos);
     for (let j = 0;j < temp_repos.length;j++){
       if (!(init_repos_names.indexOf(temp_repos[j]) > -1)){
@@ -398,6 +393,9 @@ async function get_rec_repos_by_contributor(fullname,rec_num){
       }
     }
   }
+
+  // console.log(init_repos_names.length);
+
   for (let i = 0;i < init_repos_names.length;i++){
     let temp_repo = {
       fullname: init_repos_names[i],
@@ -408,9 +406,10 @@ async function get_rec_repos_by_contributor(fullname,rec_num){
   init_repos.sort(getSortFun('desc','stars'));
 
   for (let i = 0;i < rec_num;i++){
-    if (i > init_repos.length) break;
+    if (i >= init_repos.length) break;
     rec_repos.push(init_repos[i].fullname);
   }
+  // console.log(rec_repos);
   return rec_repos;
 }
 
@@ -420,9 +419,9 @@ export {get_rec_repos_by_user,get_rec_repos_by_star_repos_owner,
 
 // connect();
 // get_rec_repos_by_user('ChenDanni',10);
-//get_rec_repos_by_also_star('RickChem',100);
+// get_rec_repos_by_also_star('RickChem',100);
 //get_rec_repos_by_following('ChenDanni',100);
 // get_rec_repos_by_also_star('ChenDanni',5);
-// get_rec_repos_by_contributor('jquery/jquery',5);
+// get_rec_repos_by_contributor('d3/d3',5);
 //get_rec_repos_by_also_star('RickChem', 10);
 // get_rec_repos_by_colleagues('ChenDanni',10);
