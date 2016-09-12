@@ -18,13 +18,7 @@ class Footer extends Component {
     return (
       <div className={s.root}>
         <div className={s.container}>
-          <span className={s.text}>© Cross</span>
-          <span className={s.spacer}>·</span>
-          <Link className={s.link} to="/home">Home</Link>
-          <span className={s.spacer}>·</span>
-          <Link className={s.link} to="/privacy">Privacy</Link>
-          <span className={s.spacer}>·</span>
-          <Link className={s.link} to="/not-found">Not Found</Link>
+          <span className={s.text}>Made with ♥ by Danni, Ray, Moo &amp; Polaris © 2016 <a href="https://github.com/CrossNJU">Cross</a></span>
         </div>
       </div>
     );
