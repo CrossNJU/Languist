@@ -45,6 +45,7 @@ function register(username, password, callback) {
 
 
 export var saveUser = (code, callback) => {
+  console.log(code);
   superagent
     .post(getAccessURL)
     .send({client_id: client_id, client_secret: client_secret, code: code})

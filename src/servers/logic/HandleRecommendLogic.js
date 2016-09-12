@@ -14,6 +14,7 @@ import {connect} from '../config'
 
 var time_left = 24*60*60;
 var time_signal = 0;
+var async = require("async");
 
 //---------------------------  common function to get random index  --------------------------------------------------
 function getRandomIndex(array_len, len) {
@@ -222,6 +223,7 @@ async function fetchData(userName, callback) {
 
 //---------------------------  switch data, not fetch again(unless all recommended)  --------------------------------------------------
 async function recNew(userName) {
+  console.log('in');
   let cur_user = await new Promise(function (resolve, reject) {
     userSchema.findOne({login: userName}, (err, user) => {
       if (err) reject(err);
