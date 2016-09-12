@@ -234,7 +234,7 @@ export {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecomm
 //  console.log(ret);
 //});
 
-connect();
-getRelatedRecommend('nodejs/node', (repos) => {
-  console.log('recommended!');
-});
+//connect();
+//getRelatedRecommend('nodejs/node', (repos) => {
+//  console.log('recommended!');
+//});
