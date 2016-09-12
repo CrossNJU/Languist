@@ -213,7 +213,7 @@ class HomePage extends Component {
         }
         console.log('UNLIKE', index);
       })
-      data = data.slice(index, 1);
+      data = data.splice(index, 1);
     });
     this.setState({flowList: list});
   }
