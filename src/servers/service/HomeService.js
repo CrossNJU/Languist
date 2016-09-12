@@ -7,6 +7,7 @@ import {userSchema} from '../../models/userSchema'
 import {connect} from '../config'
 import {getNextDayRecommendData, getStart} from '../logic/HandleRecommendLogic'
 import {getSignal} from '../config'
+import {addInfoToList} from '../service/RepoService'
 var async = require("async");
 
 export var getCoverData = (userName, callback) => {
@@ -87,6 +88,8 @@ async function getFlowListData(userName, callback) {
 export {getFlowListData}
 
 //connect();
-//getFlowListData("RickChem", (res) => {
-//  console.log(res);
+//getFlowListData('RickChem', ret => {
+//  addInfoToList('RickChem', ret, true, () => {
+//    console.log(ret);
+//  });
 //});
