@@ -3,6 +3,7 @@
  */
 
 import React, { Component, PropTypes } from 'react';
+import $ from 'jquery';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './RepoFlowItem.scss';
 
@@ -68,6 +69,19 @@ class RepoFlowItem extends Component {
     super(props);
     this.state = {hovering: false};
   }
+  handleStar() {
+    let user = this.props.currentUser;
+    let repo = this.props.repo.owner+'/'+this.props.repo.name
+    let url = `/api/repo/star?user=${user}&repo=${repo}`;
+    console.log('###',url);
+    $.ajax(url)
+      .done(((data) => {
+        console.log("$$$",data);
+      }).bind(this))
+      .fail(((xhr, status, err) => {
+        console.error(url, status, err.toString());
+      }).bind(this));
+  }
   handleMouseOver() {
     this.setState({hovering: true});
   }
@@ -82,7 +96,7 @@ class RepoFlowItem extends Component {
           icon={<Star />}
           label={this.props.repo.set || 'UNGROUPED'}
           labelColor="#F2DF83"
-          onTouchTap={this.handleExpand} />
+          onTouchTap={this.handleStar.bind(this)} />
       )
     }
     return (
@@ -91,7 +105,7 @@ class RepoFlowItem extends Component {
         icon={<Star />}
         label={'Star (' + this.props.repo.star + ')'}
         secondary={true}
-        onTouchTap={this.handleExpand} />
+        onTouchTap={this.handleStar.bind(this)} />
     )
   }
   renderNotInterestedButton() {

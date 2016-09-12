@@ -163,7 +163,7 @@ class HomePage extends Component {
               <LanguageList data={this.state.langList} />
             </div>
             <div className={s.main}>
-              <FlowList data={this.state.flowList} handleAddLanguage={this.handleAddLanguage.bind(this)}/>
+              <FlowList user={this.state.user} data={this.state.flowList} handleAddLanguage={this.handleAddLanguage.bind(this)}/>
             </div>
           </div>
         </div>
