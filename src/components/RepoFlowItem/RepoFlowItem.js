@@ -107,7 +107,7 @@ class RepoFlowItem extends Component {
           titleStyle={styles.title}
           subtitle={'Updated on ' + this.props.repo.update}
           subtitleStyle={styles.subtitle}
-          avatar={require('./avatar-default-s.png')}
+          avatar={this.props.repo.avatarUrl || require('./avatar-default-s.png')}
         />
         <CardText style={styles.cardText}>
           {this.props.repo.description}
