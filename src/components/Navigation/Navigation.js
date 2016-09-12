@@ -46,7 +46,7 @@ class Navigation extends Component {
       return (
         <div className={cx(s.root, this.props.className)} role="navigation">
           <IconButton iconStyle={styles.button} href="/search"><Search /></IconButton>
-          <IconButton iconStyle={styles.button}><Feedback /></IconButton>
+          <IconButton iconStyle={styles.button} onTouchTap={this.props.handleFeedback}><Feedback /></IconButton>
           <IconMenu
             iconButtonElement={<IconButton iconStyle={styles.button}><Account /></IconButton>}
             anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
@@ -63,7 +63,7 @@ class Navigation extends Component {
       return (
         <div className={cx(s.root, this.props.className)} role="navigation">
           <Link className={s.link} to="/login">LOG IN</Link>
-          <Link className={s.link} to="/register">SIGN UP WITH GITHUB</Link>
+          <Link className={s.link} to="https://github.com/login/oauth/authorize?client_id=c1bb199ad072f9f1639d">SIGN UP WITH GITHUB</Link>
         </div>
       );
     };
