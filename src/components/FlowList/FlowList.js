@@ -82,6 +82,7 @@ class FlowUnit extends Component {
                 repo={flowItem}
                 optional={true}
                 handleUnlike={this.props.handleUnlike}
+                handleStar={this.props.handleStar}
               />
             );
           case 'user':
@@ -129,7 +130,7 @@ class FlowUnitList extends Component {
     if (this.props.list.length > 0) {
       let fus = this.props.list.map(unit => {
         console.log('UNIT', unit);
-        return <FlowUnit key={unit.title} data={unit.data} title={unit.title} />
+        return <FlowUnit key={unit.title} data={unit.data} title={unit.title} handleStar={this.props.handleStar}/>
       });
       return fus;
     } else {
@@ -158,7 +159,7 @@ class FlowList extends Component {
   render() {
     return (
       <div className={s.container}>
-        <FlowUnitList list={this.props.data} />
+        <FlowUnitList list={this.props.data} handleStar={this.props.handleStar}/>
         {this.renderLoadAction()}
       </div>
     );

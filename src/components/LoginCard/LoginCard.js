@@ -51,47 +51,26 @@ class LoginCard extends Component {
     }
   }
 
-  renderBtn() {
-    if (this.props.type == 'login') {
-      return (
-        <div className={s.inputGroup}>
-          <RaisedButton
-            label={"LOGIN"}
-            primary={true}
-            style={buttonStyle}
-            labelStyle={buttonLableStyle}
-            onClick={this.handleSubmit.bind(this)}/>
-          <Link className={s.link} to="/">
-            Forget password?
-          </Link>
-          <Divider style={dividerStyle}/>
-          <RaisedButton label="SIGN UP WITH GITHUB"
-                        href="https://github.com/login/oauth/authorize?client_id=c1bb199ad072f9f1639d"
-                        style={buttonStyle} secondary={true}
-                        labelStyle={buttonLableStyle}/>
-        </div>
-      )
-    } else {
-      return (
-        <div className={s.inputGroup}>
-          <TextField hintText="Confirm Password" type="password" fullWidth={true} ref="password_again"/>
-          <RaisedButton label={"SIGN UP"}
-                        primary={true}
-                        style={buttonStyle}
-                        labelStyle={buttonLableStyle}
-                        onClick={this.handleSubmit.bind(this)}/>
-        </div>
-      );
-    }
-  }
-
   render() {
     return (
       <Paper className={s.content}>
         <p className={s.title}>Hi, Languist :-)</p>
         <TextField hintText="Username" fullWidth={true} ref="username" errorText={this.props.userNameError} onKeyPress={this.handleEnter.bind(this)}/>
         <TextField hintText="Password" type="password" fullWidth={true} ref="password" errorText={this.props.passwordError} onKeyPress={this.handleEnter.bind(this)}/>
-        {this.renderBtn()}
+        <RaisedButton
+          label={"LOGIN"}
+          primary={true}
+          style={buttonStyle}
+          labelStyle={buttonLableStyle}
+          onClick={this.handleSubmit.bind(this)}/>
+        <Link className={s.link} to="/">
+          Forget password?
+        </Link>
+        <Divider style={dividerStyle}/>
+        <RaisedButton label="SIGN UP WITH GITHUB"
+                      href="https://github.com/login/oauth/authorize?client_id=c1bb199ad072f9f1639d"
+                      style={buttonStyle} secondary={true}
+                      labelStyle={buttonLableStyle}/>
       </Paper>
     );
   }
