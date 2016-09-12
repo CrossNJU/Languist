@@ -368,7 +368,7 @@ function circle(userName){
       return time_signal > 0;
     },
     function(cb) {
-      //console.log('try');
+      console.log('one second passed!............');
       time_left --;
       if (time_left == 0) {time_left = 24; time_signal = 1;}
       setTimeout(cb, 1000);
@@ -408,7 +408,9 @@ export {getNextDayRecommendData, getARepo, getAUser, getDetail, getStart}
 //fetchData('ChenDanni', (ret) => {
 //  console.log(ret);
 //})
-//function test(){
-//
-//  recNew('RickChem');
+//connect();
+//async function test(){
+//  let t = await recNew('RickChem');
+//  console.log('done');
 //}
+//test();

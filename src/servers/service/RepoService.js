@@ -19,6 +19,13 @@ function addARepoToSet(login, full_name, set_name, callback) {
     else {
       userSchema.findOne({login: login}, (err, single) => {
         let sets = single.repo_sets;
+        for (let i=0;i<sets.length;i++){
+          let repos = sets[i].set_repos;
+          let index3 = repos.findIndex(j => j == full_name);
+          if (index3 >=0) {
+            sets[i].set_repos.splice(index3, 1);
+          }
+        }
         let index2 = sets.findIndex(j => j.set_name == set_name);
         if (index2 < 0) callback(-2);
         else {
@@ -146,7 +153,7 @@ async function getRelatedRecommend(full_name, callback) {
         let rec_num = 10;
         console.log('in');
         let recs = await get_rec_repos_by_contributor(full_name, rec_num);
-        console.log(recs);
+        //console.log(recs);
         github_repoSchema.update({full_name: full_name}, {$set: {related: recs}}, (err, res) => {
           console.log('update a repo:' + full_name + ' related!');
           console.log(res);
@@ -223,10 +230,14 @@ export {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecomm
 //});
 
 //connect();
-//getRelatedRecommend('nodejs/node', (repos) => {
-//  console.log('recommended!');
+//getRelatedRecommend('pixijs/pixi.js', (repos) => {
+//  console.log(repos);
 //});
 
-//addMore('RickChem', -2, (ret) => {
+//addMore('RickChem', -3, (ret) => {
 //  console.log(ret);
+//});
+
+//addARepoToSet('RickChem', 'jquery/jquery', 'test', (res)=> {
+//  console.log(res);
 //});
