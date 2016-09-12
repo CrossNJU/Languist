@@ -92,8 +92,9 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      login: false
-    }
+      login: false,
+      user: ''
+    };
     console.log('constructor App');
   }
 
@@ -142,7 +143,7 @@ class App extends Component {
     return !this.props.error ? (
       <MuiThemeProvider muiTheme={muiTheme}>
       <div className={s.container}>
-        <Header login={this.state.login} handleLogout={this.handleLogout} />
+        <Header login={this.state.login} handleLogout={this.handleLogout} user={this.state.user}/>
         {this.props.children}
         <Footer />
       </div>
