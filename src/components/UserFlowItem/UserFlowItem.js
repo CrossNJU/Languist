@@ -142,6 +142,20 @@ class UserFlowItem extends Component {
       );
     }
   }
+  renderViewButton() {
+    let flag = false;
+    if (flag) {
+      return (
+        <RaisedButton
+          className={s.mainButton}
+          icon={<Star />}
+          label="View Starred"
+          labelColor="#666"
+          href={`/starred?login=${this.props.user.login}`}
+        />
+      )
+    }
+  }
   render() {
     let title = this.props.user.name ? this.props.user.name + ' (' + this.props.user.login + ')' : this.props.user.login;
     let subtitle = 'Joined on ' + this.props.user.join.split('T')[0];
@@ -181,13 +195,7 @@ class UserFlowItem extends Component {
         <CardActions style={styles.cardActions}>
           <div style={styles.mainActions}>
             {this.renderFollowButton()}
-            <RaisedButton
-              className={s.mainButton}
-              icon={<Star />}
-              label="View Starred"
-              labelColor="#666"
-              href={`/starred?login=${this.props.user.login}`}
-            />
+            {this.renderViewButton()}
             {this.renderInviteButton()}
           </div>
           <div style={styles.optionalActions}>
