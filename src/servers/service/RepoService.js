@@ -206,8 +206,8 @@ async function addInfoToList(login, flowlist, include_user, callback) {
         })
       });
       if (test != null) is_languist = true;
-      flowlist[i].is_following = is_following;
-      flowlist[i].is_languist = is_languist;
+      flowlist[i].isFollowing = is_following;
+      flowlist[i].isLanguist = is_languist;
     }
   }
   callback();
