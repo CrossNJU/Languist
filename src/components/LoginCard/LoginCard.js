@@ -21,6 +21,8 @@ import Divider from 'material-ui/Divider';
 
 const title = 'Log In';
 
+const url = "https://github.com/login/oauth/authorize?client_id=c1bb199ad072f9f1639d";
+
 const dividerStyle = {
   marginTop: '10px',
   marginBottom: '10px',
@@ -68,7 +70,7 @@ class LoginCard extends Component {
         </Link>
         <Divider style={dividerStyle}/>
         <RaisedButton label="SIGN UP WITH GITHUB"
-                      href="https://github.com/login/oauth/authorize?client_id=c1bb199ad072f9f1639d"
+                      href={url}
                       style={buttonStyle} secondary={true}
                       labelStyle={buttonLableStyle}/>
       </Paper>

@@ -37,7 +37,6 @@ class RegisterCard extends Component {
     super(props);
     this.state = {
       login: '',
-      comfirm
     }
   }
 

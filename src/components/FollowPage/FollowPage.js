@@ -61,8 +61,8 @@ class FollowPage extends Component {
   async componentDidMount() {
     console.log('componentDidMount');
     try {
-      // let user = await $.ajax('/api/current_user');
-      let user = 'RickChem';
+      let user = await $.ajax('/api/current_user');
+      // let user = 'RickChem';
       this.getCount(user);
       this.getFollowList(user, 'Following');
       this.setState({user:user});
