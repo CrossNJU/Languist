@@ -62,7 +62,9 @@ class RepoList extends Component {
   }
   renderRepos() {
     // console.log(JSON.parse(JSON.stringify(this.props.data)));
-    // repoData = this.props.data;
+    if(this.props.data) {
+      repoData = this.props.data;
+    }
     if (repoData.length > 0) {
       let repos = repoData.map(repo => {
         return (<RepoFlowItem key={repo.owner + repo.name} repo={repo} />);

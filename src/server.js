@@ -134,6 +134,12 @@ server.get('/api/register', (req, res) => {
       res.send({res: res2});
   })
 });
+//logout
+server.get('/api/logout', (req, res) => {
+  req.session.username = null;
+  req.session.tempname = null;
+  res.redirect('/login');
+});
 //test login
 //server.get('/api/test_login', test_login);
 

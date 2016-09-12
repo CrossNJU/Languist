@@ -47,14 +47,9 @@ class RelatedPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      count: {
-        followingCount: 0,
-        followersCount: 0,
-        starredCount: 0
-      },
+      repo: repo,
+      // repo: {},
       repoList: [],
-      flowList: [],
-      langList: []
     };
     console.log('constructor');
   }
@@ -62,13 +57,33 @@ class RelatedPage extends Component {
     onSetTitle: PropTypes.func.isRequired,
   };
 
-  async componentDidMount() {
-    console.log('componentDidMount');
-  }
-
   componentWillMount() {
     console.log('componentWillMount');
     this.context.onSetTitle(title);
+  }
+
+  async componentDidMount() {
+    console.log('componentDidMount');
+    this.getRepoInfo();
+    this.getRelatedRepo();
+  }
+
+  getRepoInfo() {
+    let repoName = this.props.query.repo;
+
+    $.ajax('/api/repo/info', {data: {fullName: repoName}})
+      .done(((repo)=> {
+        this.setState({repo: repo});
+      }).bind(this))
+  }
+
+  getRelatedRepo() {
+    console.log('get related repo');
+    let url = 'api/repo/related';
+    $.ajax(url, {data: {fullName: this.props.query.repo}})
+      .done(((repoList)=>{
+        this.setState({repoList: repoList});
+      }))
   }
 
   render() {
@@ -79,10 +94,10 @@ class RelatedPage extends Component {
         <div className={s.root}>
           <div className={s.container}>
             <div className={s.sidebar}>
-              <RepoFlowItem repo={repo} />
+              <RepoFlowItem repo={this.state.repo} />
             </div>
             <div className={s.main}>
-              <RepoList />
+              <RepoList data={this.state.repoList}/>
             </div>
           </div>
         </div>

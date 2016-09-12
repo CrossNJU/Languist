@@ -158,8 +158,8 @@ async function getRelatedRecommend(full_name, callback) {
   });
 }
 
-function getRepoInfos(full_name, callback){
-  let ans = getARepo(full_name);
+async function getRepoInfos(full_name, callback){
+  let ans = await getARepo(full_name);
   callback(ans);
 }
 
