@@ -45,10 +45,14 @@ class StarDialog extends Component {
     let user = this.props.user;
     let newSet = '';
 
+    console.log('Star ' + repo + ' ' + user);
+
+
     let url = '/api/repo/star';
     let res = await $.ajax(url, {data:{user: user, repo:repo}});
 
-    // console.log(res);
+
+    console.log(res);
 
     if(res.res == 1 && this.state.isNewSet) {
       newSet = this.refs.field.input.value;

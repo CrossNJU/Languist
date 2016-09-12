@@ -230,16 +230,17 @@ class HomePage extends Component {
     let newState = {};
     newState.isStarDialogOpen = false;
     newState.currentStar = '';
-    console.log('Set ' + set);
-    console.log(this.state.currentStar);
+
     if (isSuccess) {
       this.getSetList(this.state.user);
-      this.state.repoList.forEach((repo)=> {
-        if(repo.full_name == this.state.currentStar) {
-          repo.set = set;
-        }
+      this.state.flowList.forEach((data) => {
+        data.data.forEach((repo)=> {
+          if(repo.type == 'repo' && repo.full_name == this.state.currentStar) {
+            repo.set = set;
+          }
+        });
       });
-      newState.repoList = this.state.repoList;
+      newState.flowList = this.state.flowList;
     }
     this.setState(newState);
   }

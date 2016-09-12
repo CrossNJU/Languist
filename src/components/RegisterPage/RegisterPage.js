@@ -42,7 +42,7 @@ class RegisterPage extends Component {
         console.log(message);
         switch (message.res) {
           case 1:
-            window.location.href='/home';
+            window.location.href='/language';
             break;
           case 0:
             this.setState({userNameError: 'Register failed', passwordError: ''});
