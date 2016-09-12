@@ -34,7 +34,7 @@ class StarPage extends Component {
       isSetDialogOpen: false,
 
       // Star dialog
-      isStarDialogOpen: true,
+      isStarDialogOpen: false,
       currentStar: 'facebook/react',
     };
     console.log('constructor');
@@ -115,12 +115,14 @@ class StarPage extends Component {
 
   // Handle StarDialog
   handleOpenStarDialog(repo) {
+    console.log(repo);
     this.setState({isStarDialogOpen: true, currentStar: repo});
   }
 
   handleCloseStarDialog(isSuccess, set) {
     let newState = {};
     newState.isStarDialogOpen = false;
+    newState.currentStar = '';
     if (isSuccess) {
       this.getSetList(this.state.user);
       this.state.repoList.forEach((repo)=> {
@@ -130,7 +132,7 @@ class StarPage extends Component {
       });
       newState.repoList = this.state.repoList;
     }
-    this.setState({isStarDialogOpen: false});
+    this.setState(newState);
   }
 
   // Handle Filter
@@ -154,7 +156,7 @@ class StarPage extends Component {
                 handleClickFilter={this.handleClickFilter.bind(this)}/>
             </div>
             <div className={s.main}>
-              <RepoList data={this.state.repoList}/>
+              <RepoList data={this.state.repoList} handleStar={this.handleOpenStarDialog.bind(this)}/>
             </div>
           </div>
 

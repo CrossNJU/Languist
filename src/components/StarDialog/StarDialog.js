@@ -30,6 +30,7 @@ class StarDialog extends Component {
       error: '',
       setName: 'Ungrouped',
       isNewSet: false,
+      isLoading: false
     }
   }
 
@@ -38,12 +39,16 @@ class StarDialog extends Component {
   }
 
   async handleSubmit() {
+    this.setState({isLoading: true});
+
     let repo = this.props.repo;
     let user = this.props.user;
     let newSet = '';
 
     let url = '/api/repo/star';
     let res = await $.ajax(url, {data:{user: user, repo:repo}});
+
+    // console.log(res);
 
     if(res.res == 1 && this.state.isNewSet) {
       newSet = this.refs.field.input.value;
@@ -52,7 +57,6 @@ class StarDialog extends Component {
       if(newSet){
         console.log('new is ' + newSet);
         res = await $.ajax(url, {data:{login: user, setname:newSet}});
-
       }else {
         res.res = 0;
       }
@@ -68,13 +72,13 @@ class StarDialog extends Component {
       console.log('add to succeed');
       this.handleClose(true);
     }else {
-      this.setState({error: 'Star Failed'});
+      this.setState({error: 'Star Failed', isLoading: false});
     }
 
   }
 
   handleClose(isSuccess, set) {
-    this.setState({error: ''});
+    this.setState({error: '', setName: 'Ungrouped', isNewSet: false, isLoading: false});
     this.props.handleClose(isSuccess, set);
   }
 
@@ -111,8 +115,8 @@ class StarDialog extends Component {
         </SelectField>
         {this.renderField()}
         <div className={s.btn__group}>
-          <RaisedButton label="DONE" primary={true} onClick={this.handleSubmit.bind(this)}/>
-          <RaisedButton label="CANCEL" onClick={this.handleClose.bind(this, false, null)}/>
+          <RaisedButton label="DONE" primary={true} disabled={this.state.isLoading} onTouchTap={this.handleSubmit.bind(this)}/>
+          <RaisedButton label="CANCEL" onTouchTap={this.handleClose.bind(this, false, null)}/>
         </div>
       </Dialog>
     )
