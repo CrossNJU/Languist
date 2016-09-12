@@ -268,7 +268,7 @@ class HomePage extends Component {
                 handleAddLanguage={this.handleAddLanguage.bind(this)}
                 handleUnlike={this.handleUnlike.bind(this)}
                 handleLoad={this.handleLoad.bind(this)}
-                handleStar={this.handleOpenStarDialog.bind(this)}/>
+                handleStar={this.handleOpenStarDialog.bind(this)}
               />
             </div>
           </div>
