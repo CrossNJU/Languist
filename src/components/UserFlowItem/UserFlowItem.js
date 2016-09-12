@@ -8,11 +8,13 @@ import s from './UserFlowItem.scss';
 
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
+import IconButton from 'material-ui/IconButton';
 import Chip from 'material-ui/Chip';
 
 import Person from 'material-ui/svg-icons/social/person';
 import PersonAdd from 'material-ui/svg-icons/social/person-add';
 import PersonOutline from 'material-ui/svg-icons/social/person-outline';
+import Star from 'material-ui/svg-icons/toggle/star';
 
 const styles = {
   title: {
@@ -38,9 +40,25 @@ const styles = {
     paddingBottom: 6
   },
   cardActions: {
+    display: 'flex',
+    flexDirection: 'row',
     marginLeft: 10,
     paddingTop: 16,
     paddingBottom: 6
+  },
+  mainActions: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexBasis: 0,
+    flexGrow: 1
+  },
+  optionalAction: {
+    flexBasis: 1,
+    flexGrow: 'auto',
+    color: '#CCC'
+  },
+  iconButton: {
+    color: '#BBB'
   }
 };
 
@@ -49,6 +67,7 @@ class UserFlowItem extends Component {
     if (!this.props.user.isFollowing) {
       return (
         <RaisedButton
+          className={s.mainButton}
           icon={<PersonAdd />}
           label={'Follow (' + this.props.user.followers + ')'}
           secondary={true}
@@ -57,6 +76,7 @@ class UserFlowItem extends Component {
     } else {
       return (
         <RaisedButton
+          className={s.mainButton}
           icon={<Person />}
           label={'Following'}
           labelColor="#F2DF83"
@@ -68,6 +88,7 @@ class UserFlowItem extends Component {
     if (!this.props.user.isLanguist) {
       return (
         <RaisedButton
+          className={s.mainButton}
           icon={<PersonAdd />}
           label={'Invite to Languist'}
           labelColor="#666"
@@ -114,12 +135,20 @@ class UserFlowItem extends Component {
         <CardActions style={styles.cardActions}>
           {this.renderFollowButton()}
           <RaisedButton
-            icon={<PersonOutline />}
-            label="View"
+            className={s.mainButton}
+            icon={<Star />}
+            label="View Starred"
             labelColor="#666"
-            href={'https://github.com/'+this.props.user.login} />
+          />
           {this.renderInviteButton()}
         </CardActions>
+        <div className={s.iconButtonWrap}>
+          <IconButton
+            iconClassName="muidocs-icon-custom-github"
+            iconStyle={styles.iconButton}
+            href={'https://github.com/'+this.props.user.login}
+          />
+        </div>
       </Card>
     );
   }
