@@ -63,7 +63,7 @@ class Navigation extends Component {
       return (
         <div className={cx(s.root, this.props.className)} role="navigation">
           <Link className={s.link} to="/login">LOG IN</Link>
-          <a className={s.link} href="https://github.com/login/oauth/authorize?client_id=c1bb199ad072f9f1639d">SIGN UP WITH GITHUB</a>
+          <a className={s.link} href="https://github.com/login/oauth/authorize?scope=user%20public_repo&client_id=c1bb199ad072f9f1639d">SIGN UP WITH GITHUB</a>
         </div>
       );
     };
