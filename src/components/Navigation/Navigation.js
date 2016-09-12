@@ -12,8 +12,12 @@ import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
+import Divider from 'material-ui/Divider';
 import Search from 'material-ui/svg-icons/action/search';
 import Account from 'material-ui/svg-icons/action/account-circle';
+import Star from 'material-ui/svg-icons/toggle/star';
+import Person from 'material-ui/svg-icons/social/person';
+import Exit from 'material-ui/svg-icons/action/exit-to-app';
 
 const styles = {
   button: {
@@ -46,9 +50,10 @@ class Navigation extends Component {
             anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
             targetOrigin={{horizontal: 'right', vertical: 'top'}}
           >
-            <MenuItem primaryText="Send feedback" />
-            <MenuItem primaryText="About us" />
-            <MenuItem primaryText="Sign out" onTouchTap={this.handleLogout.bind(this)} />
+            <MenuItem primaryText="Starred" leftIcon={<Star />} href="/starred" />
+            <MenuItem primaryText="Following" leftIcon={<Person />} href="/following" />
+            <Divider />
+            <MenuItem primaryText="Sign out" leftIcon={<Exit />} onTouchTap={this.handleLogout.bind(this)} />
           </IconMenu>
         </div>
       );
