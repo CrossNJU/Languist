@@ -18,6 +18,7 @@ import Account from 'material-ui/svg-icons/action/account-circle';
 import Star from 'material-ui/svg-icons/toggle/star';
 import Person from 'material-ui/svg-icons/social/person';
 import Exit from 'material-ui/svg-icons/action/exit-to-app';
+import Feedback from 'material-ui/svg-icons/action/feedback';
 
 const styles = {
   button: {
@@ -45,6 +46,7 @@ class Navigation extends Component {
       return (
         <div className={cx(s.root, this.props.className)} role="navigation">
           <IconButton iconStyle={styles.button} href="/search"><Search /></IconButton>
+          <IconButton iconStyle={styles.button}><Feedback /></IconButton>
           <IconMenu
             iconButtonElement={<IconButton iconStyle={styles.button}><Account /></IconButton>}
             anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
