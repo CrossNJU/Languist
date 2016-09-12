@@ -71,7 +71,7 @@ class RepoFlowItem extends Component {
   }
   handleStar() {
     let user = this.props.currentUser;
-    let repo = this.props.repo.owner+'/'+this.props.repo.name
+    let repo = this.props.repo.owner+'/'+this.props.repo.name;
     let url = `/api/repo/star?user=${user}&repo=${repo}`;
     console.log('###',url);
     $.ajax(url)
@@ -81,6 +81,14 @@ class RepoFlowItem extends Component {
       .fail(((xhr, status, err) => {
         console.error(url, status, err.toString());
       }).bind(this));
+  }
+  handleUnlike() {
+    let param = {
+      type: 'repo',
+      name: this.props.repo.owner+'/'+this.props.repo.name
+    };
+    console.log('UNLIKE', param);
+    this.props.handleUnlike(param);
   }
   handleMouseOver() {
     this.setState({hovering: true});
@@ -110,7 +118,13 @@ class RepoFlowItem extends Component {
   }
   renderNotInterestedButton() {
     if (this.props.optional && this.state.hovering) {
-      return (<FlatButton style={styles.optionalAction} label='Not interested' />);
+      return (
+        <FlatButton
+          style={styles.optionalAction}
+          label='Not interested'
+          onTouchTap={this.handleUnlike.bind(this)}
+        />
+      );
     }
   }
   render() {

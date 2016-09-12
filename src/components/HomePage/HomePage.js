@@ -140,10 +140,22 @@ class HomePage extends Component {
   // Add langauge dialog
   handleAddLanguage(language) {
     this.setState({addLang: language, isOpenDialog: true});
-  };
+  }
 
   handleDialogClose() {
     this.setState({addLang: '', isOpenDialog: false});
+  }
+
+  handleUnlike(param) {
+    let url = `/api/rec/evaluate?login=${this.state.user}&name=${param.name}&type=${param.type}`;
+    console.log('UNLIKE', url);
+    $.ajax(url)
+    .done(((data) => {
+      console.log('UNLIKE', data);
+    }).bind(this))
+    .fail(((xhr, status, err) => {
+      console.error(url, status, err.toString());
+    }).bind(this));
   }
 
   componentWillMount() {
@@ -163,7 +175,12 @@ class HomePage extends Component {
               <LanguageList data={this.state.langList} />
             </div>
             <div className={s.main}>
-              <FlowList user={this.state.user} data={this.state.flowList} handleAddLanguage={this.handleAddLanguage.bind(this)}/>
+              <FlowList
+                user={this.state.user}
+                data={this.state.flowList}
+                handleAddLanguage={this.handleAddLanguage.bind(this)}
+                handleUnlike={this.handleUnlike.bind(this)}
+              />
             </div>
           </div>
         </div>

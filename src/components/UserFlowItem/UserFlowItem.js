@@ -82,6 +82,14 @@ class UserFlowItem extends Component {
         console.error(url, status, err.toString());
       }).bind(this));
   }
+  handleUnlike() {
+    let param = {
+      type: 'user',
+      name: this.props.user.login
+    };
+    console.log('UNLIKE', param);
+    this.props.handleUnlike(param);
+  }
   handleMouseOver() {
     this.setState({hovering: true});
   }
@@ -123,7 +131,13 @@ class UserFlowItem extends Component {
   }
   renderNotInterestedButton() {
     if (this.props.optional && this.state.hovering) {
-      return (<FlatButton style={styles.optionalAction} label='Not interested' />);
+      return (
+        <FlatButton
+          style={styles.optionalAction}
+          label='Not interested'
+          onTouchTap={this.handleUnlike.bind(this)}
+        />
+      );
     }
   }
   render() {
