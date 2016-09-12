@@ -34,7 +34,8 @@ class StarPage extends Component {
       isSetDialogOpen: false,
 
       // Star dialog
-      isStarDialogOpen: true
+      isStarDialogOpen: true,
+      currentStar: 'facebook/react',
     };
     console.log('constructor');
   }
@@ -51,10 +52,21 @@ class StarPage extends Component {
   async componentDidMount() {
     console.log('componentDidMount');
     try {
-      // const user = await $.ajax('/api/current_user');
-      const user = 'RickChem';
+      // get user
+      let user = '';
+      console.log(this.props.query.user);
+      if(this.props.query.user) {
+        user = this.props.query.user;
+      } else {
+        // const user = await $.ajax('/api/current_user');
+        user = 'RickChem';
+        console.log('owner');
+      }
+
+      // get other data
       this.getSetList(user);
       this.getRepoList(user, 'All');
+
       this.setState({user: user});
     } catch (err) {
       console.error(err);
@@ -102,13 +114,21 @@ class StarPage extends Component {
   }
 
   // Handle StarDialog
-  handleOpenStarDialog() {
-    this.setState({isStarDialogOpen: true});
+  handleOpenStarDialog(repo) {
+    this.setState({isStarDialogOpen: true, currentStar: repo});
   }
 
-  handleCloseStarDialog(isSuccess) {
+  handleCloseStarDialog(isSuccess, set) {
+    let newState = {};
+    newState.isStarDialogOpen = false;
     if (isSuccess) {
       this.getSetList(this.state.user);
+      this.state.repoList.forEach((repo)=> {
+        if(repo.full_name == this.state.currentStar) {
+          repo.set = set;
+        }
+      });
+      newState.repoList = this.state.repoList;
     }
     this.setState({isStarDialogOpen: false});
   }
@@ -142,12 +162,13 @@ class StarPage extends Component {
         <AddSetDialog isOpen={this.state.isSetDialogOpen} handleClose={this.handleCloseSetDialog.bind(this)}
                       user={this.state.user}/>
         <StarDialog isOpen={this.state.isStarDialogOpen}
-                    setList={this.state.setList.filter((set)=> {
-                      return set.name != 'All'
-                    })}
+                    setList=
+                      {this.state.setList.filter((set)=> {
+                        return set.name != 'All'
+                      })}
                     handleClose={this.handleCloseStarDialog.bind(this)}
-                    repo = 'facebook/react'
-                    user="RickChem"/>
+                    repo = {this.state.currentStar}
+                    user = {this.state.user}/>
       </div>
     );
   }

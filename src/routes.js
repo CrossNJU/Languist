@@ -47,7 +47,9 @@ const router = new Router(on => {
 
   on('/language', async () => <LanguagePage />);
 
-  on('/star', async () => <StarPage />);
+  on('/starred', async (state) => {
+    return <StarPage query={state.query}/>;
+  });
 
   on('/follow', async (state) => {
     return <FollowPage query={state.query}/>;
