@@ -38,6 +38,7 @@ class HomePage extends Component {
       repoList: [],
       flowList: [],
       langList: [],
+      currentRecommend: 0,
 
       //Dialog
       isOpenDialog: false,
@@ -130,7 +131,13 @@ class HomePage extends Component {
     url = '/api/home/flowList?user=' + user;
     $.ajax(url)
     .done(((data) => {
-      this.setState({flowList: data});
+      let unit = {
+        title: 'Today',
+        data: data
+      }
+      let list = this.state.flowList.slice();
+      list.push(unit);
+      this.setState({flowList: list});
     }).bind(this))
     .fail(((xhr, status, err) => {
       console.error(url, status, err.toString());
@@ -159,7 +166,29 @@ class HomePage extends Component {
   }
 
   handleLoad() {
+    let recommendCount = this.state.currentRecommend;
+    recommendCount--;
+    let today = new Date();
+    let day = new Date(today);
+    day.setDate(today.getDate() + recommendCount);
+    let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    let title = day.toLocaleDateString('en-US', options);
 
+    const url = `/api/recommend/more?login=${this.state.user}&times=${recommendCount}`;
+    console.log(url);
+    $.ajax(url)
+    .done(((data) => {
+      let unit = {
+        title: recommendCount === -1 ? 'Yesterday' : title,
+        data: data
+      }
+      let list = this.state.flowList.slice();
+      list.push(unit);
+      this.setState({flowList: list, currentRecommend: recommendCount});
+    }).bind(this))
+    .fail(((xhr, status, err) => {
+      console.error(url, status, err.toString());
+    }).bind(this));
   }
 
   componentWillMount() {
