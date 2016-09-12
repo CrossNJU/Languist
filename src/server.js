@@ -288,7 +288,9 @@ server.get('/api/user/folInfo', (req, res) => {
 //get recommend repo
 server.get('/api/repo/related', (req, res) => {
   getRelatedRecommend(req.query.fullName, (resa) => {
-    res.send(resa);
+    addInfoToList(req.query.user, resa, true, () => {
+      res.send(resa);
+    });
   })
 });
 
