@@ -23,6 +23,7 @@ import FlowAction from '../FlowAction';
 import RepoFlowItem from '../RepoFlowItem';
 import SearchBar from '../SearchBar';
 import TitleBar from '../TitleBar';
+import StarDialog from '../StarDialog';
 
 const title = 'Related Recommends';
 
@@ -62,6 +63,11 @@ class RelatedPage extends Component {
       repo: repo,
       // repo: {},
       repoList: [],
+      user: '',
+      // Star dialog
+      isStarDialogOpen: false,
+      currentStar: '',
+      setList: []
     };
     console.log('constructor');
   }
@@ -76,8 +82,11 @@ class RelatedPage extends Component {
 
   async componentDidMount() {
     console.log('componentDidMount');
+    let user = await $.ajax('/api/current_user');
+    this.setState({user: user});
     this.getRepoInfo();
     this.getRelatedRepo();
+    this.getSetList(user);
   }
 
   getRepoInfo() {
@@ -92,10 +101,48 @@ class RelatedPage extends Component {
   getRelatedRepo() {
     console.log('get related repo');
     let url = 'api/repo/related';
-    $.ajax(url, {data: {fullName: this.props.query.repo}})
+    $.ajax(url, {data: {fullName: this.props.query.repo, user: this.state.user}})
       .done(((repoList)=>{
         this.setState({repoList: repoList});
       }))
+  }
+
+  getSetList(user) {
+    let url = '/api/repo/setList';
+    $.ajax(url, {data: {user: user}})
+      .done(((data) => {
+        let setList = [];
+        let all = {name: 'All', count: 0};
+        setList.push(all);
+        data.forEach((set) => {
+          all.count += set.repoNum;
+          setList.push({name: set.setName, count: set.repoNum});
+        });
+
+        this.setState({setList: setList});
+      }).bind(this));
+  }
+
+  // Handle StarDialog
+  handleOpenStarDialog(repo) {
+    console.log(repo);
+    this.setState({isStarDialogOpen: true, currentStar: repo});
+  }
+
+  handleCloseStarDialog(isSuccess, set) {
+    let newState = {};
+    newState.isStarDialogOpen = false;
+    newState.currentStar = '';
+    if (isSuccess) {
+      this.getSetList(this.state.user);
+      this.state.repoList.forEach((repo)=> {
+        if(repo.full_name == this.state.currentStar) {
+          repo.set = set;
+        }
+      });
+      newState.repoList = this.state.repoList;
+    }
+    this.setState(newState);
   }
 
   render() {
@@ -109,10 +156,18 @@ class RelatedPage extends Component {
               <RepoFlowItem repo={this.state.repo} single={true}/>
             </div>
             <div className={s.main}>
-              <RepoList data={this.state.repoList}/>
+              <RepoList data={this.state.repoList}  handleStar={this.handleOpenStarDialog.bind(this)}/>
             </div>
           </div>
         </div>
+        <StarDialog isOpen={this.state.isStarDialogOpen}
+                    setList=
+                      {this.state.setList.filter((set)=> {
+                        return set.name != 'All'
+                      })}
+                    handleClose={this.handleCloseStarDialog.bind(this)}
+                    repo = {this.state.currentStar}
+                    user = {this.state.user}/>
       </div>
     );
   }

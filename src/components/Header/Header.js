@@ -36,7 +36,7 @@ class Header extends Component {
           </Link>
           <Navigation className={s.nav} login={this.props.login} handleLogout={this.props.handleLogout} handleFeedback={this.handleFeedbackDialogOpen.bind(this)}/>
         </div>
-        <FeedbackDialog isOpen={this.state.isDialogOpen} user={this.props.login} handleClose={this.handleFeedbackDialogClose.bind(this)}/>
+        <FeedbackDialog isOpen={this.state.isDialogOpen} user={this.props.user} handleClose={this.handleFeedbackDialogClose.bind(this)}/>
       </div>
     );
   }
