@@ -368,7 +368,7 @@ function circle(userName){
       return time_signal > 0;
     },
     function(cb) {
-      console.log('one second passed!............');
+      //console.log('one second passed!............');
       time_left --;
       if (time_left == 0) {time_left = 24; time_signal = 1;}
       setTimeout(cb, 1000);
