@@ -55,7 +55,7 @@ const muiTheme = getMuiTheme({
     color: '#F2DF83',
   },
   raisedButton: {
-    fontWeight: '500',
+    fontWeight: '500'
   }
 });
 
@@ -101,7 +101,10 @@ class App extends Component {
     console.log('checkLogin App');
     $.ajax('/api/current_user')
     .done(((user) => {
-      this.setState({login: true});
+      if (user !== '') {
+        console.log(user);
+        this.setState({login: true});
+      }
     }).bind(this))
     .fail(((xhr, status, err) => {
       console.error(url, status, err.toString());

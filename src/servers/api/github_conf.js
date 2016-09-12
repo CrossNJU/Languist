@@ -6,7 +6,10 @@ import {userSchema} from '../../models/userSchema'
 import {connect} from '../config'
 
 var github = require('octonode');
-var client = github.client();
+var client = github.client({
+  username: 'RickChem',
+  password: 'cr112358132134'
+});
 
 function setClient(access_token){
   client = github.client(access_token);

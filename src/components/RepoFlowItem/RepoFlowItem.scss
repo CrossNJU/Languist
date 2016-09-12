@@ -3,14 +3,25 @@
 
 .item {
   display: flex;
+  position: relative;
   flex-direction: column;
+  align-content: stretch;
   margin-top: 20px;
   padding: 10px 0 18px;
-  align-content: stretch;
 }
 
 .tags {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+}
+
+.mainButton {
+  margin-right: 12px;
+}
+
+.iconButtonWrap {
+  position: absolute;
+  right: 10px;
+  top: 14px;
 }

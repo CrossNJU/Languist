@@ -3,12 +3,15 @@
  */
 
 import React, { Component, PropTypes } from 'react';
+import $ from 'jquery';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './RepoFlowItem.scss';
 
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
+import IconButton from 'material-ui/IconButton';
+import FontIcon from 'material-ui/FontIcon';
 import Chip from 'material-ui/Chip';
 
 import Code from 'material-ui/svg-icons/action/code';
@@ -39,13 +42,25 @@ const styles = {
     paddingBottom: 6
   },
   cardActions: {
+    display: 'flex',
+    flexDirection: 'row',
     marginLeft: 10,
     paddingTop: 16,
     paddingBottom: 6
   },
+  mainActions: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexBasis: 0,
+    flexGrow: 1
+  },
   optionalAction: {
-    float: 'right',
-    color: '#DDD'
+    flexBasis: 1,
+    flexGrow: 'auto',
+    color: '#CCC'
+  },
+  iconButton: {
+    color: '#BBB'
   }
 };
 
@@ -53,6 +68,27 @@ class RepoFlowItem extends Component {
   constructor(props) {
     super(props);
     this.state = {hovering: false};
+  }
+  handleStar() {
+    let user = this.props.currentUser;
+    let repo = this.props.repo.owner+'/'+this.props.repo.name;
+    let url = `/api/repo/star?user=${user}&repo=${repo}`;
+    console.log('###',url);
+    $.ajax(url)
+      .done(((data) => {
+        console.log("$$$",data);
+      }).bind(this))
+      .fail(((xhr, status, err) => {
+        console.error(url, status, err.toString());
+      }).bind(this));
+  }
+  handleUnlike() {
+    let param = {
+      type: 'repo',
+      name: this.props.repo.owner+'/'+this.props.repo.name
+    };
+    console.log('UNLIKE', param);
+    this.props.handleUnlike(param);
   }
   handleMouseOver() {
     this.setState({hovering: true});
@@ -64,23 +100,31 @@ class RepoFlowItem extends Component {
     if (this.props.repo.set) {
       return (
         <RaisedButton
+          className={s.mainButton}
           icon={<Star />}
           label={this.props.repo.set || 'UNGROUPED'}
           labelColor="#F2DF83"
-          onTouchTap={this.handleExpand} />
+          onTouchTap={this.handleStar.bind(this)} />
       )
     }
     return (
       <RaisedButton
+        className={s.mainButton}
         icon={<Star />}
         label={'Star (' + this.props.repo.star + ')'}
         secondary={true}
-        onTouchTap={this.handleExpand} />
+        onTouchTap={this.handleStar.bind(this)} />
     )
   }
   renderNotInterestedButton() {
     if (this.props.optional && this.state.hovering) {
-      return (<FlatButton style={styles.optionalAction} label='Not interested' />);
+      return (
+        <FlatButton
+          style={styles.optionalAction}
+          label='Not interested'
+          onTouchTap={this.handleUnlike.bind(this)}
+        />
+      );
     }
   }
   render() {
@@ -91,7 +135,7 @@ class RepoFlowItem extends Component {
           titleStyle={styles.title}
           subtitle={'Updated on ' + this.props.repo.update}
           subtitleStyle={styles.subtitle}
-          avatar={require('./avatar-default-s.png')}
+          avatar={this.props.repo.avatarUrl || require('./avatar-default-s.png')}
         />
         <CardText style={styles.cardText}>
           {this.props.repo.description}
@@ -115,14 +159,26 @@ class RepoFlowItem extends Component {
           </div>
         </CardText>
         <CardActions style={styles.cardActions}>
-          {this.renderStarButton()}
-          <RaisedButton
-            icon={<Code />}
-            label="View"
-            labelColor="#666"
-            href={'https://github.com/'+this.props.repo.owner+'/'+this.props.repo.name} />
-          {this.renderNotInterestedButton()}
+          <div style={styles.mainActions}>
+            {this.renderStarButton()}
+            <RaisedButton
+              className={s.mainButton}
+              icon={<Code />}
+              label="View Related"
+              labelColor="#666"
+            />
+          </div>
+          <div style={styles.optionalActions}>
+            {this.renderNotInterestedButton()}
+          </div>
         </CardActions>
+        <div className={s.iconButtonWrap}>
+          <IconButton
+            iconClassName="muidocs-icon-custom-github"
+            iconStyle={styles.iconButton}
+            href={'https://github.com/'+this.props.repo.owner+'/'+this.props.repo.name}
+          />
+        </div>
       </Card>
     );
   }

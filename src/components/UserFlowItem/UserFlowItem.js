@@ -3,16 +3,20 @@
  */
 
 import React, { Component, PropTypes } from 'react';
+import $ from 'jquery';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './UserFlowItem.scss';
 
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
+import IconButton from 'material-ui/IconButton';
 import Chip from 'material-ui/Chip';
 
 import Person from 'material-ui/svg-icons/social/person';
 import PersonAdd from 'material-ui/svg-icons/social/person-add';
 import PersonOutline from 'material-ui/svg-icons/social/person-outline';
+import Star from 'material-ui/svg-icons/toggle/star';
 
 const styles = {
   title: {
@@ -38,29 +42,78 @@ const styles = {
     paddingBottom: 6
   },
   cardActions: {
+    display: 'flex',
+    flexDirection: 'row',
     marginLeft: 10,
     paddingTop: 16,
     paddingBottom: 6
+  },
+  mainActions: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexBasis: 0,
+    flexGrow: 1
+  },
+  optionalAction: {
+    flexBasis: 1,
+    flexGrow: 'auto',
+    color: '#CCC'
+  },
+  iconButton: {
+    color: '#BBB'
   }
 };
 
 class UserFlowItem extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {hovering: false};
+  }
+  handleFollow() {
+    let user = this.props.currentUser;
+    let follow = this.props.user.login;
+    let url = `/api/user/follow?user=${user}&follow=${follow}`;
+    console.log('###',url);
+    $.ajax(url)
+      .done(((data) => {
+        console.log("$$$",data);
+      }).bind(this))
+      .fail(((xhr, status, err) => {
+        console.error(url, status, err.toString());
+      }).bind(this));
+  }
+  handleUnlike() {
+    let param = {
+      type: 'user',
+      name: this.props.user.login
+    };
+    console.log('UNLIKE', param);
+    this.props.handleUnlike(param);
+  }
+  handleMouseOver() {
+    this.setState({hovering: true});
+  }
+  handleMouseOut() {
+    this.setState({hovering: false});
+  }
   renderFollowButton() {
     if (!this.props.user.isFollowing) {
       return (
         <RaisedButton
+          className={s.mainButton}
           icon={<PersonAdd />}
           label={'Follow (' + this.props.user.followers + ')'}
           secondary={true}
-          onTouchTap={this.handleExpand} />
+          onTouchTap={this.handleFollow.bind(this)} />
       )
     } else {
       return (
         <RaisedButton
+          className={s.mainButton}
           icon={<Person />}
           label={'Following'}
           labelColor="#F2DF83"
-          onTouchTap={this.handleExpand} />
+          onTouchTap={this.handleFollow.bind(this)} />
       )
     }
   }
@@ -68,11 +121,23 @@ class UserFlowItem extends Component {
     if (!this.props.user.isLanguist) {
       return (
         <RaisedButton
+          className={s.mainButton}
           icon={<PersonAdd />}
-          label={'Invite to Languist'}
+          label={'Invite'}
           labelColor="#666"
           onTouchTap={this.handleExpand} />
       )
+    }
+  }
+  renderNotInterestedButton() {
+    if (this.props.optional && this.state.hovering) {
+      return (
+        <FlatButton
+          style={styles.optionalAction}
+          label='Not interested'
+          onTouchTap={this.handleUnlike.bind(this)}
+        />
+      );
     }
   }
   render() {
@@ -82,7 +147,7 @@ class UserFlowItem extends Component {
       subtitle += ' / ' + this.props.user.location;
     }
     return (
-      <Card className={s.item}>
+      <Card className={s.item} onMouseEnter={this.handleMouseOver.bind(this)} onMouseLeave={this.handleMouseOut.bind(this)}>
         <CardHeader
           title={title}
           titleStyle={styles.title}
@@ -112,14 +177,27 @@ class UserFlowItem extends Component {
           </div>
         </CardText>
         <CardActions style={styles.cardActions}>
-          {this.renderFollowButton()}
-          <RaisedButton
-            icon={<PersonOutline />}
-            label="View"
-            labelColor="#666"
-            href={'https://github.com/'+this.props.user.login} />
-          {this.renderInviteButton()}
+          <div style={styles.mainActions}>
+            {this.renderFollowButton()}
+            <RaisedButton
+              className={s.mainButton}
+              icon={<Star />}
+              label="View Starred"
+              labelColor="#666"
+            />
+            {this.renderInviteButton()}
+          </div>
+          <div style={styles.optionalActions}>
+            {this.renderNotInterestedButton()}
+          </div>
         </CardActions>
+        <div className={s.iconButtonWrap}>
+          <IconButton
+            iconClassName="muidocs-icon-custom-github"
+            iconStyle={styles.iconButton}
+            href={'https://github.com/'+this.props.user.login}
+          />
+        </div>
       </Card>
     );
   }
