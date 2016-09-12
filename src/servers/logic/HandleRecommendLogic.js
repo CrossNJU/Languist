@@ -243,6 +243,7 @@ async function recNew(userName) {
     }
   }
   let ran_num = parseInt(Math.random() * 3);
+  ran_num = 0;
   let lang_num = ran_num < lang_rec.length ? ran_num : lang_rec.length;
   if (repo_rec.length < 15 - lang_num || user_rec.length < 5 || lang_rec.length < lang_num) {
     cur_rec = await new Promise(function (resolve, reject) {
