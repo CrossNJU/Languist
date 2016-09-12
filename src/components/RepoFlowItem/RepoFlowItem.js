@@ -84,7 +84,7 @@ class RepoFlowItem extends Component {
   }
   handleUnlike() {
     let param = {
-      type: 'repo',
+      type: 1,
       name: this.props.repo.owner+'/'+this.props.repo.name
     };
     console.log('UNLIKE', param);

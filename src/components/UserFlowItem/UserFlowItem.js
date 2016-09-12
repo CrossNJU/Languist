@@ -84,7 +84,7 @@ class UserFlowItem extends Component {
   }
   handleUnlike() {
     let param = {
-      type: 'user',
+      type: 0,
       name: this.props.user.login
     };
     console.log('UNLIKE', param);
@@ -118,7 +118,9 @@ class UserFlowItem extends Component {
     }
   }
   renderInviteButton() {
-    if (!this.props.user.isLanguist) {
+    // let shouldInvite = !this.props.user.isLanguist;
+    let shouldInvite = false;
+    if (shouldInvite) {
       return (
         <RaisedButton
           className={s.mainButton}
