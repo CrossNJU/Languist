@@ -53,7 +53,7 @@ class Navigation extends Component {
             targetOrigin={{horizontal: 'right', vertical: 'top'}}
           >
             <MenuItem primaryText="Starred" leftIcon={<Star />} href="/starred" />
-            <MenuItem primaryText="Following" leftIcon={<Person />} href="/following" />
+            <MenuItem primaryText="Following" leftIcon={<Person />} href="/follow?type=following" />
             <Divider />
             <MenuItem primaryText="Sign out" leftIcon={<Exit />} onTouchTap={this.handleLogout.bind(this)} />
           </IconMenu>
