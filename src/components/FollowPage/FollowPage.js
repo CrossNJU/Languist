@@ -64,7 +64,7 @@ class FollowPage extends Component {
       let user = await $.ajax('/api/current_user');
       // let user = 'RickChem';
       this.getCount(user);
-      this.getFollowList(user, 'Following');
+      this.getFollowList(user, this.state.current);
       this.setState({user:user});
     } catch(err) {
       console.error(err);
