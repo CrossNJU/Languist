@@ -18,7 +18,7 @@ class Count extends Component {
     const data = this.props.data;
     return (
       <Paper className={s.container}>
-        <a className={s.item} href="/followers">
+        <a className={s.item} href="/follow?type=followers">
           <div className={s.number}>{data.followersCount}</div>
           <div className={s.label}>Followers</div>
         </a>
@@ -26,7 +26,7 @@ class Count extends Component {
           <div className={s.number}>{data.starredCount}</div>
           <div className={s.label}>Starred</div>
         </a>
-        <a className={s.item} href="/following">
+        <a className={s.item} href="/follow?type=following">
           <div className={s.number}>{data.followingCount}</div>
           <div className={s.label}>Following</div>
         </a>
