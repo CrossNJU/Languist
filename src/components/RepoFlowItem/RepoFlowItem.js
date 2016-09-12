@@ -9,6 +9,8 @@ import s from './RepoFlowItem.scss';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
+import IconButton from 'material-ui/IconButton';
+import FontIcon from 'material-ui/FontIcon';
 import Chip from 'material-ui/Chip';
 
 import Code from 'material-ui/svg-icons/action/code';
@@ -39,13 +41,25 @@ const styles = {
     paddingBottom: 6
   },
   cardActions: {
+    display: 'flex',
+    flexDirection: 'row',
     marginLeft: 10,
     paddingTop: 16,
     paddingBottom: 6
   },
+  mainActions: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexBasis: 0,
+    flexGrow: 1
+  },
   optionalAction: {
-    float: 'right',
-    color: '#DDD'
+    flexBasis: 1,
+    flexGrow: 'auto',
+    color: '#CCC'
+  },
+  iconButton: {
+    color: '#BBB'
   }
 };
 
@@ -64,6 +78,7 @@ class RepoFlowItem extends Component {
     if (this.props.repo.set) {
       return (
         <RaisedButton
+          className={s.mainButton}
           icon={<Star />}
           label={this.props.repo.set || 'UNGROUPED'}
           labelColor="#F2DF83"
@@ -72,6 +87,7 @@ class RepoFlowItem extends Component {
     }
     return (
       <RaisedButton
+        className={s.mainButton}
         icon={<Star />}
         label={'Star (' + this.props.repo.star + ')'}
         secondary={true}
@@ -115,14 +131,26 @@ class RepoFlowItem extends Component {
           </div>
         </CardText>
         <CardActions style={styles.cardActions}>
-          {this.renderStarButton()}
-          <RaisedButton
-            icon={<Code />}
-            label="View"
-            labelColor="#666"
-            href={'https://github.com/'+this.props.repo.owner+'/'+this.props.repo.name} />
-          {this.renderNotInterestedButton()}
+          <div style={styles.mainActions}>
+            {this.renderStarButton()}
+            <RaisedButton
+              className={s.mainButton}
+              icon={<Code />}
+              label="View Related"
+              labelColor="#666"
+            />
+          </div>
+          <div style={styles.optionalActions}>
+            {this.renderNotInterestedButton()}
+          </div>
         </CardActions>
+        <div className={s.iconButtonWrap}>
+          <IconButton
+            iconClassName="muidocs-icon-custom-github"
+            iconStyle={styles.iconButton}
+            href={'https://github.com/'+this.props.repo.owner+'/'+this.props.repo.name}
+          />
+        </div>
       </Card>
     );
   }
