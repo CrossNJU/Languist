@@ -10,10 +10,22 @@ import FlatButton from 'material-ui/FlatButton';
 import Paper from 'material-ui/Paper';
 
 class FlowAction extends Component {
+  constructor(props) {
+    super(props);
+  }
+  handleLoad() {
+    console.log('LOADING');
+    this.props.handleLoad();
+  }
   render() {
     return (
       <Paper className={s.item}>
-        <FlatButton className={s.action} primary={true} label='Load Older Recommendations' />
+        <FlatButton
+          className={s.action}
+          primary={true}
+          label='Load Older Recommendations'
+          onTouchTap={this.handleLoad.bind(this)}
+        />
       </Paper>
     );
   }

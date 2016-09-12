@@ -10,7 +10,8 @@ import RepoFlowItem from '../RepoFlowItem';
 import UserFlowItem from '../UserFlowItem';
 import LangFlowItem from '../LangFlowItem';
 import LoadingFlowItem from '../LoadingFlowItem';
-
+import FlowSeparator from '../FlowSeparator';
+import FlowAction from '../FlowAction';
 
 let flowData = [
   {
@@ -63,7 +64,7 @@ let flowData = [
   }
 ];
 
-class FlowList extends Component {
+class FlowUnit extends Component {
   constructor(props) {
     super(props);
   }
@@ -110,11 +111,55 @@ class FlowList extends Component {
       return (<LoadingFlowItem />);
     }
   };
+  render() {
+    return (
+      <div>
+        <FlowSeparator text={this.props.title} />
+        {this.renderFlowItems()}
+      </div>
+    )
+  }
+}
 
+class FlowUnitList extends Component {
+  constructor(props) {
+    super(props)
+  }
+  renderFlowUnits() {
+    if (this.props.list.length > 0) {
+      let fus = this.props.list.map(unit => {
+        console.log('UNIT', unit);
+        return <FlowUnit key={unit.title} data={unit.data} title={unit.title} />
+      });
+      return fus;
+    } else {
+      return (<LoadingFlowItem />);
+    }
+  }
+  render() {
+    return (
+      <div>
+        {this.renderFlowUnits()}
+      </div>
+    )
+  }
+}
+
+class FlowList extends Component {
+  constructor(props) {
+    super(props);
+  }
+  renderLoadAction() {
+    let hasMore = true;
+    if (hasMore) {
+      return <FlowAction handleLoad={this.props.handleLoad} />
+    }
+  }
   render() {
     return (
       <div className={s.container}>
-        {this.renderFlowItems()}
+        <FlowUnitList list={this.props.data} />
+        {this.renderLoadAction()}
       </div>
     );
   }
