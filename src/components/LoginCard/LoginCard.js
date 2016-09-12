@@ -66,7 +66,7 @@ class LoginCard extends Component {
           </Link>
           <Divider style={dividerStyle}/>
           <RaisedButton label="SIGN UP WITH GITHUB"
-                        href="https://github.com/login/oauth/authorize?client_id=c1bb199ad072f9f1639d"
+                        href="https://github.com/login/oauth/authorize?client_id=d310933db63d64f563a0"
                         style={buttonStyle} secondary={true}
                         labelStyle={buttonLableStyle}/>
         </div>

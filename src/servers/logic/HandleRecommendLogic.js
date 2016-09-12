@@ -405,3 +405,7 @@ export {getNextDayRecommendData, getARepo, getAUser, getDetail, getStart}
 //fetchData('ChenDanni', (ret) => {
 //  console.log(ret);
 //})
+//function test(){
+//
+//  recNew('RickChem');
+//}

@@ -227,6 +227,6 @@ export {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecomm
 //  console.log('recommended!');
 //});
 
-//addMore('RickChem', -1, (ret) => {
+//addMore('RickChem', -2, (ret) => {
 //  console.log(ret);
 //});
