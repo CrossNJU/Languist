@@ -8,6 +8,7 @@ import {github_repoSchema} from '../../models/github_repoSchema'
 import {get_rec_repos_by_contributor} from '../logic/RecommendLogic_repos'
 import {updateRepoCons, updateUserRepos, upsertUser, upsertRepo} from '../logic/UpdateWhenLogin'
 import {getARepo, getDetail} from '../logic/HandleRecommendLogic'
+import {connect} from '../config'
 
 var async = require('async');
 
@@ -106,13 +107,13 @@ function updateSingleRepoRecommend(full_name, callback) {
                 met2.push((call2) => {
                   upsertRepo(repos[j], () => {
                     console.log('done from REPO contributor: ' + contributors[i] + ' to its repo: ' + repos[j] + '!');
-                    call2('done 2!');
+                    call2(null, 'done 2!');
                   })
                 });
               }
               async.parallel(met2, (err, res) => {
                 console.log(res);
-                call1('done 1!');
+                call1(null, 'done 1!');
               });
             })
           })
@@ -120,7 +121,7 @@ function updateSingleRepoRecommend(full_name, callback) {
       }
       async.parallel(met1, (err, res) => {
         console.log(res);
-        call0('done 0!');
+        call0(null, 'done 0!');
       });
     })
   });
@@ -142,7 +143,9 @@ async function getRelatedRecommend(full_name, callback) {
     } else {
       updateSingleRepoRecommend(full_name, async ()=> {
         let rec_num = 10;
+        console.log('in');
         let recs = await get_rec_repos_by_contributor(full_name, rec_num);
+        console.log(recs);
         github_repoSchema.update({full_name: full_name}, {$set: {related: recs}}, (err, res) => {
           console.log('update a repo:' + full_name + ' related!');
           console.log(res);
@@ -193,3 +196,7 @@ export {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecomm
 //  console.log(ret);
 //});
 
+//connect();
+//getRelatedRecommend('nodejs/node', (repos) => {
+//  console.log('recommended!');
+//});

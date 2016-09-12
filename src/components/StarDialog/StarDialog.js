@@ -27,12 +27,31 @@ class StarDialog extends Component {
     super(props);
     this.state = {
       error: '',
-      value: 'Ungrouped'
+      setName: 'Ungrouped'
     }
   }
 
-  handleSubmit() {
-    this.handleClose(true);
+  async handleSubmit() {
+    let repo = this.props.repo;
+    let user = this.props.user;
+
+    let url = '/api/repo/star';
+    let res = await $.ajax(url, {data:{user: user, repo:repo}});
+    console.log(res.res);
+
+    if(res.res == 1) {
+      url = 'api/repo/addToSet';
+      res = await $.ajax(url, {data:{login: user, fullname:repo, setname: this.state.setName}});
+      console.log(res.res);
+      if(res.res == 1) {
+        this.handleClose(true);
+      }else {
+        this.setState({error: 'Star Failed'});
+      }
+    }else {
+      this.setState({error: 'Star Failed'});
+    }
+
   }
 
   handleClose(isSuccess) {
@@ -40,7 +59,7 @@ class StarDialog extends Component {
     this.props.handleClose(isSuccess);
   }
 
-  handleChange = (event, index, value) => this.setState({value});
+  handleChange = (event, index, value) => this.setState({setName: value});
 
   renderMenuItem() {
     return this.props.setList.map((set)=>{
@@ -56,7 +75,7 @@ class StarDialog extends Component {
         open={this.props.isOpen}
         contentStyle={style.dialogStyle}>
         <SelectField
-          value={this.state.value}
+          value={this.state.setName}
           onChange={this.handleChange.bind(this)}>
           {this.renderMenuItem()}
         </SelectField>
