@@ -74,7 +74,8 @@ async function getFlowListData(userName, callback) {
   if (before == 1) {
     console.log('get the first data from web!');
     ans = await getNextDayRecommendData(userName);
-    if (ans == []){
+    if (ans.length == 0){
+      console.log('get start!');
       let now = await getStart(userName);
       ans = await getNextDayRecommendData(userName);
       console.log('start to recommend: ');

@@ -21,7 +21,7 @@ import Divider from 'material-ui/Divider';
 
 const title = 'Log In';
 
-const url = "https://github.com/login/oauth/authorize?client_id=c1bb199ad072f9f1639d";
+const url = "https://github.com/login/oauth/authorize?scope=user%20public_repo&client_id=c1bb199ad072f9f1639d";
 
 const dividerStyle = {
   marginTop: '10px',

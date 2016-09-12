@@ -20,7 +20,7 @@ import FaceIcon from 'material-ui/svg-icons/action/face'
 
 const title = 'Languist'
 
-let signUpUrl = 'https://github.com/login/oauth/authorize?client_id=c1bb199ad072f9f1639d';
+let signUpUrl = 'https://github.com/login/oauth/authorize?scope=user%20public_repo&client_id=c1bb199ad072f9f1639d';
 
 let brandColor = '#F2DF83';
 

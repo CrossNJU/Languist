@@ -129,6 +129,7 @@ server.get('/api/login', (req, res) => {
 server.get('/api/register', (req, res) => {
   register(req.query.username, req.query.password, (res2) => {
     if (res2 == SUCCESS) {
+      req.session.username = req.query.username;
       res.send({res: SUCCESS});
     } else
       res.send({res: res2});
@@ -141,7 +142,7 @@ server.get('/api/logout', (req, res) => {
   res.redirect('/login');
 });
 //test login
-//server.get('/api/test_login', test_login);
+server.get('/api/test_login', test_login);
 
 //star repo
 server.get('/api/repo/star', (req, res)=> {
@@ -258,14 +259,18 @@ server.get('/api/repo/set', (req, res) => {
 //get followings
 server.get('/api/user/following', (req, res) => {
   getUserFollowings(req.query.user, (resa) => {
-    res.send(resa);
+    addInfoToList(req.query.user, resa, true, () => {
+      res.send(resa);
+    });
   })
 });
 
 //get followers
 server.get('/api/user/follower', (req, res) => {
   getUserFollowers(req.query.user, (resa) => {
-    res.send(resa);
+    addInfoToList(req.query.user, resa, true, () => {
+      res.send(resa);
+    });
   })
 });
 
