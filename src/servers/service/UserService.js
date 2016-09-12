@@ -5,8 +5,12 @@
 import {userSchema} from '../../models/userSchema'
 import {languageSchema} from '../../models/languageSchema'
 import {github_userSchema} from '../../models/github_userSchema'
-import {getAUser} from '../logic/HandleRecommendLogic'
+import {getAUser, getARepo} from '../logic/HandleRecommendLogic'
 import {connect} from '../config'
+import {getUserStarred} from '../api/github_user'
+import {upsertRepo} from '../logic/UpdateWhenLogin'
+
+var async = require("async");
 
 function evaluateRecommend(login, name, type, callback) {
   userSchema.findOne({login: login}, (err, user) => {
@@ -65,8 +69,34 @@ function addFeedback(login, feedback, callback){
   });
 }
 
-export {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowingsAndFollowersNum, addFeedback}
+function getUserStarRepo(login, callback){
+  getUserStarred(login, 1, [], true, -1, (stars) => {
+    let met1 = [];
+    for (let i = 0; i < stars.length; i++) {
+      met1.push((call0) => {
+        upsertRepo(stars[i], () => {
+          console.log('new repo: ' + stars[i]);
+          call0(null, 'done 0!');
+        });
+      });
+    }
+    async.parallel(met1, async (err, res) => {
+      console.log(res);
+      let ans = [];
+      for (let i = 0; i < stars.length; i++) {
+        let repo_det = await getARepo(stars[i]);
+        ans.push(repo_det);
+      }
+      callback(ans);
+    })
+  });
+}
+
+export {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowingsAndFollowersNum, addFeedback, getUserStarRepo}
 
 //getUserFollowingsAndFollowersNum()
 //connect();
 //evaluateRecommend('RickChem', 'lodash/lodash', 1);
+//getUserStarRepo('RickChem', (res) => {
+//  console.log(res);
+//});

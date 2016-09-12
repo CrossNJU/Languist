@@ -168,26 +168,14 @@ async function getRepoInfos(full_name, callback) {
 }
 
 function addMore(login, timesBefore, callback) {
-  userSchema.findOne({login: login}, (err, user) => {
+  userSchema.findOne({login: login}, async (err, user) => {
     let rec_all = user.recommend;
-    let date_set = [];
+    let ans = [];
     for (let i = 0; i < rec_all.length; i++) {
-      let index = date_set.findIndex(j => j == rec_all[i].m_date);
-      if (index < 0 && rec_all[i].m_date < 0) date_set.push(rec_all[i].m_date);
+      if (rec_all[i].m_date == timesBefore) ans.push({m_name: rec_all[i].m_name, m_type: rec_all[i].m_type});
     }
-    date_set.sort((o1, o2) => {
-      return o1 < o2
-    });
-    if (timesBefore > date_set) callback([]);
-    else {
-      let ans = [];
-      let date = date_set[timesBefore - 1];
-      for (let i = 0; i < rec_all.length; i++) {
-        if (rec_all[i].m_date == date) ans.push({m_name: rec_all[i].m_date, m_type: rec_all[i].m_type});
-      }
-      let t = getDetail(ans);
-      callback(t);
-    }
+    let t = await getDetail(ans);
+    callback(t);
   });
 }
 
@@ -237,4 +225,8 @@ export {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecomm
 //connect();
 //getRelatedRecommend('nodejs/node', (repos) => {
 //  console.log('recommended!');
+//});
+
+//addMore('RickChem', -1, (ret) => {
+//  console.log(ret);
 //});
