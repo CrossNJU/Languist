@@ -58,7 +58,7 @@ server.use(bodyParser.urlencoded({extended: true}));
 server.use(bodyParser.json());
 server.use(session({
   secret: 'keyboard cat',
-  resave: true,
+  resave: false,
   saveUninitialized: true,
   cookie: {maxAge: 3600000}
 }));
@@ -120,6 +120,8 @@ server.get('/api/login', (req, res) => {
   login(req.query.username, req.query.password, (res2) => {
     if (res2 == SUCCESS) {
       req.session.username = req.query.username;
+      console.log('session');
+      console.log(req.session.cookie.maxAge / 1000);
       res.send({res: SUCCESS});
     } else
       res.send({res: res2});
@@ -252,7 +254,9 @@ server.get('/api/repo/setList', (req, res) => {
 //get set
 server.get('/api/repo/set', (req, res) => {
   getRepoSet(req.query.user, req.query.setName, (resa) => {
-    res.send(resa);
+    addInfoToList(req.query.user, resa, true, () => {
+      res.send(resa);
+    });
   })
 });
 
@@ -284,7 +288,9 @@ server.get('/api/user/folInfo', (req, res) => {
 //get recommend repo
 server.get('/api/repo/related', (req, res) => {
   getRelatedRecommend(req.query.fullName, (resa) => {
-    res.send(resa);
+    addInfoToList(req.query.user, resa, true, () => {
+      res.send(resa);
+    });
   })
 });
 
@@ -320,7 +326,7 @@ server.get('/api/user/starRepo', (req, res)=>{
 server.get('/api/test/session', (req, res)=>{
 
   //console.log('cookie time: ');
-  res.send({res:req.session.cookie.maxAge});
+  res.send({res:req.session.cookie.expires});
 });
 
 //

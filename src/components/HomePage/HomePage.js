@@ -174,10 +174,48 @@ class HomePage extends Component {
     $.ajax(url)
     .done(((data) => {
       console.log('UNLIKE', data);
+      if (data.res === 1) {
+        this.hideFlowItem(param);
+      }
     }).bind(this))
     .fail(((xhr, status, err) => {
       console.error(url, status, err.toString());
     }).bind(this));
+  }
+
+  hideFlowItem(param) {
+    let types = ['user', 'repo', 'lang'];
+    let type = types[param.type];
+    let list = this.state.flowList.slice();
+    list.forEach((unit) => {
+      let data = unit.data;
+      let index = -1;
+      data.forEach((item) => {
+        if (item.type === type) {
+          switch (param.type) {
+            case 0:
+              if (item.login === param.name) {
+                index = data.indexOf(item);
+              }
+              break;
+            case 1:
+              if (item.full_name === param.name) {
+                index = data.indexOf(item);
+              }
+              break;
+            case 2:
+              if (item.name === param.name) {
+                index = data.indexOf(item);
+              }
+              break;
+            default:
+          }
+        }
+        console.log('UNLIKE', index);
+      })
+      data = data.slice(index, 1);
+    });
+    this.setState(flowList: list);
   }
 
   handleFollow(follow) {
