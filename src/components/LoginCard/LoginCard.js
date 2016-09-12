@@ -50,7 +50,7 @@ class LoginCard extends Component {
       this.handleSubmit();
     }
   }
-
+  
   render() {
     return (
       <Paper className={s.content}>

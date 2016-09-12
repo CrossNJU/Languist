@@ -98,7 +98,7 @@ class RepoFlowItem extends Component {
     this.setState({hovering: false});
   }
   renderStarButton() {
-    if (this.props.repo.set.length > 0) {
+    if (this.props.repo.set && this.props.repo.set.length > 0) {
       return (
         <RaisedButton
           className={s.mainButton}
