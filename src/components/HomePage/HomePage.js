@@ -215,7 +215,7 @@ class HomePage extends Component {
       })
       data = data.slice(index, 1);
     });
-    this.setState(flowList: list);
+    this.setState({flowList: list});
   }
 
   handleFollow(follow) {
@@ -244,7 +244,7 @@ class HomePage extends Component {
         }
       })
     });
-    this.setState(flowList: list);
+    this.setState({flowList: list});
   }
 
   handleLoad() {
