@@ -126,7 +126,7 @@ async function get_rec_repos_by_user(login,rec_num){
     }
   }
 
-  console.log(rec_repos);
+  // console.log(rec_repos);
   return rec_repos;
 
 }
@@ -282,7 +282,7 @@ async function get_rec_repos_by_following(login,rec_num){
     if (i >= init_repos.length) break;
     rec_repos.push(init_repos[i].fullname);
   }
-  console.log(rec_repos);
+  // console.log(rec_repos);
   return rec_repos;
 
 }
@@ -410,15 +410,69 @@ async function get_rec_repos_by_contributor(fullname,rec_num){
   return rec_repos;
 }
 
+
+//--------------------------
+//  Home Repos推荐列表
+//--------------------------
+async function get_rec_repos(login,user_percent,star_owner_percent,also_star_percent,following_percent,colleague_percent){
+  let big_base = 150;
+  let base = 100;
+  let user_num = base * user_percent;
+  let star_owner_num = big_base * star_owner_percent;
+  let also_star_num = big_base * also_star_percent;
+  let following_num = base * following_percent;
+  let colleague_num = base * colleague_percent;
+
+  let user_rec = await get_rec_repos_by_user(login,user_num);
+  // console.log(user_rec.length);
+  let star_owner_rec = await get_rec_repos_by_star_repos_owner(login,star_owner_num);
+  // console.log(star_owner_rec.length);
+  let also_star_rec = await get_rec_repos_by_also_star(login,also_star_num);
+  // console.log(also_star_rec.length);
+  let following_rec = await get_rec_repos_by_following(login,following_num);
+  // console.log(following_rec.length);
+  let colleague_rec = await get_rec_repos_by_colleagues(login,colleague_num);
+  // console.log(colleague_rec.length);
+
+  let init_repos = [];
+  let rec_repos = [];
+
+  init_repos.push(user_rec);
+  init_repos.push(star_owner_rec);
+  init_repos.push(also_star_rec);
+  init_repos.push(following_rec);
+  init_repos.push(colleague_rec);
+
+  for (let i = 0 ;i < init_repos.length;i++){
+    for (let j = 0;j < init_repos[i].length;j++){
+      if (rec_repos.indexOf(init_repos[i][j]) <= -1){
+        rec_repos.push(init_repos[i][j]);
+      }
+    }
+  }
+
+  // console.log(rec_repos);
+
+  return rec_repos;
+}
+//--------------------------
+//  Related Repos推荐列表
+//--------------------------
+async function get_related_rec_repos(fullname,contributor_percent){
+
+}
+
+
 export {get_rec_repos_by_user,get_rec_repos_by_star_repos_owner,
   get_rec_repos_by_also_star,get_rec_repos_by_following,get_rec_repos_by_contributor,
-  get_rec_repos_by_colleagues,handle_repos}
+  get_rec_repos_by_colleagues,handle_repos,get_rec_repos}
 
-connect();
+// connect();
 // get_rec_repos_by_user('ChenDanni',10);
 // get_rec_repos_by_also_star('RickChem',100);
 //get_rec_repos_by_following('ChenDanni',100);
-get_rec_repos_by_star_repos_owner('ChenDanni',5);
+// get_rec_repos_by_star_repos_owner('ChenDanni',5);
 // get_rec_repos_by_contributor('d3/d3',5);
 //get_rec_repos_by_also_star('RickChem', 10);
 // get_rec_repos_by_colleagues('ChenDanni',10);
+// get_rec_repos('ChenDanni',1,1,1,1,1);
