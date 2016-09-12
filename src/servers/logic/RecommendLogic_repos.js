@@ -137,12 +137,9 @@ async function get_rec_repos_by_star_repos_owner(login,rec_num) {
   let init_repos = [];
   let rec_repos = [];
 
-  console.log('user_stars: ');
-  console.log(user_stars);
-
 //init_repos: 用户star仓库的owner的所有其他repo的fullname
   for (let i = 0;i < user_stars.length;i++){
-    let fullname = user_stars[i].fullname;
+    let fullname = user_stars[i];
     let repo = await getRepoInfo(fullname);
     // console.log(repo.owner);
     let repo_list = await getPublicRepoByUser(repo.owner);
@@ -153,7 +150,7 @@ async function get_rec_repos_by_star_repos_owner(login,rec_num) {
 
       if (repo_list[j] != fullname){
 
-        console.log(repo_list[j]);
+        // console.log(repo_list[j]);
 
         let temp = await getRepoInfo(repo_list[j]);
 
@@ -161,13 +158,12 @@ async function get_rec_repos_by_star_repos_owner(login,rec_num) {
         // console.log(temp);          //这里不能拿到仓库,仓库为null
 
         let temp_repo = {
-          fullname: temp.fullname,
+          fullname: temp.full_name,
           stars: temp.stars_count
         };
         init_repos.push(temp_repo);
       }
     }
-    console.log('out');
   }
 
   // console.log('init_repos  ');
@@ -179,6 +175,7 @@ async function get_rec_repos_by_star_repos_owner(login,rec_num) {
     if (i >= init_repos.length) break;
     rec_repos.push(init_repos[i].fullname);
   }
+  // console.log(rec_repos);
   return rec_repos;
 }
 
@@ -242,7 +239,7 @@ async function get_rec_repos_by_also_star(login,rec_num){
     if (i >= init_repos.length) break;
     rec_repos.push(init_repos[i].fullname);
   }
-  console.log(rec_repos);
+  // console.log(rec_repos);
   return rec_repos;
 
 }
@@ -417,11 +414,11 @@ export {get_rec_repos_by_user,get_rec_repos_by_star_repos_owner,
   get_rec_repos_by_also_star,get_rec_repos_by_following,get_rec_repos_by_contributor,
   get_rec_repos_by_colleagues,handle_repos}
 
-// connect();
+connect();
 // get_rec_repos_by_user('ChenDanni',10);
 // get_rec_repos_by_also_star('RickChem',100);
 //get_rec_repos_by_following('ChenDanni',100);
-// get_rec_repos_by_also_star('ChenDanni',5);
+get_rec_repos_by_star_repos_owner('ChenDanni',5);
 // get_rec_repos_by_contributor('d3/d3',5);
 //get_rec_repos_by_also_star('RickChem', 10);
 // get_rec_repos_by_colleagues('ChenDanni',10);
