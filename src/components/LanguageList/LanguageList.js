@@ -23,10 +23,10 @@ class LanguageItem extends Component {
     return (
       <ListItem innerDivStyle={listItemStyle}>
         <div className={s.item}>
-          <Avatar src={require('./avatar-default-s.png')} size={36} className={s.avatar} />
+          <Avatar size={36} className={s.avatar}>{this.props.lang.name.substr(0,1)}</Avatar>
           <div className={s.text}>{this.props.lang.name}</div>
           <div className={s.level}>
-            {[...Array(this.props.lang.level)].map((x, i) =>
+            {[...Array(this.props.lang.level + 1)].map((x, i) =>
               <img src={require('./logo-s@2x.png')} key={i} width="18" />
             )}
           </div>

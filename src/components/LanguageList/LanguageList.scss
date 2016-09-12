@@ -1,10 +1,6 @@
 
 @import '../variables.scss';
 
-.root {
-
-}
-
 .container {
   display: flex;
   flex-direction: column;
@@ -21,6 +17,7 @@
   .avatar {
     flex-basis: auto;
     flex-grow: 0;
+    background-image: url('./avatar-default-s.png');
   }
   .text {
     flex-basis: 0;
