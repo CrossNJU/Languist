@@ -5,5 +5,5 @@
 # mongoimport -d languist -c github_repos --type csv --file data/github_repos.csv --headerline
 
 mongoimport -d languist -c users --file data/users.json
-mongoimport -d languist -c languages --file data/languages.json
+mongoimport -d languist -c github_users --file data/github_users.json
 mongoimport -d languist -c github_repos --file data/github_repos.json
