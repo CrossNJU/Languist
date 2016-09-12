@@ -12,84 +12,6 @@ import {connect} from '../config'
 let modulate = 2;
 //let rec_num = 3;
 
-
-//function getLanguageByUser(login){
-//  return [{
-//    name: "lan1",
-//    level: 1,
-//    tag:["tag1","tag2","tag3"],
-//    size:100
-//  },{
-//    name: "lan2",
-//    level: 2,
-//    tag:["tag2","tag3","tag4"],
-//    size:100
-//  },{
-//    name: "lan3",
-//    level: 1,
-//    tag:["tag1","tag4","tag3"],
-//    size:100
-//  }];
-//}
-
-//function getUserAndLevelByLanguage(language){
-//  if (language == 'lan1'){
-//    return [{
-//      login: 'u1',
-//      lan_level: 4
-//    },{
-//      login: 'u2',
-//      lan_level: 2
-//    },{
-//      login: 'u3',
-//      lan_level: 3
-//    },{
-//      login: 'u4',
-//      lan_level: 4
-//    },{
-//      login: 'u5',
-//      lan_level: 5
-//    }]
-//  }
-//  if (language == 'lan2'){
-//    return [{
-//      login: 'u11',
-//      lan_level: 1
-//    },{
-//      login: 'u2',
-//      lan_level: 2
-//    },{
-//      login: 'u13',
-//      lan_level: 3
-//    },{
-//      login: 'u14',
-//      lan_level: 4
-//    },{
-//      login: 'u15',
-//      lan_level: 5
-//    }]
-//  }
-//  if (language == 'lan3'){
-//    return [{
-//      login: 'u1',
-//      lan_level: 1
-//    },{
-//      login: 'u21',
-//      lan_level: 2
-//    },{
-//      login: 'u3',
-//      lan_level: 3
-//    },{
-//      login: 'u14',
-//      lan_level: 4
-//    },{
-//      login: 'u5',
-//      lan_level: 5
-//    }]
-//  }
-//  return []
-//}
-
 function getSortFun(order, sortBy) {
   var ordAlpah = (order == 'asc') ? '>' : '<';
   var sortFun = new Function('a', 'b', 'return a.' + sortBy + ordAlpah + 'b.' + sortBy + '?1:-1');
@@ -119,7 +41,6 @@ async function get_lan_sim(user1,user2){
   sim /= (1 + 5/modulate)*Math.sqrt(user1_lan.length*user2_lan.length);
   return sim;
 }
-//两个用户之间的tag相似度
 
 //得到两个用户之间的相似度
 async function get_user_sim(user1,user2){
@@ -183,7 +104,7 @@ async function get_user_sims(login){
 }
 
 //返回推荐用户的login列表
-async function get_rec_users(login,rec_num){
+async function get_rec_users_by_language(login, rec_num){
   let rec_user_login = [];
   //得到 用户相似度
   let user_sims = await get_user_sims(login);
@@ -218,7 +139,7 @@ async function get_rec_users(login,rec_num){
   }
 
   //console.log("here2");
-  console.log(rec_user_login);
+  // console.log(rec_user_login);
 
 
   return rec_user_login;
@@ -280,6 +201,8 @@ async function get_rec_users_by_star_contributor(login,rec_num){
       break;
     }
   }
+
+  // console.log(rec_user_login);
   return rec_user_login;
 }
 
@@ -333,7 +256,7 @@ async function get_rec_users_by_follwing_repo(login,rec_num){
   // console.log(contr_array.length);
 
   for (let i = 0;i < rec_num;i++){
-    if (i > contr_array.length){
+    if (i >= contr_array.length){
       break;
     }
     rec_contr.push(contr_array[i].login);
@@ -342,9 +265,43 @@ async function get_rec_users_by_follwing_repo(login,rec_num){
   return rec_contr;
 }
 
-export {get_rec_users,get_rec_users_by_star_contributor,get_rec_users_by_follwing_repo}
+async function get_rec_users(login,language_percent,star_contributor_percent,following_repo_percent){
+  let base = 100;
+  let language_num = base * language_percent;
+  let star_contributor_num = base * star_contributor_percent;
+  let following_repo_num = base * following_repo_percent;
+  let language_rec = await get_rec_users_by_language(login,language_num);
+  let star_contributor_rec = await get_rec_users_by_star_contributor(login,star_contributor_num);
+  let following_repo_rec = await get_rec_users_by_follwing_repo(login,following_repo_num);
+
+  let init_repo = [];
+  let rec_repos = [];
+
+  init_repo.push(language_rec);
+  init_repo.push(star_contributor_rec);
+  init_repo.push(following_repo_rec);
+
+  for (let i = 0;i < init_repo.length;i++){
+    for (let j = 0;j < init_repo[i].length;j++){
+      if (rec_repos.indexOf(init_repo[i][j]) <= -1)
+        rec_repos.push(init_repo[i][j]);
+    }
+  }
+
+  // console.log(rec_repos);
+  //
+  // console.log(language_rec.length);
+  // console.log(star_contributor_rec.length);
+  // console.log(following_repo_rec.length);
+  // console.log(rec_repos);
+
+  return rec_repos;
+}
+
+export {get_rec_users_by_language,get_rec_users_by_star_contributor,get_rec_users_by_follwing_repo,get_rec_users}
 
 // connect();
 //get_rec_users_by_follwing_repo('RickChem',20);
 // get_rec_users_by_star_contributor('ChenDanni',10);
 // get_rec_users_by_follwing_repo('ChenDanni',10);
+// get_rec_users('ChenDanni',1,1,1);

@@ -2,7 +2,7 @@
  * Created by ChenDanni on 2016/8/15.
  */
 
-import {get_rec_users} from './RecommendLogic_users'
+import {get_rec_users_by_language} from './RecommendLogic_users'
 import {getStarRepoByUser, getRepoInfo,getPublicRepoByUser,getJoinRepoByUser} from '../dao/RepoDAO'
 import {getUserAndLevelByLanguage, getFollowingByUser, getStarUserByRepo, getContributorsByRepo} from '../dao/UserDAO'
 import {calTime} from '../util/timeUtil'
@@ -67,7 +67,7 @@ async function get_rec_repos_by_user(login,rec_num){
   }
 
   //得到最相似的前sim_user_num个用户
-  let sim_users = await get_rec_users(login,sim_user_num);
+  let sim_users = await get_rec_users_by_language(login,sim_user_num);
 
   //统计count/star
   for (let i = 0;i < sim_users.length;i++){
@@ -126,7 +126,7 @@ async function get_rec_repos_by_user(login,rec_num){
     rec_repos.push(repo_info[i].fullname);
   }
 
-  console.log(rec_repos);
+  // console.log(rec_repos);
   return rec_repos;
 
 }
