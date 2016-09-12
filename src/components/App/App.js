@@ -103,7 +103,7 @@ class App extends Component {
     .done(((user) => {
       if (user !== '') {
         console.log(user);
-        this.setState({login: true});
+        this.setState({login: true, user: user});
       }
     }).bind(this))
     .fail(((xhr, status, err) => {
