@@ -3,6 +3,7 @@
  */
 
 import React, { Component, PropTypes } from 'react';
+import $ from 'jquery';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './UserFlowItem.scss';
 
@@ -68,6 +69,19 @@ class UserFlowItem extends Component {
     super(props);
     this.state = {hovering: false};
   }
+  handleFollow() {
+    let user = this.props.currentUser;
+    let follow = this.props.user.login;
+    let url = `/api/user/follow?user=${user}&follow=${follow}`;
+    console.log('###',url);
+    $.ajax(url)
+      .done(((data) => {
+        console.log("$$$",data);
+      }).bind(this))
+      .fail(((xhr, status, err) => {
+        console.error(url, status, err.toString());
+      }).bind(this));
+  }
   handleMouseOver() {
     this.setState({hovering: true});
   }
@@ -82,7 +96,7 @@ class UserFlowItem extends Component {
           icon={<PersonAdd />}
           label={'Follow (' + this.props.user.followers + ')'}
           secondary={true}
-          onTouchTap={this.handleExpand} />
+          onTouchTap={this.handleFollow.bind(this)} />
       )
     } else {
       return (
@@ -91,7 +105,7 @@ class UserFlowItem extends Component {
           icon={<Person />}
           label={'Following'}
           labelColor="#F2DF83"
-          onTouchTap={this.handleExpand} />
+          onTouchTap={this.handleFollow.bind(this)} />
       )
     }
   }
