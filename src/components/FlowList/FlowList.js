@@ -139,7 +139,7 @@ class FlowUnitList extends Component {
             handleStar={this.props.handleStar}
             handleFollow={this.props.handleFollow}
             handleUnlike={this.props.handleUnlike}
-            handleAdd={this.props.handleAdd}
+            handleAddLanguage={this.props.handleAddLanguage}
             user={this.props.user}
           />
         )
@@ -173,7 +173,7 @@ class FlowList extends Component {
           handleStar={this.props.handleStar}
           handleFollow={this.props.handleFollow}
           handleUnlike={this.props.handleUnlike}
-          handleAdd={this.props.handleAdd}
+          handleAddLanguage={this.props.handleAddLanguage}
           user={this.props.user}
         />
         {this.renderLoadAction()}

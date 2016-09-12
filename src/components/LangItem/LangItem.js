@@ -24,9 +24,12 @@ class LangItem extends Component {
   }
 
   componentWillMount() {
+    let data = this.getQuestionData(this.props.lang.name);
     this.setState({
       isSelected: this.props.lang.isSelected,
-      level: this.props.lang.level
+      level: this.props.lang.level,
+      questionData1: data[0],
+      questionData2: data[1]
     })
   }
 
