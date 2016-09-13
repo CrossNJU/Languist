@@ -79,7 +79,7 @@ export var saveUser = (code, callback) => {
           //insert new users
           userSchema.findOne({login: json.login}, (err, user) => {
             if (user == null){
-              addAnewUser(json, access_token, () => {
+              addAnewUser(json.login, access_token, () => {
                 updateInitialInfo(json.login);
               });
             } else {

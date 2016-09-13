@@ -252,11 +252,11 @@ function followUser(login, loginToFollow, callback) {
   });
 }
 
-function addAnewUser(json, access_token, callback = null) {
+function addAnewUser(login, access_token, callback = null) {
   var conditions = {login: json.login};
   var update = {
     $set: {
-      login: json.login,
+      login: login,
       level: 0,
       access_token: access_token,
       password: "123",

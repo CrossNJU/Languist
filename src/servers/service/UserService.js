@@ -8,7 +8,7 @@ import {github_userSchema} from '../../models/github_userSchema'
 import {getAUser, getARepo} from '../logic/HandleRecommendLogic'
 import {connect} from '../config'
 import {getUserStarred} from '../api/github_user'
-import {upsertRepo} from '../logic/UpdateWhenLogin'
+import {upsertRepo, updateWhenLogin} from '../logic/UpdateWhenLogin'
 
 var async = require("async");
 
@@ -92,7 +92,44 @@ function getUserStarRepo(login, callback){
   });
 }
 
-export {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowingsAndFollowersNum, addFeedback, getUserStarRepo}
+function reloadUser(login, callback){
+  let update = {
+    $set: {
+      level: 0,
+      recommend: [],
+      now_recommend: [],
+      dislike: [],
+    }
+  };
+  if (login == 'All'){
+    userSchema.find({}, (err, users) => {
+      let met0 = [];
+      for(let i=0;i<users.length;i++){
+        met0.push((call0) => {
+          userSchema.update({login:users[i].login}, update, (err, res) => {
+            console.log('reload user:'+users[i].login);
+            console.log(res);
+            updateWhenLogin(users[i].login);
+            call0(null, 'update:'+users[i].login);
+          })
+        })
+      }
+      async.parallel(met0, async (err, res) => {
+        console.log(res);
+        callback();
+      })
+    })
+  } else {
+    userSchema.update({login:login}, update, (err, res) => {
+      console.log('reload user:'+login);
+      console.log(res);
+      updateWhenLogin(login);
+      callback();
+    })
+  }
+}
+
+export {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowingsAndFollowersNum, addFeedback, getUserStarRepo, reloadUser}
 
 //getUserFollowingsAndFollowersNum()
 //connect();

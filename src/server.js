@@ -30,7 +30,7 @@ import {home, test_login} from './servers/test/testController';
 import {saveUser, login, register} from './servers/service/LoginService';
 import {getFlowListData, getCountData, getLangListData, getCoverData} from './servers/service/HomeService'
 import {addLang, getAllLanguage} from './servers/service/LanguageService'
-import {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowingsAndFollowersNum, addFeedback, getUserStarRepo} from './servers/service/UserService'
+import {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowingsAndFollowersNum, addFeedback, getUserStarRepo, reloadUser} from './servers/service/UserService'
 import {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecommend, getRepoInfos, addMore, addInfoToList} from './servers/service/RepoService'
 //others
 import {starRepo, followUser} from './servers/api/github_user'
@@ -41,6 +41,13 @@ connect();
 
 const server = global.server = express();
 const ret_success = 'success';
+
+process.on('uncaughtException', function (err) {
+  //打印出错误
+  console.log(err);
+  //打印出错误的调用栈方便调试
+  console.log(err.stack);
+});
 
 //
 // Tell any CSS tooling (such as Material UI) to use all vendor prefixes if the
@@ -327,6 +334,12 @@ server.get('/api/test/session', (req, res)=>{
 
   //console.log('cookie time: ');
   res.send({res:req.session.cookie.expires});
+});
+
+server.get('/api/test/reload', (req, res) => {
+  reloadUser(req.query.user, ()=> {
+    res.send({res: SUCCESS});
+  })
 });
 
 //
