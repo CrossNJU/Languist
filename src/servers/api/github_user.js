@@ -253,7 +253,7 @@ function followUser(login, loginToFollow, callback) {
 }
 
 function addAnewUser(login, access_token, callback = null) {
-  var conditions = {login: json.login};
+  var conditions = {login: login};
   var update = {
     $set: {
       login: login,

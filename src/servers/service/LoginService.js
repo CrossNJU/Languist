@@ -9,6 +9,7 @@ import {updateWhenLogin, updateInitialInfo} from '../logic/UpdateWhenLogin'
 import {} from '../logic/UpdateLater'
 import {SUCCESS, FAIL, PASSWORD_ERROR, NOT_FOUND, client_id, client_secret} from '../config'
 var superagent = require('superagent');
+var md5 = require('js-md5');
 
 var getAccessURL = 'https://github.com/login/oauth/access_token';
 
@@ -18,7 +19,7 @@ function login(username, password, callback) {
   userSchema.findOne({login: username}, (err, user) => {
     if (user == null) callback(NOT_FOUND);
     else {
-      if (user.password == password) {
+      if (user.password == md5(password)) {
         callback(SUCCESS);
       }
       else if (user.password === undefined) callback(PASSWORD_ERROR);
@@ -31,7 +32,7 @@ function register(username, password, callback) {
   var conditions = {login: username};
   var update = {
     $set: {
-      password: password
+      password: md5(password)
     }
   };
   userSchema.update(conditions, update, (err, res) => {

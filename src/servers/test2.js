@@ -1,6 +1,8 @@
 /**
  * Created by raychen on 16/9/12.
  */
+
+var md5 = require('js-md5');
 var async = require("async");
 var signal = 0, count = 24;
 
@@ -24,6 +26,8 @@ function circle(){
 }
 
 //circle();
-//console.log('in');
-let time = new Date();
-console.log(time.getHours());
+console.log(md5('123'));
+console.log(md5('1234'));
+//let time = new Date();
+//console.log('test:'+(new Date()).toLocaleString());
+
