@@ -178,7 +178,7 @@ function getInterval(time_bef) {
 
 //---------------------------  update recommend data  --------------------------------------------------
 async function fetchData(userName, callback) {
-  //console.log(userName);
+  console.log('fetch data for:'+userName+':'+(new Date()).toLocaleString());
   let repos = await get_rec_repos_by_also_star(userName, 100);
   //console.log('after fetch rec repo data!');
   let users = await get_rec_users_by_star_contributor(userName, 35);
@@ -223,7 +223,7 @@ async function fetchData(userName, callback) {
 
 //---------------------------  switch data, not fetch again(unless all recommended)  --------------------------------------------------
 async function recNew(userName) {
-  console.log('in');
+  console.log('in rec New:'+(new Date()).toLocaleString());
   let cur_user = await new Promise(function (resolve, reject) {
     userSchema.findOne({login: userName}, (err, user) => {
       if (err) reject(err);
@@ -303,7 +303,7 @@ async function recNew(userName) {
 
 //---------------------------  update when login  --------------------------------------------------
 async function getStart(userName) {
-  console.log('get started!');
+  console.log('get started!: '+(new Date()).toLocaleString());
   circle(userName);
   let cur_rec = await new Promise(function (resolve, reject) {
     fetchData(userName, async (ret) => {
@@ -359,8 +359,9 @@ async function getNextDayRecommendData(userName) {
 }
 
 function circle(userName){
+  var user = userName;
   let time = new Date(); // now time
-  time_left = 4 - time.getHours();
+  time_left = 9 - time.getHours();
   if (time_left < 0) time_left += 24;
   time_left += 1;
   time_left = time_left*60*60;
@@ -368,7 +369,7 @@ function circle(userName){
       return time_signal > 0;
     },
     function(cb) {
-      //console.log('one second passed!............');
+      //if(time_left % 3600 == 0) console.log('one hour passed!............'+(new Date()).toLocaleString());
       time_left --;
       if (time_left == 0) {time_left = 24; time_signal = 1;}
       setTimeout(cb, 1000);
@@ -376,8 +377,9 @@ function circle(userName){
     function(err) {
       console.log('done! hours is:'+(new Date().getHours()));
       time_signal = 0;
-      recNew(userName);
-      circle(userName);
+      console.log('in circle to recommend: ');
+      recNew(user);
+      circle(user);
     });
 }
 

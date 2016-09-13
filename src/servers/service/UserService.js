@@ -62,7 +62,7 @@ function getUserFollowingsAndFollowersNum(login, callback) {
 }
 
 function addFeedback(login, feedback, callback){
-  userSchema.update({login:login}, {$addToSet:{feedback:feedback}}, (err, res) => {
+  userSchema.update({login:login}, {$addToSet:{feedback:{time:(new Date()).toLocaleString(), content: feedback}}}, (err, res) => {
     console.log('add feedback!');
     console.log(res);
     callback(1);
