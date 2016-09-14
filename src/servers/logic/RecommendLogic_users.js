@@ -145,8 +145,7 @@ async function get_rec_users_by_language(login, rec_num){
   return rec_user_login;
 }
 
-//推荐用户star仓库的contributor
-//user->star_repos->contributors      need test
+//user->star_repos->contributors
 async function get_rec_users_by_star_contributor(login,rec_num){
   let rec_user_login = [];
   let init_rec = [];
@@ -295,7 +294,7 @@ async function get_rec_users(login,language_percent,star_contributor_percent,fol
   let init_users = [];
   let rec_users = [];
 
-  if (!((language_rec.length == 0)&&(star_contributor_rec.length == 0)&&(following_repo_rec.length == 0))){
+  if (((language_rec.length == 0)&&(star_contributor_rec.length == 0)&&(following_repo_rec.length == 0))){
     let index = base_rec.indexOf(login);
     if (index >= -1){
       base_rec.splice(index, 1);
@@ -316,15 +315,15 @@ async function get_rec_users(login,language_percent,star_contributor_percent,fol
     }
   }
 
-
   return rec_users;
 }
 
-export {get_rec_users_by_language,get_rec_users_by_star_contributor,get_rec_users_by_follwing_repo,get_rec_users}
+export {get_rec_users,get_user_sim,get_user_sims,get_rec_users_by_language,get_rec_users_by_star_contributor,
+        get_rec_users_by_follwing_repo,get_rec_users_when_zero}
 
-connect();
+// connect();
 //get_rec_users_by_follwing_repo('RickChem',20);
 // get_rec_users_by_star_contributor('ChenDanni',10);
 // get_rec_users_by_follwing_repo('ChenDanni',10);
-get_rec_users('ChenDanni',1,1,1);
+// get_rec_users('ChenDanni',1,1,1);
 // get_rec_users_when_zero(100);

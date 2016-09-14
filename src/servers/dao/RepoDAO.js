@@ -65,7 +65,23 @@ async function getJoinRepoByUser(login) {
   return t;
 }
 
-export {getStarRepoByUser, getPublicRepoByUser, getRepoInfo, getJoinRepoByUser}
+async function getTopRepos(repo_num){
+  let t = await new Promise(async function (resolve, reject) {
+    github_repoSchema.find({}, (err, res) => {
+      if (err) reject(err);
+      let ans = [];
+      for (let repo of res) {
+        ans.push(repo.full_name);
+        ans.push(repo.stars_count);
+      }
+      resolve(ans);
+    }).sort({'stars_count': -1}).limit(repo_num);
+  });
+  return t;
+}
+
+export {getStarRepoByUser, getPublicRepoByUser, getRepoInfo,
+  getJoinRepoByUser,getTopRepos}
 
 async function test() {
   //connect();
