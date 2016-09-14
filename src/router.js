@@ -30,7 +30,7 @@ function addRepoAPI(server) {
     });
   });
   //unstar repo
-  server.get('/api/repo/star', (req, res)=> {
+  server.get('/api/repo/unstar', (req, res)=> {
     unstarRepo(req.query.user, req.query.repo, resa => {
       if (resa == SUCCESS) {
         record_log(getUser(), getUser() + ' unstar repo: ' + req.query.repo + ' SUCCESS!', 'del');
@@ -131,7 +131,7 @@ function addUserAPI(server) {
     });
   });
   //unfollow user
-  server.get('/api/user/follow', (req, res)=> {
+  server.get('/api/user/unfollow', (req, res)=> {
     unfollowUser(req.query.user, req.query.follow, resa => {
       if (resa == SUCCESS) {
         record_log(getUser(), getUser() + ' unfollow user: ' + req.query.follow + ' SUCCESS!', 'del');
