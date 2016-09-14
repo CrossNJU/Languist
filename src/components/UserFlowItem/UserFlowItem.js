@@ -13,11 +13,15 @@ import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import Chip from 'material-ui/Chip';
 import CircularProgress from 'material-ui/CircularProgress';
+import Popover from 'material-ui/Popover';
+import Menu from 'material-ui/Menu';
+import MenuItem from 'material-ui/MenuItem';
 
 import Person from 'material-ui/svg-icons/social/person';
 import PersonAdd from 'material-ui/svg-icons/social/person-add';
 import PersonOutline from 'material-ui/svg-icons/social/person-outline';
 import Star from 'material-ui/svg-icons/toggle/star';
+import Undo from 'material-ui/svg-icons/content/undo';
 
 const styles = {
   title: {
@@ -75,10 +79,14 @@ const styles = {
 class UserFlowItem extends Component {
   constructor(props) {
     super(props);
-    this.state = {hovering: false, loading: false};
+    this.state = {hovering: false, loading: false, open: false};
   }
   handleFollow() {
     this.props.handleFollow(this.props.user.login);
+    this.setState({loading: true});
+  }
+  handleUnfollow() {
+    this.props.handleUnfollow(this.props.user.login);
     this.setState({loading: true});
   }
   handleUnlike() {
@@ -95,6 +103,19 @@ class UserFlowItem extends Component {
   handleMouseOut() {
     this.setState({hovering: false});
   }
+  handlePopover(event) {
+    // This prevents ghost click.
+    event.preventDefault();
+    this.setState({
+      open: true,
+      anchorEl: event.currentTarget,
+    });
+  }
+  handleRequestClose() {
+    this.setState({
+      open: false,
+    });
+  };
   renderFollowButton() {
     if (!this.props.user.isFollowing) {
       return (
@@ -110,12 +131,25 @@ class UserFlowItem extends Component {
       )
     } else {
       return (
-        <RaisedButton
-          className={s.mainButton}
-          icon={<Person />}
-          label={'Following'}
-          labelColor="#F2DF83"
-          onTouchTap={this.handleFollow.bind(this)} />
+        <div>
+          <RaisedButton
+            className={s.mainButton}
+            icon={<Person />}
+            label={'Following'}
+            labelColor="#F2DF83"
+            onTouchTap={this.handlePopover.bind(this)} />
+          <Popover
+            open={this.state.open}
+            anchorEl={this.state.anchorEl}
+            anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+            targetOrigin={{horizontal: 'left', vertical: 'top'}}
+            onRequestClose={this.handleRequestClose.bind(this)}
+          >
+            <Menu>
+              <MenuItem primaryText="Unfollow" leftIcon={<Undo />} onTouchTap={this.handleUnfollow.bind(this)} />
+            </Menu>
+          </Popover>
+        </div>
       )
     }
   }

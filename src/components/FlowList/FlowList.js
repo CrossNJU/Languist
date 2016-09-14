@@ -94,6 +94,7 @@ class FlowUnit extends Component {
                 optional={true}
                 handleUnlike={this.props.handleUnlike}
                 handleFollow={this.props.handleFollow}
+                handleUnfollow={this.props.handleUnfollow}
               />
             );
           case 'lang':
@@ -140,6 +141,7 @@ class FlowUnitList extends Component {
             handleFollow={this.props.handleFollow}
             handleUnlike={this.props.handleUnlike}
             handleAddLanguage={this.props.handleAddLanguage}
+            handleUnfollow={this.props.handleUnfollow}
             user={this.props.user}
           />
         )
@@ -174,6 +176,7 @@ class FlowList extends Component {
           handleFollow={this.props.handleFollow}
           handleUnlike={this.props.handleUnlike}
           handleAddLanguage={this.props.handleAddLanguage}
+          handleUnfollow={this.props.handleUnfollow}
           user={this.props.user}
         />
         {this.renderLoadAction()}

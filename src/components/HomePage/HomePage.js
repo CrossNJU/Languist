@@ -234,6 +234,10 @@ class HomePage extends Component {
       }).bind(this));
   }
 
+  handleUnfollow(follow) {
+    console.log('UNFOLLOWING', follow);
+  }
+
   setFollowing(follow) {
     let list = this.state.flowList.slice();
     list.forEach((unit) => {
@@ -328,6 +332,7 @@ class HomePage extends Component {
                 handleLoad={this.handleLoad.bind(this)}
                 handleStar={this.handleOpenStarDialog.bind(this)}
                 handleFollow={this.handleFollow.bind(this)}
+                handleUnfollow={this.handleUnfollow.bind(this)}
               />
             </div>
           </div>
