@@ -25,10 +25,17 @@ html {
   line-height: 1.375; /* ~22px */
 }
 
+body {
+  background: $background-color;
+}
+
 .container {
   display: flex;
+  position: relative;
+  box-sizing: border-box;
   flex-direction: column;
-  // align-items: stretch;
+  min-height: 100vh;
+  padding-bottom: 62px;
 }
 
 /*
