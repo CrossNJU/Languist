@@ -14,6 +14,8 @@ import s from './App.scss';
 import Header from '../Header';
 import Footer from '../Footer';
 
+import Snackbar from 'material-ui/Snackbar';
+
 import {
   cyan500, cyan700,
   pinkA200,
@@ -93,7 +95,8 @@ class App extends Component {
     super(props);
     this.state = {
       login: false,
-      user: ''
+      user: '',
+      snackbarOpen: false
     };
     console.log('constructor App');
   }
@@ -139,13 +142,35 @@ class App extends Component {
     }).bind(this));
   }
 
+  handleSnackbarOpen(message) {
+    this.setState({
+      snackbarOpen: true,
+      snackbarMessage: message
+    });
+  };
+
+  handleSnackbarClose() {
+    this.setState({
+      snackbarOpen: false,
+    });
+  };
+
   render() {
+    const childrenWithProps = React.Children.map(this.props.children, (child) => React.cloneElement(child, {
+       handleSnackbarOpen: this.handleSnackbarOpen.bind(this)
+    }));
     return !this.props.error ? (
       <MuiThemeProvider muiTheme={muiTheme}>
       <div className={s.container}>
-        <Header login={this.state.login} handleLogout={this.handleLogout} user={this.state.user}/>
-        {this.props.children}
+        <Header handleSnackbarOpen={this.handleSnackbarOpen.bind(this)} login={this.state.login} handleLogout={this.handleLogout} user={this.state.user}/>
+        {childrenWithProps}
         <Footer />
+        <Snackbar
+          open={this.state.snackbarOpen}
+          message={this.state.snackbarMessage}
+          autoHideDuration={4000}
+          onRequestClose={this.handleSnackbarClose.bind(this)}
+        />
       </div>
       </MuiThemeProvider>
     ) : this.props.children;

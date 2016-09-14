@@ -40,6 +40,10 @@ class Navigation extends Component {
     this.props.handleLogout();
   }
 
+  handleSnackbarOpen() {
+    this.props.handleSnackbarOpen('Open from Header');
+  }
+
   render() {
     let isLogin = this.props.login;
     if (isLogin) {

@@ -34,7 +34,7 @@ class Header extends Component {
           <Link className={s.brand} to="/home">
             <img src={require('./logo-brand-text@2x.png')} height="32" alt="Languist" />
           </Link>
-          <Navigation className={s.nav} login={this.props.login} handleLogout={this.props.handleLogout} handleFeedback={this.handleFeedbackDialogOpen.bind(this)}/>
+          <Navigation handleSnackbarOpen={this.props.handleSnackbarOpen} className={s.nav} login={this.props.login} handleLogout={this.props.handleLogout} handleFeedback={this.handleFeedbackDialogOpen.bind(this)}/>
         </div>
         <FeedbackDialog isOpen={this.state.isDialogOpen} user={this.props.user} handleClose={this.handleFeedbackDialogClose.bind(this)}/>
       </div>
