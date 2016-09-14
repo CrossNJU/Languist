@@ -75,20 +75,17 @@ const styles = {
 class RepoFlowItem extends Component {
   constructor(props) {
     super(props);
-    this.state = {hovering: false, open: false};
+    this.state = {hovering: false, open: false, tags: []};
+  }
+  componentDidMount() {
+    let url = '/api/repo/languages';
+    $.ajax(url, {data: {fullName: this.props.repo.full_name}})
+      .done(((data) => {
+        console.log(data);
+        this.setState({tags: data});
+      }).bind(this));
   }
   handleStar() {
-    // let user = this.props.currentUser;
-    // let repo = this.props.repo.owner+'/'+this.props.repo.name;
-    // let url = `/api/repo/star?user=${user}&repo=${repo}`;
-    // console.log('###',url);
-    // $.ajax(url)
-    //   .done(((data) => {
-    //     console.log("$$$",data);
-    //   }).bind(this))
-    //   .fail(((xhr, status, err) => {
-    //     console.error(url, status, err.toString());
-    //   }).bind(this));
     this.props.handleStar(this.props.repo.owner+'/'+this.props.repo.name);
   }
   handleUnstar() {
@@ -120,6 +117,24 @@ class RepoFlowItem extends Component {
       open: false,
     });
   };
+  renderTags() {
+    let tagsData = this.state.tags;
+    if (tagsData.length > 0) {
+      let tags = tagsData.map((tag, i) => {
+        return (
+          <Chip
+            key={i}
+            labelStyle={styles.chipLabel}
+            style={styles.chip}
+            onTouchTap={this.handleTouchTap}
+          >
+            {tag}
+          </Chip>
+        );
+      })
+      return tags;
+    }
+  }
   renderStarButton() {
     if (this.props.repo.set && this.props.repo.set.length > 0) {
       return (
@@ -195,20 +210,7 @@ class RepoFlowItem extends Component {
         </CardText>
         <CardText style={styles.cardText}>
           <div className={s.tags}>
-            {
-              this.props.repo.tags.map((tag, i) => {
-                return (
-                  <Chip
-                    key={i}
-                    labelStyle={styles.chipLabel}
-                    style={styles.chip}
-                    onTouchTap={this.handleTouchTap}
-                  >
-                    {tag}
-                  </Chip>
-                );
-              })
-            }
+            {this.renderTags()}
           </div>
         </CardText>
         <CardActions style={styles.cardActions}>
