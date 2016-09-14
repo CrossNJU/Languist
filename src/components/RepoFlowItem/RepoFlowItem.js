@@ -13,10 +13,15 @@ import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 import Chip from 'material-ui/Chip';
+import Popover from 'material-ui/Popover';
+import Menu from 'material-ui/Menu';
+import MenuItem from 'material-ui/MenuItem';
 
 import Code from 'material-ui/svg-icons/action/code';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import Star from 'material-ui/svg-icons/toggle/star';
+import Stars from 'material-ui/svg-icons/action/stars';
+import Undo from 'material-ui/svg-icons/content/undo';
 
 const styles = {
   title: {
@@ -70,7 +75,7 @@ const styles = {
 class RepoFlowItem extends Component {
   constructor(props) {
     super(props);
-    this.state = {hovering: false};
+    this.state = {hovering: false, open: false};
   }
   handleStar() {
     // let user = this.props.currentUser;
@@ -86,6 +91,9 @@ class RepoFlowItem extends Component {
     //   }).bind(this));
     this.props.handleStar(this.props.repo.owner+'/'+this.props.repo.name);
   }
+  handleUnstar() {
+    this.props.handleUnstar(this.props.repo.owner+'/'+this.props.repo.name);
+  }
   handleUnlike() {
     let param = {
       type: 1,
@@ -100,15 +108,41 @@ class RepoFlowItem extends Component {
   handleMouseOut() {
     this.setState({hovering: false});
   }
+  handlePopover(event) {
+    event.preventDefault();   // This prevents ghost click.
+    this.setState({
+      open: true,
+      anchorEl: event.currentTarget,
+    });
+  }
+  handleRequestClose() {
+    this.setState({
+      open: false,
+    });
+  };
   renderStarButton() {
     if (this.props.repo.set && this.props.repo.set.length > 0) {
       return (
-        <RaisedButton
-          className={s.mainButton}
-          icon={<Star />}
-          label={this.props.repo.set || 'UNGROUPED'}
-          labelColor="#F2DF83"
-          onTouchTap={this.handleStar.bind(this)} />
+        <div>
+          <RaisedButton
+            className={s.mainButton}
+            icon={<Star />}
+            label={this.props.repo.set || 'UNGROUPED'}
+            labelColor="#F2DF83"
+            onTouchTap={this.handlePopover.bind(this)} />
+          <Popover
+            open={this.state.open}
+            anchorEl={this.state.anchorEl}
+            anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+            targetOrigin={{horizontal: 'left', vertical: 'top'}}
+            onRequestClose={this.handleRequestClose.bind(this)}
+          >
+            <Menu>
+              <MenuItem primaryText="Change star set" leftIcon={<Stars />} />
+              <MenuItem primaryText="Unstar" leftIcon={<StarBorder />} onTouchTap={this.handleUnstar.bind(this)} />
+            </Menu>
+          </Popover>
+        </div>
       )
     }
     return (

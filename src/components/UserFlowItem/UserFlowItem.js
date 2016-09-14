@@ -104,8 +104,7 @@ class UserFlowItem extends Component {
     this.setState({hovering: false});
   }
   handlePopover(event) {
-    // This prevents ghost click.
-    event.preventDefault();
+    event.preventDefault();   // This prevents ghost click.
     this.setState({
       open: true,
       anchorEl: event.currentTarget,

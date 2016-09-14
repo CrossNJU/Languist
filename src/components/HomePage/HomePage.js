@@ -234,8 +234,12 @@ class HomePage extends Component {
       }).bind(this));
   }
 
-  handleUnfollow(follow) {
-    console.log('UNFOLLOWING', follow);
+  handleUnfollow(user) {
+    console.log('UNFOLLOWING', user);
+  }
+
+  handleUnstar(repo) {
+    console.log('UNSTARRING', repo);
   }
 
   setFollowing(follow) {
@@ -333,6 +337,7 @@ class HomePage extends Component {
                 handleStar={this.handleOpenStarDialog.bind(this)}
                 handleFollow={this.handleFollow.bind(this)}
                 handleUnfollow={this.handleUnfollow.bind(this)}
+                handleUnstar={this.handleUnstar.bind(this)}
               />
             </div>
           </div>

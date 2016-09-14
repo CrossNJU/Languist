@@ -83,6 +83,7 @@ class FlowUnit extends Component {
                 optional={true}
                 handleUnlike={this.props.handleUnlike}
                 handleStar={this.props.handleStar}
+                handleUnstar={this.props.handleUnstar}
               />
             );
           case 'user':
@@ -137,12 +138,13 @@ class FlowUnitList extends Component {
             key={unit.title}
             data={unit.data}
             title={unit.title}
+            user={this.props.user}
             handleStar={this.props.handleStar}
             handleFollow={this.props.handleFollow}
             handleUnlike={this.props.handleUnlike}
             handleAddLanguage={this.props.handleAddLanguage}
             handleUnfollow={this.props.handleUnfollow}
-            user={this.props.user}
+            handleUnstar={this.props.handleUnstar}
           />
         )
       });
@@ -172,12 +174,13 @@ class FlowList extends Component {
       <div className={s.container}>
         <FlowUnitList
           list={this.props.data}
+          user={this.props.user}
           handleStar={this.props.handleStar}
           handleFollow={this.props.handleFollow}
           handleUnlike={this.props.handleUnlike}
           handleAddLanguage={this.props.handleAddLanguage}
           handleUnfollow={this.props.handleUnfollow}
-          user={this.props.user}
+          handleUnstar={this.props.handleUnstar}
         />
         {this.renderLoadAction()}
       </div>
