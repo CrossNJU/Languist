@@ -61,6 +61,9 @@ const styles = {
   },
   iconButton: {
     color: '#BBB'
+  },
+  tooltip: {
+    top: '16px'
   }
 };
 
@@ -142,15 +145,17 @@ class RepoFlowItem extends Component {
     }
   }
   render() {
+    const link = 'https://github.com/' + this.props.repo.full_name;
     return (
       <Card className={s.item} onMouseEnter={this.handleMouseOver.bind(this)} onMouseLeave={this.handleMouseOut.bind(this)}>
         <CardHeader
-          title={this.props.repo.owner + '/' + this.props.repo.name}
+          title={<a href={link} target="_blank" title="View this repository on GitHub">{this.props.repo.full_name}</a>}
           titleStyle={styles.title}
           subtitle={'Updated on ' + this.props.repo.update}
           subtitleStyle={styles.subtitle}
           avatar={this.props.repo.avatarUrl || require('./avatar-default-s.png')}
-        />
+        >
+        </CardHeader>
         <CardText style={styles.cardText}>
           {this.props.repo.description}
         </CardText>
@@ -185,7 +190,12 @@ class RepoFlowItem extends Component {
           <IconButton
             iconClassName="muidocs-icon-custom-github"
             iconStyle={styles.iconButton}
-            href={'https://github.com/'+this.props.repo.owner+'/'+this.props.repo.name}
+            href={link}
+            target="_blank"
+            tooltip="View this repository on GitHub"
+            touch={true}
+            tooltipPosition="bottom-left"
+            tooltipStyles={styles.tooltip}
           />
         </div>
       </Card>

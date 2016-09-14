@@ -61,6 +61,9 @@ const styles = {
   },
   iconButton: {
     color: '#BBB'
+  },
+  tooltip: {
+    top: '16px'
   }
 };
 
@@ -147,15 +150,16 @@ class UserFlowItem extends Component {
     }
   }
   render() {
-    let title = this.props.user.name ? this.props.user.name + ' (' + this.props.user.login + ')' : this.props.user.login;
+    const title = this.props.user.name ? this.props.user.name + ' (' + this.props.user.login + ')' : this.props.user.login;
     let subtitle = 'Joined on ' + this.props.user.join.split('T')[0];
     if (this.props.user.location) {
       subtitle += ' / ' + this.props.user.location;
     }
+    const link = 'https://github.com/' + this.props.user.login;
     return (
       <Card className={s.item} onMouseEnter={this.handleMouseOver.bind(this)} onMouseLeave={this.handleMouseOut.bind(this)}>
         <CardHeader
-          title={title}
+          title={<a href={link} target="_blank" title="View this user on GitHub">{title}</a>}
           titleStyle={styles.title}
           subtitle={subtitle}
           subtitleStyle={styles.subtitle}
@@ -196,7 +200,12 @@ class UserFlowItem extends Component {
           <IconButton
             iconClassName="muidocs-icon-custom-github"
             iconStyle={styles.iconButton}
-            href={'https://github.com/'+this.props.user.login}
+            href={link}
+            target="_blank"
+            tooltip="View this user on GitHub"
+            touch={true}
+            tooltipPosition="bottom-left"
+            tooltipStyles={styles.tooltip}
           />
         </div>
       </Card>

@@ -29,6 +29,16 @@ body {
   background: $background-color;
 }
 
+a {
+  color: $primary-color;
+  text-decoration: none;
+  transition: all .3s;
+  cursor: pointer;
+  &:hover {
+    color: $brand-color;
+  }
+}
+
 .container {
   display: flex;
   position: relative;
