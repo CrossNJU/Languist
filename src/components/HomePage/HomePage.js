@@ -176,6 +176,7 @@ class HomePage extends Component {
       console.log('UNLIKE', data);
       if (data.res === 1) {
         this.hideFlowItem(param);
+        this.props.handleSnackbarOpen('Marked ' + param.name + ' as NOT INTERESTED');
       }
     }).bind(this))
     .fail(((xhr, status, err) => {
@@ -228,6 +229,7 @@ class HomePage extends Component {
         if (data.res === 1) {
           this.setFollowing(follow);
         }
+        this.props.handleSnackbarOpen(`${follow} is added to your following list :-D`);
       }).bind(this))
       .fail(((xhr, status, err) => {
         console.error(url, status, err.toString());
@@ -307,6 +309,7 @@ class HomePage extends Component {
       });
       newState.flowList = this.state.flowList;
     }
+    this.props.handleSnackbarOpen(`${this.state.currentStar} is added to your star set <${set}> :-D`);
     this.setState(newState);
   }
 
