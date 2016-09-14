@@ -6,7 +6,6 @@ import {userSchema} from '../../models/userSchema'
 import {addAnewUser, addAnewGitHubUser} from '../api/github_user'
 import {setClient} from '../api/github_conf'
 import {updateWhenLogin, updateInitialInfo} from '../logic/UpdateWhenLogin'
-import {} from '../logic/UpdateLater'
 import {SUCCESS, FAIL, PASSWORD_ERROR, NOT_FOUND, client_id, client_secret} from '../config'
 var superagent = require('superagent');
 var md5 = require('js-md5');

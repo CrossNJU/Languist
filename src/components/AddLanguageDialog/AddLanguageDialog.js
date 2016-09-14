@@ -38,7 +38,7 @@ class AddLanguageDialog extends Component {
         <LangList langData={[this.props.language]} user={this.props.user} handleChange={this.handleChange.bind(this)}/>
         <div className={s.btn__group}>
           <RaisedButton label="DONE" primary={true} onClick={this.handleSubmit.bind(this)}/>
-          <RaisedButton label="CANCEL" onClick={this.props.handleClose}/>
+          <RaisedButton label="CANCEL" onTouchTap={this.props.handleClose}/>
         </div>
       </Dialog>
     )

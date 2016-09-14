@@ -7,9 +7,9 @@ import {github_repoSchema} from '../../models/github_repoSchema';
 import {github_userSchema} from '../../models/github_userSchema'
 import {languageSchema} from '../../models/languageSchema';
 import {transTime} from '../util/timeUtil'
-import {get_rec_languages_by_select, get_rec_languages_by_repos} from './RecommendLogic_languages'
-import {get_rec_repos_by_following, get_rec_repos_by_user, get_rec_repos_by_also_star} from './RecommendLogic_repos'
-import {get_rec_users, get_rec_users_by_star_contributor} from './RecommendLogic_users'
+import {get_rec_languages} from './RecommendLogic_languages'
+import {get_rec_repos,get_related_rec_repos} from './RecommendLogic_repos'
+import {get_rec_users} from './RecommendLogic_users'
 import {connect} from '../config'
 import {record_log} from '../service/LogService'
 
@@ -180,11 +180,11 @@ function getInterval(time_bef) {
 //---------------------------  update recommend data  --------------------------------------------------
 async function fetchData(userName, callback) {
   record_log('system','fetch recommend data for: '+userName,'add');
-  let repos = await get_rec_repos_by_also_star(userName, 100);
+  let repos = await get_rec_repos(userName, 1,1,1,1,1);
   //console.log('after fetch rec repo data!');
-  let users = await get_rec_users_by_star_contributor(userName, 35);
+  let users = await get_rec_users(userName, 1,1,1);
   //console.log('after fetch rec user data!');
-  let langs = await get_rec_languages_by_repos(userName, 15);
+  let langs = await get_rec_languages(userName, 1,1,1);
   console.log('after fetch rec data!');
   console.log(repos.length + ' ' + users.length + ' ' + langs.length);
   let rec = [];
@@ -244,7 +244,7 @@ async function recNew(userName) {
     }
   }
   let ran_num = parseInt(Math.random() * 3);
-  ran_num = 0;
+  // ran_num = 0;
   let lang_num = ran_num < lang_rec.length ? ran_num : lang_rec.length;
   if (repo_rec.length < 15 - lang_num || user_rec.length < 5 || lang_rec.length < lang_num) {
     cur_rec = await new Promise(function (resolve, reject) {

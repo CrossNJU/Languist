@@ -5,6 +5,7 @@
 import {userSchema} from '../../models/userSchema'
 import {github_userSchema} from '../../models/github_userSchema'
 import {github_repoSchema} from '../../models/github_repoSchema'
+import {getRepoLanguages} from '../api/github_repo';
 import {get_rec_repos_by_contributor} from '../logic/RecommendLogic_repos'
 import {updateRepoCons, updateUserRepos, upsertUser, upsertRepo} from '../logic/UpdateWhenLogin'
 import {getARepo, getDetail} from '../logic/HandleRecommendLogic'
@@ -20,10 +21,10 @@ function addARepoToSet(login, full_name, set_name, callback) {
     else {
       userSchema.findOne({login: login}, (err, single) => {
         let sets = single.repo_sets;
-        for (let i=0;i<sets.length;i++){
+        for (let i = 0; i < sets.length; i++) {
           let repos = sets[i].set_repos;
           let index3 = repos.findIndex(j => j == full_name);
-          if (index3 >=0) {
+          if (index3 >= 0) {
             sets[i].set_repos.splice(index3, 1);
           }
         }
@@ -134,8 +135,8 @@ function updateSingleRepoRecommend(full_name, callback) {
     })
   });
   async.parallel(met0, (err, res) => {
-    console.log(res+'get related repo info');
-    record_log('system','done get related repo data for: '+full_name, 'done');
+    console.log(res + 'get related repo info');
+    record_log('system', 'done get related repo data for: ' + full_name, 'done');
     callback();
   })
 }
@@ -222,7 +223,23 @@ async function addInfoToList(login, flowlist, include_user, callback) {
   callback();
 }
 
-export {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecommend, getRepoInfos, addMore, addInfoToList}
+function getRepoLanguage(full_name, callback) {
+  getRepoLanguages(full_name, (languages) => {
+    let conditions = {full_name: full_name};
+    let update = {
+      $set: {
+        languages: languages
+      }
+    };
+    github_repoSchema.update(conditions, update, (err, res) => {
+      console.log('update repo:' + full_name + ' languages');
+      console.log(res);
+      callback(languages);
+    });
+  });
+}
+
+export {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecommend, getRepoInfos, addMore, addInfoToList, getRepoLanguage}
 
 //userSchema.update({login:'RickChem'}, {$set:{repo_sets: [{set_name:'test1', set_repos:['DanARay/mineSnake', 'DanARay/wordsReader']}]}}, (err, res)=> {
 //  console.log(res);

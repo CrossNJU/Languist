@@ -8,11 +8,11 @@ import {SUCCESS, FAIL, getUser, setUser} from './servers/config'
 import {saveUser, login, register} from './servers/service/LoginService';
 import {getFlowListData, getCountData, getLangListData, getCoverData} from './servers/service/HomeService'
 import {addLang, getAllLanguage} from './servers/service/LanguageService'
-import {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowingsAndFollowersNum, addFeedback, getUserStarRepo} from './servers/service/UserService'
-import {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecommend, getRepoInfos, addMore, addInfoToList} from './servers/service/RepoService'
+import {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowingsAndFollowersNum, addFeedback, getUserStarRepo, getBestSubRepo, isLanguist} from './servers/service/UserService'
+import {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecommend, getRepoInfos, addMore, addInfoToList, getRepoLanguage} from './servers/service/RepoService'
 import {record_log, getLog} from './servers/service/LogService'
 //others
-import {starRepo, followUser} from './servers/api/github_user'
+import {starRepo, followUser,unfollowUser, unstarRepo} from './servers/api/github_user'
 import {searchRepo} from './servers/api/github_search'
 
 function addRepoAPI(server) {
@@ -29,20 +29,32 @@ function addRepoAPI(server) {
       }
     });
   });
+  //unstar repo
+  server.get('/api/repo/star', (req, res)=> {
+    unstarRepo(req.query.user, req.query.repo, resa => {
+      if (resa == SUCCESS) {
+        record_log(getUser(), getUser() + ' unstar repo: ' + req.query.repo + ' SUCCESS!', 'add');
+        res.send({res: SUCCESS});
+      }
+      else {
+        record_log(getUser(), getUser() + ' unstar repo: ' + req.query.repo + ' FAIL!', 'error');
+        res.send({res: FAIL});
+      }
+    });
+  });
   //add a repo to a repo set
   server.get('/api/repo/addToSet', (req, res) => {
     addARepoToSet(req.query.login, req.query.fullname, req.query.setname, (resa) => {
       if (resa == SUCCESS) {
-        record_log(getUser(), getUser() + ' add: '+req.query.fullname+' to the set: '+req.query.setname+' SUCCESS!', 'add');
+        record_log(getUser(), getUser() + ' add: ' + req.query.fullname + ' to the set: ' + req.query.setname + ' SUCCESS!', 'add');
         res.send({res: SUCCESS});
       }
       else {
-        record_log(getUser(), getUser() + ' add: '+req.query.fullname+' to the set: '+req.query.setname+' FAIL!', 'error');
+        record_log(getUser(), getUser() + ' add: ' + req.query.fullname + ' to the set: ' + req.query.setname + ' FAIL!', 'error');
         res.send({res: resa});
       }
     })
   });
-
   //add a repo set
   server.get('/api/repo/addSet', (req, res) => {
     addAReopSet(req.query.login, req.query.setname, (resa) => {
@@ -56,47 +68,49 @@ function addRepoAPI(server) {
       }
     });
   });
-
   //search repo
   server.get('/api/search/repo', (req, res) => {
     searchRepo(req.query.q, req.query.sort, req.query.order, req.query.page, (resa) => {
-      record_log(getUser(), getUser() + ' search repo: ' + req.query.q + ' and return: '+ resa.length +' RECORDS', 'query');
+      record_log(getUser(), getUser() + ' search repo: ' + req.query.q + ' and return: ' + resa.length + ' RECORDS', 'query');
       res.send(resa);
     })
   });
-
   //get set list
   server.get('/api/repo/setList', (req, res) => {
     getRepoSetList(req.query.user, (resa) => {
-      record_log(getUser(), getUser() + ' get set list and return: '+ resa.length +' RECORDS', 'query');
+      record_log(getUser(), getUser() + ' get set list and return: ' + resa.length + ' RECORDS', 'query');
       res.send(resa);
     })
   });
-
   //get set
   server.get('/api/repo/set', (req, res) => {
     getRepoSet(req.query.user, req.query.setName, (resa) => {
       addInfoToList(req.query.user, resa, true, () => {
-        record_log(getUser(), getUser() + ' get set: '+req.query.setName+' repos and return: '+ resa.length +' RECORDS', 'query');
+        record_log(getUser(), getUser() + ' get set: ' + req.query.setName + ' repos and return: ' + resa.length + ' RECORDS', 'query');
         res.send(resa);
       });
     })
   });
-
   //get recommend repo
   server.get('/api/repo/related', (req, res) => {
     getRelatedRecommend(req.query.fullName, (resa) => {
       addInfoToList(req.query.user, resa, true, () => {
-        record_log(getUser(), getUser() + ' get repo: '+req.query.fullName+' related repo and return: '+ resa.length +' RECORDS', 'query');
+        record_log(getUser(), getUser() + ' get repo: ' + req.query.fullName + ' related repo and return: ' + resa.length + ' RECORDS', 'query');
         res.send(resa);
       });
     })
   });
-
   //get repo infos
   server.get('/api/repo/info', (req, res) => {
     getRepoInfos(req.query.fullName, (resa) => {
-      record_log(getUser(), getUser() + ' get repo: '+req.query.fullName+' info', 'query');
+      record_log(getUser(), getUser() + ' get repo: ' + req.query.fullName + ' info', 'query');
+      res.send(resa);
+    })
+  });
+  //get repo languages/tags
+  server.get('/api/repo/languages', (req, res) => {
+    getRepoLanguage(req.query.fullName, (resa) => {
+      record_log(getUser(), getUser() + ' get repo: ' + req.query.fullName + ' languages and return: ' + resa.length + ' RECORDS', 'query');
       res.send(resa);
     })
   });
@@ -116,36 +130,45 @@ function addUserAPI(server) {
       }
     });
   });
+  //unfollow user
+  server.get('/api/user/follow', (req, res)=> {
+    unfollowUser(req.query.user, req.query.follow, resa => {
+      if (resa == SUCCESS) {
+        record_log(getUser(), getUser() + ' unfollow user: ' + req.query.follow + ' SUCCESS!', 'add');
+        res.send({res: SUCCESS});
+      }
+      else {
+        record_log(getUser(), getUser() + ' unfollow user: ' + req.query.follow + ' SUCCESS!', 'error');
+        res.send({res: FAIL});
+      }
+    });
+  });
   //get current user
   server.get('/api/current_user', (req, res) => {
     res.send(req.session.username);
   });
-
   //get temp user
   server.get('/api/temp_user', (req, res) => {
     res.send(req.session.tempname);
   });
-
   //get followings
   server.get('/api/user/following', (req, res) => {
     getUserFollowings(req.query.user, (resa) => {
       addInfoToList(req.query.user, resa, true, () => {
-        record_log(getUser(), getUser() + ' get followings and return: '+ resa.length +' RECORDS', 'query');
+        record_log(getUser(), getUser() + ' get followings and return: ' + resa.length + ' RECORDS', 'query');
         res.send(resa);
       });
     })
   });
-
   //get followers
   server.get('/api/user/follower', (req, res) => {
     getUserFollowers(req.query.user, (resa) => {
       addInfoToList(req.query.user, resa, true, () => {
-        record_log(getUser(), getUser() + ' get followers and return: '+ resa.length +' RECORDS', 'query');
+        record_log(getUser(), getUser() + ' get followers and return: ' + resa.length + ' RECORDS', 'query');
         res.send(resa);
       });
     })
   });
-
   //get followersNum and followingsNum (eg.{followings:1, followers:1})
   server.get('/api/user/folInfo', (req, res) => {
     getUserFollowingsAndFollowersNum(req.query.user, (resa) => {
@@ -156,8 +179,21 @@ function addUserAPI(server) {
   //get anyone star repo
   server.get('/api/user/starRepo', (req, res)=> {
     getUserStarRepo(req.query.login, (resa) => {
-      record_log(getUser(), getUser() + ' get star repos and return: '+ resa.length +' RECORDS', 'query');
+      record_log(getUser(), getUser() + ' get star repos and return: ' + resa.length + ' RECORDS', 'query');
       res.send(resa);
+    });
+  });
+  //get user most stared subscript repos
+  server.get('/api/user/subRepo', (req, res)=> {
+    getBestSubRepo(req.query.login, (resa) => {
+      record_log(getUser(), getUser() + ' get subscribe repos and return: ' + resa.length + ' RECORDS', 'query');
+      res.send(resa);
+    });
+  });
+  //judge a person if he is languist
+  server.get('/api/user/isLanguist', (req, res)=> {
+    isLanguist(req.query.login, (resa) => {
+      res.send({res: resa});
     });
   });
 }
@@ -222,7 +258,7 @@ function addOtherAPI(server) {
   server.get('/api/home/flowList', (req, res) => {
     getFlowListData(req.query.user, ret => {
       addInfoToList(req.query.user, ret, true, () => {
-        record_log(getUser(), getUser() + ' get flowlist data and return: '+ ret.length +' RECORDS', 'query');
+        record_log(getUser(), getUser() + ' get flowlist data and return: ' + ret.length + ' RECORDS', 'query');
         res.send(ret);
       });
     });
@@ -237,7 +273,7 @@ function addOtherAPI(server) {
   //home-language list
   server.get('/api/home/langList', (req, res) => {
     getLangListData(req.query.user, call => {
-      record_log(getUser(), getUser() + ' get home languages and return: '+call.length+' RECORDS', 'query');
+      record_log(getUser(), getUser() + ' get home languages and return: ' + call.length + ' RECORDS', 'query');
       res.send(call);
     });
   });
@@ -253,11 +289,11 @@ function addOtherAPI(server) {
   server.get('/api/rec/evaluate', (req, res) => {
     evaluateRecommend(req.query.login, req.query.name, req.query.type, (resa) => {
       if (resa == SUCCESS) {
-        record_log(getUser(), getUser() + ' dislike: '+req.query.name+' SUCCESS!', 'add');
+        record_log(getUser(), getUser() + ' dislike: ' + req.query.name + ' SUCCESS!', 'add');
         res.send({res: SUCCESS});
       }
       else {
-        record_log(getUser(), getUser() + ' dislike: '+req.query.name+' FAIL!', 'error');
+        record_log(getUser(), getUser() + ' dislike: ' + req.query.name + ' FAIL!', 'error');
         res.send({res: FAIL});
       }
     })
@@ -265,7 +301,7 @@ function addOtherAPI(server) {
   //add more
   server.get('/api/recommend/more', (req, res) => {
     addMore(req.query.login, req.query.times, (resa) => {
-      record_log(getUser(), getUser() + ' get more: '+req.query.times+' times recommend data and return: '+ resa.length +' RECORDS', 'query');
+      record_log(getUser(), getUser() + ' get more: ' + req.query.times + ' times recommend data and return: ' + resa.length + ' RECORDS', 'query');
       res.send(resa);
     })
   });

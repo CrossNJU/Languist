@@ -7,7 +7,7 @@ import {languageSchema} from '../../models/languageSchema'
 import {github_userSchema} from '../../models/github_userSchema'
 import {getAUser, getARepo} from '../logic/HandleRecommendLogic'
 import {connect} from '../config'
-import {getUserStarred} from '../api/github_user'
+import {getUserStarred, getJoinRepos} from '../api/github_user'
 import {upsertRepo, updateWhenLogin} from '../logic/UpdateWhenLogin'
 import {record_log} from '../service/LogService'
 
@@ -62,15 +62,22 @@ function getUserFollowingsAndFollowersNum(login, callback) {
   })
 }
 
-function addFeedback(login, feedback, callback){
-  userSchema.update({login:login}, {$addToSet:{feedback:{time:(new Date()).toLocaleString(), content: feedback}}}, (err, res) => {
+function addFeedback(login, feedback, callback) {
+  userSchema.update({login: login}, {
+    $addToSet: {
+      feedback: {
+        time: (new Date()).toLocaleString(),
+        content: feedback
+      }
+    }
+  }, (err, res) => {
     console.log('add feedback!');
     //console.log(res);
     callback(1);
   });
 }
 
-function getUserStarRepo(login, callback){
+function getUserStarRepo(login, callback) {
   getUserStarred(login, 1, [], true, -1, (stars) => {
     let met1 = [];
     for (let i = 0; i < stars.length; i++) {
@@ -82,8 +89,8 @@ function getUserStarRepo(login, callback){
       });
     }
     async.parallel(met1, async (err, res) => {
-      record_log('system', 'get user: '+login+' star repos', 'done');
-      console.log(res+'get star repos');
+      record_log('system', 'get user: ' + login + ' star repos', 'done');
+      console.log(res + 'get star repos');
       let ans = [];
       for (let i = 0; i < stars.length; i++) {
         let repo_det = await getARepo(stars[i]);
@@ -94,7 +101,7 @@ function getUserStarRepo(login, callback){
   });
 }
 
-function reloadUser(login, callback){
+function reloadUser(login, callback) {
   //console.log('in');
   let update = {
     $set: {
@@ -103,18 +110,18 @@ function reloadUser(login, callback){
       dislike: [],
     }
   };
-  if (login == 'All'){
+  if (login == 'All') {
     userSchema.find({}, (err, users) => {
       //console.log(users);
       let met0 = [];
-      for(let i=0;i<users.length;i++){
+      for (let i = 0; i < users.length; i++) {
         met0.push((call0) => {
-          userSchema.update({login:users[i].login}, update, (err, res) => {
+          userSchema.update({login: users[i].login}, update, (err, res) => {
             //console.log('reload user:'+users[i].login);
             //console.log(res);
             updateWhenLogin(users[i].login);
             //console.log('at');
-            call0(null, 'update:'+users[i].login);
+            call0(null, 'update:' + users[i].login);
           })
         })
       }
@@ -125,16 +132,59 @@ function reloadUser(login, callback){
       })
     })
   } else {
-    userSchema.update({login:login}, update, (err, res) => {
-      record_log('system', 'reload user:'+login, 'later');
-      console.log(res+'reload user');
+    userSchema.update({login: login}, update, (err, res) => {
+      record_log('system', 'reload user:' + login, 'later');
+      console.log(res + 'reload user');
       updateWhenLogin(login);
       callback();
     })
   }
 }
 
-export {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowingsAndFollowersNum, addFeedback, getUserStarRepo, reloadUser}
+function getBestSubRepo(login, callback) {
+  getUserStarred(login, 1, [], true, -1, (repos) => {
+    let met1 = [];
+    for (let i = 0; i < repos.length; i++) {
+      met1.push((call0) => {
+        upsertRepo(repos[i], () => {
+          //console.log('new repo: ' + stars[i]);
+          call0(null, 'done 0!');
+        });
+      });
+    }
+    async.parallel(met1, async (err, res) => {
+      record_log('system', 'get user: ' + login + ' subscribe repos', 'done');
+      console.log(res + 'get subscribe repos');
+      let ans = [];
+      for (let i = 0; i < repos.length; i++) {
+        let repo_det = await getARepo(repos[i]);
+        ans.push(repo_det);
+      }
+      ans.sort((o1, o2) => {
+        return o2.star - o1.star;
+      });
+      let ret = [];
+      if (ans[0].star < 1000) ret[0] = ans[0];
+      else {
+        let i = 0;
+        while (i < 5 && ans[i].star >= 1000) {
+          ret[i] = ans[i];
+          i++;
+        }
+      }
+      callback(ret);
+    })
+  });
+}
+
+function isLanguist(login, callback) {
+  userSchema.find({login: login}, (err, res) => {
+    if (res == null) callback(false);
+    else callback(true);
+  })
+}
+
+export {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowingsAndFollowersNum, addFeedback, getUserStarRepo, getBestSubRepo,isLanguist,  reloadUser}
 
 //getUserFollowingsAndFollowersNum()
 //connect();
@@ -142,3 +192,8 @@ export {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowing
 //getUserStarRepo('RickChem', (res) => {
 //  console.log(res);
 //});
+//let a = [{a: 2}, {a: 4}, {a: 1}];
+//a.sort((o1, o2)=> {
+//  return o1.a - o2.a;
+//});
+//console.log(a);

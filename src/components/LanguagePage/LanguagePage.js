@@ -10,55 +10,9 @@ import Paper from 'material-ui/Paper';
 import $ from 'jquery';
 import SearchField from '../SearchField';
 import RaisedButton from 'material-ui/RaisedButton';
+import async from 'async';
 
 import AddLanguageDialog from '../AddLanguageDialog';
-
-// let originalLang = [
-//   {
-//     name: "JavaScript",
-//     isSelected: false,
-//     level: 0,
-//     repoNum: 4000000
-//   },
-//   {
-//     name: "C++",
-//     isSelected: true,
-//     level: 1,
-//     repoNum: 2131200
-//   },
-//   {
-//     name: "Java",
-//     isSelected: false,
-//     level: 0,
-//     repoNum: 2100000
-//   }
-// ];
-//
-// let allLanguage = [
-//   {
-//     name: 'Java',
-//     repoNum: 210000,
-//   },
-//   {
-//     name: "JavaScript",
-//     repoNum: 4000000
-//   },
-//   {
-//     name: "C++",
-//     repoNum: 2131200
-//   },
-//   {
-//     name: "Ruby",
-//     repoNum: 2012400
-//   }
-// ];
-//
-// let userLanguage = [
-//   {
-//     name: 'Java',
-//     level: 1
-//   }
-// ];
 
 const title = 'Add Language';
 
@@ -71,7 +25,8 @@ class LanguagePage extends Component {
     this.state = {
       user: "",
       langData: [],
-      isOpen: true
+      isOpen: true,
+      isLoading: false
     }
   }
 
@@ -149,17 +104,28 @@ class LanguagePage extends Component {
   }
 
   handleSubmit() {
-    // console.log(this.langData);
+    this.setState({isLoading: true});
+
     let langs = this.langData;
     langs = langs.filter((lang) => {
       return lang.isSelected;
     });
-    langs.forEach((lang) => {
-      $.ajax('api/lang/choose', {async: false, data: {lang:lang.name, level: lang.level, login: this.state.user}})
+
+    async.each(langs, (lang, callback) => {
+      $.ajax('api/lang/choose', {data: {lang:lang.name, level: lang.level, login: this.state.user}})
         .done((function (message) {
-          console.log('choose ' + lang.name + " " + message);
-          window.location.href = '/home';
+          if(message.res == 1) {
+            console.log('choose ' + lang.name + " " + message);
+            callback();
+          } else {
+            callback(err);
+          }
         }));
+    }, (error)=> {
+      this.setState({isLoading: false});
+      if(!error) {
+        window.location.href = '/home';
+      }
     });
   }
 
@@ -180,8 +146,15 @@ class LanguagePage extends Component {
             <LangList langData={this.state.langData} user={this.state.user} handleChange={this.handleChange.bind(this)} ref="list"/>
             <div className={s.btn__group}>
               {/*<RaisedButton label="DONE" primary={true}/>*/}
-              <RaisedButton label="DONE" primary={true} onClick={this.handleSubmit.bind(this)}/>
-              <RaisedButton label="CANCEL" href='/home'/>
+              <RaisedButton
+                label="DONE"
+                primary={true}
+                disabled={this.state.isLoading}
+                onTouchTap={this.handleSubmit.bind(this)}/>
+              <RaisedButton
+                label="CANCEL"
+                disabled={this.state.isLoading}
+                href='/home'/>
             </div>
           </Paper>
         </div>
