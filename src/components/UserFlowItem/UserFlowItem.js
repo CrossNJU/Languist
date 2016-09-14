@@ -83,36 +83,35 @@ const styles = {
 class UserFlowItem extends Component {
   constructor(props) {
     super(props);
-    this.state = {hovering: false, loading: false, open: false};
+    this.state = {hovering: false, loading: false, open: false, repos: []};
   }
+
+  componentDidMount() {
+    let url = '/api/user/subRepo';
+    $.ajax(url, {data: {login: this.props.user.login}})
+      .done(((data) => {
+        console.log(data);
+        this.setState({repos: data});
+      }).bind(this));
+  }
+
   renderTable() {
-    let repos = [
-      {
-        name: 'sindresorhus/awesome',
-        star: 42349
-      },
-      {
-        name: 'sindresorhus/awesome-nodejs',
-        star: 13378
-      },
-      {
-        name: 'avajs/ava',
-        star: 6403
-      }
-    ]
-    let repoTable = repos.map(repo => {
+    let repos = this.state.repos;
+    if (repos.length > 0) {
+      let repoTable = repos.map(repo => {
+        return (
+          <a className={s.row} key={repo.full_name} target="_blank" href={`https://github.com/${repo.full_name}`} title="View this repository on GitHub">
+            <div className={s.rowTitle}>{repo.full_name.replace(`${this.props.user.login}/`, '')}</div>
+            <div className={s.rowAction}>{repo.star} ★</div>
+          </a>
+        )
+      })
       return (
-        <div className={s.row} target="_blank" href={`https://github.com/${repo.name}`} title="View this repository on GitHub">
-          <a className={s.rowTitle}>{repo.name.replace(`${this.props.user.login}/`, '')}</a>
-          <div className={s.rowAction}>{repo.star} ★</div>
+        <div className={s.table}>
+          {repoTable}
         </div>
       )
-    })
-    return (
-      <div className={s.table}>
-        {repoTable}
-      </div>
-    )
+    }
   }
   handleFollow() {
     this.props.handleFollow(this.props.user.login);
