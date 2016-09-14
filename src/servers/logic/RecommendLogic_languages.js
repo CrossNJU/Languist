@@ -271,7 +271,8 @@ async function get_rec_languages(login,select_percent,following_percent,repo_per
   return rec_languages;
 }
 
-export {get_rec_languages}
+export {get_rec_languages,get_rec_languages_by_select,get_rec_languages_by_following,
+        get_rec_languages_by_repos,get_rec_language_when_zero}
 
 // connect();
 // get_rec_languages_by_select('RickChem');

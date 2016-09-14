@@ -494,7 +494,8 @@ async function get_related_rec_repos(fullname,contributor_percent){
 }
 
 
-export {get_rec_repos,get_related_rec_repos}
+export {get_rec_repos,get_related_rec_repos,get_rec_repos_by_user,get_rec_repos_by_star_repos_owner,
+        get_rec_repos_by_also_star,get_rec_repos_by_following,get_rec_repos_by_contributor,get_rec_repos_when_zero}
 
 // connect();
 // get_rec_repos_by_user('ChenDanni',10);
