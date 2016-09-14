@@ -14,6 +14,10 @@ import RaisedButton from 'material-ui/RaisedButton';
 class AddLanguageDialog extends Component {
   lang;
 
+  componentWillReceiveProps(nextProps) {
+    this.lang = nextProps.language;
+  }
+
   handleSubmit() {
     let lang = this.lang;
     if(lang.isSelected) {
@@ -21,8 +25,17 @@ class AddLanguageDialog extends Component {
         .done((function (message) {
           console.log('choose ' + lang.name + " " + message);
         }));
+    }else {
+      $.ajax('api/lang/delete', {async: false, data: {lang:lang.name, login: this.props.user}})
+        .done((function (message) {
+          console.log('delete ' + lang.name + " " + message);
+        }));
     }
-    this.props.handleClose();
+    this.handleClose(true);
+  }
+
+  handleClose(isSuccess) {
+    this.props.handleClose(isSuccess);
   }
 
   handleChange(languages) {
@@ -38,7 +51,7 @@ class AddLanguageDialog extends Component {
         <LangList langData={[this.props.language]} user={this.props.user} handleChange={this.handleChange.bind(this)}/>
         <div className={s.btn__group}>
           <RaisedButton label="DONE" primary={true} onClick={this.handleSubmit.bind(this)}/>
-          <RaisedButton label="CANCEL" onTouchTap={this.props.handleClose}/>
+          <RaisedButton label="CANCEL" onTouchTap={this.handleClose.bind(this, false)}/>
         </div>
       </Dialog>
     )
