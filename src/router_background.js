@@ -11,8 +11,9 @@ function addTestApi(server){
     res.send({res:req.session.cookie.expires});
   });
   server.get('/api/test/reload', (req, res) => {
+    //console.log('in');
     reloadUser(req.query.user, ()=> {
-      res.send({res: SUCCESS});
+      res.send({res: 1});
     })
   });
   server.get('/api/test/null', (req, res) => {

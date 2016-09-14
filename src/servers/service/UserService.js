@@ -95,9 +95,9 @@ function getUserStarRepo(login, callback){
 }
 
 function reloadUser(login, callback){
+  //console.log('in');
   let update = {
     $set: {
-      level: 0,
       recommend: [],
       now_recommend: [],
       dislike: [],
@@ -105,6 +105,7 @@ function reloadUser(login, callback){
   };
   if (login == 'All'){
     userSchema.find({}, (err, users) => {
+      //console.log(users);
       let met0 = [];
       for(let i=0;i<users.length;i++){
         met0.push((call0) => {
@@ -112,12 +113,14 @@ function reloadUser(login, callback){
             //console.log('reload user:'+users[i].login);
             //console.log(res);
             updateWhenLogin(users[i].login);
+            //console.log('at');
             call0(null, 'update:'+users[i].login);
           })
         })
       }
       async.parallel(met0, async (err, res) => {
-        //console.log(res);
+        record_log('system', 'reload all user', 'later');
+        console.log(res);
         callback();
       })
     })
