@@ -9,6 +9,7 @@ import {get_rec_repos_by_contributor} from '../logic/RecommendLogic_repos'
 import {updateRepoCons, updateUserRepos, upsertUser, upsertRepo} from '../logic/UpdateWhenLogin'
 import {getARepo, getDetail} from '../logic/HandleRecommendLogic'
 import {connect} from '../config'
+import {record_log} from '../service/LogService'
 
 var async = require('async');
 
@@ -32,7 +33,7 @@ function addARepoToSet(login, full_name, set_name, callback) {
           sets[index2].set_repos.push(full_name);
           userSchema.update({login: login}, {$set: {repo_sets: sets}}, (err, res) => {
             console.log('add repo:' + full_name + ' to repo set:' + set_name);
-            console.log(res);
+            //console.log(res);
             callback(1);
           })
         }
@@ -53,7 +54,7 @@ function addAReopSet(login, set_name, callback) {
       });
       userSchema.update({login: login}, {$set: {repo_sets: sets}}, (err, res) => {
         console.log('add repo set:' + set_name);
-        console.log(res);
+        //console.log(res);
         callback(1);
       })
     }
@@ -113,13 +114,13 @@ function updateSingleRepoRecommend(full_name, callback) {
               for (let j = 0; j < repos.length; j++) {
                 met2.push((call2) => {
                   upsertRepo(repos[j], () => {
-                    console.log('done from REPO contributor: ' + contributors[i] + ' to its repo: ' + repos[j] + '!');
+                    //console.log('done from REPO contributor: ' + contributors[i] + ' to its repo: ' + repos[j] + '!');
                     call2(null, 'done 2!');
                   })
                 });
               }
               async.parallel(met2, (err, res) => {
-                console.log(res);
+                //console.log(res);
                 call1(null, 'done 1!');
               });
             })
@@ -127,13 +128,14 @@ function updateSingleRepoRecommend(full_name, callback) {
         });
       }
       async.parallel(met1, (err, res) => {
-        console.log(res);
+        //console.log(res);
         call0(null, 'done 0!');
       });
     })
   });
   async.parallel(met0, (err, res) => {
-    console.log(res);
+    console.log(res+'get related repo info');
+    record_log('system','done get related repo data for: '+full_name, 'done');
     callback();
   })
 }
@@ -151,12 +153,12 @@ async function getRelatedRecommend(full_name, callback) {
     } else {
       updateSingleRepoRecommend(full_name, async ()=> {
         let rec_num = 10;
-        console.log('in');
+        //console.log('in');
         let recs = await get_rec_repos_by_contributor(full_name, rec_num);
         //console.log(recs);
         github_repoSchema.update({full_name: full_name}, {$set: {related: recs}}, (err, res) => {
-          console.log('update a repo:' + full_name + ' related!');
-          console.log(res);
+          //console.log('update a repo:' + full_name + ' related!');
+          //console.log(res);
         });
         let ans = [];
         for (let i = 0; i < recs.length; i++) {

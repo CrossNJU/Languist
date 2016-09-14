@@ -8,6 +8,7 @@ import {github_repoSchema} from '../../models/github_repoSchema'
 import {addNewRepo} from './github_repo'
 import {connect} from '../config'
 import {getClient} from './github_conf'
+import {record_log} from '../service/LogService'
 
 var github = require('octonode');
 var client = github.client();
@@ -217,8 +218,7 @@ function starRepo(login, repo, callback) {
           callback(1);
         });
         userSchema.update({login: login}, {$addToSet: {star_repos: repo}}, (err, res)=> {
-          console.log('star a repo:' + repo);
-          console.log(res);
+          //console.log(res);
         })
       }
     });
@@ -244,8 +244,8 @@ function followUser(login, loginToFollow, callback) {
           callback(1);
         });
         userSchema.update({login: login}, {$addToSet: {followings: loginToFollow}}, (err, res)=> {
-          console.log('follow a user:' + loginToFollow);
-          console.log(res);
+          //console.log('follow a user:' + loginToFollow);
+          //console.log(res);
         })
       }
     });
@@ -274,7 +274,8 @@ function addAnewUser(login, access_token, callback = null) {
   };
   var options = {upsert: true};
   userSchema.update(conditions, update, options, function (error, res) {
-    console.log("new user!");
+
+    record_log('system', 'add a new user: '+login, 'add');
     if (callback != null) callback();
   });
 }

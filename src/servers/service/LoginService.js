@@ -46,21 +46,21 @@ function register(username, password, callback) {
 
 
 export var saveUser = (code, callback) => {
-  console.log(code);
+  console.log('authority code:'+code);
   superagent
     .post(getAccessURL)
     .send({client_id: client_id, client_secret: client_secret, code: code})
     .set('Accept', 'application/json')
     .end(function (err, sres) {
       if (err) {
-        console.log('err: ' + err);
+        //console.log('err: ' + err);
         callback(0);
         return;
       }
       //console.log(sres.body);
       let access_token = sres.body.access_token;
       if (access_token === undefined) {
-        console.log('undefined!');
+        console.log('access token undefined!');
         callback(0);
         return;
       }
@@ -72,7 +72,7 @@ export var saveUser = (code, callback) => {
         .accept('json')
         .end((err, ssres) => {
           if (err) {
-            return console.log(err);
+            return -1;
           }
           let json = JSON.parse(ssres.text);
           callback(json.login);
@@ -90,7 +90,7 @@ export var saveUser = (code, callback) => {
                 }
               };
               userSchema.update({login: json.login}, update, (err, res) => {
-                console.log('update new access token!');
+                //console.log('update new access token!');
               });
               updateInitialInfo(json.login);
             }

@@ -11,6 +11,7 @@ import {get_rec_languages, get_rec_languages_by_repos} from './RecommendLogic_la
 import {get_rec_repos_by_following, get_rec_repos_by_user, get_rec_repos_by_also_star} from './RecommendLogic_repos'
 import {get_rec_users, get_rec_users_by_star_contributor} from './RecommendLogic_users'
 import {connect} from '../config'
+import {record_log} from '../service/LogService'
 
 var time_left = 24*60*60;
 var time_signal = 0;
@@ -144,8 +145,8 @@ function getAUser(user) {
 
 //---------------------------  random conbine (repo,user,lang)'s name --------------------------------------------------
 function combine(repos, users, langs, lang_num) {
-  console.log('combine:');
-  console.log(repos.length + ' ' + users.length + ' ' + langs.length);
+  //console.log('combine:');
+  //console.log(repos.length + ' ' + users.length + ' ' + langs.length);
   let ans = [], index = [];
   for (let i = 0; i < 20; i++) index[i] = i;
   while (index.length > 0) {
@@ -178,7 +179,7 @@ function getInterval(time_bef) {
 
 //---------------------------  update recommend data  --------------------------------------------------
 async function fetchData(userName, callback) {
-  console.log('fetch data for:'+userName+':'+(new Date()).toLocaleString());
+  record_log('system','fetch recommend data for: '+userName,'add');
   let repos = await get_rec_repos_by_also_star(userName, 100);
   //console.log('after fetch rec repo data!');
   let users = await get_rec_users_by_star_contributor(userName, 35);
@@ -223,7 +224,7 @@ async function fetchData(userName, callback) {
 
 //---------------------------  switch data, not fetch again(unless all recommended)  --------------------------------------------------
 async function recNew(userName) {
-  console.log('in rec New:'+(new Date()).toLocaleString());
+  record_log('system','rec new','mark');
   let cur_user = await new Promise(function (resolve, reject) {
     userSchema.findOne({login: userName}, (err, user) => {
       if (err) reject(err);
@@ -295,7 +296,7 @@ async function recNew(userName) {
     }
   };
   userSchema.update({login: userName}, update, (err, res) => {
-    console.log('update recommend dates');
+    //console.log('update recommend dates');
     //console.log(res);
   });
   return now;
@@ -303,7 +304,7 @@ async function recNew(userName) {
 
 //---------------------------  update when login  --------------------------------------------------
 async function getStart(userName) {
-  console.log('get started!: '+(new Date()).toLocaleString());
+  record_log('system','get start to recommend in logic!','mark');
   circle(userName);
   let cur_rec = await new Promise(function (resolve, reject) {
     fetchData(userName, async (ret) => {
@@ -339,7 +340,7 @@ async function getNextDayRecommendData(userName) {
   //  console.log('after first!');
   //  return ans;
   //} else {
-    console.log('in recommend!');
+  //  record_log('system','get recommend data!','query');
     //console.log(cur_rec);
     //let ans = [];
     //if (interval == 0) {
@@ -375,9 +376,8 @@ function circle(userName){
       setTimeout(cb, 1000);
     },
     function(err) {
-      console.log('done! hours is:'+(new Date().getHours()));
+      record_log('system','done one circle!','mark');
       time_signal = 0;
-      console.log('in circle to recommend: ');
       recNew(user);
       circle(user);
     });

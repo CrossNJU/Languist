@@ -24,17 +24,11 @@ import assets from './assets';
 import { port, auth, analytics } from './config';
 
 //config and test
-import {connect, disconnect, SUCCESS, FAIL} from './servers/config'
+import {connect, disconnect, SUCCESS, FAIL, getUser, setUser} from './servers/config'
 import {home, test_login} from './servers/test/testController';
-//services
-import {saveUser, login, register} from './servers/service/LoginService';
-import {getFlowListData, getCountData, getLangListData, getCoverData} from './servers/service/HomeService'
-import {addLang, getAllLanguage} from './servers/service/LanguageService'
-import {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowingsAndFollowersNum, addFeedback, getUserStarRepo, reloadUser} from './servers/service/UserService'
-import {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecommend, getRepoInfos, addMore, addInfoToList} from './servers/service/RepoService'
-//others
-import {starRepo, followUser} from './servers/api/github_user'
-import {searchRepo} from './servers/api/github_search'
+//apis
+import {addTestApi, addAdministerApi} from './router_background'
+import {addLanguageAPI, addLoginAPI, addOtherAPI, addUserAPI, addRepoAPI} from './router'
 
 var session = require('express-session');
 connect();
@@ -112,235 +106,17 @@ server.use('/graphql', expressGraphQL(req => ({
 //  res.send({res:1});
 //});
 
-//login success
-server.get('/api/login/success', (req, res)=> {
-  saveUser(req.query.code, (ress) => {
-    if (ress != null) {
-      req.session.tempname = ress;
-      res.redirect('/register');
-    }
-    else res.redirect('/login');
-  });
-});
-//login
-server.get('/api/login', (req, res) => {
-  login(req.query.username, req.query.password, (res2) => {
-    if (res2 == SUCCESS) {
-      req.session.username = req.query.username;
-      console.log('session');
-      console.log(req.session.cookie.maxAge / 1000);
-      res.send({res: SUCCESS});
-    } else
-      res.send({res: res2});
-  })
-});
-//register
-server.get('/api/register', (req, res) => {
-  register(req.query.username, req.query.password, (res2) => {
-    if (res2 == SUCCESS) {
-      req.session.username = req.query.username;
-      res.send({res: SUCCESS});
-    } else
-      res.send({res: res2});
-  })
-});
-//logout
-server.get('/api/logout', (req, res) => {
-  req.session.username = null;
-  req.session.tempname = null;
-  res.redirect('/login');
-});
 //test login
-server.get('/api/test_login', test_login);
+//server.get('/api/test_login', test_login);
 
-//star repo
-server.get('/api/repo/star', (req, res)=> {
-  starRepo(req.query.user, req.query.repo, resa => {
-    if (resa == SUCCESS) res.send({res: SUCCESS});
-    else res.send({res: FAIL});
-  });
-});
-//follow user
-server.get('/api/user/follow', (req, res)=> {
-  followUser(req.query.user, req.query.follow, resa => {
-    if (resa == SUCCESS) res.send({res: SUCCESS});
-    else res.send({res: FAIL});
-  });
-});
-
-//get recommend data
-server.get('/api/home/flowList', (req, res) => {
-  getFlowListData(req.query.user, ret => {
-    addInfoToList(req.query.user, ret, true, () => {
-      res.send(ret);
-    });
-  });
-});
-//home-count
-server.get('/api/home/count', (req, res) => {
-  getCountData(req.query.user, call => {
-    res.send(call);
-  });
-});
-//home-language list
-server.get('/api/home/langList', (req, res) => {
-  getLangListData(req.query.user, call => {
-    res.send(call);
-  });
-});
-//home-cover
-server.get('/api/home/cover', (req, res)=> {
-  getCoverData(req.query.user, call => {
-    res.send(call);
-  });
-});
-
-//evaluate the recommend
-server.get('/api/rec/evaluate', (req, res) => {
-  evaluateRecommend(req.query.login, req.query.name, req.query.type, (resa) => {
-    if (resa == SUCCESS) res.send({res: SUCCESS});
-    else res.send({res: FAIL});
-  })
-});
-
-//get current user
-server.get('/api/current_user', (req, res) => {
-  res.send(req.session.username);
-});
-
-//get temp user
-server.get('/api/temp_user', (req, res) => {
-  res.send(req.session.tempname);
-});
-
-//choose language
-server.get('/api/lang/choose', (req, res) => {
-  addLang(req.query.login, req.query.lang, req.query.level, ret => {
-    if (ret == SUCCESS) res.send({res: SUCCESS});
-    else res.send({res: FAIL});
-  });
-});
-
-//get all language
-server.get('/api/language/all', (req, res) => {
-  getAllLanguage((langs) => {
-    res.send(langs);
-  })
-});
-
-//add a repo to a repo set
-server.get('/api/repo/addToSet', (req, res) => {
-  addARepoToSet(req.query.login, req.query.fullname, req.query.setname, (resa) => {
-    if (resa == SUCCESS) res.send({res: SUCCESS});
-    else res.send({res: resa});
-  })
-});
-
-//add a repo set
-server.get('/api/repo/addSet', (req, res) => {
-  addAReopSet(req.query.login, req.query.setname, (resa) => {
-    if (resa == SUCCESS) res.send({res: SUCCESS});
-    else res.send({res: resa});
-  });
-});
-
-//search repo
-server.get('/api/search/repo', (req, res) => {
-  searchRepo(req.query.q, req.query.sort, req.query.order, req.query.page, (resa) => {
-    res.send(resa);
-  })
-});
-
-//get set list
-server.get('/api/repo/setList', (req, res) => {
-  getRepoSetList(req.query.user, (resa) => {
-    res.send(resa);
-  })
-});
-
-//get set
-server.get('/api/repo/set', (req, res) => {
-  getRepoSet(req.query.user, req.query.setName, (resa) => {
-    addInfoToList(req.query.user, resa, true, () => {
-      res.send(resa);
-    });
-  })
-});
-
-//get followings
-server.get('/api/user/following', (req, res) => {
-  getUserFollowings(req.query.user, (resa) => {
-    addInfoToList(req.query.user, resa, true, () => {
-      res.send(resa);
-    });
-  })
-});
-
-//get followers
-server.get('/api/user/follower', (req, res) => {
-  getUserFollowers(req.query.user, (resa) => {
-    addInfoToList(req.query.user, resa, true, () => {
-      res.send(resa);
-    });
-  })
-});
-
-//get followersNum and followingsNum (eg.{followings:1, followers:1})
-server.get('/api/user/folInfo', (req, res) => {
-  getUserFollowingsAndFollowersNum(req.query.user, (resa) => {
-    res.send(resa);
-  })
-});
-
-//get recommend repo
-server.get('/api/repo/related', (req, res) => {
-  getRelatedRecommend(req.query.fullName, (resa) => {
-    addInfoToList(req.query.user, resa, true, () => {
-      res.send(resa);
-    });
-  })
-});
-
-//get repo infos
-server.get('/api/repo/info', (req, res) => {
-  getRepoInfos(req.query.fullName, (resa) => {
-    res.send(resa);
-  })
-});
-
-//add more
-server.get('/api/recommend/more', (req, res) => {
-  addMore(req.query.login, req.query.times, (resa) => {
-    res.send(resa);
-  })
-});
-
-//add feedback
-server.get('/api/feedback/add', (req, res)=>{
-  addFeedback(req.query.login, req.query.feedback, (resa) => {
-    if (resa == SUCCESS) res.send({res: SUCCESS});
-    else res.send({res: resa});
-  });
-});
-
-//get anyone star repo
-server.get('/api/user/starRepo', (req, res)=>{
-  getUserStarRepo(req.query.login, (resa) => {
-    res.send(resa);
-  });
-});
-
-server.get('/api/test/session', (req, res)=>{
-
-  //console.log('cookie time: ');
-  res.send({res:req.session.cookie.expires});
-});
-
-server.get('/api/test/reload', (req, res) => {
-  reloadUser(req.query.user, ()=> {
-    res.send({res: SUCCESS});
-  })
-});
+addAdministerApi(server);
+addOtherAPI(server);
+addLanguageAPI(server);
+addLoginAPI(server);
+addRepoAPI(server);
+addUserAPI(server);
+addTestApi(server);
+addAdministerApi(server);
 
 //
 // Register server-side rendering middleware

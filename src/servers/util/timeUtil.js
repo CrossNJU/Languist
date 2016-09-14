@@ -35,7 +35,7 @@ async function calTime(time1,time2){
     return days;
   }
 }
-calTime('2015-04-15T13:28:22Z','2015-04-16T13:28:21Z');
+//calTime('2015-04-15T13:28:22Z','2015-04-16T13:28:21Z');
 
 
 export {
