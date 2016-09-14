@@ -1,15 +1,14 @@
 /**
- * React Starter Kit (https://www.reactstarterkit.com/)
- *
- * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
+ * Created by PolarisChen on 16/9/15.
  */
 
 import React, { Component, PropTypes } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './NotFoundPage.scss';
+
+import RaisedButton from 'material-ui/RaisedButton';
+
+import TitleBar from '../TitleBar';
 
 const title = 'Page Not Found';
 
@@ -25,11 +24,19 @@ class NotFoundPage extends Component {
     this.context.onPageNotFound();
   }
 
+  handleTouchTap(event) {
+    event.preventDefault();
+    history.go(-1);
+  }
+
   render() {
     return (
       <div>
-        <h1>{title}</h1>
-        <p>Sorry, but the page you were trying to view does not exist.</p>
+        <TitleBar text="404 Page Not Found :-(" />
+        <div className={s.container}>
+          <p>The page you are looking for does not exist.</p>
+          <RaisedButton label="Back to home" secondary={true} href="/home" />
+        </div>
       </div>
     );
   }

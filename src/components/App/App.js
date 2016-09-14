@@ -173,7 +173,14 @@ class App extends Component {
         />
       </div>
       </MuiThemeProvider>
-    ) : this.props.children;
+    ) : (
+      <MuiThemeProvider muiTheme={muiTheme}>
+      <div className={s.container}>
+        <Header handleSnackbarOpen={this.handleSnackbarOpen.bind(this)} login={this.state.login} handleLogout={this.handleLogout} user={this.state.user}/>
+        {this.props.children}
+      </div>
+      </MuiThemeProvider>
+    );
   }
 
 }
