@@ -7,7 +7,7 @@ import {github_repoSchema} from '../../models/github_repoSchema';
 import {github_userSchema} from '../../models/github_userSchema'
 import {languageSchema} from '../../models/languageSchema';
 import {transTime} from '../util/timeUtil'
-import {get_rec_languages, get_rec_languages_by_repos} from './RecommendLogic_languages'
+import {get_rec_languages_by_select, get_rec_languages_by_repos} from './RecommendLogic_languages'
 import {get_rec_repos_by_following, get_rec_repos_by_user, get_rec_repos_by_also_star} from './RecommendLogic_repos'
 import {get_rec_users, get_rec_users_by_star_contributor} from './RecommendLogic_users'
 import {connect} from '../config'
