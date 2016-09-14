@@ -134,7 +134,10 @@ class StarDialog extends Component {
             disabledBackgroundColor={primaryColor}
             disabledLabelColor={whiteColor}
             onTouchTap={this.handleSubmit.bind(this)}/>
-          <RaisedButton label="CANCEL" onTouchTap={this.handleClose.bind(this, false, null)}/>
+          <RaisedButton
+            label="CANCEL"
+            disabled={this.state.isLoading}
+            onTouchTap={this.handleClose.bind(this, false, null)}/>
         </div>
       </Dialog>
     )

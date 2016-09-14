@@ -7,7 +7,7 @@ import {SUCCESS, FAIL, getUser, setUser} from './servers/config'
 //services
 import {saveUser, login, register} from './servers/service/LoginService';
 import {getFlowListData, getCountData, getLangListData, getCoverData} from './servers/service/HomeService'
-import {addLang, getAllLanguage} from './servers/service/LanguageService'
+import {addLang, getAllLanguage, deleteLanguage} from './servers/service/LanguageService'
 import {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowingsAndFollowersNum, addFeedback, getUserStarRepo, getBestSubRepo, isLanguist} from './servers/service/UserService'
 import {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecommend, getRepoInfos, addMore, addInfoToList, getRepoLanguage} from './servers/service/RepoService'
 import {record_log, getLog} from './servers/service/LogService'
@@ -33,7 +33,7 @@ function addRepoAPI(server) {
   server.get('/api/repo/star', (req, res)=> {
     unstarRepo(req.query.user, req.query.repo, resa => {
       if (resa == SUCCESS) {
-        record_log(getUser(), getUser() + ' unstar repo: ' + req.query.repo + ' SUCCESS!', 'add');
+        record_log(getUser(), getUser() + ' unstar repo: ' + req.query.repo + ' SUCCESS!', 'del');
         res.send({res: SUCCESS});
       }
       else {
@@ -134,7 +134,7 @@ function addUserAPI(server) {
   server.get('/api/user/follow', (req, res)=> {
     unfollowUser(req.query.user, req.query.follow, resa => {
       if (resa == SUCCESS) {
-        record_log(getUser(), getUser() + ' unfollow user: ' + req.query.follow + ' SUCCESS!', 'add');
+        record_log(getUser(), getUser() + ' unfollow user: ' + req.query.follow + ' SUCCESS!', 'del');
         res.send({res: SUCCESS});
       }
       else {
@@ -322,7 +322,7 @@ function addOtherAPI(server) {
 }
 
 function addLanguageAPI(server) {
-  //choose language
+  //choose/modify language
   server.get('/api/lang/choose', (req, res) => {
     addLang(req.query.login, req.query.lang, req.query.level, ret => {
       if (ret == SUCCESS) {
@@ -335,12 +335,24 @@ function addLanguageAPI(server) {
       }
     });
   });
-
   //get all language
   server.get('/api/language/all', (req, res) => {
     getAllLanguage((langs) => {
       res.send(langs);
     })
+  });
+  //delete language
+  server.get('/api/lang/delete', (req, res) => {
+    deleteLanguage(req.query.login, req.query.lang, ret => {
+      if (ret == SUCCESS) {
+        record_log(getUser(), getUser() + ' delete language: ' + req.query.lang + ' SUCCESS!', 'del');
+        res.send({res: SUCCESS});
+      }
+      else {
+        record_log(getUser(), getUser() + ' delete language: ' + req.query.lang + ' FAIL!', 'error');
+        res.send({res: FAIL});
+      }
+    });
   });
 }
 

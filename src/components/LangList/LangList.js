@@ -16,20 +16,7 @@ class LangList extends Component {
 
   constructor(props) {
     super(props);
-    // this.originalLang = undefined;
   }
-
-  // componentWillReceiveProps(nextProps) {
-  //   if(!this.originalLang) {
-  //     this.originalLang = nextProps.originalLang.map((lang) => {
-  //       return {
-  //         name: lang.name,
-  //         isSelected: false,
-  //         level: 0
-  //       }
-  //     });
-  //   }
-  // }
 
   handleChange(lang) {
     let langData = this.props.langData;

@@ -86,23 +86,7 @@ class HomePage extends Component {
     let url = '/api/home/';
     let isHaveLanguage = true;
 
-    // Get langList
-    url = '/api/home/langList?user=' + user;
-    $.ajax(url)
-      .done(((data) => {
-        if(data && data.length != 0) {
-          this.setState({langList: data});
-        }else {
-          window.location.href = '/language';
-        }
-      }).bind(this))
-      .fail(((xhr, status, err) => {
-        console.error(url, status, err.toString());
-      }).bind(this));
-
-    // if(!isHaveLanguage) {
-    //   return ;
-    // }
+    this.getLangList(user);
 
     // Get count
     url = '/api/home/count?user=' + user;
@@ -143,7 +127,23 @@ class HomePage extends Component {
     this.getSetList(user);
   }
 
-  async getSetList(user) {
+  // Get langList
+  getLangList(user) {
+    let url = '/api/home/langList?user=' + user;
+    $.ajax(url)
+      .done(((data) => {
+        if(data && data.length != 0) {
+          this.setState({langList: data});
+        }else {
+          window.location.href = '/language';
+        }
+      }).bind(this))
+      .fail(((xhr, status, err) => {
+        console.error(url, status, err.toString());
+      }).bind(this));
+  }
+
+  getSetList(user) {
     let url = '/api/repo/setList';
     $.ajax(url, {data: {user: user}})
       .done(((data) => {
@@ -160,11 +160,15 @@ class HomePage extends Component {
   }
 
   // Add langauge dialog
-  handleAddLanguage(language) {
-    this.setState({addLang: language, isOpenDialog: true});
+  handleAddLanguage(language, level) {
+    this.setState({addLang: {name: language, isSelected: true, level: level || 0}, isOpenDialog: true});
   }
 
-  handleDialogClose() {
+  handleDialogClose(isSuccess) {
+    if(isSuccess) {
+      console.log('success');
+      this.getLangList(this.state.user);
+    }
     this.setState({addLang: '', isOpenDialog: false});
   }
 
@@ -327,7 +331,7 @@ class HomePage extends Component {
           <div className={s.container}>
             <div className={s.sidebar}>
               <Count data={this.state.count} />
-              <LanguageList data={this.state.langList} />
+              <LanguageList data={this.state.langList} handleEdit={this.handleAddLanguage.bind(this)}/>
             </div>
             <div className={s.main}>
               <FlowList
@@ -347,7 +351,7 @@ class HomePage extends Component {
         </div>
         <AddLanguageDialog
           isOpen={this.state.isOpenDialog}
-          language={{name: this.state.addLang, isSelected: true, level: 0}}
+          language={this.state.addLang}
           user={this.state.user}
           handleClose={this.handleDialogClose.bind(this)}/>
         <StarDialog isOpen={this.state.isStarDialogOpen}
