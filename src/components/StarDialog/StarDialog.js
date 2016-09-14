@@ -12,7 +12,10 @@ import RaisedButton from 'material-ui/RaisedButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
+import CircularProgress from 'material-ui/CircularProgress';
 
+const primaryColor = '#74C2CE';
+const whiteColor = '#FFF';
 const style = {
   dialogStyle: {
     width: '400px',
@@ -21,6 +24,10 @@ const style = {
     fontSize: '20px',
     marginTop: '-10px'
   },
+  circularProgress: {
+    position: 'relative',
+    top: '-6px'
+  }
 };
 
 class StarDialog extends Component {
@@ -119,7 +126,14 @@ class StarDialog extends Component {
         </SelectField>
         {this.renderField()}
         <div className={s.btn__group}>
-          <RaisedButton label="DONE" primary={true} disabled={this.state.isLoading} onTouchTap={this.handleSubmit.bind(this)}/>
+          <RaisedButton
+            icon={!this.state.isLoading ? '' : <CircularProgress size={0.4} innerStyle={style.circularProgress} />}
+            label={!this.state.isLoading ? 'DONE' : ''}
+            primary={true}
+            disabled={this.state.isLoading}
+            disabledBackgroundColor={primaryColor}
+            disabledLabelColor={whiteColor}
+            onTouchTap={this.handleSubmit.bind(this)}/>
           <RaisedButton label="CANCEL" onTouchTap={this.handleClose.bind(this, false, null)}/>
         </div>
       </Dialog>

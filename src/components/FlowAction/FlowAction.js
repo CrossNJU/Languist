@@ -14,7 +14,12 @@ class FlowAction extends Component {
     super(props);
   }
   handleLoad() {
-    console.log('LOADING');
+    let today = new Date();
+    let day = new Date(today);
+    day.setDate(today.getDate() - 5);
+    let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    let title = day.toLocaleDateString('en-US', options);
+    console.log(title);
     this.props.handleLoad();
   }
   render() {
@@ -25,7 +30,7 @@ class FlowAction extends Component {
           primary={true}
           label={this.props.hasMore ? 'Load Older Recommendations' : 'We would recommend you new repos and users at 5:00 every day.'}
           onTouchTap={this.handleLoad.bind(this)}
-          disabled={!this.props.hasMore}
+          // disabled={!this.props.hasMore}
         />
       </Paper>
     );

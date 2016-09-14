@@ -12,6 +12,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import Chip from 'material-ui/Chip';
+import CircularProgress from 'material-ui/CircularProgress';
 
 import Person from 'material-ui/svg-icons/social/person';
 import PersonAdd from 'material-ui/svg-icons/social/person-add';
@@ -64,16 +65,21 @@ const styles = {
   },
   tooltip: {
     top: '16px'
+  },
+  circularProgress: {
+    position: 'relative',
+    top: '-6px'
   }
 };
 
 class UserFlowItem extends Component {
   constructor(props) {
     super(props);
-    this.state = {hovering: false};
+    this.state = {hovering: false, loading: false};
   }
   handleFollow() {
-    this.props.handleFollow(this.props.user.login)
+    this.props.handleFollow(this.props.user.login);
+    this.setState({loading: true});
   }
   handleUnlike() {
     let param = {
@@ -94,9 +100,12 @@ class UserFlowItem extends Component {
       return (
         <RaisedButton
           className={s.mainButton}
-          icon={<PersonAdd />}
-          label={'Follow (' + this.props.user.followers + ')'}
+          icon={!this.state.loading ? <PersonAdd /> : <CircularProgress size={0.4} innerStyle={styles.circularProgress} />}
+          label={!this.state.loading ? 'Follow (' + this.props.user.followers + ')' : ''}
           secondary={true}
+          disabled={this.state.loading}
+          disabledBackgroundColor="#F2DF83"
+          disabledLabelColor="#FFF"
           onTouchTap={this.handleFollow.bind(this)} />
       )
     } else {
