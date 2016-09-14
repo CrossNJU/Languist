@@ -3,7 +3,7 @@
  */
 
 import {get_rec_users_by_language} from './RecommendLogic_users'
-import {getStarRepoByUser, getRepoInfo,getPublicRepoByUser,getJoinRepoByUser} from '../dao/RepoDAO'
+import {getStarRepoByUser, getRepoInfo,getPublicRepoByUser,getJoinRepoByUser,getTopRepos} from '../dao/RepoDAO'
 import {getUserAndLevelByLanguage, getFollowingByUser, getStarUserByRepo, getContributorsByRepo} from '../dao/UserDAO'
 import {calTime} from '../util/timeUtil'
 import {connect} from '../config'
@@ -411,6 +411,20 @@ async function get_rec_repos_by_contributor(fullname,rec_num){
 }
 
 
+//when 000
+async function get_rec_repos_when_zero(rec_num){
+  let rec_percent = 4;
+  let top_repos = await getTopRepos(rec_num * rec_percent);
+  let rec_repos = [];
+
+  for (let i = 0;i < rec_num*rec_percent;i += rec_percent){
+    if (i >= top_repos.length) break;
+    rec_repos.push(top_repos[i]);
+  }
+  // console.log(rec_repos);
+  return rec_repos;
+}
+
 //--------------------------
 //  Home Repos推荐列表
 //--------------------------
@@ -433,6 +447,14 @@ async function get_rec_repos(login,user_percent,star_owner_percent,also_star_per
   // console.log(following_rec.length);
   let colleague_rec = await get_rec_repos_by_colleagues(login,colleague_num);
   // console.log(colleague_rec.length);
+  let base_rec = await get_rec_repos_when_zero(base);
+
+  if (((user_rec.length == 0)&&(star_owner_rec.length == 0)&&(also_star_rec.length == 0)&&
+    (following_rec.length == 0)&&(colleague_rec.length == 0))){
+    // console.log(base_rec);
+    // console.log('base');
+    return base_rec;
+  }
 
   let init_repos = [];
   let rec_repos = [];
@@ -472,9 +494,7 @@ async function get_related_rec_repos(fullname,contributor_percent){
 }
 
 
-export {get_rec_repos_by_user,get_rec_repos_by_star_repos_owner,
-  get_rec_repos_by_also_star,get_rec_repos_by_following,get_rec_repos_by_contributor,
-  get_rec_repos_by_colleagues,handle_repos,get_rec_repos,get_related_rec_repos}
+export {get_rec_repos,get_related_rec_repos}
 
 // connect();
 // get_rec_repos_by_user('ChenDanni',10);
@@ -486,3 +506,4 @@ export {get_rec_repos_by_user,get_rec_repos_by_star_repos_owner,
 // get_rec_repos_by_colleagues('ChenDanni',10);
 // get_rec_repos('ChenDanni',1,1,1,1,1);
 // get_related_rec_repos('d3/d3',1);
+// get_rec_repos_when_zero(10);
