@@ -21,7 +21,7 @@ class LangQuestion extends Component {
       return null;
     }
 
-    var Button = this.props.question.type == "radio" ? RadioButton : Checkbox;
+    var Button = type == "radio" ? RadioButton : Checkbox;
     return this.props.question.options.map(option => {
       return (
         <Button
@@ -34,15 +34,30 @@ class LangQuestion extends Component {
     })
   }
 
+  renderGroup(type) {
+    switch (type) {
+      case 'radio':
+        return (
+          <RadioButtonGroup className={s.options__wrapper} name={this.props.question.question} defaultSelected={this.props.defaultLevel} ref="group" onChange={this.handleChoose.bind(this)}>
+            {this.renderOptions(type)}
+          </RadioButtonGroup>
+        );
+      case 'checkbox':
+        return (
+          <div className={s.options__wrapper}>
+            {this.renderOptions(type)}
+          </div>
+        )
+    }
+  }
+
   render() {
-    var ButtonGroup = this.props.question.type == "radio" ? RadioButtonGroup : 'div';
+    var type = this.props.question.type;
 
     return (
       <div className={s.question__wrapper}>
         <h1 className={s.question__title}>{this.props.question.question}</h1>
-        <ButtonGroup className={s.options__wrapper} name={this.props.question.question} defaultSelected={"0"} ref="group" onChange={this.handleChoose.bind(this)}>
-          {this.renderOptions(this.props.question.type)}
-        </ButtonGroup>
+        {this.renderGroup(type)}
       </div>
     );
 

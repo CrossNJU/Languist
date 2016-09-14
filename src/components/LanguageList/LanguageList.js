@@ -19,9 +19,13 @@ const listItemStyle = {
 }
 
 class LanguageItem extends Component {
+  handleEdit() {
+    this.props.handleEdit(this.props.lang.name, this.props.lang.level);
+  }
+
   render() {
     return (
-      <ListItem innerDivStyle={listItemStyle}>
+      <ListItem innerDivStyle={listItemStyle} onTouchTap={this.handleEdit.bind(this)}>
         <div className={s.item}>
           <Avatar size={36} className={s.avatar}>{this.props.lang.name.substr(0,1)}</Avatar>
           <div className={s.text}>{this.props.lang.name}</div>
@@ -72,7 +76,7 @@ class LanguageList extends Component {
     langData = this.props.data;
     if (langData.length > 0) {
       let languages = langData.map(language => {
-        return <LanguageItem key={language.name} lang={language} />;
+        return <LanguageItem key={language.name} lang={language} handleEdit={this.props.handleEdit}/>;
       });
       return languages;
     } else {

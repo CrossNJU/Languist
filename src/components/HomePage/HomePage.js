@@ -160,8 +160,8 @@ class HomePage extends Component {
   }
 
   // Add langauge dialog
-  handleAddLanguage(language) {
-    this.setState({addLang: language, isOpenDialog: true});
+  handleAddLanguage(language, level) {
+    this.setState({addLang: {name: language, isSelected: true, level: level || 0}, isOpenDialog: true});
   }
 
   handleDialogClose() {
@@ -324,7 +324,7 @@ class HomePage extends Component {
           <div className={s.container}>
             <div className={s.sidebar}>
               <Count data={this.state.count} />
-              <LanguageList data={this.state.langList} />
+              <LanguageList data={this.state.langList} handleEdit={this.handleAddLanguage.bind(this)}/>
             </div>
             <div className={s.main}>
               <FlowList
@@ -344,7 +344,7 @@ class HomePage extends Component {
         </div>
         <AddLanguageDialog
           isOpen={this.state.isOpenDialog}
-          language={{name: this.state.addLang, isSelected: true, level: 0}}
+          language={this.state.addLang}
           user={this.state.user}
           handleClose={this.handleDialogClose.bind(this)}/>
         <StarDialog isOpen={this.state.isStarDialogOpen}

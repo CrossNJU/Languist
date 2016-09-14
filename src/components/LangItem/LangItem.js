@@ -14,11 +14,9 @@ class LangItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // isSelected: this.props.lang.isSelected
       isSelected: false,
       level: 0,
       questionData1: {},
-
       questionData2: {},
     };
   }
@@ -91,15 +89,12 @@ class LangItem extends Component {
   handleClick() {
     let isSelected = !this.refs.toggle.state.switched;
     this.setState({isSelected: isSelected});
-    // this.props.handleChange({name: this.props.lang.name, isSelected: isSelected, level: this.props.lang.level})
     this.props.lang.isSelected = isSelected;
     this.props.handleChange(this.props.lang);
   };
 
   handleQuestion(level) {
     this.setState({level: level});
-    // console.log(level);
-    // this.props.handleChange({name: this.props.lang.name, isSelected: this.props.lang.isSelected, level: level});
     this.props.lang.level = level;
     this.props.handleChange(this.props.lang);
   }
@@ -132,7 +127,7 @@ class LangItem extends Component {
           </div>
         </ListItem>
         <div className={s.lang__questions} ref="question" style={{display: this.state.isSelected ? "block" : "none"}}>
-          <LangQuestion question={this.state.questionData1} onChoose={this.handleQuestion.bind(this)}/>
+          <LangQuestion question={this.state.questionData1} defaultLevel={this.state.level.toString()} onChoose={this.handleQuestion.bind(this)}/>
           <LangQuestion question={this.state.questionData2}/>
         </div>
       </div>
