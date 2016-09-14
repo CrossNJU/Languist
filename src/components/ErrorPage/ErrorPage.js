@@ -1,15 +1,14 @@
 /**
- * React Starter Kit (https://www.reactstarterkit.com/)
- *
- * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
+ * Created by PolarisChen on 16/9/15.
  */
 
 import React, { Component, PropTypes } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './ErrorPage.scss';
+
+import RaisedButton from 'material-ui/RaisedButton';
+
+import TitleBar from '../TitleBar';
 
 const title = 'Error';
 
@@ -24,11 +23,19 @@ class ErrorPage extends Component {
     this.context.onSetTitle(title);
   }
 
+  handleTouchTap(event) {
+    event.preventDefault();
+    history.go(0);
+  }
+
   render() {
     return (
       <div>
-        <h1>{title}</h1>
-        <p>Sorry, an critical error occurred on this page.</p>
+        <TitleBar text="500 Internal Server Error :-(" />
+        <div className={s.container}>
+          <p>Some error occurred on this page. Please try again later.</p>
+          <RaisedButton label="Reload the page" secondary={true} onTouchTap={this.handleTouchTap.bind(this)} />
+        </div>
       </div>
     );
   }
