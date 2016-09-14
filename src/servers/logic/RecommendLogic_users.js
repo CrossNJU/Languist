@@ -3,7 +3,7 @@
  */
 
 import {getGithubUserInfo, getUserAndLevelByLanguage,
-  getFollowingByUser, getStarUserByRepo, getContributorsByRepo, getUserLanguage} from '../dao/UserDAO'
+  getFollowingByUser, getStarUserByRepo, getContributorsByRepo, getUserLanguage,getTopUsersInSystem,getTopUsersInGithub} from '../dao/UserDAO'
 import {getStarRepoByUser, getPublicRepoByUser, getRepoInfo, getJoinRepoByUser} from '../dao/RepoDAO'
 import {handle_repos} from './RecommendLogic_repos'
 import {getLanguageByUser} from '../dao/languageDAO'
@@ -265,6 +265,23 @@ async function get_rec_users_by_follwing_repo(login,rec_num){
   return rec_contr;
 }
 
+//when 000
+async function get_rec_users_when_zero(rec_num){
+  let user_num = 10;
+  let github_user_num = rec_num = rec_num - user_num;
+  let rec_users = await getTopUsersInSystem(user_num);
+  let rec_github_users = await getTopUsersInGithub(github_user_num);
+  let ret = rec_users;
+
+  for (let i = 0;i < rec_github_users.length;i++){
+    if (ret.indexOf(rec_github_users[i]) <= -1)
+      ret.push(rec_github_users[i]);
+  }
+
+  return ret;
+
+}
+
 async function get_rec_users(login,language_percent,star_contributor_percent,following_repo_percent){
   let base = 100;
   let language_num = base * language_percent;
@@ -273,35 +290,41 @@ async function get_rec_users(login,language_percent,star_contributor_percent,fol
   let language_rec = await get_rec_users_by_language(login,language_num);
   let star_contributor_rec = await get_rec_users_by_star_contributor(login,star_contributor_num);
   let following_repo_rec = await get_rec_users_by_follwing_repo(login,following_repo_num);
+  let base_rec = await get_rec_users_when_zero(base);
 
-  let init_repo = [];
-  let rec_repos = [];
+  let init_users = [];
+  let rec_users = [];
 
-  init_repo.push(language_rec);
-  init_repo.push(star_contributor_rec);
-  init_repo.push(following_repo_rec);
+  if (!((language_rec.length == 0)&&(star_contributor_rec.length == 0)&&(following_repo_rec.length == 0))){
+    let index = base_rec.indexOf(login);
+    if (index >= -1){
+      base_rec.splice(index, 1);
+    }
+    // console.log(base_rec);
+    // console.log(base_rec.length);
+    return base_rec;
+  }
 
-  for (let i = 0;i < init_repo.length;i++){
-    for (let j = 0;j < init_repo[i].length;j++){
-      if (rec_repos.indexOf(init_repo[i][j]) <= -1)
-        rec_repos.push(init_repo[i][j]);
+  init_users.push(language_rec);
+  init_users.push(star_contributor_rec);
+  init_users.push(following_repo_rec);
+
+  for (let i = 0;i < init_users.length;i++){
+    for (let j = 0;j < init_users[i].length;j++){
+      if (rec_users.indexOf(init_users[i][j]) <= -1)
+        rec_users.push(init_users[i][j]);
     }
   }
 
-  // console.log(rec_repos);
-  //
-  // console.log(language_rec.length);
-  // console.log(star_contributor_rec.length);
-  // console.log(following_repo_rec.length);
-  // console.log(rec_repos);
 
-  return rec_repos;
+  return rec_users;
 }
 
 export {get_rec_users_by_language,get_rec_users_by_star_contributor,get_rec_users_by_follwing_repo,get_rec_users}
 
-// connect();
+connect();
 //get_rec_users_by_follwing_repo('RickChem',20);
 // get_rec_users_by_star_contributor('ChenDanni',10);
 // get_rec_users_by_follwing_repo('ChenDanni',10);
-// get_rec_users('ChenDanni',1,1,1);
+get_rec_users('ChenDanni',1,1,1);
+// get_rec_users_when_zero(100);
