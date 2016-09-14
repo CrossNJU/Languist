@@ -178,18 +178,15 @@ class UserFlowItem extends Component {
     }
   }
   renderViewButton() {
-    let flag = false;
-    if (flag) {
-      return (
-        <RaisedButton
-          className={s.mainButton}
-          icon={<Star />}
-          label="View Starred"
-          labelColor="#666"
-          href={`/starred?login=${this.props.user.login}`}
-        />
-      )
-    }
+    return (
+      <RaisedButton
+        className={s.mainButton}
+        icon={<Star />}
+        label="View Starred"
+        labelColor="#666"
+        href={`/starred?login=${this.props.user.login}`}
+      />
+    )
   }
   render() {
     const title = this.props.user.name ? this.props.user.name + ' (' + this.props.user.login + ')' : this.props.user.login;
