@@ -4,7 +4,7 @@
 
 import {getLanguageByUser} from '../dao/languageDAO'
 import {getLanguageByTag} from '../dao/languageDAO'
-import {getLanguageSize} from '../dao/languageDAO'
+import {getLanguageSize,getAllLanguages} from '../dao/languageDAO'
 import {getUserAndLevelByLanguage, getFollowingByUser, getStarUserByRepo, getContributorsByRepo} from '../dao/UserDAO'
 import {getStarRepoByUser, getPublicRepoByUser, getRepoInfo,getJoinRepoByUser} from '../dao/RepoDAO'
 import {connect} from '../config'
@@ -220,6 +220,20 @@ async function get_rec_languages_by_repos(login,rec_num) {
   return rec_lan;
 }
 
+//如果用户为000
+async function get_rec_language_when_zero(rec_num){
+  let languages = await getAllLanguages();
+  let rec_lan = [];
+
+  for (let i = 0;i < rec_num;i++){
+    if (2*i >= languages.length)
+      break;
+    rec_lan.push(languages[2*i]);
+  }
+  // console.log(rec_lan);
+  return rec_lan;
+}
+
 async function get_rec_languages(login,select_percent,following_percent,repo_percent){
   let base = 5;
   let select_num = base * select_percent;
@@ -232,6 +246,7 @@ async function get_rec_languages(login,select_percent,following_percent,repo_per
   // console.log(following_rec);
   let repo_rec = await get_rec_languages_by_repos(login,repo_num);
   // console.log(repo_rec);
+  let base_lan = await get_rec_language_when_zero(base);
 
   let init_languages = [];
   let rec_languages = [];
@@ -249,14 +264,19 @@ async function get_rec_languages(login,select_percent,following_percent,repo_per
     }
   }
 
+  if (rec_languages.length != 0)
+    return base_lan;
+
   // console.log(rec_languages);
   return rec_languages;
 }
 
 export {get_rec_languages_by_select,get_rec_languages_by_following,get_rec_languages_by_repos,get_rec_languages}
 
-connect();
-//get_rec_languages_by_select('RickChem');
+// connect();
+// get_rec_languages_by_select('RickChem');
 // get_rec_languages_by_following('ChenDanni',5);
 // get_rec_languages_by_repos('ChenDanni',5);
-get_rec_languages('ChenDanni',1,1,1);
+// get_rec_languages('ChenDanni',1,1,1);
+
+// get_rec_language_when_zero(5);

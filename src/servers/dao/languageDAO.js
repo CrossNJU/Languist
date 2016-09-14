@@ -56,7 +56,23 @@ async function getLanguageSize(langName){
   });
   return promise;
 }
-export {getLanguageByUser, getLanguageSize, getLanguageByTag}
+
+async function getAllLanguages(){
+  let promise = await new Promise(function(resolve, reject){
+    languageSchema.find({}, (err, res) => {
+      if (err) reject(err);
+      let ans = [];
+      for (let lang of res) {
+        ans.push(lang.language);
+      }
+      resolve(ans);
+    }).sort({'repo_num': -1}).limit(15);
+  });
+  return promise;
+}
+
+
+export {getLanguageByUser, getLanguageSize, getLanguageByTag,getAllLanguages}
 
 async function test(){
   connect();
