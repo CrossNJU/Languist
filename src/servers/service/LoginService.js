@@ -9,6 +9,7 @@ import {updateWhenLogin, updateInitialInfo} from '../logic/UpdateWhenLogin'
 import {} from '../logic/UpdateLater'
 import {SUCCESS, FAIL, PASSWORD_ERROR, NOT_FOUND, client_id, client_secret} from '../config'
 var superagent = require('superagent');
+var md5 = require('js-md5');
 
 var getAccessURL = 'https://github.com/login/oauth/access_token';
 
@@ -18,7 +19,7 @@ function login(username, password, callback) {
   userSchema.findOne({login: username}, (err, user) => {
     if (user == null) callback(NOT_FOUND);
     else {
-      if (user.password == password) {
+      if (user.password == md5(password)) {
         callback(SUCCESS);
       }
       else if (user.password === undefined) callback(PASSWORD_ERROR);
@@ -31,7 +32,7 @@ function register(username, password, callback) {
   var conditions = {login: username};
   var update = {
     $set: {
-      password: password
+      password: md5(password)
     }
   };
   userSchema.update(conditions, update, (err, res) => {
@@ -45,21 +46,21 @@ function register(username, password, callback) {
 
 
 export var saveUser = (code, callback) => {
-  console.log(code);
+  console.log('authority code:'+code);
   superagent
     .post(getAccessURL)
     .send({client_id: client_id, client_secret: client_secret, code: code})
     .set('Accept', 'application/json')
     .end(function (err, sres) {
       if (err) {
-        console.log('err: ' + err);
+        //console.log('err: ' + err);
         callback(0);
         return;
       }
       //console.log(sres.body);
       let access_token = sres.body.access_token;
       if (access_token === undefined) {
-        console.log('undefined!');
+        console.log('access token undefined!');
         callback(0);
         return;
       }
@@ -71,7 +72,7 @@ export var saveUser = (code, callback) => {
         .accept('json')
         .end((err, ssres) => {
           if (err) {
-            return console.log(err);
+            return -1;
           }
           let json = JSON.parse(ssres.text);
           callback(json.login);
@@ -79,7 +80,7 @@ export var saveUser = (code, callback) => {
           //insert new users
           userSchema.findOne({login: json.login}, (err, user) => {
             if (user == null){
-              addAnewUser(json, access_token, () => {
+              addAnewUser(json.login, access_token, () => {
                 updateInitialInfo(json.login);
               });
             } else {
@@ -89,7 +90,7 @@ export var saveUser = (code, callback) => {
                 }
               };
               userSchema.update({login: json.login}, update, (err, res) => {
-                console.log('update new access token!');
+                //console.log('update new access token!');
               });
               updateInitialInfo(json.login);
             }

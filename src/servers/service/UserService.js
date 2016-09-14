@@ -8,7 +8,8 @@ import {github_userSchema} from '../../models/github_userSchema'
 import {getAUser, getARepo} from '../logic/HandleRecommendLogic'
 import {connect} from '../config'
 import {getUserStarred} from '../api/github_user'
-import {upsertRepo} from '../logic/UpdateWhenLogin'
+import {upsertRepo, updateWhenLogin} from '../logic/UpdateWhenLogin'
+import {record_log} from '../service/LogService'
 
 var async = require("async");
 
@@ -22,7 +23,7 @@ function evaluateRecommend(login, name, type, callback) {
     rec.splice(index, 1);
     userSchema.update({login: login}, {$set: {now_recommend: rec}, $addToSet: {dislike: dislike}}, (err, res) => {
       console.log('update recommend feedback!');
-      console.log(res);
+      //console.log(res);
       callback(1);
     })
   });
@@ -62,9 +63,9 @@ function getUserFollowingsAndFollowersNum(login, callback) {
 }
 
 function addFeedback(login, feedback, callback){
-  userSchema.update({login:login}, {$addToSet:{feedback:feedback}}, (err, res) => {
+  userSchema.update({login:login}, {$addToSet:{feedback:{time:(new Date()).toLocaleString(), content: feedback}}}, (err, res) => {
     console.log('add feedback!');
-    console.log(res);
+    //console.log(res);
     callback(1);
   });
 }
@@ -75,13 +76,14 @@ function getUserStarRepo(login, callback){
     for (let i = 0; i < stars.length; i++) {
       met1.push((call0) => {
         upsertRepo(stars[i], () => {
-          console.log('new repo: ' + stars[i]);
+          //console.log('new repo: ' + stars[i]);
           call0(null, 'done 0!');
         });
       });
     }
     async.parallel(met1, async (err, res) => {
-      console.log(res);
+      record_log('system', 'get user: '+login+' star repos', 'done');
+      console.log(res+'get star repos');
       let ans = [];
       for (let i = 0; i < stars.length; i++) {
         let repo_det = await getARepo(stars[i]);
@@ -92,7 +94,47 @@ function getUserStarRepo(login, callback){
   });
 }
 
-export {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowingsAndFollowersNum, addFeedback, getUserStarRepo}
+function reloadUser(login, callback){
+  //console.log('in');
+  let update = {
+    $set: {
+      recommend: [],
+      now_recommend: [],
+      dislike: [],
+    }
+  };
+  if (login == 'All'){
+    userSchema.find({}, (err, users) => {
+      //console.log(users);
+      let met0 = [];
+      for(let i=0;i<users.length;i++){
+        met0.push((call0) => {
+          userSchema.update({login:users[i].login}, update, (err, res) => {
+            //console.log('reload user:'+users[i].login);
+            //console.log(res);
+            updateWhenLogin(users[i].login);
+            //console.log('at');
+            call0(null, 'update:'+users[i].login);
+          })
+        })
+      }
+      async.parallel(met0, async (err, res) => {
+        record_log('system', 'reload all user', 'later');
+        console.log(res);
+        callback();
+      })
+    })
+  } else {
+    userSchema.update({login:login}, update, (err, res) => {
+      record_log('system', 'reload user:'+login, 'later');
+      console.log(res+'reload user');
+      updateWhenLogin(login);
+      callback();
+    })
+  }
+}
+
+export {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowingsAndFollowersNum, addFeedback, getUserStarRepo, reloadUser}
 
 //getUserFollowingsAndFollowersNum()
 //connect();

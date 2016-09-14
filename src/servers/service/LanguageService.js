@@ -16,7 +16,7 @@ function chooseLanguage(login, language, level, callback){
     }
   };
   userSchema.update(condition, update, (err, res) => {
-    if (err) console.error(err);
+    //if (err) console.error(err);
     //console.log(login);
     //console.log(res);
     callback(1);

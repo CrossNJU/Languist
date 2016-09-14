@@ -8,6 +8,7 @@ import {github_userSchema} from '../../models/github_userSchema'
 import {getUserInfo, getUserStarred, getPublicRepos, addAnewUser, getFollowings, addAnewGitHubUser, getJoinRepos, getFollowers} from '../api/github_user'
 import {getRepoInfo, getRepoLanguages, getContributors, getStarredUsers, addNewRepo} from '../api/github_repo'
 import {setSignal} from '../config'
+import {record_log} from '../service/LogService'
 
 var async = require("async");
 var get_size = 12;
@@ -34,7 +35,7 @@ function updateRepoCons(fullname, callback) {
           }
         };
         github_repoSchema.update(conditions2, update2, (err, res2) => {
-          console.log("update repo: " + fullname + " cons!");
+          //console.log("update repo: " + fullname + " cons!");
           //console.log(res2);
           callback(getLoginFromContributors(ret2));
         });
@@ -54,7 +55,7 @@ function updateRepoStar(fullname, callback) {
           }
         };
         github_repoSchema.update(conditions2, update2, (err, res2) => {
-          console.log("update repo: " + fullname + " starers!");
+          //console.log("update repo: " + fullname + " starers!");
           //console.log(res2);
           callback(ret2);
         });
@@ -76,7 +77,7 @@ function updateUserStars(login, is_insert, callback) {
           }
         };
         github_userSchema.update(conditions, update, (err, res2) => {
-          console.log("update user: " + login + " star repos!");
+          //console.log("update user: " + login + " star repos!");
           //console.log(res2);
           callback(ret);
         });
@@ -96,7 +97,7 @@ function updateUserRepos(login, is_insert, callback) {
           }
         };
         github_userSchema.update(conditions, update, (err, res2) => {
-          console.log("update user: " + login + " repos!");
+          //console.log("update user: " + login + " repos!");
           //console.log(res2);
           callback(ret);
         });
@@ -116,7 +117,7 @@ function updateUserFollowing(login, callback) {
           }
         };
         github_userSchema.update(conditions, update, (err, res2) => {
-          console.log("update user: " + login + " repos!");
+          //console.log("update user: " + login + " repos!");
           //console.log(res2);
           callback(ret);
         });
@@ -137,7 +138,7 @@ function updateUserJoinRepo(login, is_insert, callback) {
           }
         };
         github_userSchema.update(conditions, update, (err, res2) => {
-          console.log("update user: " + login + " join repos!");
+          //console.log("update user: " + login + " join repos!");
           //console.log(res2);
           callback(ret);
         });
@@ -152,7 +153,7 @@ function upsertRepo(ret, callback) {
   github_repoSchema.findOne({full_name: ret}, (err, check)=> {
     if (check == null) {
       getRepoInfo(ret, info => {
-        console.log('from api to add repo:' + ret);
+        //console.log('from api to add repo:' + ret);
         if (!info) upsertRepo(ret, callback);
         else if (info.full_name) addNewRepo(info, () => {
           callback();
@@ -205,13 +206,13 @@ function updateWhenLogin(login) {
                       for (let k = 0; k < ret3.length; k++) {
                         met3.push((call3) => {
                           upsertRepo(ret3[k], () => {
-                            console.log('done from USER star repo: ' + ret[i] + ' to its owner: ' + single.owner + ' to its repo: ' + ret3[k] + '!');
+                            //console.log('done from USER star repo: ' + ret[i] + ' to its owner: ' + single.owner + ' to its repo: ' + ret3[k] + '!');
                             call3(null, 'done 3!');
                           })
                         });
                       }
                       async.parallel(met3, (err, res) => {
-                        console.log(res);
+                        //console.log(res);
                         call2(null, 'done 2!');
                       })
                     });
@@ -231,13 +232,13 @@ function updateWhenLogin(login) {
                           for (let k = 0; k < ret3.length; k++) {
                             met4.push((call4) => {
                               upsertRepo(ret3[k], () => {
-                                console.log('done from USER star repo: ' + ret[i] + ' to its starer: ' + ret2[j] + ' to its star repo: ' + ret3[k] + '!');
+                                //console.log('done from USER star repo: ' + ret[i] + ' to its starer: ' + ret2[j] + ' to its star repo: ' + ret3[k] + '!');
                                 call4(null, 'done 4!');
                               });
                             });
                           }
                           async.parallel(met4, (err, res) => {
-                            console.log(res);
+                            //console.log(res);
                             call3(null, 'done 3!');
                           });
                         });
@@ -245,7 +246,7 @@ function updateWhenLogin(login) {
                     });
                   }
                   async.parallel(met3, (err, res) => {
-                    console.log(res);
+                    //console.log(res);
                     call2(null, 'done 2!');
                   });
                 })
@@ -258,27 +259,27 @@ function updateWhenLogin(login) {
                   for (let j = 0; j < ret2.length; j++) {
                     met3.push((call3) => {
                       upsertUser(ret2[j], () => {
-                        console.log('done from USER star repo: ' + ret[i] + ' to its contributor: ' + ret2[j]+ '!');
+                        //console.log('done from USER star repo: ' + ret[i] + ' to its contributor: ' + ret2[j]+ '!');
                         call3(null, 'done 3!');
                       });
                     });
                   }
                   async.parallel(met3, (err, res) => {
-                    console.log(res);
+                    //console.log(res);
                     call2(null, 'done 2!');
                   });
                 })
               });
             }
             async.parallel(met2, (err, res) => {
-              console.log(res);
+              //console.log(res);
               call1(null, 'done 1!');
             });
           });
         });
       }
       async.parallel(met1, (err, res) => {
-        console.log(res);
+        //console.log(res);
         call0(null, 'done 0!');
       })
     });
@@ -297,13 +298,13 @@ function updateWhenLogin(login) {
               for (let j = 0; j < ret2.length; j++) {
                 met2.push((call2) => {
                   upsertUser(ret2[j], () => {
-                    console.log('done from USER repo: ' + ret[i] + ' to its contributor: ' + ret2[j] + '!');
+                    //console.log('done from USER repo: ' + ret[i] + ' to its contributor: ' + ret2[j] + '!');
                     call2(null, 'done 2!');
                     if (run3) {
                       updateUserRepos(ret2[j], true, (ret3) => {
                         for (let k = 0; k < ret3.length; k++) {
                           upsertRepo(ret3[k], () => {
-                            console.log('done from USER repo: ' + ret[i] + ' to its contributor: ' + ret2[j] + ' to its repo: ' + ret3[k] + '!');
+                            //console.log('done from USER repo: ' + ret[i] + ' to its contributor: ' + ret2[j] + ' to its repo: ' + ret3[k] + '!');
                           });
                         }
                       });
@@ -312,7 +313,7 @@ function updateWhenLogin(login) {
                 });
               }
               async.parallel(met2, (err, res) => {
-                console.log(res);
+                //console.log(res);
                 call1(null, 'done 1!');
               })
             });
@@ -320,7 +321,7 @@ function updateWhenLogin(login) {
         });
       }
       async.parallel(met1, (err, res) => {
-        console.log(res);
+        //console.log(res);
         call0(null, 'done 0!');
       })
     });
@@ -344,13 +345,13 @@ function updateWhenLogin(login) {
                         for (let k = 0; k < ret3.length; k++) {
                           met3.push((call3) => {
                             upsertRepo(ret3[k], () => {
-                              console.log('done from USER repo: ' + ret[i] + ' to its contributor: ' + ret2[j] + ' to its star repo: ' + ret3[k] + '!');
+                              //console.log('done from USER repo: ' + ret[i] + ' to its contributor: ' + ret2[j] + ' to its star repo: ' + ret3[k] + '!');
                               call3(null, 'done 3!');
                             });
                           });
                         }
                         async.parallel(met3, (err, res) => {
-                          console.log(res);
+                          //console.log(res);
                           call2(null, 'done 2!');
                         })
                       });
@@ -359,7 +360,7 @@ function updateWhenLogin(login) {
                 });
               }
               async.parallel(met2, (err, res) => {
-                console.log(res);
+                //console.log(res);
                 call1(null, 'done 1!');
               })
             });
@@ -367,7 +368,7 @@ function updateWhenLogin(login) {
         });
       }
       async.parallel(met1, (err, res) => {
-        console.log(res);
+        //console.log(res);
         call0(null, 'done 0!');
       })
     });
@@ -393,13 +394,13 @@ function updateWhenLogin(login) {
                         for (let k = 0; k < ret3.length; k++) {
                           met3.push((call3) => {
                             upsertUser(ret3[k], ()=> {
-                              console.log('done from USER following: ' + ret[i] + ' to its repo: ' + ret2[j] + ' to its contributor: ' + ret3[k] + '!');
+                              //console.log('done from USER following: ' + ret[i] + ' to its repo: ' + ret2[j] + ' to its contributor: ' + ret3[k] + '!');
                               call3(null, 'done 3!');
                             })
                           });
                         }
                         async.parallel(met3, (err, res) => {
-                          console.log(res);
+                          //console.log(res);
                           call2(null, 'done 2!');
                         })
                       });
@@ -407,7 +408,7 @@ function updateWhenLogin(login) {
                   });
                 }
                 async.parallel(met2, (err, res) => {
-                  console.log(res);
+                  //console.log(res);
                   call1(null, 'done 1!');
                 })
               });
@@ -431,14 +432,15 @@ function updateWhenLogin(login) {
         });
       }
       async.parallel(met1, (err, res) => {
-        console.log(res);
+        //console.log(res);
         call0(null, 'done 0!');
       })
     });
   });
 
   async.parallel(met0, (err, res) => {
-    console.log(res);
+    console.log(res+'done update when login');
+    record_log('system', 'update user: '+login+' when login done!', 'done');
     setSignal(1);
   })
 }
@@ -448,10 +450,10 @@ function updateInitialInfo(login) {
     //console.log(followers);
     userSchema.update({login: login}, {$set: {followers: followers}}, (err, res) => {
       console.log('update system user followers!');
-      console.log(res);
+      //console.log(res);
       for (let i = 0; i < followers.length; i++) {
         upsertUser(followers[i], () => {
-          console.log('new user: ' + followers[i])
+          //console.log('new user: ' + followers[i])
         });
       }
     })
@@ -460,10 +462,10 @@ function updateInitialInfo(login) {
     //console.log(followings);
     userSchema.update({login: login}, {$set: {followings: followings}}, (err, res) => {
       console.log('update system user followings!');
-      console.log(res);
+      //console.log(res);
       for (let i = 0; i < followings.length; i++) {
         upsertUser(followings[i], () => {
-          console.log('new user: ' + followings[i])
+          //console.log('new user: ' + followings[i])
         });
       }
     })
@@ -473,10 +475,10 @@ function updateInitialInfo(login) {
     let repo_set = [{set_name: 'Ungrouped', set_repos: stars}];
     userSchema.update({login: login}, {$set: {star_repos: stars, repo_sets: repo_set}}, (err, res) => {
       console.log('update system user star repos!');
-      console.log(res);
+      //console.log(res);
       for (let i = 0; i < stars.length; i++) {
         upsertRepo(stars[i], () => {
-          console.log('new user: ' + stars[i])
+          //console.log('new user: ' + stars[i])
         });
       }
     })

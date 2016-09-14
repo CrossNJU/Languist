@@ -107,7 +107,36 @@ async function getContributorsByRepo(full_name) {
   return t;
 }
 
-export {getGithubUserInfo, getUserAndLevelByLanguage, getFollowingByUser, getStarUserByRepo, getContributorsByRepo, getUserLanguage}
+async function getTopUsersInSystem(user_num){
+  let promise = await new Promise(function(resolve, reject){
+    userSchema.find({}, (err, users) => {
+      if (err) reject(err);
+      let ans = [];
+      for (let user of users){
+          ans.push(user.login)
+      }
+      resolve(ans);
+    }).sort({'followers': -1}).limit(user_num);
+  });
+  return promise;
+}
+
+async function getTopUsersInGithub(user_num){
+  let promise = await new Promise(function(resolve, reject){
+    github_userSchema.find({}, (err, users) => {
+      if (err) reject(err);
+      let ans = [];
+      for (let user of users){
+        ans.push(user.login)
+      }
+      resolve(ans);
+    }).sort({'followers': -1}).limit(user_num);
+  });
+  return promise;
+}
+
+export {getGithubUserInfo, getUserAndLevelByLanguage, getFollowingByUser,
+  getStarUserByRepo, getContributorsByRepo, getUserLanguage,getTopUsersInSystem,getTopUsersInGithub}
 
 async function test() {
   let t = await getRepoInfo("CrossNJU/PASS");

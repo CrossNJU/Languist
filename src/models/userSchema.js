@@ -39,7 +39,10 @@ var user = schema({
     m_name: String,
     m_type: Number
   }],
-  feedback: [String]
+  feedback: [{
+    time:String,
+    content:String
+  }]
 });
 
 //make model and export

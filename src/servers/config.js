@@ -9,13 +9,14 @@ export const FAIL = 0;
 export const NOT_FOUND = -1;
 export const PASSWORD_ERROR = -2;
 
-export const client_id = 'c1bb199ad072f9f1639d';
-export const client_secret = 'e89f1fdfaa227f6ba0d12953c33e6d79a6e18192';
+//export const client_id = 'c1bb199ad072f9f1639d';
+//export const client_secret = 'e89f1fdfaa227f6ba0d12953c33e6d79a6e18192';
 
-//export const client_id = 'd310933db63d64f563a0';
-//export const client_secret = 'b09a6840ed8fba314dd7089a7bb45e687fe';
+export const client_id = 'd310933db63d64f563a0';
+export const client_secret = '82093b09a6840ed8fba314dd7089a7bb45e687fe';
 
 var signal = 1;
+var current_user = null;
 
 function mon_conn(){
   mongoose.connect('mongodb://localhost/languist');
@@ -58,9 +59,19 @@ function setSignal(value){
   signal = value;
 }
 
+function getUser(){
+  return current_user;
+}
+
+function setUser(value){
+  current_user = value;
+}
+
 export {
   mon_conn as connect,
   mon_disconn as disconnect,
   mon_conn2 as connect_callback,
   getSignal,
-  setSignal}
+  setSignal,
+  setUser,
+  getUser}

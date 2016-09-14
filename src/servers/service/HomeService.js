@@ -6,7 +6,8 @@ import {github_userSchema} from '../../models/github_userSchema'
 import {userSchema} from '../../models/userSchema'
 import {connect} from '../config'
 import {getNextDayRecommendData, getStart} from '../logic/HandleRecommendLogic'
-import {getSignal} from '../config'
+import {getSignal, getUser} from '../config'
+import {record_log} from '../service/LogService'
 import {addInfoToList} from '../service/RepoService'
 var async = require("async");
 
@@ -28,7 +29,7 @@ export var getCountData = (userName, callback) => {
   let condition = {login: userName};
   userSchema.findOne(condition, (err, user) => {
     if (err) {
-      console.log('err occurs: ' + err.message);
+      console.log('err occurs in home count data: ' + err.message);
     } else {
       data.followingCount = user.followings.length;
       data.followersCount = user.followers.length;
@@ -53,7 +54,7 @@ export var getLangListData = (userName, callback) => {
 };
 
 async function getFlowListData(userName, callback) {
-  console.log(getSignal());
+  record_log(getUser(), getUser()+' get updatewhenlogin signal: '+getSignal(), 'query');
   let before = await new Promise((resolve, reject) => {
     async.until(function() {
         return getSignal() > 0;
@@ -64,22 +65,21 @@ async function getFlowListData(userName, callback) {
       },
       function(err) {
         // 4s have passed
-        console.log('done!');
-        console.log(err); // -> undefined
+        record_log(getUser(), getUser()+' updatewhenlogin done in recommend', 'mark');
+        //console.log(err); // -> undefined
         if (err) reject(err);
         resolve(1);
       });
   });
   let ans = [];
   if (before == 1) {
-    console.log('get the first data from web!');
+    record_log(getUser(), getUser()+' to get recommend date in HomeService', 'query');
     ans = await getNextDayRecommendData(userName);
     if (ans.length == 0){
-      console.log('get start!');
       let now = await getStart(userName);
       ans = await getNextDayRecommendData(userName);
-      console.log('start to recommend: ');
-      console.log(now);
+      record_log(getUser(), getUser()+' first get recommend data', 'mark');
+      //console.log(now);
     }
   }
   //console.log(ans);
