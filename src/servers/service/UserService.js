@@ -78,26 +78,42 @@ function addFeedback(login, feedback, callback) {
 }
 
 function getUserStarRepo(login, callback) {
-  getUserStarred(login, 1, [], true, -1, (stars) => {
-    let met1 = [];
-    for (let i = 0; i < stars.length; i++) {
-      met1.push((call0) => {
-        upsertRepo(stars[i], () => {
-          //console.log('new repo: ' + stars[i]);
-          call0(null, 'done 0!');
-        });
-      });
-    }
-    async.parallel(met1, async (err, res) => {
-      record_log('system', 'get user: ' + login + ' star repos', 'done');
-      console.log(res + 'get star repos');
+  github_userSchema.findOne({login: login}, async (err, user) => {
+    if (user.star_repo_all == 1) {
+      let stars = user.star_repos;
       let ans = [];
       for (let i = 0; i < stars.length; i++) {
         let repo_det = await getARepo(stars[i]);
         ans.push(repo_det);
       }
       callback(ans);
-    })
+    } else {
+      getUserStarred(login, 1, [], true, -1, (stars) => {
+        let met1 = [];
+        for (let i = 0; i < stars.length; i++) {
+          met1.push((call0) => {
+            upsertRepo(stars[i], () => {
+              //console.log('new repo: ' + stars[i]);
+              call0(null, 'done 0!');
+            });
+          });
+        }
+        async.parallel(met1, async (err, res) => {
+          record_log('system', 'get user: ' + login + ' star repos', 'done');
+          console.log(res + 'get star repos');
+          github_userSchema.update({login: login}, {$set: {star_repo_all: 1, star_repos: stars}}, (err, res) => {
+            console.log('update user:' + login + ' star all repos');
+            console.log(res);
+          });
+          let ans = [];
+          for (let i = 0; i < stars.length; i++) {
+            let repo_det = await getARepo(stars[i]);
+            ans.push(repo_det);
+          }
+          callback(ans);
+        })
+      });
+    }
   });
 }
 
@@ -142,22 +158,12 @@ function reloadUser(login, callback) {
 }
 
 function getBestSubRepo(login, callback) {
-  getUserStarred(login, 1, [], true, -1, (repos) => {
-    let met1 = [];
-    for (let i = 0; i < repos.length; i++) {
-      met1.push((call0) => {
-        upsertRepo(repos[i], () => {
-          //console.log('new repo: ' + stars[i]);
-          call0(null, 'done 0!');
-        });
-      });
-    }
-    async.parallel(met1, async (err, res) => {
-      record_log('system', 'get user: ' + login + ' subscribe repos', 'done');
-      console.log(res + 'get subscribe repos');
+  github_userSchema.findOne({login: login}, async (err, user) => {
+    if (user.join_repo_all == 1) {
+      let joins = user.joinRepos;
       let ans = [];
-      for (let i = 0; i < repos.length; i++) {
-        let repo_det = await getARepo(repos[i]);
+      for (let i = 0; i < joins.length; i++) {
+        let repo_det = await getARepo(joins[i]);
         ans.push(repo_det);
       }
       ans.sort((o1, o2) => {
@@ -173,12 +179,51 @@ function getBestSubRepo(login, callback) {
         }
       }
       callback(ret);
-    })
+    } else {
+      getJoinRepos(login, 1, [], true, -1, (repos) => {
+        console.log(repos);
+        let met1 = [];
+        for (let i = 0; i < repos.length; i++) {
+          met1.push((call0) => {
+            upsertRepo(repos[i], () => {
+              //console.log('new repo: ' + stars[i]);
+              call0(null, 'done 0!');
+            });
+          });
+        }
+        async.parallel(met1, async (err, res) => {
+          record_log('system', 'get user: ' + login + ' subscribe repos', 'done');
+          console.log(res + 'get subscribe repos');
+          github_userSchema.update({login: login}, {$set: {join_repo_all: 1, joinRepos: repos}}, (err, res) => {
+            console.log('update user:' + login + ' join all repos');
+            console.log(res);
+          });
+          let ans = [];
+          for (let i = 0; i < repos.length; i++) {
+            let repo_det = await getARepo(repos[i]);
+            ans.push(repo_det);
+          }
+          ans.sort((o1, o2) => {
+            return o2.star - o1.star;
+          });
+          let ret = [];
+          if (ans[0].star < 1000) ret[0] = ans[0];
+          else {
+            let i = 0;
+            while (i < 5 && ans[i].star >= 1000) {
+              ret[i] = ans[i];
+              i++;
+            }
+          }
+          callback(ret);
+        })
+      });
+    }
   });
 }
 
 function isLanguist(login, callback) {
-  userSchema.find({login: login}, (err, res) => {
+  userSchema.findOne({login: login}, (err, res) => {
     if (res == null) callback(false);
     else callback(true);
   })
@@ -197,3 +242,7 @@ export {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowing
 //  return o1.a - o2.a;
 //});
 //console.log(a);
+//getUserStarRepo('ziadoz', (repos) => {
+//  console.log(repos);
+//});
+//isLanguist('RickChem', (ans) => {console.log(ans)});

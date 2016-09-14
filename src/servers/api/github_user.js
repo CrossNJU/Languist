@@ -33,7 +33,7 @@ function getUserInfo(login, callback) {
 
 function getUserStarred(login, page, array, is_insert, numbers, callback) {
   client = getClient();
-  //console.log("in");
+  //console.log(page);
   let per_page = number_per_page > numbers ? numbers : number_per_page;
   let next_per_page = numbers > number_per_page ? numbers - number_per_page : 0;
   if (numbers < 0) {
@@ -45,9 +45,7 @@ function getUserStarred(login, page, array, is_insert, numbers, callback) {
   else {
     client.get('users/' + login + '/starred', {
       page: page,
-      per_page: per_page,
-      sort: 'updated',
-      direction: 'desc'
+      per_page: per_page
     }, function (err, status, body, headers) {
       //console.log("in");
       if (body === undefined || body.length == 0) {
@@ -232,14 +230,14 @@ function unstarRepo(login, repo, callback) {
     ghme.unstar(repo, (err, data, header) => {
       if (err) callback(err);
       else {
-        userSchema.find({login: login}, (err, user) => {
+        userSchema.findOne({login: login}, (err, user) => {
           let repos = user.star_repos;
           let index = repos.findIndex(j => j == repo);
           if (index >= 0) {
             repos.splice(index, 1);
             let update = {
-              $dec: {
-                star_num: 1
+              $inc: {
+                star_num: -1
               },
               $set: {
                 star_repos: repos
@@ -293,14 +291,14 @@ function unfollowUser(login, loginToUnFollow, callback) {
     ghme.unfollow(loginToUnFollow, (err, data, header) => {
       if (err) callback(err);
       else {
-        userSchema.find({login: login}, (err, user) => {
+        userSchema.findOne({login: login}, (err, user) => {
           let followings = user.followings;
           let index = followings.findIndex(j => j == loginToUnFollow);
           if (index >= 0) {
             followings.splice(index, 1);
             let update = {
-              $dec: {
-                star_num: 1
+              $inc: {
+                following: -1
               },
               $set: {
                 followings_login: followings
@@ -373,7 +371,9 @@ function addAnewGitHubUser(json, callback = null) {
       use_languages: [],
       repos: [],
       joinRepos: [],
-      joinRepo_count: -1
+      joinRepo_count: -1,
+      star_repo_all: 0,
+      join_repo_all: 0
     }
   };
   var options = {upsert: true};
@@ -405,4 +405,9 @@ export {getUserInfo, getUserStarred, getFollowers, getPublicRepos, getFollowings
 
 //getPublicRepos('RickChem', 1, [], false, 20, (ret) => {
 //  console.log(ret);
+//});
+
+//connect();
+//unfollowUser('RickChem', 'vjeux', (res) => {
+//  console.log(res);
 //});

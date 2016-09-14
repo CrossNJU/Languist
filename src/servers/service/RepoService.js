@@ -224,18 +224,24 @@ async function addInfoToList(login, flowlist, include_user, callback) {
 }
 
 function getRepoLanguage(full_name, callback) {
-  getRepoLanguages(full_name, (languages) => {
-    let conditions = {full_name: full_name};
-    let update = {
-      $set: {
-        languages: languages
-      }
-    };
-    github_repoSchema.update(conditions, update, (err, res) => {
-      console.log('update repo:' + full_name + ' languages');
-      console.log(res);
-      callback(languages);
-    });
+  github_repoSchema.findOne({full_name: full_name}, (err, repo) => {
+    if (repo.languages.length == 0){
+      getRepoLanguages(full_name, (languages) => {
+        let conditions = {full_name: full_name};
+        let update = {
+          $set: {
+            languages: languages
+          }
+        };
+        github_repoSchema.update(conditions, update, (err, res) => {
+          console.log('update repo:' + full_name + ' languages');
+          console.log(res);
+          callback(languages);
+        });
+      });
+    } else {
+      callback(repo.languages);
+    }
   });
 }
 
@@ -259,4 +265,8 @@ export {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecomm
 
 //addARepoToSet('RickChem', 'jquery/jquery', 'test', (res)=> {
 //  console.log(res);
+//});
+
+//getRepoLanguage('FreeCodeCamp/FreeCodeCamp', (langs) => {
+// console.log(langs);
 //});
