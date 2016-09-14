@@ -225,6 +225,40 @@ function starRepo(login, repo, callback) {
   });
 }
 
+function unstarRepo(login, repo, callback) {
+  userSchema.findOne({login: login}, (err, user) => {
+    var auth_client = github.client(user.access_token);
+    var ghme = auth_client.me();
+    ghme.unstar(repo, (err, data, header) => {
+      if (err) callback(err);
+      else {
+        userSchema.find({login: login}, (err, user) => {
+          let repos = user.star_repos;
+          let index = repos.findIndex(j => j == repo);
+          if (index >= 0) {
+            repos.splice(index, 1);
+            let update = {
+              $dec: {
+                star_num: 1
+              },
+              $set: {
+                star_repos: repos
+              }
+            };
+            github_userSchema.update({login: login}, update, (err, res) => {
+              callback(1);
+            });
+            userSchema.update({login: login}, {$set: {star_repos: repos}}, (err, res)=> {
+              //console.log(res);
+            })
+          } else callback(1);
+
+        });
+      }
+    });
+  });
+}
+
 function followUser(login, loginToFollow, callback) {
   userSchema.findOne({login: login}, (err, user) => {
     var auth_client = github.client(user.access_token);
@@ -247,6 +281,39 @@ function followUser(login, loginToFollow, callback) {
           //console.log('follow a user:' + loginToFollow);
           //console.log(res);
         })
+      }
+    });
+  });
+}
+
+function unfollowUser(login, loginToUnFollow, callback) {
+  userSchema.findOne({login: login}, (err, user) => {
+    var auth_client = github.client(user.access_token);
+    var ghme = auth_client.me();
+    ghme.unfollow(loginToUnFollow, (err, data, header) => {
+      if (err) callback(err);
+      else {
+        userSchema.find({login: login}, (err, user) => {
+          let followings = user.followings;
+          let index = followings.findIndex(j => j == loginToUnFollow);
+          if (index >= 0) {
+            followings.splice(index, 1);
+            let update = {
+              $dec: {
+                star_num: 1
+              },
+              $set: {
+                followings_login: followings
+              }
+            };
+            github_userSchema.update({login: login}, update, (err, res) => {
+              callback(1);
+            });
+            userSchema.update({login: login}, {$set: {followings: followings}}, (err, res)=> {
+              //console.log(res);
+            })
+          } else callback(1);
+        });
       }
     });
   });
@@ -275,7 +342,7 @@ function addAnewUser(login, access_token, callback = null) {
   var options = {upsert: true};
   userSchema.update(conditions, update, options, function (error, res) {
 
-    record_log('system', 'add a new user: '+login, 'add');
+    record_log('system', 'add a new user: ' + login, 'add');
     if (callback != null) callback();
   });
 }
@@ -323,7 +390,7 @@ function addAnewGitHubUser(json, callback = null) {
 //getUserStarred('ChenDanni', 1, [], (v) => {
 //  console.log('done!'+ v);
 //});
-export {getUserInfo, getUserStarred, getFollowers, getPublicRepos, getFollowings, starRepo, followUser, addAnewUser, addAnewGitHubUser, getJoinRepos}
+export {getUserInfo, getUserStarred, getFollowers, getPublicRepos, getFollowings, starRepo, followUser, addAnewUser, addAnewGitHubUser, getJoinRepos, unfollowUser, unstarRepo}
 
 
 //getUserInfo("egower", (body) => {
