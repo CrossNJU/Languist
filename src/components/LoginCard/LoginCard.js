@@ -99,7 +99,7 @@ class LoginCard extends Component {
           primary={true}
           style={buttonStyle}
           labelStyle={buttonLableStyle}
-          onClick={this.handleSubmit.bind(this)}/>
+          onTouchTap={this.handleSubmit.bind(this)}/>
         <Link className={s.link} to="/">
           Forget password?
         </Link>

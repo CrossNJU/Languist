@@ -71,8 +71,8 @@ class FeedbackDialog extends Component {
           errorText={this.state.error}
           style={style.fieldStyle}/>
         <div className={s.btn__group}>
-          <RaisedButton label="DONE" primary={true} onClick={this.handleSubmit.bind(this)}/>
-          <RaisedButton label="CANCEL" onClick={this.handleClose.bind(this, false)}/>
+          <RaisedButton label="DONE" primary={true} onTouchTap={this.handleSubmit.bind(this)}/>
+          <RaisedButton label="CANCEL" onTouchTap={this.handleClose.bind(this, false)}/>
         </div>
       </Dialog>
     )

@@ -109,20 +109,25 @@ class RegisterCard extends Component {
           disabled={true}
           value={this.state.login}
           inputStyle={style.userNameStyle}/>
-        <TextField hintText="Password" type="password" fullWidth={true} ref="password"
-                   errorText={this.state.passwordError} onKeyPress={this.handleEnter.bind(this)}/>
-        <TextField hintText="Confirm Password"
-                   errorText={this.state.confirmError}
-                   type="password"
-                   fullWidth={true}
-                   ref="passwordAgain"
-                   onChange={this.handleChange.bind(this)}
-                   onKeyPress={this.handleEnter.bind(this)}/>
-        <RaisedButton label={"SIGN UP"}
-                      primary={true}
-                      style={style.buttonStyle}
-                      labelStyle={style.buttonLableStyle}
-                      onClick={this.handleSubmit.bind(this)}/>
+        <TextField
+          hintText="Password" type="password"
+          fullWidth={true} ref="password"
+          errorText={this.state.passwordError}
+          onKeyPress={this.handleEnter.bind(this)}/>
+        <TextField
+          hintText="Confirm Password"
+          errorText={this.state.confirmError}
+          type="password"
+          fullWidth={true}
+          ref="passwordAgain"
+          onChange={this.handleChange.bind(this)}
+          onKeyPress={this.handleEnter.bind(this)}/>
+        <RaisedButton
+          label={"SIGN UP"}
+          primary={true}
+          style={style.buttonStyle}
+          labelStyle={style.buttonLableStyle}
+          onTouchTap={this.handleSubmit.bind(this)}/>
       </Paper>
     );
   }
