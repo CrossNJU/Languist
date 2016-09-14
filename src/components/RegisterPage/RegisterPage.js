@@ -21,8 +21,7 @@ class RegisterPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userNameError: "",
-      passwordError: ""
+
     }
   }
 
@@ -34,28 +33,11 @@ class RegisterPage extends Component {
     this.context.onSetTitle(title);
   }
 
-  handleRegister(username, password) {
-    let url = '/api/register';
-
-    $.ajax(url, {data:{username: username, password: password}})
-      .done((message) => {
-        console.log(message);
-        switch (message.res) {
-          case 1:
-            window.location.href='/language';
-            break;
-          case 0:
-            this.setState({userNameError: 'Register failed', passwordError: ''});
-            break;
-        }
-      })
-  }
-
   render() {
     return (
       <div className={s.root}>
         <div className={s.container}>
-          <RegisterCard handleSubmit={this.handleRegister.bind(this)} userNameError={this.state.userNameError} passwordError={this.state.passwordError}/>
+          <RegisterCard/>
         </div>
       </div>
     );

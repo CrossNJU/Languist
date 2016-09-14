@@ -35,34 +35,11 @@ class LoginPage extends Component {
     this.context.onSetTitle(title);
   }
 
-  handleLogin(username, password) {
-    let url = '/api/login';
-
-    $.ajax(url, {data:{username: username, password: password}})
-      .done((message) => {
-        console.log(message);
-        switch (message.res) {
-          case 1:
-            window.location.href='/home';
-            break;
-          case 0:
-            this.setState({userNameError: "", passwordError: 'The password is incorrect'});
-            break;
-          case -1:
-            this.setState({userNameError: 'The username is not found', passwordError:""});
-            break;
-          case -2:
-            this.setState({userNameError: 'The password is not set', passwordError:""});
-            break;
-        }
-      })
-  }
-
   render() {
     return (
       <div className={s.root}>
         <div className={s.container}>
-          <LoginCard handleSubmit={this.handleLogin.bind(this)} userNameError={this.state.userNameError} passwordError={this.state.passwordError}/>
+          <LoginCard/>
         </div>
       </div>
     );
