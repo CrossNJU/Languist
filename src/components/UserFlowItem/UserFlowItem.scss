@@ -25,3 +25,34 @@
   right: 10px;
   top: 14px;
 }
+
+.table {
+  display: flex;
+  flex-direction: column;
+  margin-top: 12px;
+  .row {
+    display: flex;
+    flex-direction: row;
+    // background-color: $gray-lighter;
+    align-items: center;
+    border-top: 1px $gray-lighter solid;
+    padding: 4px 0;
+    transition: color .3s;
+    &:hover {
+      > .rowTitle, >.rowAction {
+        color: $brand-color;
+      }
+    }
+    .rowTitle {
+      flex-grow: 1;
+      flex-basis: 0;
+      font-size: 16px;
+      color: $primary-color;
+    }
+    .rowAction {
+      flex-grow: 0;
+      flex-basis: auto;
+      color: $gray;
+    }
+  }
+}

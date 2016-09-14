@@ -16,6 +16,7 @@ import CircularProgress from 'material-ui/CircularProgress';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
 import Person from 'material-ui/svg-icons/social/person';
 import PersonAdd from 'material-ui/svg-icons/social/person-add';
@@ -73,13 +74,45 @@ const styles = {
   circularProgress: {
     position: 'relative',
     top: '-6px'
-  }
+  },
+  tableAction: {
+    color: '#888'
+  },
 };
 
 class UserFlowItem extends Component {
   constructor(props) {
     super(props);
     this.state = {hovering: false, loading: false, open: false};
+  }
+  renderTable() {
+    let repos = [
+      {
+        name: 'sindresorhus/awesome',
+        star: 42349
+      },
+      {
+        name: 'sindresorhus/awesome-nodejs',
+        star: 13378
+      },
+      {
+        name: 'avajs/ava',
+        star: 6403
+      }
+    ]
+    let repoTable = repos.map(repo => {
+      return (
+        <div className={s.row} target="_blank" href={`https://github.com/${repo.name}`} title="View this repository on GitHub">
+          <a className={s.rowTitle}>{repo.name.replace(`${this.props.user.login}/`, '')}</a>
+          <div className={s.rowAction}>{repo.star} ★</div>
+        </div>
+      )
+    })
+    return (
+      <div className={s.table}>
+        {repoTable}
+      </div>
+    )
   }
   handleFollow() {
     this.props.handleFollow(this.props.user.login);
@@ -206,6 +239,7 @@ class UserFlowItem extends Component {
         />
         <CardText style={styles.cardText}>
           {this.props.user.bio}
+          {this.renderTable()}
         </CardText>
         <CardText style={styles.cardText}>
           <div className={s.tags}>
