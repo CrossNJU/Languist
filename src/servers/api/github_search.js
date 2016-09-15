@@ -32,14 +32,16 @@ function searchRepo(query, language, page, callback){
         star: repo.stargazers_count,
         full_name: repo.full_name
       });
-      let index = languages.findIndex(j => j.name == repo.language);
-      if (index >= 0){
-        languages[index].count ++;
-      }else {
-        languages.push({
-          name: repo.language,
-          count: 1
-        })
+      if (repo.language != null){
+        let index = languages.findIndex(j => j.name == repo.language);
+        if (index >= 0){
+          languages[index].count ++;
+        }else {
+          languages.push({
+            name: repo.language,
+            count: 1
+          })
+        }
       }
     }
     callback({
