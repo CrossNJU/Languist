@@ -15,42 +15,16 @@ import Filter from '../Filter';
 import RepoList from '../RepoList';
 import SearchBar from '../SearchBar';
 import StarDialog from '../StarDialog';
+import LoadMoreButton from '../LoadMoreButton';
 
 const title = 'PolarisChen\'s Starred';
-
-let currentLanguageFilter = 'JavaScript';
-let languageFilterData = [
-  {
-    name: 'All',
-    count: 34
-  },
-  {
-    name: 'JavaScript',
-    count: 18
-  },
-  {
-    name: 'CSS',
-    count: 3
-  },
-  {
-    name: 'HTML',
-    count: 4
-  },
-  {
-    name: 'Java',
-    count: 4
-  },
-  {
-    name: 'Python',
-    count: 3
-  }
-];
 
 class SearchPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       hasResult: false,
+      hasMore: false,
       user: '',
 
       repoList: [],
@@ -93,7 +67,7 @@ class SearchPage extends Component {
     console.log(data);
 
     if(data.repoList.length == 0) {
-      this.setState({langList: [], repoList: [], page: 1, hasResult: false, keyword: keyword, language: 'All'});
+      this.setState({langList: [], repoList: [], page: 1, hasResult: false, hasMore: false, keyword: keyword, language: 'All'});
 
     } else {
       let langList = [];
@@ -102,7 +76,7 @@ class SearchPage extends Component {
         langList.push(lang);
       });
 
-      this.setState({langList: langList, repoList: data.repoList, page: 1, hasResult: true, keyword: keyword, language: 'All'});
+      this.setState({langList: langList, repoList: data.repoList, page: 1, hasResult: true, keyword: keyword, language: 'All', hasMore: (data.repoList.length == 50)});
     }
 
   };
@@ -117,9 +91,9 @@ class SearchPage extends Component {
     console.log(data);
 
     if(data.repoList.length == 0) {
-      this.setState({repoList: [], hasResult: false, page: 1});
+      this.setState({repoList: [], hasResult: false, page: 1, hasMore: false});
     } else {
-      this.setState({repoList: data.repoList, page: 1, hasResult: true});
+      this.setState({repoList: data.repoList, page: 1, hasResult: true, hasMore: (data.repoList.length == 50)});
     }
 
   };
@@ -131,11 +105,13 @@ class SearchPage extends Component {
     let data = await $.ajax(url, {data: {keyword: this.state.keyword, language: this.state.language, page: this.state.page+1}});
 
     if(data.repoList.length == 0) {
-      this.setState({});
+      this.setState({hasMore: (data.repoList.length == 50)});
     } else {
       let repoList = this.state.repoList;
-      repoList.push(data.repoList);
-      this.setState({repoList: repoList, page: this.state.page+1});
+      data.repoList.forEach((repo)=> {
+        repoList.push(repo);
+      });
+      this.setState({repoList: repoList, page: this.state.page+1, hasMore: (data.repoList.length == 50)});
     }
   }
 
@@ -207,6 +183,7 @@ class SearchPage extends Component {
               data={this.state.repoList}
               handleUnstar={this.handleUnstar.bind(this)}
               handleStar={this.handleOpenStarDialog.bind(this)}/>
+            <LoadMoreButton hasMore={this.state.hasMore} handleLoad={this.handleLoad.bind(this)}/>
           </div>
         </div>
       )

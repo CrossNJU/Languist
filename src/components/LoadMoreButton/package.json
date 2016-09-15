@@ -1,0 +1,6 @@
+{
+  "name": "LoadMoreButton",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./LoadMoreButton.js"
+}
