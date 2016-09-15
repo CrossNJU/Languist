@@ -84,7 +84,7 @@ class RepoFlowItem extends Component {
   }
   async componentDidMount() {
     let url = '/api/repo/languages';
-    const tags = $.ajax(url, {data: {fullName: this.props.repo.owner+'/'+this.props.repo.name}})
+    const tags = await $.ajax(url, {data: {fullName: this.props.repo.owner+'/'+this.props.repo.name}});
     this.setState({tags: tags});
   }
   handleChangeStarSet() {
