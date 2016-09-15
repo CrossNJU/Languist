@@ -215,8 +215,16 @@ class HomePage extends Component {
     return false;
   }
 
-  handleUnstar(repo) {
-    console.log('UNSTARRING', repo);
+  async handleUnstar(repo) {
+    let user = this.state.user;
+    let url = `/api/repo/unstar?user=${user}&repo=${repo}`;
+    let data = await $.ajax(url);
+    if (data.res === 1) {
+      this.setStarSet(repo);
+      this.props.handleSnackbarOpen(`${repo} is removed from your stars :-)`);
+      return true;
+    }
+    return false;
   }
 
   setFollowing(follow, isFollowing) {
@@ -283,9 +291,22 @@ class HomePage extends Component {
         });
       });
       newState.flowList = this.state.flowList;
+      this.props.handleSnackbarOpen(`${this.state.currentStar} is added to your star set <${set}> :-D`);
     }
-    this.props.handleSnackbarOpen(`${this.state.currentStar} is added to your star set <${set}> :-D`);
     this.setState(newState);
+  }
+
+  setStarSet(repo) {
+    let list = this.state.flowList.slice();
+    list.forEach((unit) => {
+      let data = unit.data;
+      data.forEach((item) => {
+        if (item.type === 'repo' && item.full_name === repo) {
+          item.set = '';
+        }
+      })
+    });
+    this.setState({flowList: list});
   }
 
   componentWillMount() {

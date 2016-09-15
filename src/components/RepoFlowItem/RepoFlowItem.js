@@ -16,6 +16,7 @@ import Chip from 'material-ui/Chip';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
+import CircularProgress from 'material-ui/CircularProgress';
 
 import Code from 'material-ui/svg-icons/action/code';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
@@ -69,27 +70,37 @@ const styles = {
   },
   tooltip: {
     top: '16px'
+  },
+  circularProgress: {
+    position: 'relative',
+    top: '-6px'
   }
 };
 
 class RepoFlowItem extends Component {
   constructor(props) {
     super(props);
-    this.state = {hovering: false, open: false, tags: []};
+    this.state = {hovering: false, loading: false, open: false, tags: []};
   }
-  componentDidMount() {
+  async componentDidMount() {
     let url = '/api/repo/languages';
-    $.ajax(url, {data: {fullName: this.props.repo.full_name}})
-      .done(((data) => {
-        console.log(data);
-        this.setState({tags: data});
-      }).bind(this));
+    const tags = $.ajax(url, {data: {fullName: this.props.repo.owner+'/'+this.props.repo.name}})
+    this.setState({tags: tags});
+  }
+  handleChangeStarSet() {
+    this.handleStar();
   }
   handleStar() {
+    this.handleRequestClose();
     this.props.handleStar(this.props.repo.owner+'/'+this.props.repo.name);
   }
-  handleUnstar() {
-    this.props.handleUnstar(this.props.repo.owner+'/'+this.props.repo.name);
+  async handleUnstar() {
+    this.handleRequestClose();
+    this.setState({loading: true});
+    const isSuccess = await this.props.handleUnstar(this.props.repo.owner+'/'+this.props.repo.name);
+    if (isSuccess) {
+      this.setState({loading: false});
+    }
   }
   handleUnlike() {
     let param = {
@@ -141,10 +152,14 @@ class RepoFlowItem extends Component {
         <div>
           <RaisedButton
             className={s.mainButton}
-            icon={<Star />}
-            label={this.props.repo.set || 'UNGROUPED'}
+            icon={!this.state.loading ? <Star /> : <CircularProgress size={0.4} innerStyle={styles.circularProgress} />}
+            label={!this.state.loading ? this.props.repo.set : ''}
             labelColor="#F2DF83"
-            onTouchTap={this.handlePopover.bind(this)} />
+            onTouchTap={this.handlePopover.bind(this)}
+            disabled={this.state.loading}
+            disabledBackgroundColor="#F2DF83"
+            disabledLabelColor="#FFF"
+          />
           <Popover
             open={this.state.open}
             anchorEl={this.state.anchorEl}
@@ -153,7 +168,7 @@ class RepoFlowItem extends Component {
             onRequestClose={this.handleRequestClose.bind(this)}
           >
             <Menu>
-              <MenuItem primaryText="Change star set" leftIcon={<Stars />} />
+              <MenuItem primaryText="Change star set" leftIcon={<Stars />} onTouchTap={this.handleChangeStarSet.bind(this)} />
               <MenuItem primaryText="Unstar" leftIcon={<StarBorder />} onTouchTap={this.handleUnstar.bind(this)} />
             </Menu>
           </Popover>

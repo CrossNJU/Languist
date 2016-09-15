@@ -74,10 +74,7 @@ const styles = {
   circularProgress: {
     position: 'relative',
     top: '-6px'
-  },
-  tableAction: {
-    color: '#888'
-  },
+  }
 };
 
 class UserFlowItem extends Component {
@@ -164,7 +161,8 @@ class UserFlowItem extends Component {
           secondary={true}
           disabled={true}
           disabledBackgroundColor="#F2DF83"
-          disabledLabelColor="#FFF" />
+          disabledLabelColor="#FFF"
+        />
       )
     } else if (!this.props.user.isFollowing) {
       return (
