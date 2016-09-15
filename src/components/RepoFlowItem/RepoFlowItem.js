@@ -147,18 +147,27 @@ class RepoFlowItem extends Component {
     }
   }
   renderStarButton() {
-    if (this.props.repo.set && this.props.repo.set.length > 0) {
+    if (this.state.loading) {
+      return (
+        <RaisedButton
+          className={s.mainButton}
+          icon={<CircularProgress size={0.4} innerStyle={styles.circularProgress} />}
+          label=''
+          disabled={true}
+          disabledBackgroundColor="#F2DF83"
+          disabledLabelColor="#FFF"
+        />
+      )
+    } else if (this.props.repo.set && this.props.repo.set.length > 0) {
       return (
         <div>
           <RaisedButton
             className={s.mainButton}
-            icon={!this.state.loading ? <Star /> : <CircularProgress size={0.4} innerStyle={styles.circularProgress} />}
-            label={!this.state.loading ? this.props.repo.set : ''}
+            icon={<Star />}
+            label={this.props.repo.set}
             labelColor="#F2DF83"
             onTouchTap={this.handlePopover.bind(this)}
             disabled={this.state.loading}
-            disabledBackgroundColor="#F2DF83"
-            disabledLabelColor="#FFF"
           />
           <Popover
             open={this.state.open}

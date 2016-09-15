@@ -96,7 +96,8 @@ class App extends Component {
     this.state = {
       login: false,
       user: '',
-      snackbarOpen: false
+      snackbarOpen: false,
+      snackbarMessage: ''
     };
     console.log('constructor App');
   }

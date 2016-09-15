@@ -14,7 +14,7 @@ import FlowList from '../FlowList';
 import AddLanguageDialog from '../AddLanguageDialog';
 import StarDialog from '../StarDialog';
 
-const title = 'Home';
+const title = 'Languist';
 
 class HomePage extends Component {
   constructor(props) {
