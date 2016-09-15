@@ -225,7 +225,12 @@ async function addInfoToList(login, flowlist, include_user, callback) {
 
 function getRepoLanguage(full_name, callback) {
   github_repoSchema.findOne({full_name: full_name}, (err, repo) => {
-    if (repo.languages.length == 0){
+    if (repo == null){
+      getRepoLanguages(full_name, (languages) => {
+        if (languages.length > 3) callback(languages.slice(0,3));
+        else callback(languages);
+      });
+    } else if (repo.languages.length == 0){
       getRepoLanguages(full_name, (languages) => {
         let conditions = {full_name: full_name};
         let update = {
@@ -236,11 +241,13 @@ function getRepoLanguage(full_name, callback) {
         github_repoSchema.update(conditions, update, (err, res) => {
           console.log('update repo:' + full_name + ' languages');
           console.log(res);
-          callback(languages);
+          if (languages.length > 3) callback(languages.slice(0,3));
+          else callback(languages);
         });
       });
     } else {
-      callback(repo.languages);
+      if (repo.languages.length > 3) callback(repo.languages.slice(0,3));
+      else callback(repo.languages);
     }
   });
 }
@@ -267,6 +274,6 @@ export {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecomm
 //  console.log(res);
 //});
 
-//getRepoLanguage('FreeCodeCamp/FreeCodeCamp', (langs) => {
+//getRepoLanguage('postmodern/ruby-install', (langs) => {
 // console.log(langs);
 //});

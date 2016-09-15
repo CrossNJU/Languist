@@ -70,7 +70,7 @@ function addRepoAPI(server) {
   });
   //search repo
   server.get('/api/search/repo', (req, res) => {
-    searchRepo(req.query.q, req.query.sort, req.query.order, req.query.page, (resa) => {
+    searchRepo(req.query.keyword, req.query.language, req.query.page, (resa) => {
       record_log(getUser(), getUser() + ' search repo: ' + req.query.q + ' and return: ' + resa.length + ' RECORDS', 'query');
       res.send(resa);
     })
@@ -305,7 +305,6 @@ function addOtherAPI(server) {
       res.send(resa);
     })
   });
-
   //add feedback
   server.get('/api/feedback/add', (req, res)=> {
     addFeedback(req.query.login, req.query.feedback, (resa) => {
