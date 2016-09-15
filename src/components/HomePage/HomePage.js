@@ -46,15 +46,12 @@ class HomePage extends Component {
       currentStar: 'facebook/react',
       setList: []
     };
-    console.log('constructor');
   }
   static contextTypes = {
     onSetTitle: PropTypes.func.isRequired,
   };
 
   async componentDidMount() {
-    console.log('componentDidMount');
-
     try {
       // Get username
       const user = await $.ajax('/api/current_user');
@@ -72,52 +69,29 @@ class HomePage extends Component {
     } catch(err) {
       console.error(err);
     }
-
-    // const user = 'RickChem';
-    // this.loadData(user);
   }
 
-  loadData(user) {
-    let url = '/api/home/';
+  async loadData(user) {
     let isHaveLanguage = true;
 
     this.getLangList(user);
 
-    // Get count
-    url = '/api/home/count?user=' + user;
-    $.ajax(url)
-    .done(((data) => {
-      this.setState({count: data});
-    }).bind(this))
-    .fail(((xhr, status, err) => {
-      console.error(url, status, err.toString());
-    }).bind(this));
-
-    // Get cover
-    url = '/api/home/cover?user=' + user;
-    $.ajax(url)
-    .done(((data) => {
-      this.setState({cover: data});
-    }).bind(this))
-    .fail(((xhr, status, err) => {
-      console.error(url, status, err.toString());
-    }).bind(this));
-
-    // Get flowList
-    url = '/api/home/flowList?user=' + user;
-    $.ajax(url)
-    .done(((data) => {
-      let unit = {
-        title: 'Today',
-        data: data
-      }
-      let list = this.state.flowList.slice();
-      list.push(unit);
-      this.setState({flowList: list});
-    }).bind(this))
-    .fail(((xhr, status, err) => {
-      console.error(url, status, err.toString());
-    }).bind(this));
+    const count = await $.ajax('/api/home/count?user=' + user)
+    const cover = await $.ajax('/api/home/cover?user=' + user);
+    this.setState({
+      count: count,
+      cover: cover
+    });
+    const data = await $.ajax('/api/home/flowList?user=' + user)
+    const unit = {
+      title: 'Today',
+      data: data
+    }
+    let list = this.state.flowList.slice();
+    list.push(unit);
+    this.setState({
+      flowList: list
+    });
 
     this.getSetList(user);
   }
@@ -211,7 +185,6 @@ class HomePage extends Component {
             default:
           }
         }
-        console.log('UNLIKE', index);
       })
       data = data.splice(index, 1);
     });
