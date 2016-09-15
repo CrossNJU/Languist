@@ -26,23 +26,33 @@ const styles = {
   }
 }
 
+
 class SearchBar extends Component {
   constructor(props) {
     super(props);
   }
+
+  handleSearch() {
+    let value = this.refs.search.input.value;
+
+    this.props.handleSearch(value);
+  }
+
   render() {
     const data = this.props.data;
     return (
       <div className={s.root}>
         <div className={s.container}>
           <TextField
+            ref="search"
             fullWidth={true}
             hintStyle={styles.hint}
             hintText="Search repo here..."
             inputStyle={styles.text}
             underlineFocusStyle={styles.underlineFocus}
+            onEnterKeyDown={this.handleSearch.bind(this)}
           />
-          <IconButton iconStyle={styles.button}><Search /></IconButton>
+          <IconButton iconStyle={styles.button} onTouchTap={this.handleSearch.bind(this)}><Search /></IconButton>
         </div>
       </div>
     );

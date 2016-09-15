@@ -50,6 +50,9 @@ class SearchPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      hasResult: false,
+      user: '',
+
       repoList: [],
       langList: [],
       keyword: '',
@@ -69,7 +72,9 @@ class SearchPage extends Component {
 
   async componentDidMount() {
     console.log('componentDidMount');
-
+    let user = await $.ajax('/api/current_user');
+    this.getSetList(user);
+    this.setState({user: user});
   }
 
   componentWillMount() {
@@ -78,24 +83,60 @@ class SearchPage extends Component {
   }
 
   async handleSearch(keyword) {
-    let url = '';
+    let url = '/api/search/repo';
     let page = 1;
     let language = 'All';
 
+    this.setState({hasResult:true});
+
     let data = await $.ajax(url, {data: {keyword: keyword, language: language, page: page}});
+    console.log(data);
+
+    if(data.repoList.length == 0) {
+      this.setState({langList: [], repoList: [], page: 1, hasResult: false, keyword: keyword, language: 'All'});
+
+    } else {
+      let langList = [];
+      langList.push({name: 'All', count: data.count});
+      data.language.forEach((lang)=> {
+        langList.push(lang);
+      });
+
+      this.setState({langList: langList, repoList: data.repoList, page: 1, hasResult: true, keyword: keyword, language: 'All'});
+    }
 
   };
 
   async handleFilter(language) {
-    let url = '';
+    let url = '/api/search/repo';
 
+
+    this.setState({hasResult: true, language: language, repoList: []});
     let data = await $.ajax(url, {data: {keyword: this.state.keyword, language: language, page: 1}});
+
+    console.log(data);
+
+    if(data.repoList.length == 0) {
+      this.setState({repoList: [], hasResult: false, page: 1});
+    } else {
+      this.setState({repoList: data.repoList, page: 1, hasResult: true});
+    }
+
   };
 
   async handleLoad() {
-    let url = '';
+    let url = '/api/search/repo';
 
+    this.setState({hasResult: true});
     let data = await $.ajax(url, {data: {keyword: this.state.keyword, language: this.state.language, page: this.state.page+1}});
+
+    if(data.repoList.length == 0) {
+      this.setState({});
+    } else {
+      let repoList = this.state.repoList;
+      repoList.push(data.repoList);
+      this.setState({repoList: repoList, page: this.state.page+1});
+    }
   }
 
   getSetList(user) {
@@ -140,19 +181,6 @@ class SearchPage extends Component {
     this.setState(newState);
   }
 
-  setStarSet(repo) {
-    let list = this.state.flowList.slice();
-    list.forEach((unit) => {
-      let data = unit.data;
-      data.forEach((item) => {
-        if (item.type === 'repo' && item.full_name === repo) {
-          item.set = '';
-        }
-      })
-    });
-    this.setState({flowList: list});
-  }
-
   async handleUnstar(repo) {
     let user = this.state.user;
     let url = `/api/repo/unstar?user=${user}&repo=${repo}`;
@@ -165,24 +193,36 @@ class SearchPage extends Component {
     return false;
   }
 
+  renderContainer() {
+
+    if(this.state.hasResult) {
+      return (
+        <div className={s.container}>
+          <div className={s.sidebar}>
+            <Filter data={this.state.langList} current={this.state.language} handleClick={this.handleFilter.bind(this)}/>
+          </div>
+          <div className={s.main}>
+            <RepoList
+              user={this.state.user}
+              data={this.state.repoList}
+              handleUnstar={this.handleUnstar.bind(this)}
+              handleStar={this.handleOpenStarDialog.bind(this)}/>
+          </div>
+        </div>
+      )
+    } else {
+      return null;
+    }
+
+  }
+
   render() {
     console.log('render SearchPage');
     return (
       <div className="SearchPage">
-        <SearchBar />
+        <SearchBar handleSearch={this.handleSearch.bind(this)}/>
         <div className={s.root}>
-          <div className={s.container}>
-            <div className={s.sidebar}>
-              <Filter data={languageFilterData} current={currentLanguageFilter} />
-            </div>
-            <div className={s.main}>
-              <RepoList
-                user={this.state.user}
-                data={this.state.flowList}
-                handleUnstar={this.handleUnstar.bind(this)}
-                handleStar={this.handleOpenStarDialog.bind(this)}/>
-            </div>
-          </div>
+          {this.renderContainer()};
         </div>
 
         <StarDialog isOpen={this.state.isStarDialogOpen}
