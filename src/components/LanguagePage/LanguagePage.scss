@@ -18,6 +18,8 @@
   width: 800px;
 
   .btn__group {
+    display: flex;
+    flex-direction: row;
     padding: 30px 16px;
 
     >div {

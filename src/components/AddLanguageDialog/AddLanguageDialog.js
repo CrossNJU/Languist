@@ -45,7 +45,7 @@ class AddLanguageDialog extends Component {
   render() {
     return (
       <Dialog
-        title="Add New Language"
+        title={this.props.isEdit?"Edit the language":"Add a new language"}
         modal={true}
         open={this.props.isOpen}>
         <LangList langData={[this.props.language]} user={this.props.user} handleChange={this.handleChange.bind(this)}/>

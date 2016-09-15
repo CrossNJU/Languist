@@ -108,7 +108,7 @@ class FollowPage extends Component {
     console.log('render FollowPage');
     return (
       <div className="StarPage">
-        <TitleBar text={this.state.user + '\'s Follow'} />
+        <TitleBar text={(this.state.user || 'Languist') + '\'s Follow'} />
         <div className={s.root}>
           <div className={s.container}>
             <div className={s.sidebar}>

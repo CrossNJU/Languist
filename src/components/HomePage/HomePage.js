@@ -39,12 +39,13 @@ class HomePage extends Component {
 
       //Dialog
       isOpenDialog: false,
-      addLang: '',
+      addLang: {},
 
       // Star dialog
       isStarDialogOpen: false,
-      currentStar: 'facebook/react',
-      setList: []
+      currentStar: '',
+      setList: [],
+      isEdit: false
     };
   }
   static contextTypes = {
@@ -257,7 +258,7 @@ class HomePage extends Component {
         let unit = {
           title: recommendCount === -1 ? 'Yesterday' : title,
           data: data
-        }
+        };
         let list = this.state.flowList.slice();
         list.push(unit);
         this.setState({flowList: list, currentRecommend: recommendCount});
@@ -345,7 +346,8 @@ class HomePage extends Component {
           isOpen={this.state.isOpenDialog}
           language={this.state.addLang}
           user={this.state.user}
-          handleClose={this.handleDialogClose.bind(this)}/>
+          handleClose={this.handleDialogClose.bind(this)}
+          isEdit={this.state.isEdit}/>
         <StarDialog isOpen={this.state.isStarDialogOpen}
                     setList=
                       {this.state.setList.filter((set)=> {
@@ -353,7 +355,8 @@ class HomePage extends Component {
                       })}
                     handleClose={this.handleCloseStarDialog.bind(this)}
                     repo = {this.state.currentStar}
-                    user = {this.state.user}/>
+                    user = {this.state.user}
+                    isEdit={this.state.isEdit}/>
       </div>
     );
   }

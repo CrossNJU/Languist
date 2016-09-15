@@ -113,15 +113,14 @@ class LangItem extends Component {
   render() {
     return (
       <div className={s.root}>
-        <ListItem>
+        <ListItem onTouchTap={this.handleClick.bind(this)}>
           <div className={s['lang__list__item']}>
             <div className={s['lang__list__item__left']}>
               <Toggle style={{width: 'auto'}}
                       ref="toggle"
                       label={this.props.lang.name}
                       labelPosition="right"
-                      defaultToggled={this.state.isSelected}
-                      onToggle={this.handleClick.bind(this)}/>
+                      defaultToggled={this.state.isSelected}/>
             </div>
             {this.renderRepos()}
           </div>
