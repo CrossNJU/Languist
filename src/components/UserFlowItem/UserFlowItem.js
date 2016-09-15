@@ -113,13 +113,20 @@ class UserFlowItem extends Component {
       )
     }
   }
-  handleFollow() {
-    this.props.handleFollow(this.props.user.login);
+  async handleFollow() {
     this.setState({loading: true});
+    let isSuccess = await this.props.handleFollow(this.props.user.login);
+    if (isSuccess) {
+      this.setState({loading: false});
+    }
   }
-  handleUnfollow() {
-    this.props.handleUnfollow(this.props.user.login);
+  async handleUnfollow() {
+    this.handleRequestClose();
     this.setState({loading: true});
+    let isSuccess = await this.props.handleUnfollow(this.props.user.login);
+    if (isSuccess) {
+      this.setState({loading: false});
+    }
   }
   handleUnlike() {
     let param = {
@@ -148,16 +155,24 @@ class UserFlowItem extends Component {
     });
   };
   renderFollowButton() {
-    if (!this.props.user.isFollowing) {
+    if (this.state.loading) {
       return (
         <RaisedButton
           className={s.mainButton}
-          icon={!this.state.loading ? <PersonAdd /> : <CircularProgress size={0.4} innerStyle={styles.circularProgress} />}
-          label={!this.state.loading ? 'Follow (' + this.props.user.followers + ')' : ''}
+          icon={<CircularProgress size={0.4} innerStyle={styles.circularProgress} />}
+          label=''
           secondary={true}
-          disabled={this.state.loading}
+          disabled={true}
           disabledBackgroundColor="#F2DF83"
-          disabledLabelColor="#FFF"
+          disabledLabelColor="#FFF" />
+      )
+    } else if (!this.props.user.isFollowing) {
+      return (
+        <RaisedButton
+          className={s.mainButton}
+          icon={<PersonAdd />}
+          label={'Follow (' + this.props.user.followers + ')'}
+          secondary={true}
           onTouchTap={this.handleFollow.bind(this)} />
       )
     } else {

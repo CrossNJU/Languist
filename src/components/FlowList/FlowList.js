@@ -69,7 +69,6 @@ class FlowUnit extends Component {
     super(props);
   }
   renderFlowItems() {
-    console.log(JSON.parse(JSON.stringify(this.props.data)));
     flowData = this.props.data;
     if (flowData.length > 0) {
       let flowItems = flowData.map(flowItem => {
@@ -132,7 +131,6 @@ class FlowUnitList extends Component {
   renderFlowUnits() {
     if (this.props.list.length > 0) {
       let fus = this.props.list.map(unit => {
-        console.log('UNIT', unit);
         return (
           <FlowUnit
             key={unit.title}

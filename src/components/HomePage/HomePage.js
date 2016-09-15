@@ -1,10 +1,5 @@
 /**
- * React Starter Kit (https://www.reactstarterkit.com/)
- *
- * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
+ * Created by PolarisChen on 16/7/11.
  */
 
 import React, { Component, PropTypes } from 'react';
@@ -223,38 +218,41 @@ class HomePage extends Component {
     this.setState({flowList: list});
   }
 
-  handleFollow(follow) {
+  async handleFollow(follow) {
     let user = this.state.user;
     let url = `/api/user/follow?user=${user}&follow=${follow}`;
-    console.log('###',url);
-    $.ajax(url)
-      .done(((data) => {
-        console.log("$$$",data);
-        if (data.res === 1) {
-          this.setFollowing(follow);
-        }
-        this.props.handleSnackbarOpen(`${follow} is added to your following list :-D`);
-      }).bind(this))
-      .fail(((xhr, status, err) => {
-        console.error(url, status, err.toString());
-      }).bind(this));
+    let data = await $.ajax(url);
+    if (data.res === 1) {
+      this.setFollowing(follow, true);
+      this.props.handleSnackbarOpen(`${follow} is added to your following list :-D`);
+      return true;
+    }
+    return false;
   }
 
-  handleUnfollow(user) {
-    console.log('UNFOLLOWING', user);
+  async handleUnfollow(follow) {
+    let user = this.state.user;
+    let url = `/api/user/unfollow?user=${user}&follow=${follow}`;
+    let data = await $.ajax(url);
+    if (data.res === 1) {
+      this.setFollowing(follow, false);
+      this.props.handleSnackbarOpen(`${follow} is removed from your following list :-)`);
+      return true;
+    }
+    return false;
   }
 
   handleUnstar(repo) {
     console.log('UNSTARRING', repo);
   }
 
-  setFollowing(follow) {
+  setFollowing(follow, isFollowing) {
     let list = this.state.flowList.slice();
     list.forEach((unit) => {
       let data = unit.data;
       data.forEach((item) => {
         if (item.type === 'user' && item.login === follow) {
-          item.isFollowing = true;
+          item.isFollowing = isFollowing;
         }
       })
     });
