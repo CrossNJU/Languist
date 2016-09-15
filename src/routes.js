@@ -24,6 +24,7 @@ import BasePage from './components/BasePage';
 import StarPage from './components/StarPage';
 import FollowPage from './components/FollowPage';
 import RelatedPage from './components/RelatedPage';
+import SearchPage from './components/SearchPage';
 
 const router = new Router(on => {
   on('*', async (state, next) => {
@@ -57,6 +58,10 @@ const router = new Router(on => {
 
   on('/related', async(state) => {
     return <RelatedPage query={state.query}/>;
+  });
+
+  on('/search', async(state) => {
+    return <SearchPage query={state.query}/>;
   });
 
   on('*', async (state) => {

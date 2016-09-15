@@ -115,7 +115,7 @@ class StarDialog extends Component {
   render() {
     return (
       <Dialog
-        title="Add the repo to a set"
+        title={this.props.isEdit ? "Change the set of the repo":"Add the repo to a set"}
         modal={true}
         open={this.props.isOpen}
         contentStyle={style.dialogStyle}>

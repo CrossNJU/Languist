@@ -33,7 +33,7 @@ const buttonLableStyle = {
   fontWeight: 'normal'
 };
 const buttonStyle = {
-  marginTop: '15px'
+  marginTop: '16px'
 };
 
 class LoginCard extends Component {
@@ -95,13 +95,13 @@ class LoginCard extends Component {
           errorText={this.state.passwordError}
           onKeyPress={this.handleEnter.bind(this)}/>
         <RaisedButton
-          label={"LOGIN"}
+          label={"LOG IN"}
           primary={true}
           style={buttonStyle}
           labelStyle={buttonLableStyle}
           onTouchTap={this.handleSubmit.bind(this)}/>
         <Link className={s.link} to="/">
-          Forget password?
+          Forgot password?
         </Link>
         <Divider style={dividerStyle}/>
         <RaisedButton

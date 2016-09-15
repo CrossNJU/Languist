@@ -15,16 +15,20 @@ class RepoSetFilter extends Component {
     super(props);
   }
   renderAction() {
-    return (
-      <div className={s.action}>
-        <RaisedButton
-          fullWidth={true}
-          primary={true}
-          label="Add New Repo Set"
-          onClick={this.props.handleClickAdd}
-        />
-      </div>
-    )
+    if(this.props.isCurrentUser) {
+      return (
+        <div className={s.action}>
+          <RaisedButton
+            fullWidth={true}
+            primary={true}
+            label="Add New Repo Set"
+            onTouchTap={this.props.handleClickAdd}
+          />
+        </div>
+      )
+    }else {
+      return null;
+    }
   }
   render() {
     return (
