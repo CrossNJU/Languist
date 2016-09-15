@@ -13,9 +13,8 @@ import {get_rec_users} from './RecommendLogic_users'
 import {connect} from '../config'
 import {record_log} from '../service/LogService'
 
-var time_left = 24*60*60;
-var time_signal = 0;
 var async = require("async");
+var time_signal = 0;
 
 //---------------------------  common function to get random index  --------------------------------------------------
 function getRandomIndex(array_len, len) {
@@ -359,27 +358,25 @@ async function getNextDayRecommendData(userName) {
   //}
 }
 
-function circle(userName){
-  var user = userName;
-  let time = new Date(); // now time
-  time_left = 9 - time.getHours();
-  if (time_left < 0) time_left += 24;
-  time_left += 1;
-  time_left = time_left*60*60;
+function circle(){
   async.until(function() {
       return time_signal > 0;
     },
     function(cb) {
       //if(time_left % 3600 == 0) console.log('one hour passed!............'+(new Date()).toLocaleString());
-      time_left --;
-      if (time_left == 0) {time_left = 24; time_signal = 1;}
+      let time = new Date();
+      if(time.getHours() == 5) time_signal = 1;
       setTimeout(cb, 1000);
     },
     function(err) {
       record_log('system','done one circle!','mark');
       time_signal = 0;
-      recNew(user);
-      circle(user);
+      userSchema.find({}, (err, users) => {
+        for (let i=0;i<users.length;i++){
+          recNew(users[i].login);
+        }
+        circle();
+      });
     });
 }
 
