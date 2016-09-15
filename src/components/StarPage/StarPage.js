@@ -27,8 +27,14 @@ class StarPage extends Component {
     this.state = {
       user: "",
       setList: [],
-      currentSet: 'All',
+
+      owner: "",
+      ownerSetList: [],
+
       repoList: [],
+
+      isLanguist: true,
+      currentSet: 'All',
 
       // Add set dialog
       isSetDialogOpen: false,
@@ -51,29 +57,26 @@ class StarPage extends Component {
 
   async componentDidMount() {
     console.log('componentDidMount');
-    try {
-      // get user
-      let user = '';
-      console.log(this.props.query.user);
-      if(this.props.query.user) {
-        user = this.props.query.user;
-      } else {
-        user = await $.ajax('/api/current_user');
-        // user = 'RickChem';
-        console.log('owner');
-      }
 
-      // get other data
-      this.getSetList(user);
-      this.getRepoList(user, 'All');
+    // get user
+    let user = await $.ajax('/api/current_user');
+    let owner = this.props.query.owner || user;
+    let isLanguist = true;
 
-      this.setState({user: user});
-    } catch (err) {
-      console.error(err);
+    if(user == owner) {
+      this.getSetList(user, owner);
+    } else {
+      isLanguist = ((await $.ajax('/api/user/isLanguist', {data: {login: owner}})).res == 1);
+      this.getSetList(user, owner);
+      this.getOwnerSetList(owner, isLanguist);
     }
+    this.getRepoList(user, 'All', isLanguist);
+
+    this.setState({user: user, owner: owner, isLanguist: isLanguist});
+
   }
 
-  async getSetList(user) {
+  async getSetList(user, owner) {
     let url = '/api/repo/setList';
     $.ajax(url, {data: {user: user}})
       .done(((data) => {
@@ -85,20 +88,53 @@ class StarPage extends Component {
           setList.push({name: set.setName, count: set.repoNum});
         });
 
-        this.setState({setList: setList});
+        if(user == owner) {
+          this.setState({setList: setList, ownerSetList: setList});
+        }else {
+          this.setState({setList: setList});
+        }
       }).bind(this));
   }
 
-  async getRepoList(user, set) {
-    let url = '/api/repo/set';
-    $.ajax(url, {data: {user: user, setName: set}})
-      .done(((repoList) => {
-        console.log('repolist ' + repoList);
-        this.setState({repoList: repoList, currentSet: set});
-      }).bind(this))
-      .fail(((xhr, status, err)=> {
-        console.log(error);
-      }).bind(this));
+  async getOwnerSetList(owner, isLanguist) {
+    if(isLanguist) {
+      let url = '/api/repo/setList';
+      $.ajax(url, {data: {user: owner}})
+        .done(((data) => {
+          let setList = [];
+          let all = {name: 'All', count: 0};
+          setList.push(all);
+          data.forEach((set) => {
+            all.count += set.repoNum;
+            setList.push({name: set.setName, count: set.repoNum});
+          });
+
+          this.setState({ownerSetList: setList});
+        }).bind(this));
+    } else {
+      this.setState({ownerSetList: [{name: 'All', count: 0}]});
+    }
+
+  }
+
+  async getRepoList(owner, set, isLanguist) {
+    if(isLanguist) {
+      let url = '/api/repo/set';
+      $.ajax(url, {data: {user: owner, setName: set}})
+        .done(((repoList) => {
+          console.log('repolist ' + repoList);
+          this.setState({repoList: repoList, currentSet: set});
+        }).bind(this))
+        .fail(((xhr, status, err)=> {
+          console.log(error);
+        }).bind(this));
+    } else {
+      let url = '/api/user/starRepo';
+      $.ajax(url, {data: {login: owner}})
+        .done(((repoList)=> {
+          this.setState({repoList: repoList});
+        }).bind(this))
+    }
   }
 
   // Handle SetDialog
@@ -108,7 +144,7 @@ class StarPage extends Component {
 
   handleCloseSetDialog(isSuccess) {
     if (isSuccess) {
-      this.getSetList(this.state.user);
+      this.getSetList(this.state.user, this.state.owner);
     }
     this.setState({isSetDialogOpen: false});
   }
@@ -124,7 +160,7 @@ class StarPage extends Component {
     newState.isStarDialogOpen = false;
     newState.currentStar = '';
     if (isSuccess) {
-      this.getSetList(this.state.user);
+      this.getSetList(this.state.user, this.state.owner);
       this.state.repoList.forEach((repo)=> {
         if(repo.full_name == this.state.currentStar) {
           repo.set = set;
@@ -137,23 +173,26 @@ class StarPage extends Component {
 
   // Handle Filter
   handleClickFilter(set) {
-    this.getRepoList(this.state.user, set);
-    this.setState({currentSet: set});
+    if(this.state.isLanguist) {
+      this.getRepoList(this.state.owner, set, this.state.isLanguist);
+      this.setState({currentSet: set});
+    }
   }
 
   render() {
     console.log('render StarPage');
     return (
       <div className="StarPage">
-        <TitleBar text={this.state.user + '\'s Starred'}/>
+        <TitleBar text={(this.state.owner || 'Languist') + '\'s Starred'}/>
         <div className={s.root}>
           <div className={s.container}>
             <div className={s.sidebar}>
               <RepoSetFilter
-                data={this.state.setList}
+                data={this.state.ownerSetList}
                 current={this.state.currentSet}
                 handleClickAdd={this.handleOpenSetDialog.bind(this)}
-                handleClickFilter={this.handleClickFilter.bind(this)}/>
+                handleClickFilter={this.handleClickFilter.bind(this)}
+                isCurrentUser={this.state.user == this.state.owner}/>
             </div>
             <div className={s.main}>
               <RepoList data={this.state.repoList} handleStar={this.handleOpenStarDialog.bind(this)}/>
