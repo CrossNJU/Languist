@@ -179,7 +179,7 @@ function addUserAPI(server) {
   //get anyone star repo
   server.get('/api/user/starRepo', (req, res)=> {
     getUserStarRepo(req.query.login, (resa) => {
-      addInfoToList(req.query.login, resa, true, () => {
+      addInfoToList(getUser(), resa, true, () => {
         record_log(getUser(), getUser() + ' get star repos and return: ' + resa.length + ' RECORDS', 'query');
         res.send(resa);
       });
@@ -188,7 +188,7 @@ function addUserAPI(server) {
   //get user most stared subscript repos
   server.get('/api/user/subRepo', (req, res)=> {
     getBestSubRepo(req.query.login, (resa) => {
-      addInfoToList(req.query.login, resa, true, () => {
+      addInfoToList(getUser(), resa, true, () => {
         record_log(getUser(), getUser() + ' get subscribe repos and return: ' + resa.length + ' RECORDS', 'query');
         res.send(resa);
       });
