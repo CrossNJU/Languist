@@ -323,9 +323,9 @@ async function get_rec_users(login,language_percent,star_contributor_percent,fol
 export {get_rec_users,get_user_sim,get_user_sims,get_rec_users_by_language,get_rec_users_by_star_contributor,
         get_rec_users_by_follwing_repo,get_rec_users_when_zero}
 
-connect();
+// connect();
 //get_rec_users_by_follwing_repo('RickChem',20);
 // get_rec_users_by_star_contributor('ChenDanni',10);
 // get_rec_users_by_follwing_repo('ChenDanni',10);
-get_rec_users('ChenDanni',1,1,1);
+// get_rec_users('ChenDanni',1,1,1);
 // get_rec_users_when_zero(100);
