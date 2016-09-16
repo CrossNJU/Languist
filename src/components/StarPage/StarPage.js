@@ -70,7 +70,7 @@ class StarPage extends Component {
       this.getSetList(user, owner);
       this.getOwnerSetList(owner, isLanguist);
     }
-    this.getRepoList(user, 'All', isLanguist);
+    this.getRepoList(owner, 'All', isLanguist);
 
     this.setState({user: user, owner: owner, isLanguist: isLanguist});
 
@@ -122,7 +122,7 @@ class StarPage extends Component {
       let url = '/api/repo/set';
       $.ajax(url, {data: {user: owner, setName: set}})
         .done(((repoList) => {
-          console.log('repolist ' + repoList);
+          // console.log('repolist ' + repoList);
           this.setState({repoList: repoList, currentSet: set});
         }).bind(this))
         .fail(((xhr, status, err)=> {
@@ -132,6 +132,7 @@ class StarPage extends Component {
       let url = '/api/user/starRepo';
       $.ajax(url, {data: {login: owner}})
         .done(((repoList)=> {
+          // console.log('repolist ' + repoList);
           this.setState({repoList: repoList, ownerSetList: [{name: 'All', count: repoList.length}]});
         }).bind(this))
     }
