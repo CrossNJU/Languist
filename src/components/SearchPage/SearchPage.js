@@ -17,7 +17,7 @@ import SearchBar from '../SearchBar';
 import StarDialog from '../StarDialog';
 import LoadMoreButton from '../LoadMoreButton';
 
-const title = 'PolarisChen\'s Starred';
+const title = 'Search';
 
 class SearchPage extends Component {
   constructor(props) {
