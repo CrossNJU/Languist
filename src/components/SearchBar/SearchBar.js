@@ -38,6 +38,12 @@ class SearchBar extends Component {
     this.props.handleSearch(value);
   }
 
+  handleEnter(event) {
+    if(event.key == 'Enter') {
+      this.handleSearch();
+    }
+  }
+
   render() {
     const data = this.props.data;
     return (
@@ -50,7 +56,7 @@ class SearchBar extends Component {
             hintText="Search repo here..."
             inputStyle={styles.text}
             underlineFocusStyle={styles.underlineFocus}
-            onEnterKeyDown={this.handleSearch.bind(this)}
+            onKeyDown={this.handleEnter.bind(this)}
           />
           <IconButton iconStyle={styles.button} onTouchTap={this.handleSearch.bind(this)}><Search /></IconButton>
         </div>
