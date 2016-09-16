@@ -132,7 +132,7 @@ class StarPage extends Component {
       let url = '/api/user/starRepo';
       $.ajax(url, {data: {login: owner}})
         .done(((repoList)=> {
-          this.setState({repoList: repoList});
+          this.setState({repoList: repoList, ownerSetList: [{name: 'All', count: repoList.length}]});
         }).bind(this))
     }
   }
