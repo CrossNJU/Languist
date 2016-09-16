@@ -283,7 +283,7 @@ async function get_rec_users_when_zero(rec_num){
 }
 
 async function get_rec_users(login,language_percent,star_contributor_percent,following_repo_percent){
-  let base = 100;
+  let base = 25;
   let language_num = base * language_percent;
   let star_contributor_num = base * star_contributor_percent;
   let following_repo_num = base * following_repo_percent;

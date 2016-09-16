@@ -429,8 +429,8 @@ async function get_rec_repos_when_zero(rec_num){
 //  Home Repos推荐列表
 //--------------------------
 async function get_rec_repos(login,user_percent,star_owner_percent,also_star_percent,following_percent,colleague_percent){
-  let big_base = 150;
-  let base = 100;
+  let big_base = 15;
+  let base = 30;
   let user_num = base * user_percent;
   let star_owner_num = big_base * star_owner_percent;
   let also_star_num = big_base * also_star_percent;
