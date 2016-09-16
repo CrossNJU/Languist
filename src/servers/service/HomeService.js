@@ -8,7 +8,8 @@ import {connect} from '../config'
 import {getNextDayRecommendData, getStart} from '../logic/HandleRecommendLogic'
 import {getSignal, getUser} from '../config'
 import {record_log} from '../service/LogService'
-import {addInfoToList} from '../service/RepoService'
+import {updateWhenLogin} from '../logic/UpdateWhenLogin'
+
 var async = require("async");
 
 export var getCoverData = (userName, callback) => {
@@ -53,9 +54,8 @@ export var getLangListData = (userName, callback) => {
   });
 };
 
-async function getFlowListData(userName, callback) {
-  record_log(getUser(), getUser()+' get updatewhenlogin signal: '+getSignal(), 'query');
-  let before = await new Promise((resolve, reject) => {
+function awaitUpdate(){
+  return new Promise((resolve, reject) => {
     async.until(function() {
         return getSignal() > 0;
       },
@@ -71,11 +71,18 @@ async function getFlowListData(userName, callback) {
         resolve(1);
       });
   });
+}
+
+async function getFlowListData(userName, callback) {
+  record_log(getUser(), getUser()+' get updatewhenlogin signal: '+getSignal(), 'query');
+  let before = await awaitUpdate();
   let ans = [];
   if (before == 1) {
     record_log(getUser(), getUser()+' to get recommend date in HomeService', 'query');
     ans = await getNextDayRecommendData(userName);
     if (ans.length == 0){
+      updateWhenLogin(userName);
+      let t = await awaitUpdate();
       let now = await getStart(userName);
       ans = await getNextDayRecommendData(userName);
       record_log(getUser(), getUser()+' first get recommend data', 'mark');

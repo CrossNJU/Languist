@@ -10,6 +10,7 @@ import {connect} from '../config'
 import {getUserStarred, getJoinRepos} from '../api/github_user'
 import {upsertRepo, updateWhenLogin} from '../logic/UpdateWhenLogin'
 import {record_log} from '../service/LogService'
+//import {addInfoToList} from './RepoService'
 
 var async = require("async");
 
@@ -181,7 +182,7 @@ function getBestSubRepo(login, callback) {
       callback(ret);
     } else {
       getJoinRepos(login, 1, [], true, -1, (repos) => {
-        console.log(repos);
+        //console.log(repos);
         let met1 = [];
         for (let i = 0; i < repos.length; i++) {
           met1.push((call0) => {
@@ -242,7 +243,9 @@ export {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowing
 //  return o1.a - o2.a;
 //});
 //console.log(a);
-//getUserStarRepo('ziadoz', (repos) => {
-//  console.log(repos);
+//getUserStarRepo('daixinyan', (repos) => {
+//  addInfoToList('RickChem', repos, true, () => {
+//    console.log(repos);
+//  });
 //});
 //isLanguist('RickChem', (ans) => {console.log(ans)});

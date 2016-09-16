@@ -12,6 +12,7 @@ import {get_rec_repos,get_related_rec_repos} from './RecommendLogic_repos'
 import {get_rec_users} from './RecommendLogic_users'
 import {connect} from '../config'
 import {record_log} from '../service/LogService'
+import {upsertRepo, upsertUser} from './UpdateWhenLogin'
 
 var async = require("async");
 var time_signal = 0;
@@ -95,18 +96,25 @@ function getARepo(repo) {
     github_repoSchema.findOne({full_name: repo}, (err, repo_single) => {
       if (err) reject(err);
       //console.log('repo:' + repo);
-      let ret = {
-        type: 'repo',
-        avatarUrl: repo_single.owner_avatar_url,
-        owner: repo_single.owner,
-        name: repo_single.full_name.split("/")[1],
-        description: repo_single.description,
-        tags: repo_single.languages,
-        update: transTime(repo_single.updated_at),
-        star: repo_single.stars_count,
-        full_name: repo
-      };
-      resolve(ret);
+      if (repo_single == null) {
+        upsertRepo(repo, () => {
+          resolve(getARepo(repo));
+        });
+      }
+      else {
+        let ret = {
+          type: 'repo',
+          avatarUrl: repo_single.owner_avatar_url,
+          owner: repo_single.owner,
+          name: repo_single.full_name.split("/")[1],
+          description: repo_single.description,
+          tags: repo_single.languages,
+          update: transTime(repo_single.updated_at),
+          star: repo_single.stars_count,
+          full_name: repo
+        };
+        resolve(ret);
+      }
     });
   });
 }
@@ -124,19 +132,25 @@ function getAUser(user) {
       }
       github_userSchema.findOne({login: user}, (err, github_user) => {
         //console.log(user);
-        let ret = {
-          type: 'user',
-          avatarUrl: github_user.avatar_url,
-          login: user,
-          name: github_user.name,
-          bio: github_user.bio,
-          url: github_user.blog,
-          langs: lang_user,
-          join: transTime(github_user.created_at),
-          location: github_user.location,
-          followers: github_user.followers
-        };
-        resolve(ret);
+        if (github_user == null) {
+          upsertUser(user, () => {
+            resolve(getAUser(user));
+          });
+        } else {
+          let ret = {
+            type: 'user',
+            avatarUrl: github_user.avatar_url,
+            login: user,
+            name: github_user.name,
+            bio: github_user.bio,
+            url: github_user.blog,
+            langs: lang_user,
+            join: transTime(github_user.created_at),
+            location: github_user.location,
+            followers: github_user.followers
+          };
+          resolve(ret);
+        }
       });
     });
   });
@@ -178,12 +192,12 @@ function getInterval(time_bef) {
 
 //---------------------------  update recommend data  --------------------------------------------------
 async function fetchData(userName, callback) {
-  record_log('system','fetch recommend data for: '+userName,'add');
-  let repos = await get_rec_repos(userName, 1,1,1,1,1);
-  //console.log('after fetch rec repo data!');
-  let users = await get_rec_users(userName, 1,1,1);
-  //console.log('after fetch rec user data!');
-  let langs = await get_rec_languages(userName, 1,1,1);
+  record_log('system', 'fetch recommend data for: ' + userName, 'add');
+  let repos = await get_rec_repos(userName, 1, 1, 1, 1, 1);
+  console.log('after fetch rec repo data!');
+  let users = await get_rec_users(userName, 1, 1, 1);
+  console.log('after fetch rec user data!');
+  let langs = await get_rec_languages(userName, 1, 1, 1);
   console.log('after fetch rec data!');
   console.log(repos.length + ' ' + users.length + ' ' + langs.length);
   let rec = [];
@@ -223,7 +237,7 @@ async function fetchData(userName, callback) {
 
 //---------------------------  switch data, not fetch again(unless all recommended)  --------------------------------------------------
 async function recNew(userName) {
-  record_log('system','rec new','mark');
+  record_log('system', 'rec new', 'mark');
   let cur_user = await new Promise(function (resolve, reject) {
     userSchema.findOne({login: userName}, (err, user) => {
       if (err) reject(err);
@@ -303,8 +317,7 @@ async function recNew(userName) {
 
 //---------------------------  update when login  --------------------------------------------------
 async function getStart(userName) {
-  record_log('system','get start to recommend in logic!','mark');
-  circle(userName);
+  record_log('system', 'get start to recommend in logic!', 'mark');
   let cur_rec = await new Promise(function (resolve, reject) {
     fetchData(userName, async (ret) => {
       let array = await recNew(userName);
@@ -340,39 +353,39 @@ async function getNextDayRecommendData(userName) {
   //  return ans;
   //} else {
   //  record_log('system','get recommend data!','query');
-    //console.log(cur_rec);
-    //let ans = [];
-    //if (interval == 0) {
-      //console.log('in');
-    let ans =  getDetail(cur_user.now_recommend);
-    //} else {
-    //  let now = await recNew(repos, users, langs, userName, cur_rec, interval, cur_user.dislike);
-    //  console.log('after rec new');
-    //  ans = getDetail(now);
-    //  //console.log(repos);
-    //}
-    //console.log(repos.length+users.length+langs.length);
-    //console.log('done combine');
-    //console.log(ans);
-    return ans;
+  //console.log(cur_rec);
+  //let ans = [];
+  //if (interval == 0) {
+  //console.log('in');
+  let ans = getDetail(cur_user.now_recommend);
+  //} else {
+  //  let now = await recNew(repos, users, langs, userName, cur_rec, interval, cur_user.dislike);
+  //  console.log('after rec new');
+  //  ans = getDetail(now);
+  //  //console.log(repos);
+  //}
+  //console.log(repos.length+users.length+langs.length);
+  //console.log('done combine');
+  //console.log(ans);
+  return ans;
   //}
 }
 
-function circle(){
-  async.until(function() {
+function circle() {
+  async.until(function () {
       return time_signal > 0;
     },
-    function(cb) {
-      //if(time_left % 3600 == 0) console.log('one hour passed!............'+(new Date()).toLocaleString());
+    function (cb) {
       let time = new Date();
-      if(time.getHours() == 5) time_signal = 1;
+      //if (time.getMinutes() % 10 == 0) console.log('ten minutes passed!............' + (new Date()).toLocaleString());
+      if (time.getHours() == 5) time_signal = 1;
       setTimeout(cb, 1000);
     },
-    function(err) {
-      record_log('system','done one circle!','mark');
+    function (err) {
+      record_log('system', 'done one circle!', 'mark');
       time_signal = 0;
       userSchema.find({}, (err, users) => {
-        for (let i=0;i<users.length;i++){
+        for (let i = 0; i < users.length; i++) {
           recNew(users[i].login);
         }
         circle();
@@ -380,7 +393,7 @@ function circle(){
     });
 }
 
-export {getNextDayRecommendData, getARepo, getAUser, getDetail, getStart}
+export {getNextDayRecommendData, getARepo, getAUser, getDetail, getStart, circle}
 
 //fakeUsers(20);
 //fakeLangs(10);

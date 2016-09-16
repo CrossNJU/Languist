@@ -473,7 +473,7 @@ async function get_rec_repos(login,user_percent,star_owner_percent,also_star_per
     }
   }
 
-  console.log(rec_repos);
+  //console.log(rec_repos);
 
   return rec_repos;
 }
