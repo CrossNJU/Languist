@@ -221,6 +221,7 @@ async function get_rec_users_by_follwing_repo(login,rec_num){
     let temp_f_repos = await getJoinRepoByUser(followings[i]);
     temp_f_repos = await handle_repos(temp_f_repos);
     for (let j = 0;j < temp_f_repos.length;j++){
+
       let repo_contr = await getContributorsByRepo(temp_f_repos[j]);
       for (let k = 0;k < repo_contr.length;k++){
         let user_login = repo_contr[k].login;
@@ -300,7 +301,7 @@ async function get_rec_users(login,language_percent,star_contributor_percent,fol
       base_rec.splice(index, 1);
     }
     // console.log(base_rec);
-    // console.log(base_rec.length);
+    console.log(base_rec.length);
     return base_rec;
   }
 
@@ -315,15 +316,16 @@ async function get_rec_users(login,language_percent,star_contributor_percent,fol
     }
   }
 
+  // console.log(rec_users);
   return rec_users;
 }
 
 export {get_rec_users,get_user_sim,get_user_sims,get_rec_users_by_language,get_rec_users_by_star_contributor,
         get_rec_users_by_follwing_repo,get_rec_users_when_zero}
 
-// connect();
+connect();
 //get_rec_users_by_follwing_repo('RickChem',20);
 // get_rec_users_by_star_contributor('ChenDanni',10);
 // get_rec_users_by_follwing_repo('ChenDanni',10);
-// get_rec_users('ChenDanni',1,1,1);
+get_rec_users('ChenDanni',1,1,1);
 // get_rec_users_when_zero(100);

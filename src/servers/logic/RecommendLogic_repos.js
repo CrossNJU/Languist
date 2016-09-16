@@ -473,7 +473,7 @@ async function get_rec_repos(login,user_percent,star_owner_percent,also_star_per
     }
   }
 
-  // console.log(rec_repos.length);
+  console.log(rec_repos);
 
   return rec_repos;
 }
@@ -495,7 +495,7 @@ async function get_related_rec_repos(fullname,contributor_percent){
 
 
 export {get_rec_repos,get_related_rec_repos,get_rec_repos_by_user,get_rec_repos_by_star_repos_owner,
-        get_rec_repos_by_also_star,get_rec_repos_by_following,get_rec_repos_by_contributor,get_rec_repos_when_zero}
+        get_rec_repos_by_also_star,get_rec_repos_by_following,get_rec_repos_by_contributor,get_rec_repos_when_zero,handle_repos}
 
 // connect();
 // get_rec_repos_by_user('ChenDanni',10);
