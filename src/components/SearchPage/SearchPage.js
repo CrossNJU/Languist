@@ -24,7 +24,7 @@ class SearchPage extends Component {
     super(props);
     this.state = {
       hasResult: false,
-      hasMore: false,
+      hasMore: 0,
       user: '',
 
       repoList: [],
@@ -61,7 +61,7 @@ class SearchPage extends Component {
     let page = 1;
     let language = 'All';
 
-    this.setState({hasResult:true});
+    this.setState({hasResult:true, hasMore: 0, repoList:[], langList:[]});
 
     let data = await $.ajax(url, {data: {keyword: keyword, language: language, page: page}});
     console.log(data);
@@ -76,7 +76,7 @@ class SearchPage extends Component {
         langList.push(lang);
       });
 
-      this.setState({langList: langList, repoList: data.repoList, page: 1, hasResult: true, keyword: keyword, language: 'All', hasMore: (data.repoList.length == 50)});
+      this.setState({langList: langList, repoList: data.repoList, page: 1, hasResult: true, keyword: keyword, language: 'All', hasMore: (data.repoList.length == 50?1:-1)});
     }
 
   };
@@ -85,7 +85,7 @@ class SearchPage extends Component {
     let url = '/api/search/repo';
 
 
-    this.setState({hasResult: true, language: language, repoList: []});
+    this.setState({hasResult: true, language: language, repoList: [], hasMore: 0});
     let data = await $.ajax(url, {data: {keyword: this.state.keyword, language: language, page: 1}});
 
     console.log(data);
@@ -93,7 +93,7 @@ class SearchPage extends Component {
     if(data.repoList.length == 0) {
       this.setState({repoList: [], hasResult: false, page: 1, hasMore: false});
     } else {
-      this.setState({repoList: data.repoList, page: 1, hasResult: true, hasMore: (data.repoList.length == 50)});
+      this.setState({repoList: data.repoList, page: 1, hasResult: true, hasMore: (data.repoList.length == 50?1:-1)});
     }
 
   };
@@ -101,7 +101,7 @@ class SearchPage extends Component {
   async handleLoad() {
     let url = '/api/search/repo';
 
-    this.setState({hasResult: true});
+    this.setState({hasResult: true, hasMore: 0});
     let data = await $.ajax(url, {data: {keyword: this.state.keyword, language: this.state.language, page: this.state.page+1}});
 
     if(data.repoList.length == 0) {
@@ -111,7 +111,7 @@ class SearchPage extends Component {
       data.repoList.forEach((repo)=> {
         repoList.push(repo);
       });
-      this.setState({repoList: repoList, page: this.state.page+1, hasMore: (data.repoList.length == 50)});
+      this.setState({repoList: repoList, page: this.state.page+1, hasMore: (data.repoList.length == 50?1:-1)});
     }
   }
 
@@ -144,12 +144,10 @@ class SearchPage extends Component {
 
     if (isSuccess) {
       this.getSetList(this.state.user);
-      this.state.flowList.forEach((data) => {
-        data.data.forEach((repo)=> {
-          if(repo.type == 'repo' && repo.full_name == this.state.currentStar) {
-            repo.set = set;
-          }
-        });
+      this.state.repoList.forEach((repo) => {
+        if(repo.type == 'repo' && repo.full_name == this.state.currentStar) {
+          repo.set = set;
+        }
       });
       newState.flowList = this.state.flowList;
       this.props.handleSnackbarOpen(`${this.state.currentStar} is added to your star set <${set}> :-D`);
