@@ -19,6 +19,7 @@ function login(username, password, callback) {
     if (user == null) callback(NOT_FOUND);
     else {
       if (user.password == md5(password)) {
+        updateWhenLogin(username);
         callback(SUCCESS);
       }
       else if (user.password === undefined) callback(PASSWORD_ERROR);
@@ -96,9 +97,9 @@ export var saveUser = (code, callback) => {
           });
           addAnewGitHubUser(json, () => {
             //update when login
-            if (!test_login) {
+            //if (!test_login) {
               updateWhenLogin(json.login);
-            }
+            //}
           });
         });
     });

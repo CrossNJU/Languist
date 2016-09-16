@@ -54,18 +54,18 @@ export var getLangListData = (userName, callback) => {
   });
 };
 
-function awaitUpdate(){
+function awaitUpdate() {
   return new Promise((resolve, reject) => {
-    async.until(function() {
+    async.until(function () {
         return getSignal() > 0;
       },
-      function(cb) {
-        //console.log('try');
+      function (cb) {
+        console.log('await update');
         setTimeout(cb, 500);
       },
-      function(err) {
+      function (err) {
         // 4s have passed
-        record_log(getUser(), getUser()+' updatewhenlogin done in recommend', 'mark');
+        record_log(getUser(), getUser() + ' updatewhenlogin done in recommend', 'mark');
         //console.log(err); // -> undefined
         if (err) reject(err);
         resolve(1);
@@ -74,22 +74,17 @@ function awaitUpdate(){
 }
 
 async function getFlowListData(userName, callback) {
-  record_log(getUser(), getUser()+' get updatewhenlogin signal: '+getSignal(), 'query');
-  let before = await awaitUpdate();
-  let ans = [];
-  if (before == 1) {
-    record_log(getUser(), getUser()+' to get recommend date in HomeService', 'query');
+  record_log(getUser(), getUser() + ' get updatewhenlogin signal: ' + getSignal(), 'query');
+  record_log(getUser(), getUser() + ' to get recommend date in HomeService', 'query');
+  let ans = await getNextDayRecommendData(userName);
+  if (ans.length == 0) {
+    let t = await awaitUpdate();
+    let now = await getStart(userName);
     ans = await getNextDayRecommendData(userName);
-    if (ans.length == 0){
-      updateWhenLogin(userName);
-      let t = await awaitUpdate();
-      let now = await getStart(userName);
-      ans = await getNextDayRecommendData(userName);
-      record_log(getUser(), getUser()+' first get recommend data', 'mark');
-      //console.log(now);
-    }
+    record_log(getUser(), getUser() + ' first get recommend data', 'mark');
+    //console.log(now);
   }
-  //console.log(ans);
+  console.log('rec records: '+ans.length);
   callback(ans);
 }
 
@@ -101,3 +96,5 @@ export {getFlowListData}
 //    console.log(ret);
 //  });
 //});
+
+//console.log((new Date()).getHours());

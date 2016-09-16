@@ -11,6 +11,7 @@ import {addLang, getAllLanguage, deleteLanguage} from './servers/service/Languag
 import {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowingsAndFollowersNum, addFeedback, getUserStarRepo, getBestSubRepo, isLanguist} from './servers/service/UserService'
 import {addAReopSet, addARepoToSet, getRepoSet, getRepoSetList, getRelatedRecommend, getRepoInfos, addMore, addInfoToList, getRepoLanguage} from './servers/service/RepoService'
 import {record_log, getLog} from './servers/service/LogService'
+import {updateWhenLogin} from './servers/logic/UpdateWhenLogin'
 //others
 import {starRepo, followUser,unfollowUser, unstarRepo} from './servers/api/github_user'
 import {searchRepo} from './servers/api/github_search'
@@ -207,7 +208,7 @@ function addLoginAPI(server) {
   server.get('/api/login/success', (req, res)=> {
     saveUser(req.query.code, (ress) => {
       if (ress != null) {
-        req.session.tempname = ress;
+        req.session.tempname = ress;;
         setUser(ress);
         record_log(getUser(), ress + ' sign up with github SUCCESS!', 'login');
         res.redirect('/register');
