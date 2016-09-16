@@ -229,7 +229,7 @@ class UserFlowItem extends Component {
         icon={<Star />}
         label="View Starred"
         labelColor="#666"
-        href={`/starred?login=${this.props.user.login}`}
+        href={`/starred?owner=${this.props.user.login}`}
       />
     )
   }
