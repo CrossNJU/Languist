@@ -9,7 +9,7 @@ import {languageSchema} from '../../models/languageSchema';
 import {transTime} from '../util/timeUtil'
 import {get_rec_languages} from './RecommendLogic_languages'
 import {get_rec_repos,get_related_rec_repos} from './RecommendLogic_repos'
-import {get_rec_users} from './RecommendLogic_users'
+import {get_rec_users,get_rec_users_by_star_contributor,get_rec_users_when_zero} from './RecommendLogic_users'
 import {connect} from '../config'
 import {record_log} from '../service/LogService'
 import {upsertRepo, upsertUser} from './UpdateWhenLogin'
@@ -195,7 +195,10 @@ async function fetchData(userName, callback) {
   record_log('system', 'fetch recommend data for: ' + userName, 'add');
   let repos = await get_rec_repos(userName, 1, 1, 1, 1, 1);
   console.log('after fetch rec repo data!');
-  let users = await get_rec_users(userName, 1, 1, 1);
+  // let users = await get_rec_users(userName, 1, 1, 1);
+  let users = await get_rec_users_by_star_contributor(userName);
+  if (users == [] || users == null)
+    users = await get_rec_users_when_zero(userName);
   console.log('after fetch rec user data!');
   let langs = await get_rec_languages(userName, 1, 1, 1);
   console.log('after fetch rec data!');
