@@ -143,7 +143,11 @@ function updateSingleRepoRecommend(full_name, callback) {
 
 async function getRelatedRecommend(full_name, callback) {
   github_repoSchema.findOne({full_name: full_name}, async (err, repo) => {
-    if (repo.related.length != 0) {
+    if (repo == null){
+      upsertRepo(full_name, () => {
+        getRelatedRecommend(full_name, callback);
+      });
+    }else if (repo.related.length != 0) {
       let ans = [];
       for (let i = 0; i < repo.related.length; i++) {
         let repo_det = await getARepo(repo.related[i]);
