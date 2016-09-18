@@ -190,59 +190,69 @@ async function get_rec_repos_by_also_star(login,rec_num){
   let init_repos = [];
   let rec_repos = [];
 
-  //console.log("in");
+  // console.log("in");
   for (let i = 0;i < stars_handle.length;i++)
     user_stars.push(stars_handle[i]);
 
-  for (let i = 0;i < user_stars.length;i++){
-    let temp_starers = await getStarUserByRepo(user_stars[i]);
-    for (let j = 0;j < temp_starers.length;j++){
-      if (!(init_starers.indexOf(temp_starers[j]) > -1)){
-        init_starers.push(temp_starers[j]);
-      }
+
+  let t = await new Promise((resolve, reject)=>{
+    let met0 = [];
+    for (let i = 0;i < user_stars.length;i++){
+      met0.push(async (call0)=>{
+        let temp_starers = await getStarUserByRepo(user_stars[i]);
+        for (let j = 0;j < temp_starers.length;j++){
+          if (!(init_starers.indexOf(temp_starers[j]) > -1)){
+            init_starers.push(temp_starers[j]);
+          }
+        }
+        call0(null,'done met0');
+      });
     }
-  }
-
-  //console.log(init_starers.length);
-  for (let i = 0;i < init_starers.length;i++){
-    //console.log(init_starers[i]);
-    let temp_repos = await getStarRepoByUser(init_starers[i]);
-    for (let j = 0;j < temp_repos.length;j++){
-      let fullname = temp_repos[j];
-      if ((!(init_repos_name.indexOf(fullname) > -1))
-        &&(!(user_stars.indexOf(fullname) > -1))&&(!(user_repos.indexOf(fullname) > -1))){
-        init_repos_name.push(fullname);
+    async.parallel(met0,(err,res)=>{
+      console.log('done met0');
+      let met1 = [];
+      for (let i = 0;i < init_starers.length;i++){
+        met1.push(async (call1)=>{
+          let temp_repos = await getStarRepoByUser(init_starers[i]);
+          for (let j = 0;j < temp_repos.length;j++){
+            let fullname = temp_repos[j];
+            if ((!(init_repos_name.indexOf(fullname) > -1))
+              &&(!(user_stars.indexOf(fullname) > -1))&&(!(user_repos.indexOf(fullname) > -1))){
+              init_repos_name.push(fullname);
+            }
+          }
+          call1(null,'done met1');
+        });
       }
-    }
-    // console.log(init_repos_name);
-    // console.log(i);
-  }
-
-  //console.log("in");
-
-  for (let i = 0;i < init_repos_name.length;i++){
-    //console.log('ininin');
-    let repo_single = await getRepoInfo(init_repos_name[i]);
-    let repo_stars = repo_single.stars_count;
-    let repo = {
-      fullname: init_repos_name[i],
-      stars: repo_stars
-    };
-    init_repos.push(repo);
-    //console.log(init_repos);
-  }
-
-  init_repos.sort(getSortFun('desc','stars'));
-
-  //console.log(init_repos);
-
-  for (let i = 0;i < rec_num;i++){
-    if (i >= init_repos.length) break;
-    rec_repos.push(init_repos[i].fullname);
-  }
-  // console.log(rec_repos);
-  return rec_repos;
-
+      async.parallel(met1,(err,res)=>{
+        console.log('done met1');
+        let met2 = [];
+        for (let i = 0;i < init_repos_name.length;i++){
+          met2.push(async (call2)=>{
+            let repo_single = await getRepoInfo(init_repos_name[i]);
+            let repo_stars = repo_single.stars_count;
+            let repo = {
+              fullname: init_repos_name[i],
+              stars: repo_stars
+            };
+            init_repos.push(repo);
+            call2(null,'done met2');
+          });
+        }
+        async.parallel(met2,(err,res)=>{
+          console.log('done met2');
+          init_repos.sort(getSortFun('desc','stars'));
+          for (let i = 0;i < rec_num;i++){
+            if (i >= init_repos.length) break;
+            rec_repos.push(init_repos[i].fullname);
+          }
+          // console.log(rec_repos);
+          resolve(rec_repos);
+        });
+      });
+    });
+  });
+  return t;
 }
 
 //user->following->repos
@@ -443,32 +453,32 @@ async function get_rec_repos(login,user_percent,star_owner_percent,also_star_per
 
     met.push(async (call0) => {
       let user_rec = await get_rec_repos_by_user(login,user_num);
-      // console.log('done1!');
+      console.log('done1!');
       call0(null, user_rec);
     });
     met.push(async (call0) => {
       let star_owner_rec = await get_rec_repos_by_star_repos_owner(login,star_owner_num);
-      // console.log('done2!');
+      console.log('done2!');
       call0(null, star_owner_rec);
     });
     met.push(async (call0) => {
       let also_star_rec = await get_rec_repos_by_also_star(login,also_star_num);
-      // console.log('done3!');
+      console.log('done3!');
       call0(null, also_star_rec);
     });
     met.push(async (call0) => {
       let following_rec = await get_rec_repos_by_following(login,following_num);
-      // console.log('done4!');
+      console.log('done4!');
       call0(null, following_rec);
     });
     met.push(async (call0) => {
       let colleague_rec = await get_rec_repos_by_colleagues(login,colleague_num);
-      // console.log('done5!');
+      console.log('done5!');
       call0(null, colleague_rec);
     });
     met.push(async (call0) => {
       let base_rec = await get_rec_repos_when_zero(base);
-      // console.log('done6!');
+      console.log('done6!');
       call0(null, base_rec);
     });
 
@@ -478,6 +488,7 @@ async function get_rec_repos(login,user_percent,star_owner_percent,also_star_per
       let also_star_rec = res[2];
       let following_rec = res[3];
       let colleague_rec = res[4];
+
       let base_rec = res[5];
       if (((user_rec.length == 0)&&(star_owner_rec.length == 0)&&(also_star_rec.length == 0)&&
         (following_rec.length == 0)&&(colleague_rec.length == 0))){
@@ -485,7 +496,6 @@ async function get_rec_repos(login,user_percent,star_owner_percent,also_star_per
         // console.log('base');
         return base_rec;
       }
-
       let init_repos = [];
       let rec_repos = [];
 
@@ -502,9 +512,6 @@ async function get_rec_repos(login,user_percent,star_owner_percent,also_star_per
           }
         }
       }
-
-      //console.log(rec_repos);
-
       resolve(rec_repos);
     });
   });
@@ -540,23 +547,25 @@ export {get_rec_repos,get_related_rec_repos,get_rec_repos_by_user,get_rec_repos_
 async function test() {
   connect();
   let t = await get_rec_repos('ChenDanni',1,1,1,1,1);
+  // let t = await get_rec_repos_by_also_star('ChenDanni',100);
   console.log(t.length);
 }
 // test();
 // get_related_rec_repos('d3/d3',1);
 // get_rec_repos_when_zero(10);
 // async function s1(call0) {
-//   let t = await get_rec_repos_by_also_star('RickChem',100);
+//   // let t = await get_rec_repos_by_also_star('RickChem',100);
 //   // console.log(t);
-//   // setTimeout(() => {call0(null, 'yes1')}, 2000);
+//   setTimeout(() => {call0(null, 'yes1')}, 2000);
 //   // console.log(x);
-//   call0(null, t);
+//   // call0(null, t);
 // }
 // async function s2(call0) {
 //   setTimeout(() => {call0(null, 'yes2')}, 1000);
 // }
-// async.parallel([s1(0),s2], (err, res) => {
+// async.parallel([s1,s2], (err, res) => {
 //   console.log(res);
+//   console.log('a');
 // });
 
 

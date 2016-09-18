@@ -60,7 +60,7 @@ function awaitUpdate() {
         return getSignal() > 0;
       },
       function (cb) {
-        console.log('await update');
+        // console.log('await update');
         setTimeout(cb, 500);
       },
       function (err) {
