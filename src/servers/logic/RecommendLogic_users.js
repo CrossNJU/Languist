@@ -8,6 +8,7 @@ import {getStarRepoByUser, getPublicRepoByUser, getRepoInfo, getJoinRepoByUser} 
 import {handle_repos} from './RecommendLogic_repos'
 import {getLanguageByUser} from '../dao/languageDAO'
 import {connect} from '../config'
+var async = require("async");
 
 let modulate = 2;
 //let rec_num = 3;
@@ -206,7 +207,7 @@ async function get_rec_users_by_star_contributor(login,rec_num){
 }
 
 //user->followings->repos->contributors
-async function get_rec_users_by_follwing_repo(login,rec_num){
+async function get_rec_users_by_following_repo(login, rec_num){
   let followings = await getFollowingByUser(login);
   let init_contr = [];//{name,count}
   let contr_array = [];
@@ -217,52 +218,68 @@ async function get_rec_users_by_follwing_repo(login,rec_num){
   let handle_repeat = followings;
   handle_repeat.push(login);
 
-  for (let i = 0;i < followings.length;i++){
-    let temp_f_repos = await getJoinRepoByUser(followings[i]);
-    temp_f_repos = await handle_repos(temp_f_repos);
-    for (let j = 0;j < temp_f_repos.length;j++){
-
-      let repo_contr = await getContributorsByRepo(temp_f_repos[j]);
-      for (let k = 0;k < repo_contr.length;k++){
-        let user_login = repo_contr[k].login;
-        let user_contributions = repo_contr[k].contributions;
-        if (!(handle_repeat.indexOf(user_login) > -1)){
-          //contributor加入初始化contributor列表，统计
-          if (init_contr.hasOwnProperty(user_login)){
-            init_contr[user_login] += appear_percent + contr_percent * user_contributions;
-          }else{
-            init_contr[user_login] = appear_percent  + contr_percent * user_contributions;
-          }
+  let t = await new Promise((resolve,reject)=>{
+    let met0 = [];
+    for (let i = 0;i < followings.length;i++){
+      met0.push(async (call0)=>{
+        let temp_f_repos = await getJoinRepoByUser(followings[i]);
+        temp_f_repos = await handle_repos(temp_f_repos);
+        let met1 = [];
+        for (let j = 0;j < temp_f_repos.length;j++){
+          met1.push(async (call1)=>{
+            let repo_contr = await getContributorsByRepo(temp_f_repos[j]);
+            for (let k = 0;k < repo_contr.length;k++){
+              let user_login = repo_contr[k].login;
+              let user_contributions = repo_contr[k].contributions;
+              if (!(handle_repeat.indexOf(user_login) > -1)){
+                //contributor加入初始化contributor列表，统计
+                if (init_contr.hasOwnProperty(user_login)){
+                  init_contr[user_login] += appear_percent + contr_percent * user_contributions;
+                }else{
+                  init_contr[user_login] = appear_percent  + contr_percent * user_contributions;
+                }
+              }
+            }
+            call1(null,'done met1');
+          });
         }
+        async.parallel(met1,(err,res)=>{
+          // console.log(res);
+          call0(null, 'done met0');
+        });
+      });
+    }
+    async.parallel(met0,async (err,res)=>{
+      // console.log(res);
+      //考虑user相似度
+      for (let contributor in init_contr){
+        let similarity = await get_user_sim(login,contributor);
+        init_contr[contributor] += similarity_percent * similarity;
       }
-    }
-  }
 
-  //考虑user相似度
-  for (let contributor in init_contr){
-    let similarity = await get_user_sim(login,contributor);
-    init_contr[contributor] += similarity_percent * similarity;
-  }
+      for (let contributor in init_contr){
+        let temp_contr = {
+          login: contributor,
+          count: init_contr[contributor]
+        };
+        contr_array.push(temp_contr);
+      }
+      contr_array.sort(getSortFun('desc','count'));
 
-  for (let contributor in init_contr){
-    let temp_contr = {
-      login: contributor,
-      count: init_contr[contributor]
-    };
-    contr_array.push(temp_contr);
-  }
-  contr_array.sort(getSortFun('desc','count'));
+      // console.log(contr_array.length);
 
-  // console.log(contr_array.length);
+      for (let i = 0;i < rec_num;i++){
+        if (i >= contr_array.length){
+          break;
+        }
+        rec_contr.push(contr_array[i].login);
+      }
+      // console.log(rec_contr);
+      resolve(rec_contr);
+    });
+  });
 
-  for (let i = 0;i < rec_num;i++){
-    if (i >= contr_array.length){
-      break;
-    }
-    rec_contr.push(contr_array[i].login);
-  }
-  // console.log(rec_contr);
-  return rec_contr;
+  return t;
 }
 
 //when 000
@@ -283,49 +300,81 @@ async function get_rec_users_when_zero(rec_num){
 }
 
 async function get_rec_users(login,language_percent,star_contributor_percent,following_repo_percent){
-  let base = 25;
+  let base = 100;
   let language_num = base * language_percent;
   let star_contributor_num = base * star_contributor_percent;
   let following_repo_num = base * following_repo_percent;
-  let language_rec = await get_rec_users_by_language(login,language_num);
-  let star_contributor_rec = await get_rec_users_by_star_contributor(login,star_contributor_num);
-  let following_repo_rec = await get_rec_users_by_follwing_repo(login,following_repo_num);
-  let base_rec = await get_rec_users_when_zero(base);
 
-  let init_users = [];
-  let rec_users = [];
+  let t = await new Promise((resolve, reject)=>{
+    let met = [];
+    met.push(async (call0) => {
+      let language_rec = await get_rec_users_by_language(login,language_num);
+      // console.log('done1');
+      call0(null,language_rec);
+    });
+    met.push(async (call0) => {
+      let star_contributor_rec = await get_rec_users_by_star_contributor(login,star_contributor_num);
+      // console.log('done2');
+      call0(null,star_contributor_rec);
+    });
+    met.push(async (call0) => {
+      let following_repo_rec = await get_rec_users_by_following_repo(login,following_repo_num);
+      // console.log('done3');
+      call0(null,following_repo_rec);
+    });
+    met.push(async (call0) => {
+      let base_rec = await get_rec_users_when_zero(base);
+      // console.log('done4');
+      call0(null,base_rec);
+    });
+    async.parallel(met,(err,res)=>{
+      let language_rec = res[0];
+      let star_contributor_rec = res[1];
+      let following_repo_rec = res[2];
+      let base_rec = res[3];
 
-  if (((language_rec.length == 0)&&(star_contributor_rec.length == 0)&&(following_repo_rec.length == 0))){
-    let index = base_rec.indexOf(login);
-    if (index >= -1){
-      base_rec.splice(index, 1);
-    }
-    // console.log(base_rec);
-    console.log(base_rec.length);
-    return base_rec;
-  }
+      let init_users = [];
+      let rec_users = [];
 
-  init_users.push(language_rec);
-  init_users.push(star_contributor_rec);
-  init_users.push(following_repo_rec);
+      if (((language_rec.length == 0)&&(star_contributor_rec.length == 0)&&(following_repo_rec.length == 0))){
+        let index = base_rec.indexOf(login);
+        if (index >= -1){
+          base_rec.splice(index, 1);
+        }
+        // console.log(base_rec);
+        // console.log(base_rec.length);
+        return base_rec;
+      }
 
-  for (let i = 0;i < init_users.length;i++){
-    for (let j = 0;j < init_users[i].length;j++){
-      if (rec_users.indexOf(init_users[i][j]) <= -1)
-        rec_users.push(init_users[i][j]);
-    }
-  }
+      init_users.push(language_rec);
+      init_users.push(star_contributor_rec);
+      init_users.push(following_repo_rec);
 
-  // console.log(rec_users);
-  return rec_users;
+      for (let i = 0;i < init_users.length;i++){
+        for (let j = 0;j < init_users[i].length;j++){
+          if (rec_users.indexOf(init_users[i][j]) <= -1)
+            rec_users.push(init_users[i][j]);
+        }
+      }
+      resolve(rec_users);
+    });
+  });
+  return t;
 }
 
 export {get_rec_users,get_user_sim,get_user_sims,get_rec_users_by_language,get_rec_users_by_star_contributor,
-        get_rec_users_by_follwing_repo,get_rec_users_when_zero}
+        get_rec_users_by_following_repo,get_rec_users_when_zero}
 
 // connect();
-//get_rec_users_by_follwing_repo('RickChem',20);
+//get_rec_users_by_following_repo('RickChem',20);
 // get_rec_users_by_star_contributor('ChenDanni',10);
-// get_rec_users_by_follwing_repo('ChenDanni',10);
+// get_rec_users_by_following_repo('ChenDanni',10);
 // get_rec_users('ChenDanni',1,1,1);
 // get_rec_users_when_zero(100);
+
+async function test() {
+  connect();
+  let t = await get_rec_users('ChenDanni',1,1,1);
+  console.log(t.length);
+}
+// test();
