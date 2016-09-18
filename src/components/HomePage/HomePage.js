@@ -130,8 +130,8 @@ class HomePage extends Component {
   }
 
   // Add langauge dialog
-  handleAddLanguage(language, level) {
-    this.setState({addLang: {name: language, isSelected: true, level: level || 0}, isOpenDialog: true});
+  handleAddLanguage(language, level, isEdit) {
+    this.setState({addLang: {name: language, isSelected: true, level: level || 0}, isOpenDialog: true, isEdit: isEdit});
   }
 
   handleDialogClose(isSuccess) {

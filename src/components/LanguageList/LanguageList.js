@@ -20,7 +20,7 @@ const listItemStyle = {
 
 class LanguageItem extends Component {
   handleEdit() {
-    this.props.handleEdit(this.props.lang.name, this.props.lang.level);
+    this.props.handleEdit(this.props.lang.name, this.props.lang.level, true);
   }
 
   render() {

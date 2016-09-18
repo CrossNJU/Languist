@@ -31,7 +31,7 @@ class FilterItem extends Component {
   }
 
   renderCount() {
-    if(this.props.item.count) {
+    if(typeof(this.props.item.count) != "undefined") {
       return <div className={s.bubble}>{this.props.item.count}</div>;
     } else {
       return null;

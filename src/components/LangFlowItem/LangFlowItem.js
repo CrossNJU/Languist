@@ -12,7 +12,7 @@ import Add from 'material-ui/svg-icons/content/add';
 
 class LangFlowItem extends Component {
   handleAdd() {
-    this.props.handleAdd(this.props.lang.name);
+    this.props.handleAdd(this.props.lang.name,0,false);
   }
 
   render() {
