@@ -30,6 +30,14 @@ class FilterItem extends Component {
     this.props.handleClick(this.props.item.name);
   }
 
+  renderCount() {
+    if(this.props.item.count) {
+      return <div className={s.bubble}>{this.props.item.count}</div>;
+    } else {
+      return null;
+    }
+  }
+
   render() {
     return (
       <ListItem
@@ -38,7 +46,7 @@ class FilterItem extends Component {
         <div className={s.item}>
           <Avatar size={36} className={s.avatar}>{this.props.item.name.substr(0,1)}</Avatar>
           <div className={s.text}>{this.props.item.name}</div>
-          <div className={s.bubble}>{this.props.item.count}</div>
+          {this.renderCount()}
         </div>
       </ListItem>
     );
