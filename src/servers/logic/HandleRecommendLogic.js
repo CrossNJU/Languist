@@ -12,7 +12,7 @@ import {get_rec_repos,get_related_rec_repos,get_rec_repos_by_also_star} from './
 import {get_rec_users,get_rec_users_by_star_contributor,get_rec_users_when_zero} from './RecommendLogic_users'
 import {connect} from '../config'
 import {record_log} from '../service/LogService'
-import {upsertRepo, upsertUser} from './UpdateWhenLogin'
+import {upsertRepo, upsertUser, updateInitialInfo} from './UpdateWhenLogin'
 
 var async = require("async");
 var time_signal = 0;
@@ -244,7 +244,7 @@ async function fetchData(userName, callback) {
 //---------------------------  switch data, not fetch again(unless all recommended)  --------------------------------------------------
 async function recNew(userName) {
   //console.log('rec new');
-  record_log('system', 'rec new', 'mark');
+  record_log('system', 'rec new for: '+ userName, 'mark');
   let cur_user = await new Promise(function (resolve, reject) {
     userSchema.findOne({login: userName}, (err, user) => {
       if (err) reject(err);
@@ -360,7 +360,7 @@ function circle() {
     function (cb) {
       let time = new Date();
       //if (time.getMinutes() % 10 == 0) console.log('ten minutes passed!............' + (new Date()).toLocaleString());
-      if (time.getHours() == 18) time_signal = 1;
+      if (time.getHours() == 21 && time.getMinutes() == 30 && time.getSeconds() == 0) time_signal = 1;
       setTimeout(cb, 1000);
     },
     function (err) {
@@ -369,6 +369,7 @@ function circle() {
       userSchema.find({}, (err, users) => {
         for (let i = 0; i < users.length; i++) {
           recNew(users[i].login);
+          updateInitialInfo(users[i].login);
         }
         circle();
       });

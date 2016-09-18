@@ -4,6 +4,7 @@
 
 import {reloadUser} from './servers/service/UserService'
 import {getLog} from './servers/service/LogService'
+import {getAllUserInfo, getUserInfo} from './servers/service/BackService'
 
 function addTestApi(server){
   server.get('/api/test/session', (req, res)=>{
@@ -27,6 +28,17 @@ function addAdministerApi(server){
     getLog(req.query.user, req.query.op, req.query.begin, req.query.end, (ans) => {
       res.send(ans);
     })
+  });
+  server.get('/api/admin/user', (req, res) => {
+    if (req.query.login === undefined){
+      getAllUserInfo((resa) => {
+        res.send(resa)
+      });
+    }else {
+      getUserInfo(req.query.login, (resa)=>{
+        res.send(resa);
+      });
+    }
   });
 }
 
