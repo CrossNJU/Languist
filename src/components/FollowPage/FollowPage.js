@@ -40,8 +40,7 @@ class FollowPage extends Component {
       followers: {
         name: 'Followers',
         count: 0
-      },
-      userList:[]
+      }
     };
     console.log('constructor');
   }
@@ -108,17 +107,22 @@ class FollowPage extends Component {
     console.log('render FollowPage');
     return (
       <div className="StarPage">
-        <TitleBar text={(this.state.user || 'Languist') + '\'s Follow'} />
+        <TitleBar text={(this.state.user || 'Languist') + '\'s ' + this.state.current} />
         <div className={s.root}>
           <div className={s.container}>
             <div className={s.sidebar}>
-              <Filter data={[this.state.following, this.state.followers]}
-                      current={this.state.current}
-                      handleClick={this.handleClickFilter.bind(this)}/>
+              <Filter
+                data={[this.state.following, this.state.followers]}
+                current={this.state.current}
+                handleClick={this.handleClickFilter.bind(this)}
+              />
             </div>
             <div className={s.main}>
               <UserList
-                data={this.state.userList} loadingText="Loading users you have followed or who has followed you..."/>
+                data={this.state.userList}
+                loadingText={this.state.current === 'Following' ? 'Loading users you are following...' : 'Loading users following you...'}
+                emptyText={this.state.current === 'Following' ? 'You are following no one' : 'No one is following you'}
+              />
             </div>
           </div>
         </div>

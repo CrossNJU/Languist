@@ -8,6 +8,7 @@ import s from './UserList.scss';
 
 import UserFlowItem from '../UserFlowItem';
 import LoadingFlowItem from '../LoadingFlowItem';
+import TextFlowItem from '../TextFlowItem';
 
 let userData = [
   {
@@ -68,12 +69,14 @@ class UserList extends Component {
     // console.log(JSON.parse(JSON.stringify(this.props.data)));
     if(this.props.data) {
       userData = this.props.data;
-    }
-    if (userData.length > 0) {
-      let items = userData.map(flowItem => {
-        return <UserFlowItem key={flowItem.login} user={flowItem} />;
-      });
-      return items;
+      if (userData.length > 0) {
+        let items = userData.map(flowItem => {
+          return <UserFlowItem key={flowItem.login} user={flowItem} />;
+        });
+        return items;
+      } else {
+        return <TextFlowItem text={this.props.emptyText} />;
+      }
     } else {
       return (<LoadingFlowItem title={this.props.loadingText || 'Loading users...'}/>);
     }

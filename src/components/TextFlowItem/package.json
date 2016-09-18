@@ -1,0 +1,6 @@
+{
+  "name": "TextFlowItem",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./TextFlowItem.js"
+}

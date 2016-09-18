@@ -31,8 +31,6 @@ class StarPage extends Component {
       owner: "",
       ownerSetList: [],
 
-      repoList: [],
-
       isLanguist: true,
       currentSet: 'All',
 
@@ -199,7 +197,9 @@ class StarPage extends Component {
               <RepoList
                 data={this.state.repoList}
                 handleStar={this.handleOpenStarDialog.bind(this)}
-                loadingText="Loading repos this user or you have starred... "/>
+                loadingText="Loading repos this user have starred... "
+                emptyText="No stars"
+              />
             </div>
           </div>
 
