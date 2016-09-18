@@ -156,7 +156,12 @@ class RelatedPage extends Component {
               <RepoFlowItem repo={this.state.repo} single={true}/>
             </div>
             <div className={s.main}>
-              <RepoList data={this.state.repoList}  handleStar={this.handleOpenStarDialog.bind(this)}/>
+              <RepoList
+                data={this.state.repoList}
+                handleStar={this.handleOpenStarDialog.bind(this)}
+                loadingText="Loading related repositories"
+                emptyText="No related repository"
+              />
             </div>
           </div>
         </div>

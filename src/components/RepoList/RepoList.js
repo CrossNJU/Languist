@@ -8,6 +8,7 @@ import s from './RepoList.scss';
 
 import LoadingFlowItem from '../LoadingFlowItem';
 import RepoFlowItem from '../RepoFlowItem';
+import TextFlowItem from '../TextFlowItem';
 
 
 let repoData = [
@@ -64,12 +65,16 @@ class RepoList extends Component {
     // console.log(JSON.parse(JSON.stringify(this.props.data)));
     if(this.props.data) {
       repoData = this.props.data;
-    }
-    if (repoData.length > 0) {
-      let repos = repoData.map(repo => {
-        return (<RepoFlowItem key={repo.owner + repo.name} repo={repo} handleStar={this.props.handleStar}/>);
-      });
-      return repos;
+      if (repoData.length > 0) {
+        let repos = repoData.map(repo => {
+          return (<RepoFlowItem key={repo.owner + repo.name} repo={repo} handleStar={this.props.handleStar}/>);
+        });
+        return repos;
+      } else {
+        return (
+          <TextFlowItem text={this.props.emptyText} />
+        );
+      }
     } else {
       return (<LoadingFlowItem title={this.props.loadingText||"Loading repos..."}/>);
     }
