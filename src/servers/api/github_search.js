@@ -35,11 +35,11 @@ function searchRepo(query, language, page, callback){
       if (repo.language != null){
         let index = languages.findIndex(j => j.name == repo.language);
         if (index >= 0){
-          languages[index].count ++;
+          //languages[index].count ++;
         }else {
           languages.push({
-            name: repo.language,
-            count: 1
+            name: repo.language
+            //count: 1
           })
         }
       }
