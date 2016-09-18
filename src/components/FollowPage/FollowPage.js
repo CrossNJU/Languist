@@ -59,15 +59,18 @@ class FollowPage extends Component {
 
   async componentDidMount() {
     console.log('componentDidMount');
-    try {
-      let user = await $.ajax('/api/current_user');
+
+    let user = await $.ajax('/api/current_user');
+
+    if(user) {
       // let user = 'RickChem';
       this.getCount(user);
       this.getFollowList(user, this.state.current);
       this.setState({user:user});
-    } catch(err) {
-      console.error(err);
+    } else {
+      window.location.href = '/login';
     }
+
   }
 
   getCount(user) {

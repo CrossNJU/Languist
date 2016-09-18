@@ -27,7 +27,7 @@ class SearchPage extends Component {
       hasMore: 0,
       user: '',
 
-      repoList: [],
+      repoList: undefined,
       langList: [],
       keyword: '',
       page: 1,
@@ -61,7 +61,7 @@ class SearchPage extends Component {
     let page = 1;
     let language = 'All';
 
-    this.setState({hasResult:true, hasMore: 0, repoList:[], langList:[]});
+    this.setState({hasResult:true, hasMore: 0, repoList:undefined, langList:[]});
 
     let data = await $.ajax(url, {data: {keyword: keyword, language: language, page: page}});
     console.log(data);
@@ -85,7 +85,7 @@ class SearchPage extends Component {
     let url = '/api/search/repo';
 
 
-    this.setState({hasResult: true, language: language, repoList: [], hasMore: 0});
+    this.setState({hasResult: true, language: language, repoList: undefined, hasMore: 0});
     let data = await $.ajax(url, {data: {keyword: this.state.keyword, language: language, page: 1}});
 
     console.log(data);

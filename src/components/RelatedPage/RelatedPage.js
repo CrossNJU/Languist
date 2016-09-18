@@ -61,8 +61,7 @@ class RelatedPage extends Component {
     super(props);
     this.state = {
       repo: repo,
-      // repo: {},
-      repoList: [],
+      // repoList: [],
       user: '',
       // Star dialog
       isStarDialogOpen: false,
@@ -83,10 +82,19 @@ class RelatedPage extends Component {
   async componentDidMount() {
     console.log('componentDidMount');
     let user = await $.ajax('/api/current_user');
-    this.setState({user: user});
-    this.getRepoInfo();
-    this.getRelatedRepo();
-    this.getSetList(user);
+    let repo = this.props.query.repo;
+
+    if(!repo) {
+      window.location.href = '/home';
+    } else if(user) {
+      // Get other data
+      this.setState({user: user});
+      this.getRepoInfo();
+      this.getRelatedRepo();
+      this.getSetList(user);
+    } else {
+      window.location.href = '/login';
+    }
   }
 
   getRepoInfo() {
@@ -153,7 +161,7 @@ class RelatedPage extends Component {
         <div className={s.root}>
           <div className={s.container}>
             <div className={s.sidebar}>
-              <RepoFlowItem repo={this.state.repo} single={true}/>
+              <RepoFlowItem repo={this.state.repo} single={true} handleStar={this.handleOpenStarDialog.bind(this)}/>
             </div>
             <div className={s.main}>
               <RepoList

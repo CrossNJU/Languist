@@ -61,16 +61,22 @@ class StarPage extends Component {
     let owner = this.props.query.owner || user;
     let isLanguist = true;
 
-    if(user == owner) {
-      this.getSetList(user, owner);
-    } else {
-      isLanguist = ((await $.ajax('/api/user/isLanguist', {data: {login: owner}})).res == 1);
-      this.getSetList(user, owner);
-      this.getOwnerSetList(owner, isLanguist);
-    }
-    this.getRepoList(owner, 'All', isLanguist);
+    if(user) {
+      if(user == owner) {
+        this.getSetList(user, owner);
+      } else {
+        isLanguist = ((await $.ajax('/api/user/isLanguist', {data: {login: owner}})).res == 1);
+        this.getSetList(user, owner);
+        this.getOwnerSetList(owner, isLanguist);
+      }
+      this.getRepoList(owner, 'All', isLanguist);
 
-    this.setState({user: user, owner: owner, isLanguist: isLanguist});
+      this.setState({user: user, owner: owner, isLanguist: isLanguist});
+    } else {
+      window.location.href = '/login';
+    }
+
+
 
   }
 
