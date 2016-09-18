@@ -71,7 +71,7 @@ class RepoList extends Component {
       });
       return repos;
     } else {
-      return (<LoadingFlowItem />);
+      return (<LoadingFlowItem title={this.props.loadingText||"Loading repos..."}/>);
     }
   };
 

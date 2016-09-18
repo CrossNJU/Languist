@@ -14,7 +14,7 @@ class LoadingFlowItem extends Component {
     return (
       <Paper className={s.item}>
         <CircularProgress size={0.8} />
-        <div className={s.text}>Loading repos, developers and languages you might interest in...</div>
+        <div className={s.text}>{this.props.title||"Loading ..."}</div>
       </Paper>
     );
   }

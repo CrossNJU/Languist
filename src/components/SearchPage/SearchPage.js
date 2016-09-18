@@ -180,7 +180,8 @@ class SearchPage extends Component {
               user={this.state.user}
               data={this.state.repoList}
               handleUnstar={this.handleUnstar.bind(this)}
-              handleStar={this.handleOpenStarDialog.bind(this)}/>
+              handleStar={this.handleOpenStarDialog.bind(this)}
+              loadingText="Loading repos you search for ..."/>
             <LoadMoreButton hasMore={this.state.hasMore} handleLoad={this.handleLoad.bind(this)}/>
           </div>
         </div>

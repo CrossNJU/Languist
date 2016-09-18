@@ -117,7 +117,8 @@ class FollowPage extends Component {
                       handleClick={this.handleClickFilter.bind(this)}/>
             </div>
             <div className={s.main}>
-              <UserList data={this.state.userList}/>
+              <UserList
+                data={this.state.userList} loadingText="Loading users you have followed or who has followed you..."/>
             </div>
           </div>
         </div>

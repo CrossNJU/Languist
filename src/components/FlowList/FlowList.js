@@ -111,7 +111,7 @@ class FlowUnit extends Component {
       });
       return flowItems;
     } else {
-      return (<LoadingFlowItem />);
+      return (<LoadingFlowItem title="Loading repos, developers and languages you might interest in..." />);
     }
   };
   render() {
@@ -148,7 +148,7 @@ class FlowUnitList extends Component {
       });
       return fus;
     } else {
-      return (<LoadingFlowItem />);
+      return (<LoadingFlowItem title="Loading repos, developers and languages you might interest in..." />);
     }
   }
   render() {

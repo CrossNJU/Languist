@@ -75,7 +75,7 @@ class UserList extends Component {
       });
       return items;
     } else {
-      return (<LoadingFlowItem />);
+      return (<LoadingFlowItem title={this.props.loadingText || 'Loading users...'}/>);
     }
   };
 

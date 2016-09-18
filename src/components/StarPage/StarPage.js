@@ -196,7 +196,10 @@ class StarPage extends Component {
                 isCurrentUser={this.state.user == this.state.owner}/>
             </div>
             <div className={s.main}>
-              <RepoList data={this.state.repoList} handleStar={this.handleOpenStarDialog.bind(this)}/>
+              <RepoList
+                data={this.state.repoList}
+                handleStar={this.handleOpenStarDialog.bind(this)}
+                loadingText="Loading repos this user or you have starred... "/>
             </div>
           </div>
 
