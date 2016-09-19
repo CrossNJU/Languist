@@ -2,7 +2,7 @@
  * Created by PolarisChen on 16/7/11.
  */
 
-import React, { Component, PropTypes } from 'react';
+import React, {Component, PropTypes} from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './RepoList.scss';
 
@@ -61,22 +61,29 @@ class RepoList extends Component {
   constructor(props) {
     super(props);
   }
+
   renderRepos() {
     // console.log(JSON.parse(JSON.stringify(this.props.data)));
-    if(this.props.data) {
+    if (this.props.data) {
       repoData = this.props.data;
       if (repoData.length > 0) {
         let repos = repoData.map(repo => {
-          return (<RepoFlowItem key={repo.owner + repo.name} repo={repo} handleStar={this.props.handleStar}/>);
+          return (
+            <RepoFlowItem
+              key={repo.owner + repo.name}
+              repo={repo}
+              handleStar={this.props.handleStar}
+              handleUnstar={this.props.handleUnstar}
+            />);
         });
         return repos;
       } else {
         return (
-          <TextFlowItem text={this.props.emptyText} />
+          <TextFlowItem text={this.props.emptyText}/>
         );
       }
     } else {
-      return (<LoadingFlowItem title={this.props.loadingText||"Loading repos..."}/>);
+      return (<LoadingFlowItem title={this.props.loadingText || "Loading repos..."}/>);
     }
   };
 

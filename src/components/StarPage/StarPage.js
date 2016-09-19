@@ -176,6 +176,27 @@ class StarPage extends Component {
     this.setState(newState);
   }
 
+  async handleUnstar(repo) {
+    let user = this.state.user;
+    let url = `/api/repo/unstar?user=${user}&repo=${repo}`;
+    let data = await $.ajax(url);
+    if (data.res === 1) {
+      this.setStarSet(repo);
+      this.props.handleSnackbarOpen(`${repo} is removed from your stars :-)`);
+      return true;
+    }
+    return false;
+  }
+
+  setStarSet(repo) {
+    this.state.repoList.forEach((data)=> {
+      if(data.full_name === repo) {
+        data.set = '';
+      }
+    });
+    this.setState({repoList: this.state.repoList});
+  }
+
   // Handle Filter
   handleClickFilter(set) {
     if(this.state.isLanguist) {
@@ -203,6 +224,7 @@ class StarPage extends Component {
               <RepoList
                 data={this.state.repoList}
                 handleStar={this.handleOpenStarDialog.bind(this)}
+                handleUnstar={this.handleUnstar.bind(this)}
                 loadingText="Loading repos this user have starred... "
                 emptyText="No stars"
               />

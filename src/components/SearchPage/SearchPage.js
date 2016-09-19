@@ -7,7 +7,7 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import React, { Component, PropTypes } from 'react';
+import React, {Component, PropTypes} from 'react';
 import $ from 'jquery';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './SearchPage.scss';
@@ -40,6 +40,7 @@ class SearchPage extends Component {
     };
     console.log('constructor');
   }
+
   static contextTypes = {
     onSetTitle: PropTypes.func.isRequired,
   };
@@ -61,23 +62,27 @@ class SearchPage extends Component {
     let page = 1;
     let language = 'All';
 
-    this.setState({hasResult:true, hasMore: 0, repoList:undefined, langList:[]});
+    this.setState({hasResult: true, hasMore: 0, repoList: undefined, langList: []});
 
     let data = await $.ajax(url, {data: {keyword: keyword, language: language, page: page}});
     console.log(data);
 
-    if(data.repoList.length == 0) {
-      this.setState({langList: [], repoList: [], page: 1, hasResult: false, hasMore: false, keyword: keyword, language: 'All'});
+    let langList = [];
+    langList.push({name: 'All', count: data.count});
+    data.language.forEach((lang)=> {
+      langList.push(lang);
+    });
 
-    } else {
-      let langList = [];
-      langList.push({name: 'All', count: data.count});
-      data.language.forEach((lang)=> {
-        langList.push(lang);
-      });
+    this.setState({
+      langList: langList,
+      repoList: data.repoList,
+      page: 1,
+      hasResult: true,
+      keyword: keyword,
+      language: 'All',
+      hasMore: (data.repoList.length == 50 ? 1 : -1)
+    });
 
-      this.setState({langList: langList, repoList: data.repoList, page: 1, hasResult: true, keyword: keyword, language: 'All', hasMore: (data.repoList.length == 50?1:-1)});
-    }
 
   };
 
@@ -86,15 +91,17 @@ class SearchPage extends Component {
 
 
     this.setState({hasResult: true, language: language, repoList: undefined, hasMore: 0});
-    let data = await $.ajax(url, {data: {keyword: this.state.keyword, language: language, page: 1}});
+    let data = await  $.ajax(url, {data: {keyword: this.state.keyword, language: language, page: 1}});
 
     console.log(data);
 
-    if(data.repoList.length == 0) {
-      this.setState({repoList: [], hasResult: false, page: 1, hasMore: false});
-    } else {
-      this.setState({repoList: data.repoList, page: 1, hasResult: true, hasMore: (data.repoList.length == 50?1:-1)});
-    }
+
+    this.setState({
+      repoList: data.repoList,
+      page: 1,
+      hasResult: true,
+      hasMore: (data.repoList.length == 50 ? 1 : -1)
+    });
 
   };
 
@@ -102,17 +109,19 @@ class SearchPage extends Component {
     let url = '/api/search/repo';
 
     this.setState({hasResult: true, hasMore: 0});
-    let data = await $.ajax(url, {data: {keyword: this.state.keyword, language: this.state.language, page: this.state.page+1}});
+    let data = await $.ajax(url, {
+      data: {
+        keyword: this.state.keyword,
+        language: this.state.language,
+        page: this.state.page + 1
+      }
+    });
 
-    if(data.repoList.length == 0) {
-      this.setState({hasMore: (data.repoList.length == 50)});
-    } else {
-      let repoList = this.state.repoList;
-      data.repoList.forEach((repo)=> {
-        repoList.push(repo);
-      });
-      this.setState({repoList: repoList, page: this.state.page+1, hasMore: (data.repoList.length == 50?1:-1)});
-    }
+    let repoList = this.state.repoList;
+    data.repoList.forEach((repo)=> {
+      repoList.push(repo);
+    });
+    this.setState({repoList: repoList, page: this.state.page + 1, hasMore: (data.repoList.length == 50 ? 1 : -1)});
   }
 
   getSetList(user) {
@@ -145,7 +154,7 @@ class SearchPage extends Component {
     if (isSuccess) {
       this.getSetList(this.state.user);
       this.state.repoList.forEach((repo) => {
-        if(repo.type == 'repo' && repo.full_name == this.state.currentStar) {
+        if (repo.type == 'repo' && repo.full_name == this.state.currentStar) {
           repo.set = set;
         }
       });
@@ -169,11 +178,12 @@ class SearchPage extends Component {
 
   renderContainer() {
 
-    if(this.state.hasResult) {
+    if (this.state.hasResult) {
       return (
         <div className={s.container}>
           <div className={s.sidebar}>
-            <Filter data={this.state.langList} current={this.state.language} handleClick={this.handleFilter.bind(this)}/>
+            <Filter data={this.state.langList} current={this.state.language}
+                    handleClick={this.handleFilter.bind(this)}/>
           </div>
           <div className={s.main}>
             <RepoList
@@ -209,8 +219,8 @@ class SearchPage extends Component {
                         return set.name != 'All'
                       })}
                     handleClose={this.handleCloseStarDialog.bind(this)}
-                    repo = {this.state.currentStar}
-                    user = {this.state.user}/>
+                    repo={this.state.currentStar}
+                    user={this.state.user}/>
       </div>
     );
   }
