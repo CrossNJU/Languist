@@ -234,6 +234,14 @@ function unstarRepo(login, repo, callback) {
           let repos = user.star_repos;
           let index = repos.findIndex(j => j == repo);
           if (index >= 0) {
+            let sets = user.repo_sets;
+            let insideIndex = -1;
+            let index2 = sets.findIndex(j => {
+              let index3 = j.set_repos.findIndex(k => k == repo);
+              insideIndex = index3;
+              return index3 >= 0;
+            });
+            if (index2 >= 0) sets[index2].set_repos.splice(insideIndex, 1);
             repos.splice(index, 1);
             let update = {
               $inc: {
@@ -246,7 +254,7 @@ function unstarRepo(login, repo, callback) {
             github_userSchema.update({login: login}, update, (err, res) => {
               callback(1);
             });
-            userSchema.update({login: login}, {$set: {star_repos: repos}}, (err, res)=> {
+            userSchema.update({login: login}, {$set: {star_repos: repos, repo_sets: sets}}, (err, res)=> {
               //console.log(res);
             })
           } else callback(1);

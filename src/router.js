@@ -18,53 +18,53 @@ import {searchRepo} from './servers/api/github_search'
 
 function addRepoAPI(server) {
   //star repo
-  server.get('/api/repo/star', (req, res)=> {
-    starRepo(req.query.user, req.query.repo, resa => {
+  server.post('/api/repo/star', (req, res)=> {
+    starRepo(req.body.user, req.body.repo, resa => {
       if (resa == SUCCESS) {
-        record_log(getUser(), getUser() + ' star repo: ' + req.query.repo + ' SUCCESS!', 'add');
+        record_log(getUser(), getUser() + ' star repo: ' + req.body.repo + ' SUCCESS!', 'add');
         res.send({res: SUCCESS});
       }
       else {
-        record_log(getUser(), getUser() + ' star repo: ' + req.query.repo + ' FAIL!', 'error');
+        record_log(getUser(), getUser() + ' star repo: ' + req.body.repo + ' FAIL!', 'error');
         res.send({res: FAIL});
       }
     });
   });
   //unstar repo
-  server.get('/api/repo/unstar', (req, res)=> {
-    unstarRepo(req.query.user, req.query.repo, resa => {
+  server.post('/api/repo/unstar', (req, res)=> {
+    unstarRepo(req.body.user, req.body.repo, resa => {
       if (resa == SUCCESS) {
-        record_log(getUser(), getUser() + ' unstar repo: ' + req.query.repo + ' SUCCESS!', 'del');
+        record_log(getUser(), getUser() + ' unstar repo: ' + req.body.repo + ' SUCCESS!', 'del');
         res.send({res: SUCCESS});
       }
       else {
-        record_log(getUser(), getUser() + ' unstar repo: ' + req.query.repo + ' FAIL!', 'error');
+        record_log(getUser(), getUser() + ' unstar repo: ' + req.body.repo + ' FAIL!', 'error');
         res.send({res: FAIL});
       }
     });
   });
   //add a repo to a repo set
-  server.get('/api/repo/addToSet', (req, res) => {
-    addARepoToSet(req.query.login, req.query.fullname, req.query.setname, (resa) => {
+  server.post('/api/repo/addToSet', (req, res) => {
+    addARepoToSet(req.body.login, req.body.fullname, req.body.setname, (resa) => {
       if (resa == SUCCESS) {
-        record_log(getUser(), getUser() + ' add: ' + req.query.fullname + ' to the set: ' + req.query.setname + ' SUCCESS!', 'add');
+        record_log(getUser(), getUser() + ' add: ' + req.body.fullname + ' to the set: ' + req.body.setname + ' SUCCESS!', 'add');
         res.send({res: SUCCESS});
       }
       else {
-        record_log(getUser(), getUser() + ' add: ' + req.query.fullname + ' to the set: ' + req.query.setname + ' FAIL!', 'error');
+        record_log(getUser(), getUser() + ' add: ' + req.body.fullname + ' to the set: ' + req.body.setname + ' FAIL!', 'error');
         res.send({res: resa});
       }
     })
   });
   //add a repo set
-  server.get('/api/repo/addSet', (req, res) => {
-    addAReopSet(req.query.login, req.query.setname, (resa) => {
+  server.post('/api/repo/addSet', (req, res) => {
+    addAReopSet(req.body.login, req.body.setname, (resa) => {
       if (resa == SUCCESS) {
-        record_log(getUser(), getUser() + ' add set: ' + req.query.setname + ' SUCCESS!', 'add');
+        record_log(getUser(), getUser() + ' add set: ' + req.body.setname + ' SUCCESS!', 'add');
         res.send({res: SUCCESS});
       }
       else {
-        record_log(getUser(), getUser() + ' add set: ' + req.query.setname + ' SUCCESS!', 'error');
+        record_log(getUser(), getUser() + ' add set: ' + req.body.setname + ' SUCCESS!', 'error');
         res.send({res: resa});
       }
     });
@@ -119,27 +119,27 @@ function addRepoAPI(server) {
 
 function addUserAPI(server) {
   //follow user
-  server.get('/api/user/follow', (req, res)=> {
-    followUser(req.query.user, req.query.follow, resa => {
+  server.post('/api/user/follow', (req, res)=> {
+    followUser(req.body.user, req.body.follow, resa => {
       if (resa == SUCCESS) {
-        record_log(getUser(), getUser() + ' follow user: ' + req.query.follow + ' SUCCESS!', 'add');
+        record_log(getUser(), getUser() + ' follow user: ' + req.body.follow + ' SUCCESS!', 'add');
         res.send({res: SUCCESS});
       }
       else {
-        record_log(getUser(), getUser() + ' follow user: ' + req.query.follow + ' SUCCESS!', 'error');
+        record_log(getUser(), getUser() + ' follow user: ' + req.body.follow + ' SUCCESS!', 'error');
         res.send({res: FAIL});
       }
     });
   });
   //unfollow user
-  server.get('/api/user/unfollow', (req, res)=> {
-    unfollowUser(req.query.user, req.query.follow, resa => {
+  server.post('/api/user/unfollow', (req, res)=> {
+    unfollowUser(req.body.user, req.body.follow, resa => {
       if (resa == SUCCESS) {
-        record_log(getUser(), getUser() + ' unfollow user: ' + req.query.follow + ' SUCCESS!', 'del');
+        record_log(getUser(), getUser() + ' unfollow user: ' + req.body.follow + ' SUCCESS!', 'del');
         res.send({res: SUCCESS});
       }
       else {
-        record_log(getUser(), getUser() + ' unfollow user: ' + req.query.follow + ' SUCCESS!', 'error');
+        record_log(getUser(), getUser() + ' unfollow user: ' + req.body.follow + ' SUCCESS!', 'error');
         res.send({res: FAIL});
       }
     });
@@ -208,7 +208,7 @@ function addLoginAPI(server) {
   server.get('/api/login/success', (req, res)=> {
     saveUser(req.query.code, (ress) => {
       if (ress != null) {
-        req.session.tempname = ress;;
+        req.session.tempname = ress;
         setUser(ress);
         record_log(getUser(), ress + ' sign up with github SUCCESS!', 'login');
         res.redirect('/register');
@@ -220,11 +220,11 @@ function addLoginAPI(server) {
     });
   });
   //login
-  server.get('/api/login', (req, res) => {
-    login(req.query.username, req.query.password, (res2) => {
+  server.post('/api/login', (req, res) => {
+    login(req.body.username, req.body.password, (res2) => {
       if (res2 == SUCCESS) {
-        setUser(req.query.username);
-        req.session.username = req.query.username;
+        setUser(req.body.username);
+        req.session.username = req.body.username;
         record_log(getUser(), getUser() + ' login SUCCESS!', 'login');
         //console.log('session');
         //console.log(req.session.cookie.maxAge / 1000);
@@ -236,10 +236,10 @@ function addLoginAPI(server) {
     })
   });
   //register
-  server.get('/api/register', (req, res) => {
-    register(req.query.username, req.query.password, (res2) => {
+  server.post('/api/register', (req, res) => {
+    register(req.body.username, req.body.password, (res2) => {
       if (res2 == SUCCESS) {
-        req.session.username = req.query.username;
+        req.session.username = req.body.username;
         record_log(getUser(), getUser() + ' register SUCCESS!', 'login');
         res.send({res: SUCCESS});
       } else {
@@ -249,7 +249,7 @@ function addLoginAPI(server) {
     })
   });
   //logout
-  server.get('/api/logout', (req, res) => {
+  server.post('/api/logout', (req, res) => {
     record_log(getUser(), getUser() + ' logout!', 'login');
     req.session.username = null;
     req.session.tempname = null;
@@ -291,14 +291,14 @@ function addOtherAPI(server) {
   });
 
   //evaluate the recommend
-  server.get('/api/rec/evaluate', (req, res) => {
-    evaluateRecommend(req.query.login, req.query.name, req.query.type, (resa) => {
+  server.post('/api/rec/evaluate', (req, res) => {
+    evaluateRecommend(req.body.login, req.body.name, req.body.type, (resa) => {
       if (resa == SUCCESS) {
-        record_log(getUser(), getUser() + ' dislike: ' + req.query.name + ' SUCCESS!', 'add');
+        record_log(getUser(), getUser() + ' dislike: ' + req.body.name + ' SUCCESS!', 'add');
         res.send({res: SUCCESS});
       }
       else {
-        record_log(getUser(), getUser() + ' dislike: ' + req.query.name + ' FAIL!', 'error');
+        record_log(getUser(), getUser() + ' dislike: ' + req.body.name + ' FAIL!', 'error');
         res.send({res: FAIL});
       }
     })
@@ -311,8 +311,8 @@ function addOtherAPI(server) {
     })
   });
   //add feedback
-  server.get('/api/feedback/add', (req, res)=> {
-    addFeedback(req.query.login, req.query.feedback, (resa) => {
+  server.post('/api/feedback/add', (req, res)=> {
+    addFeedback(req.body.login, req.body.feedback, (resa) => {
       if (resa == SUCCESS) {
         record_log(getUser(), getUser() + ' add feedback SUCCESS!', 'add');
         res.send({res: SUCCESS});
@@ -327,14 +327,14 @@ function addOtherAPI(server) {
 
 function addLanguageAPI(server) {
   //choose/modify language
-  server.get('/api/lang/choose', (req, res) => {
-    addLang(req.query.login, req.query.lang, req.query.level, ret => {
+  server.post('/api/lang/choose', (req, res) => {
+    addLang(req.body.login, req.body.lang, req.body.level, ret => {
       if (ret == SUCCESS) {
-        record_log(getUser(), getUser() + ' choose language: ' + req.query.lang + ' SUCCESS!', 'add');
+        record_log(getUser(), getUser() + ' choose language: ' + req.body.lang + ' SUCCESS!', 'add');
         res.send({res: SUCCESS});
       }
       else {
-        record_log(getUser(), getUser() + ' choose language: ' + req.query.lang + ' FAIL!', 'error');
+        record_log(getUser(), getUser() + ' choose language: ' + req.body.lang + ' FAIL!', 'error');
         res.send({res: FAIL});
       }
     });
@@ -346,14 +346,14 @@ function addLanguageAPI(server) {
     })
   });
   //delete language
-  server.get('/api/lang/delete', (req, res) => {
-    deleteLanguage(req.query.login, req.query.lang, ret => {
+  server.post('/api/lang/delete', (req, res) => {
+    deleteLanguage(req.body.login, req.body.lang, ret => {
       if (ret == SUCCESS) {
-        record_log(getUser(), getUser() + ' delete language: ' + req.query.lang + ' SUCCESS!', 'del');
+        record_log(getUser(), getUser() + ' delete language: ' + req.body.lang + ' SUCCESS!', 'del');
         res.send({res: SUCCESS});
       }
       else {
-        record_log(getUser(), getUser() + ' delete language: ' + req.query.lang + ' FAIL!', 'error');
+        record_log(getUser(), getUser() + ' delete language: ' + req.body.lang + ' FAIL!', 'error');
         res.send({res: FAIL});
       }
     });
