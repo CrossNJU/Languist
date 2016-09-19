@@ -69,7 +69,7 @@ class RegisterCard extends Component {
     }
 
     let url = '/api/register';
-    $.ajax(url, {data: {username: username, password: password}})
+    $.ajax(url, {type: 'post', data: {username: username, password: password}})
       .done((message) => {
         console.log(message);
         switch (message.res) {

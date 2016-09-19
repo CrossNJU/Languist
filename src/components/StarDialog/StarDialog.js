@@ -56,7 +56,7 @@ class StarDialog extends Component {
 
 
     let url = '/api/repo/star';
-    let res = await $.ajax(url, {data:{user: user, repo:repo}});
+    let res = await $.ajax(url, {type: 'post', data:{user: user, repo:repo}});
 
 
     console.log(res);
@@ -67,7 +67,7 @@ class StarDialog extends Component {
       url = '/api/repo/AddSet';
       if(newSet){
         console.log('new is ' + newSet);
-        res = await $.ajax(url, {data:{login: user, setname:newSet}});
+        res = await $.ajax(url, {type: 'post', data:{login: user, setname:newSet}});
       }else {
         res.res = 0;
       }
@@ -76,7 +76,7 @@ class StarDialog extends Component {
     if(res.res == 1) {
       console.log('add succeed');
       url = 'api/repo/addToSet';
-      res = await $.ajax(url, {data:{login: user, fullname:repo, setname: this.state.isNewSet?newSet:this.state.setName}});
+      res = await $.ajax(url, {type: 'post', data:{login: user, fullname:repo, setname: this.state.isNewSet?newSet:this.state.setName}});
     }
 
     if(res.res == 1) {

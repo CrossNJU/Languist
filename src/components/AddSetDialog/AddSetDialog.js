@@ -36,7 +36,7 @@ class AddSetDialog extends Component {
       this.setState({error:'The input is empty'});
     }else {
       let url = '/api/repo/addSet';
-      $.ajax(url, {data: {setname: name, login: this.props.user}})
+      $.ajax(url, {type: 'post', data: {setname: name, login: this.props.user}})
         .done((msg)=> {
           if(msg.res == 1){
             this.handleClose(true);

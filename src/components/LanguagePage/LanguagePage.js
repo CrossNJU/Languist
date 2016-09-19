@@ -112,7 +112,7 @@ class LanguagePage extends Component {
     });
 
     async.each(langs, (lang, callback) => {
-      $.ajax('api/lang/choose', {data: {lang:lang.name, level: lang.level, login: this.state.user}})
+      $.ajax('api/lang/choose', {type: 'post', data: {lang:lang.name, level: lang.level, login: this.state.user}})
         .done((function (message) {
           if(message.res == 1) {
             console.log('choose ' + lang.name + " " + message);

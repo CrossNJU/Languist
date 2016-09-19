@@ -37,7 +37,7 @@ class FeedbackDialog extends Component {
     if(value && value.length!=0) {
 
       let url = '/api/feedback/add';
-      let result = await $.ajax(url, {data: {login: this.props.user, feedback: value}});
+      let result = await $.ajax(url, {type: 'post', data: {login: this.props.user, feedback: value}});
       if(result.res == 1) {
         this.handleClose();
       } else {

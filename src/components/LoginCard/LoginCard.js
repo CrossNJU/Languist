@@ -51,7 +51,7 @@ class LoginCard extends Component {
 
     let url = '/api/login';
 
-    $.ajax(url, {data:{username: username, password: password}})
+    $.ajax(url, {type: 'post', data:{username: username, password: password}})
       .done((message) => {
         console.log(message);
         switch (message.res) {

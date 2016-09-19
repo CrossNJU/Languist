@@ -21,12 +21,12 @@ class AddLanguageDialog extends Component {
   handleSubmit() {
     let lang = this.lang;
     if(lang.isSelected) {
-      $.ajax('api/lang/choose', {async: false, data: {lang:lang.name, level: lang.level, login: this.props.user}})
+      $.ajax('api/lang/choose', {type: 'post', async: false, data: {lang:lang.name, level: lang.level, login: this.props.user}})
         .done((function (message) {
           console.log('choose ' + lang.name + " " + message);
         }));
     }else {
-      $.ajax('api/lang/delete', {async: false, data: {lang:lang.name, login: this.props.user}})
+      $.ajax('api/lang/delete', {type: 'post', async: false, data: {lang:lang.name, login: this.props.user}})
         .done((function (message) {
           console.log('delete ' + lang.name + " " + message);
         }));
