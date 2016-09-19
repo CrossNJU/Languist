@@ -22,7 +22,18 @@ class LangQuestion extends Component {
     }
 
     var Button = type == "radio" ? RadioButton : Checkbox;
-    return this.props.question.options.map(option => {
+
+    var options;
+
+    if(type == 'radio') {
+      options = this.props.question.options;
+    }else {
+      options = this.props.question.languageOption[this.props.language].map((option)=> {
+        return this.props.question.options[option];
+      });
+    }
+
+    return options.map(option => {
       return (
         <Button
           key={"option"+option.value}
