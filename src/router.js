@@ -111,8 +111,10 @@ function addRepoAPI(server) {
   //get repo languages/tags
   server.get('/api/repo/languages', (req, res) => {
     getRepoLanguage(req.query.fullName, (resa) => {
-      //record_log(getUser(), getUser() + ' get repo: ' + req.query.fullName + ' languages and return: ' + resa.length + ' RECORDS', 'query');
-      res.send(resa);
+      addInfoToList(getUser(), [resa], true, () => {
+        //record_log(getUser(), getUser() + ' get repo: ' + req.query.fullName + ' languages and return: ' + resa.length + ' RECORDS', 'query');
+        res.send(resa);
+      });
     })
   });
 }
