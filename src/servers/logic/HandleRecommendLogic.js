@@ -193,13 +193,13 @@ function getInterval(time_bef) {
 //---------------------------  update recommend data  --------------------------------------------------
 async function fetchData(userName, callback) {
   record_log('system', 'fetch recommend data for: ' + userName, 'add');
-  let repos = await get_rec_repos(userName, 1, 1, 1, 1, 1);
+  // let repos = await get_rec_repos(userName, 1, 1, 1, 1, 1);
   // console.log('-------------------------------------------------------------');
   // console.log(repos.length);
-  // let repos = await get_rec_repos_by_also_star(userName,100);
+  let repos = await get_rec_repos_by_also_star(userName,100);
   console.log('after fetch rec repo data!');
-  let users = await get_rec_users(userName, 1, 1, 1);
-  // let users = await get_rec_users_by_star_contributor(userName,100);
+  // let users = await get_rec_users(userName, 1, 1, 1);
+  let users = await get_rec_users_by_star_contributor(userName,100);
   if (users == [] || users == null)
     users = await get_rec_users_when_zero(userName);
   console.log('after fetch rec user data!');

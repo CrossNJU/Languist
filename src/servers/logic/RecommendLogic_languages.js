@@ -264,7 +264,7 @@ async function get_rec_languages(login,select_percent,following_percent,repo_per
     }
   }
 
-  if (rec_languages.length != 0)
+  if (rec_languages.length == 0)
     return base_lan;
 
   // console.log(rec_languages);
