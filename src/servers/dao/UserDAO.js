@@ -123,7 +123,7 @@ async function getTopUsersInSystem(user_num){
 
 async function getTopUsersInGithub(user_num){
   let promise = await new Promise(function(resolve, reject){
-    github_userSchema.find({}, (err, users) => {
+    github_userSchema.find({followers:{$gt:50}}, (err, users) => {
       if (err) reject(err);
       let ans = [];
       for (let user of users){
@@ -136,7 +136,7 @@ async function getTopUsersInGithub(user_num){
 }
 
 export {getGithubUserInfo, getUserAndLevelByLanguage, getFollowingByUser,
-  getStarUserByRepo, getContributorsByRepo, getUserLanguage,getTopUsersInSystem,getTopUsersInGithub}
+  getStarUserByRepo, getContributorsByRepo, getUserLanguage,getTopUsersInGithub}
 
 async function test() {
   let t = await getRepoInfo("CrossNJU/PASS");
