@@ -3,7 +3,7 @@
  */
 
 import {getGithubUserInfo, getUserAndLevelByLanguage,
-  getFollowingByUser, getStarUserByRepo, getContributorsByRepo, getUserLanguage,getTopUsersInSystem,getTopUsersInGithub} from '../dao/UserDAO'
+  getFollowingByUser, getStarUserByRepo, getContributorsByRepo, getTopUsersInGithub} from '../dao/UserDAO'
 import {getStarRepoByUser, getPublicRepoByUser, getRepoInfo, getJoinRepoByUser} from '../dao/RepoDAO'
 import {handle_repos} from './RecommendLogic_repos'
 import {getLanguageByUser} from '../dao/languageDAO'
@@ -284,18 +284,21 @@ async function get_rec_users_by_following_repo(login, rec_num){
 
 //when 000
 async function get_rec_users_when_zero(rec_num){
-  let user_num = 10;
-  let github_user_num = rec_num = rec_num - user_num;
-  let rec_users = await getTopUsersInSystem(user_num);
-  let rec_github_users = await getTopUsersInGithub(github_user_num);
-  let ret = rec_users;
+  // let user_num = 10;
+  // let github_user_num = rec_num = rec_num - user_num;
+  // let rec_users = await getTopUsersInSystem(user_num);
+  // let rec_github_users = await getTopUsersInGithub(github_user_num);
+  // let ret = rec_users;
+  //
+  //
+  // for (let i = 0;i < rec_github_users.length;i++){
+  //   if (ret.indexOf(rec_github_users[i]) <= -1)
+  //     ret.push(rec_github_users[i]);
+  // }
 
-  for (let i = 0;i < rec_github_users.length;i++){
-    if (ret.indexOf(rec_github_users[i]) <= -1)
-      ret.push(rec_github_users[i]);
-  }
+  let rec_users = await getTopUsersInGithub(rec_num);
 
-  return ret;
+  return rec_users;
 
 }
 
@@ -375,7 +378,8 @@ export {get_rec_users,get_user_sim,get_user_sims,get_rec_users_by_language,get_r
 
 async function test() {
   connect();
-  let t = await get_rec_users('ChenDanni',1,1,1);
-  console.log(t.length);
+  // let t = await get_rec_users('ChenDanni',1,1,1);
+  let t = await get_rec_users_when_zero(10);
+  console.log(t);
 }
 // test();

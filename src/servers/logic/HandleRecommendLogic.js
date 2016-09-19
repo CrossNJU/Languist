@@ -198,12 +198,12 @@ async function fetchData(userName, callback) {
   // console.log(repos.length);
   // let repos = await get_rec_repos_by_also_star(userName,100);
   console.log('after fetch rec repo data!');
-  let users = await get_rec_users_by_language(userName,100);
-  console.log('don111');
-  users = await get_rec_repos_by_also_star(userName,100);
-  console.log('don222');
-  users = await get_rec_users_by_star_contributor(userName,100);
-  console.log('don333');
+  // let users = await get_rec_users_by_language(userName,100);
+  // console.log('don111');
+  // users = await get_rec_repos_by_also_star(userName,100);
+  // console.log('don222');
+  // users = await get_rec_users_by_star_contributor(userName,100);
+  // console.log('don333');
   users = await get_rec_users(userName, 1, 1, 1);
   console.log('don444');
   if (users == [] || users == null)
