@@ -71,7 +71,14 @@ class UserList extends Component {
       userData = this.props.data;
       if (userData.length > 0) {
         let items = userData.map(flowItem => {
-          return <UserFlowItem key={flowItem.login} user={flowItem} />;
+          return (
+            <UserFlowItem
+              key={flowItem.login}
+              user={flowItem}
+              handleFollow={this.props.handleFollow}
+              handleUnfollow={this.props.handleUnfollow}
+            />
+          );
         });
         return items;
       } else {

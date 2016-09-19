@@ -106,6 +106,42 @@ class FollowPage extends Component {
     this.setState({current: type});
   }
 
+  async handleFollow(follow) {
+    let user = this.state.user;
+    let url = '/api/user/follow';
+    let data = {user, follow};
+    let res = await $.ajax({url, data, type: 'POST'});
+    if (res.res === 1) {
+      this.setFollowing(follow, true);
+      this.props.handleSnackbarOpen(`${follow} is added to your following list :-D`);
+      return true;
+    }
+    return false;
+  }
+
+  async handleUnfollow(follow) {
+    let user = this.state.user;
+    let url = '/api/user/unfollow';
+    let data = {user, follow};
+    let res = await $.ajax({url, data, type: 'POST'});
+    if (res.res === 1) {
+      this.setFollowing(follow, false);
+      this.props.handleSnackbarOpen(`${follow} is removed from your following list :-)`);
+      return true;
+    }
+    return false;
+  }
+
+  setFollowing(follow, isFollowing) {
+    let list = this.state.userList.slice();
+    list.forEach((user) => {
+      if (user.login === follow) {
+        user.isFollowing = isFollowing;
+      }
+    });
+    this.setState({userList: list});
+  }
+
   render() {
     console.log('render FollowPage');
     return (
@@ -125,6 +161,8 @@ class FollowPage extends Component {
                 data={this.state.userList}
                 loadingText={this.state.current === 'Following' ? 'Loading users you are following...' : 'Loading users following you...'}
                 emptyText={this.state.current === 'Following' ? 'You are following no one' : 'No one is following you'}
+                handleFollow={this.handleFollow.bind(this)}
+                handleUnfollow={this.handleUnfollow.bind(this)}
               />
             </div>
           </div>
