@@ -166,9 +166,10 @@ class SearchPage extends Component {
 
   async handleUnstar(repo) {
     let user = this.state.user;
-    let url = `/api/repo/unstar?user=${user}&repo=${repo}`;
-    let data = await $.ajax(url);
-    if (data.res === 1) {
+    let data = {user, repo};
+    let url = '/api/repo/unstar';
+    let res = await $.ajax({url, data, type: 'POST'});
+    if (res.res === 1) {
       this.setStarSet(repo);
       this.props.handleSnackbarOpen(`${repo} is removed from your stars :-)`);
       return true;

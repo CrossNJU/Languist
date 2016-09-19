@@ -143,11 +143,16 @@ class HomePage extends Component {
   }
 
   handleUnlike(param) {
-    let url = `/api/rec/evaluate?login=${this.state.user}&name=${param.name}&type=${param.type}`;
-    console.log('UNLIKE', url);
-    $.ajax(url)
+    let url = '/api/rec/evaluate';
+    let data = {
+      login: this.state.user,
+      name: param.name,
+      type: param.type
+    }
+    // console.log('UNLIKE', data);
+    $.ajax({url, data, type:'POST'})
     .done(((data) => {
-      console.log('UNLIKE', data);
+      // console.log('UNLIKE', data);
       if (data.res === 1) {
         this.hideFlowItem(param);
         this.props.handleSnackbarOpen('Marked ' + param.name + ' as NOT INTERESTED');
@@ -194,9 +199,10 @@ class HomePage extends Component {
 
   async handleFollow(follow) {
     let user = this.state.user;
-    let url = `/api/user/follow?user=${user}&follow=${follow}`;
-    let data = await $.ajax(url);
-    if (data.res === 1) {
+    let url = '/api/user/follow';
+    let data = {user, follow};
+    let res = await $.ajax({url, data, type: 'POST'});
+    if (res.res === 1) {
       this.setFollowing(follow, true);
       this.props.handleSnackbarOpen(`${follow} is added to your following list :-D`);
       return true;
@@ -206,9 +212,10 @@ class HomePage extends Component {
 
   async handleUnfollow(follow) {
     let user = this.state.user;
-    let url = `/api/user/unfollow?user=${user}&follow=${follow}`;
-    let data = await $.ajax(url);
-    if (data.res === 1) {
+    let url = '/api/user/unfollow';
+    let data = {user, follow};
+    let res = await $.ajax({url, data, type: 'POST'});
+    if (res.res === 1) {
       this.setFollowing(follow, false);
       this.props.handleSnackbarOpen(`${follow} is removed from your following list :-)`);
       return true;
@@ -218,9 +225,10 @@ class HomePage extends Component {
 
   async handleUnstar(repo) {
     let user = this.state.user;
-    let url = `/api/repo/unstar?user=${user}&repo=${repo}`;
-    let data = await $.ajax(url);
-    if (data.res === 1) {
+    let data = {user, repo};
+    let url = '/api/repo/unstar';
+    let res = await $.ajax({url, data, type: 'POST'});
+    if (res.res === 1) {
       this.setStarSet(repo);
       this.props.handleSnackbarOpen(`${repo} is removed from your stars :-)`);
       return true;

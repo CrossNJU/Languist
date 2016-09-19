@@ -133,7 +133,7 @@ class App extends Component {
 
   handleLogout() {
     console.log('LOGOUT');
-    $.ajax('/api/logout')
+    $.ajax({url: '/api/logout', type: 'POST'})
     .done(((res) => {
       // console.log(res);
       window.location.href = '/login';
