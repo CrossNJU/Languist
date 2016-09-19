@@ -473,15 +473,33 @@ function updateInitialInfo(login) {
   getUserStarred(login, 1, [], true, -1, (stars) => {
     //console.log(stars);
     let repo_set = [{set_name: 'Ungrouped', set_repos: stars}];
-    userSchema.update({login: login}, {$set: {star_repos: stars, repo_sets: repo_set}}, (err, res) => {
-      console.log('update system user star repos!');
-      //console.log(res);
-      for (let i = 0; i < stars.length; i++) {
-        upsertRepo(stars[i], () => {
-          //console.log('new user: ' + stars[i])
-        });
+    userSchema.findOne({login: login}, (err, user) => {
+      let repo_set = user.repo_sets;
+      let ungroup_set = [];
+      for (let j=0;j<repo_set.length;j++) {
+        if (repo_set[j].set_name == 'Ungrouped') ungroup_set = repo_set[j].set_repos;
       }
-    })
+      for (let i=0;i<stars.length;i++){
+        let new_repo = stars[i];
+        let is_find = false;
+        for (let j=0;j<repo_set.length;j++){
+          if (repo_set[j].set_repos.findIndex(k => k == new_repo) >= 0) is_find = true;
+        }
+        if (!is_find) ungroup_set.push(new_repo);
+      }
+      for (let j=0;j<repo_set.length;j++){
+        if (repo_set[j].set_name == 'Ungrouped') repo_set[j].set_repos = ungroup_set;
+      }
+      userSchema.update({login: login}, {$set: {star_repos: stars, repo_sets: repo_set}}, (err, res) => {
+        console.log('update system user star repos!');
+        //console.log(res);
+        for (let i = 0; i < stars.length; i++) {
+          upsertRepo(stars[i], () => {
+            //console.log('new user: ' + stars[i])
+          });
+        }
+      })
+    });
   })
 }
 
