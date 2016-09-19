@@ -177,6 +177,15 @@ class SearchPage extends Component {
     return false;
   }
 
+  setStarSet(repo) {
+    this.state.repoList.forEach((data)=> {
+      if(data.full_name === repo) {
+        data.set = '';
+      }
+    });
+    this.setState({repoList: this.state.repoList});
+  }
+
   renderContainer() {
 
     if (this.state.hasResult) {

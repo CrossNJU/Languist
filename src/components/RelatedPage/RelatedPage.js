@@ -148,9 +148,38 @@ class RelatedPage extends Component {
           repo.set = set;
         }
       });
+      if(this.state.repo.full_name == this.state.currentStar) {
+        this.state.repo.set = set;
+      }
       newState.repoList = this.state.repoList;
+      newState.repo = this.state.repo;
     }
     this.setState(newState);
+  }
+
+  async handleUnstar(repo) {
+    let user = this.state.user;
+    let data = {user, repo};
+    let url = '/api/repo/unstar';
+    let res = await $.ajax({url, data, type: 'POST'});
+    if (res.res === 1) {
+      this.setStarSet(repo);
+      this.props.handleSnackbarOpen(`${repo} is removed from your stars :-)`);
+      return true;
+    }
+    return false;
+  }
+
+  setStarSet(repo) {
+    this.state.repoList.forEach((data)=> {
+      if(data.full_name === repo) {
+        data.set = '';
+      }
+    });
+    if(this.state.repo.full_name == repo) {
+      this.state.repo.set = '';
+    }
+    this.setState({repoList: this.state.repoList, repo: this.state.repo});
   }
 
   render() {
@@ -161,12 +190,13 @@ class RelatedPage extends Component {
         <div className={s.root}>
           <div className={s.container}>
             <div className={s.sidebar}>
-              <RepoFlowItem repo={this.state.repo} single={true} handleStar={this.handleOpenStarDialog.bind(this)}/>
+              <RepoFlowItem repo={this.state.repo} single={true} handleStar={this.handleOpenStarDialog.bind(this)} handleUnstar={this.handleUnstar.bind(this)}/>
             </div>
             <div className={s.main}>
               <RepoList
                 data={this.state.repoList}
                 handleStar={this.handleOpenStarDialog.bind(this)}
+                handleUnstar={this.handleUnstar.bind(this)}
                 loadingText="Loading related repositories"
                 emptyText="No related repository"
               />
