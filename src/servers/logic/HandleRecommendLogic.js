@@ -9,7 +9,7 @@ import {languageSchema} from '../../models/languageSchema';
 import {transTime} from '../util/timeUtil'
 import {get_rec_languages,get_rec_languages_by_repos} from './RecommendLogic_languages'
 import {get_rec_repos,get_related_rec_repos,get_rec_repos_by_also_star} from './RecommendLogic_repos'
-import {get_rec_users,get_rec_users_by_star_contributor,get_rec_users_when_zero} from './RecommendLogic_users'
+import {get_rec_users,get_rec_users_by_star_contributor,get_rec_users_when_zero,get_rec_users_by_language,get_rec_users_by_following_repo} from './RecommendLogic_users'
 import {connect} from '../config'
 import {record_log} from '../service/LogService'
 import {upsertRepo, upsertUser, updateInitialInfo} from './UpdateWhenLogin'
@@ -198,8 +198,14 @@ async function fetchData(userName, callback) {
   // console.log(repos.length);
   // let repos = await get_rec_repos_by_also_star(userName,100);
   console.log('after fetch rec repo data!');
-  // let users = await get_rec_users(userName, 1, 1, 1);
-  let users = await get_rec_users_by_star_contributor(userName,100);
+  let users = await get_rec_users_by_language(userName,100);
+  console.log('don111');
+  users = await get_rec_repos_by_also_star(userName,100);
+  console.log('don222');
+  users = await get_rec_users_by_star_contributor(userName,100);
+  console.log('don333');
+  users = await get_rec_users(userName, 1, 1, 1);
+  console.log('don444');
   if (users == [] || users == null)
     users = await get_rec_users_when_zero(userName);
   console.log('after fetch rec user data!');
