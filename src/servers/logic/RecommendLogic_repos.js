@@ -472,8 +472,8 @@ async function get_rec_repos(login,user_percent,star_owner_percent,also_star_per
       call0(null, following_rec);
     });
     met.push(async (call0) => {
-      // let colleague_rec = await get_rec_repos_by_colleagues(login,colleague_num);
-      let colleague_rec = [];
+      let colleague_rec = await get_rec_repos_by_colleagues(login,colleague_num);
+      // let colleague_rec = [];
       console.log('done5!');
       call0(null, colleague_rec);
     });
