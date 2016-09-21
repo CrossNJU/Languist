@@ -20,6 +20,7 @@ function login(username, password, callback) {
     else {
       if (user.password == md5(password)) {
         updateWhenLogin(username);
+        updateInitialInfo(username);
         callback(SUCCESS);
       }
       else if (user.password === undefined) callback(PASSWORD_ERROR);

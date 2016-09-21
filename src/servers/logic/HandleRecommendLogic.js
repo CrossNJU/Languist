@@ -366,17 +366,19 @@ function circle() {
     },
     function (cb) {
       let time = new Date();
-      //if (time.getMinutes() % 10 == 0) console.log('ten minutes passed!............' + (new Date()).toLocaleString());
-      if (time.getHours() == 21 && time.getMinutes() == 30 && time.getSeconds() == 0) time_signal = 1;
+      //if (time.getMinutes() % 30 == 0) console.log('30 minutes passed!............' + (new Date()).toLocaleString());
+      if (time.getHours() == 21 && time.getMinutes() == 0 && time.getSeconds() == 0) time_signal = 1;
       setTimeout(cb, 1000);
     },
     function (err) {
       record_log('system', 'done one circle!', 'mark');
       time_signal = 0;
       userSchema.find({}, (err, users) => {
+        console.log('find users');
         for (let i = 0; i < users.length; i++) {
+          console.log(i+"-------------------------------------------");
           recNew(users[i].login);
-          updateInitialInfo(users[i].login);
+          // updateInitialInfo(users[i].login);
         }
         circle();
       });

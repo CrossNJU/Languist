@@ -38,8 +38,9 @@ function getUserInfo(login, callback){
 export {getAllUserInfo, getUserInfo}
 
 //connect();
-//my_userSchema.find({starred_count:{$gt: 100}, followers_count:{$gt: 100} }, (err, users)=>{
+//my_userSchema.find({starred_count:{$gt: 20, $lt: 50} }, (err, users)=>{
 //  let ans = [];
+//  let ans_out = '[';
 //  let c = 0;
 //  for (let i=0;i<users.length;i++){
 //    if (users[i].email != 'Unknown' && users[i].email != null && c<20){
@@ -50,8 +51,10 @@ export {getAllUserInfo, getUserInfo}
 //        following: users[i].followings_count,
 //        follower: users[i].followers_count,
 //        star: users[i].starred_count
-//      })
+//      });
+//      ans_out = ans_out + users[i].email + ';';
 //    }
 //  }
-//  console.log(ans);
+//  ans_out = ans_out + ']';
+//  console.log(ans_out);
 //});

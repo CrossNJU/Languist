@@ -9,6 +9,7 @@ import {getUserInfo, getUserStarred, getPublicRepos, addAnewUser, getFollowings,
 import {getRepoInfo, getRepoLanguages, getContributors, getStarredUsers, addNewRepo} from '../api/github_repo'
 import {setSignal} from '../config'
 import {record_log} from '../service/LogService'
+import {connect} from '../config'
 
 var async = require("async");
 var get_size = 12;
@@ -472,7 +473,6 @@ function updateInitialInfo(login) {
   });
   getUserStarred(login, 1, [], true, -1, (stars) => {
     //console.log(stars);
-    let repo_set = [{set_name: 'Ungrouped', set_repos: stars}];
     userSchema.findOne({login: login}, (err, user) => {
       let repo_set = user.repo_sets;
       let ungroup_set = [];
@@ -511,5 +511,5 @@ export {updateWhenLogin, upsertRepo, upsertUser, updateRepoCons, updateRepoStar,
 //    console.log('okkkk');
 //  });
 //});
-
+//connect();
 //updateInitialInfo('RickChem');
