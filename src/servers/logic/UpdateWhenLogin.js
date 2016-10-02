@@ -2,18 +2,52 @@
  * Created by raychen on 16/9/5.
  */
 
-import {userSchema} from '../../models/userSchema'
-import {github_repoSchema} from '../../models/github_repoSchema'
-import {github_userSchema} from '../../models/github_userSchema'
-import {getUserInfo, getUserStarred, getPublicRepos, addAnewUser, getFollowings, addAnewGitHubUser, getJoinRepos, getFollowers} from '../api/github_user'
-import {getRepoInfo, getRepoLanguages, getContributors, getStarredUsers, addNewRepo} from '../api/github_repo'
-import {setSignal} from '../config'
-import {record_log} from '../service/LogService'
-import {connect} from '../config'
+import {
+  userSchema
+} from '../../models/userSchema'
+import {
+  github_repoSchema
+} from '../../models/github_repoSchema'
+import {
+  github_userSchema
+} from '../../models/github_userSchema'
+import {
+  getUserInfo,
+  getUserStarred,
+  getPublicRepos,
+  addAnewUser,
+  getFollowings,
+  addAnewGitHubUser,
+  getJoinRepos,
+  getFollowers
+} from '../api/github_user'
+import {
+  getRepoInfo,
+  getRepoLanguages,
+  getContributors,
+  getStarredUsers,
+  addNewRepo
+} from '../api/github_repo'
+import {
+  setSignal,
+  setSignal_init
+} from '../config'
+import {
+  record_log
+} from '../service/LogService'
+import {
+  connect
+} from '../config'
 
 var async = require("async");
 var get_size = 12;
-var run1 = true, run2 = true, run3 = false, run4 = true, run5 = true, run6 = false, run7 = true;
+var run1 = true,
+  run2 = true,
+  run3 = false,
+  run4 = true,
+  run5 = true,
+  run6 = false,
+  run7 = true;
 
 /*-------------------- update part -------------------------- */
 
@@ -24,11 +58,16 @@ function getLoginFromContributors(array) {
   }
   return ret;
 }
+
 function updateRepoCons(fullname, callback) {
-  github_repoSchema.findOne({full_name: fullname}, (err, repo) => {
+  github_repoSchema.findOne({
+    full_name: fullname
+  }, (err, repo) => {
     if (repo.contributors.length == 0) {
       getContributors(fullname, 1, [], get_size, (ret2) => {
-        var conditions2 = {full_name: fullname};
+        var conditions2 = {
+          full_name: fullname
+        };
         var update2 = {
           $set: {
             contributors_count: ret2.length,
@@ -46,10 +85,14 @@ function updateRepoCons(fullname, callback) {
 }
 
 function updateRepoStar(fullname, callback) {
-  github_repoSchema.findOne({full_name: fullname}, (err, repo) => {
+  github_repoSchema.findOne({
+    full_name: fullname
+  }, (err, repo) => {
     if (repo.starers.length == 0) {
       getStarredUsers(fullname, 1, [], get_size, (ret2) => {
-        var conditions2 = {full_name: fullname};
+        var conditions2 = {
+          full_name: fullname
+        };
         var update2 = {
           $set: {
             starers: ret2
@@ -66,11 +109,15 @@ function updateRepoStar(fullname, callback) {
 }
 
 function updateUserStars(login, is_insert, callback) {
-  github_userSchema.findOne({login: login}, (err, user) => {
+  github_userSchema.findOne({
+    login: login
+  }, (err, user) => {
     //console.log(login);
     if (user.star_repos.length == 0) {
       getUserStarred(login, 1, [], is_insert, get_size, (ret) => {
-        var conditions = {login: login};
+        var conditions = {
+          login: login
+        };
         var update = {
           $set: {
             star_num: ret.length,
@@ -88,10 +135,14 @@ function updateUserStars(login, is_insert, callback) {
 }
 
 function updateUserRepos(login, is_insert, callback) {
-  github_userSchema.findOne({login: login}, (err, user) => {
+  github_userSchema.findOne({
+    login: login
+  }, (err, user) => {
     if (user.repos.length == 0) {
       getPublicRepos(login, 1, [], is_insert, get_size, (ret) => {
-        var conditions = {login: login};
+        var conditions = {
+          login: login
+        };
         var update = {
           $set: {
             repos: ret
@@ -108,10 +159,14 @@ function updateUserRepos(login, is_insert, callback) {
 }
 
 function updateUserFollowing(login, callback) {
-  github_userSchema.findOne({login: login}, (err, user) => {
+  github_userSchema.findOne({
+    login: login
+  }, (err, user) => {
     if (user.followings_login.length == 0) {
       getFollowings(login, 1, [], get_size, (ret) => {
-        var conditions = {login: login};
+        var conditions = {
+          login: login
+        };
         var update = {
           $set: {
             followings_login: ret
@@ -128,10 +183,14 @@ function updateUserFollowing(login, callback) {
 }
 
 function updateUserJoinRepo(login, is_insert, callback) {
-  github_userSchema.findOne({login: login}, (err, user) => {
+  github_userSchema.findOne({
+    login: login
+  }, (err, user) => {
     if (user.joinRepos.length == 0) {
       getJoinRepos(login, 1, [], is_insert, get_size, (ret) => {
-        var conditions = {login: login};
+        var conditions = {
+          login: login
+        };
         var update = {
           $set: {
             joinRepos: ret,
@@ -151,7 +210,9 @@ function updateUserJoinRepo(login, is_insert, callback) {
 /*-------------------- insert part -------------------------- */
 
 function upsertRepo(ret, callback) {
-  github_repoSchema.findOne({full_name: ret}, (err, check)=> {
+  github_repoSchema.findOne({
+    full_name: ret
+  }, (err, check) => {
     if (check == null) {
       getRepoInfo(ret, info => {
         //console.log('from api to add repo:' + ret);
@@ -168,7 +229,9 @@ function upsertRepo(ret, callback) {
 }
 
 function upsertUser(ret, callback) {
-  github_userSchema.findOne({login: ret}, (err, check) => {
+  github_userSchema.findOne({
+    login: ret
+  }, (err, check) => {
     if (check == null) {
       getUserInfo(ret, info => {
         //console.log('from api to add user:' + ret);
@@ -200,7 +263,9 @@ function updateWhenLogin(login) {
             let met2 = [];
             if (run1) {
               met2.push((call2 => {
-                github_repoSchema.findOne({full_name: ret[i]}, (err, single) => {
+                github_repoSchema.findOne({
+                  full_name: ret[i]
+                }, (err, single) => {
                   upsertUser(single.owner, () => {
                     updateUserRepos(single.owner, true, (ret3) => {
                       let met3 = [];
@@ -394,7 +459,7 @@ function updateWhenLogin(login) {
                         let met3 = [];
                         for (let k = 0; k < ret3.length; k++) {
                           met3.push((call3) => {
-                            upsertUser(ret3[k], ()=> {
+                            upsertUser(ret3[k], () => {
                               //console.log('done from USER following: ' + ret[i] + ' to its repo: ' + ret2[j] + ' to its contributor: ' + ret3[k] + '!');
                               call3(null, 'done 3!');
                             })
@@ -440,70 +505,118 @@ function updateWhenLogin(login) {
   });
 
   async.parallel(met0, (err, res) => {
-    console.log(res+'done update when login');
-    record_log('system', 'update user: '+login+' when login done!', 'done');
+    console.log(res + 'done update when login');
+    record_log('system', 'update user: ' + login + ' when login done!', 'done');
     setSignal(1);
   })
 }
 
 function updateInitialInfo(login) {
-  getFollowers(login, 1, [], -1, (followers) => {
-    //console.log(followers);
-    userSchema.update({login: login}, {$set: {followers: followers}}, (err, res) => {
-      console.log('update system user followers!');
-      //console.log(res);
-      for (let i = 0; i < followers.length; i++) {
-        upsertUser(followers[i], () => {
-          //console.log('new user: ' + followers[i])
-        });
-      }
-    })
-  });
-  getFollowings(login, 1, [], -1, (followings) => {
-    //console.log(followings);
-    userSchema.update({login: login}, {$set: {followings: followings}}, (err, res) => {
-      console.log('update system user followings!');
-      //console.log(res);
-      for (let i = 0; i < followings.length; i++) {
-        upsertUser(followings[i], () => {
-          //console.log('new user: ' + followings[i])
-        });
-      }
-    })
-  });
-  getUserStarred(login, 1, [], true, -1, (stars) => {
-    //console.log(stars);
-    userSchema.findOne({login: login}, (err, user) => {
-      let repo_set = user.repo_sets;
-      let ungroup_set = [];
-      for (let j=0;j<repo_set.length;j++) {
-        if (repo_set[j].set_name == 'Ungrouped') ungroup_set = repo_set[j].set_repos;
-      }
-      for (let i=0;i<stars.length;i++){
-        let new_repo = stars[i];
-        let is_find = false;
-        for (let j=0;j<repo_set.length;j++){
-          if (repo_set[j].set_repos.findIndex(k => k == new_repo) >= 0) is_find = true;
+  let met = [];
+  setSignal_init(0);
+  met.push((call0) => {
+    getFollowers(login, 1, [], -1, (followers) => {
+      //console.log(followers);
+      userSchema.update({
+        login: login
+      }, {
+        $set: {
+          followers: followers
         }
-        if (!is_find) ungroup_set.push(new_repo);
-      }
-      for (let j=0;j<repo_set.length;j++){
-        if (repo_set[j].set_name == 'Ungrouped') repo_set[j].set_repos = ungroup_set;
-      }
-      userSchema.update({login: login}, {$set: {star_repos: stars, repo_sets: repo_set}}, (err, res) => {
-        console.log('update system user star repos!');
+      }, (err, res) => {
+        console.log('update system user followers!');
+        call0(null, 'done for get followers!');
         //console.log(res);
-        for (let i = 0; i < stars.length; i++) {
-          upsertRepo(stars[i], () => {
-            //console.log('new user: ' + stars[i])
+        for (let i = 0; i < followers.length; i++) {
+          upsertUser(followers[i], () => {
+            //console.log('new user: ' + followers[i])
           });
         }
       })
     });
+  });
+  met.push((call0) => {
+    getFollowings(login, 1, [], -1, (followings) => {
+      //console.log(followings);
+      userSchema.update({
+        login: login
+      }, {
+        $set: {
+          followings: followings
+        }
+      }, (err, res) => {
+        console.log('update system user followings!');
+        call0(null, 'done for get followings!');
+        //console.log(res);
+        for (let i = 0; i < followings.length; i++) {
+          upsertUser(followings[i], () => {
+            //console.log('new user: ' + followings[i])
+          });
+        }
+      })
+    });
+  });
+  met.push((call0) => {
+    getUserStarred(login, 1, [], true, -1, (stars) => {
+      //console.log(stars);
+      userSchema.findOne({
+        login: login
+      }, (err, user) => {
+        let repo_set = user.repo_sets;
+        let ungroup_set = [];
+        for (let j = 0; j < repo_set.length; j++) {
+          if (repo_set[j].set_name == 'Ungrouped') ungroup_set = repo_set[j].set_repos;
+        }
+        for (let i = 0; i < stars.length; i++) {
+          let new_repo = stars[i];
+          let is_find = false;
+          for (let j = 0; j < repo_set.length; j++) {
+            if (repo_set[j].set_repos.findIndex(k => k == new_repo) >= 0) is_find = true;
+          }
+          if (!is_find) ungroup_set.push(new_repo);
+        }
+        for (let j = 0; j < repo_set.length; j++) {
+          if (repo_set[j].set_name == 'Ungrouped') repo_set[j].set_repos = ungroup_set;
+        }
+        userSchema.update({
+          login: login
+        }, {
+          $set: {
+            star_repos: stars,
+            repo_sets: repo_set
+          }
+        }, (err, res) => {
+          console.log('update system user star repos!');
+          call0(null, 'done for get stars!');
+          //console.log(res);
+          for (let i = 0; i < stars.length; i++) {
+            upsertRepo(stars[i], () => {
+              //console.log('new user: ' + stars[i])
+            });
+          }
+        })
+      });
+    })
+  });
+  async.parallel(met, (err, res) => {
+    console.log(res + 'done init data');
+    record_log('system', 'init user data: ' + login, 'done');
+    setSignal_init(1);
   })
 }
 
-export {updateWhenLogin, upsertRepo, upsertUser, updateRepoCons, updateRepoStar, updateUserFollowing, updateUserRepos, updateUserStars, updateUserJoinRepo, updateInitialInfo}
+export {
+  updateWhenLogin,
+  upsertRepo,
+  upsertUser,
+  updateRepoCons,
+  updateRepoStar,
+  updateUserFollowing,
+  updateUserRepos,
+  updateUserStars,
+  updateUserJoinRepo,
+  updateInitialInfo
+}
 
 //let test_login = 'ChenDanni';
 //upsertUser(test_login, () => {

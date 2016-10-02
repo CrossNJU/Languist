@@ -2,25 +2,58 @@
  * Created by raychen on 16/9/6.
  */
 
-import {userSchema} from '../../models/userSchema'
-import {github_repoSchema} from '../../models/github_repoSchema';
-import {github_userSchema} from '../../models/github_userSchema'
-import {languageSchema} from '../../models/languageSchema';
-import {transTime} from '../util/timeUtil'
-import {get_rec_languages,get_rec_languages_by_repos} from './RecommendLogic_languages'
-import {get_rec_repos,get_related_rec_repos,get_rec_repos_by_also_star} from './RecommendLogic_repos'
-import {get_rec_users,get_rec_users_by_star_contributor,get_rec_users_when_zero,get_rec_users_by_language,get_rec_users_by_following_repo} from './RecommendLogic_users'
-import {connect} from '../config'
-import {record_log} from '../service/LogService'
-import {upsertRepo, upsertUser, updateInitialInfo} from './UpdateWhenLogin'
+import {
+  userSchema
+} from '../../models/userSchema'
+import {
+  github_repoSchema
+} from '../../models/github_repoSchema';
+import {
+  github_userSchema
+} from '../../models/github_userSchema'
+import {
+  languageSchema
+} from '../../models/languageSchema';
+import {
+  transTime
+} from '../util/timeUtil'
+import {
+  get_rec_languages,
+  get_rec_languages_by_repos
+} from './RecommendLogic_languages'
+import {
+  get_rec_repos,
+  get_related_rec_repos,
+  get_rec_repos_by_also_star
+} from './RecommendLogic_repos'
+import {
+  get_rec_users,
+  get_rec_users_by_star_contributor,
+  get_rec_users_when_zero,
+  get_rec_users_by_language,
+  get_rec_users_by_following_repo
+} from './RecommendLogic_users'
+import {
+  connect
+} from '../config'
+import {
+  record_log
+} from '../service/LogService'
+import {
+  upsertRepo,
+  upsertUser,
+  updateInitialInfo
+} from './UpdateWhenLogin'
 
 var async = require("async");
-var time_signal = 0;
+var set_hour = 5;
+var set_min = 0;
 
 //---------------------------  common function to get random index  --------------------------------------------------
 function getRandomIndex(array_len, len) {
   if (len > array_len) return [];
-  let index = [], ret = [];
+  let index = [],
+    ret = [];
   for (let i = 0; i < array_len; i++) index[i] = i;
   while (ret.length < len) {
     let r = parseInt(Math.random() * index.length);
@@ -79,7 +112,9 @@ async function fakeLangs(number) {
 //---------------------------  get detail infomation of (repo,user,lang)  --------------------------------------------------
 function getALanguage(lang) {
   return new Promise(function (resolve, reject) {
-    languageSchema.findOne({language: lang}, (err, lang_single) => {
+    languageSchema.findOne({
+      language: lang
+    }, (err, lang_single) => {
       if (err) reject(err);
       let ret = {
         type: 'lang',
@@ -93,15 +128,16 @@ function getALanguage(lang) {
 
 function getARepo(repo) {
   return new Promise(function (resolve, reject) {
-    github_repoSchema.findOne({full_name: repo}, (err, repo_single) => {
+    github_repoSchema.findOne({
+      full_name: repo
+    }, (err, repo_single) => {
       if (err) reject(err);
       //console.log('repo:' + repo);
       if (repo_single == null) {
         upsertRepo(repo, () => {
           resolve(getARepo(repo));
         });
-      }
-      else {
+      } else {
         let ret = {
           type: 'repo',
           avatarUrl: repo_single.owner_avatar_url,
@@ -121,7 +157,9 @@ function getARepo(repo) {
 
 function getAUser(user) {
   return new Promise(function (resolve, reject) {
-    userSchema.findOne({login: user}, (err, user_single) => {
+    userSchema.findOne({
+      login: user
+    }, (err, user_single) => {
       //console.log('user:' + user);
       if (err) reject(err);
       let lang_user = [];
@@ -130,7 +168,9 @@ function getAUser(user) {
           lang_user.push(lang_single.lang_name);
         }
       }
-      github_userSchema.findOne({login: user}, (err, github_user) => {
+      github_userSchema.findOne({
+        login: user
+      }, (err, github_user) => {
         //console.log(user);
         if (github_user == null) {
           upsertUser(user, () => {
@@ -158,24 +198,29 @@ function getAUser(user) {
 
 //---------------------------  random conbine (repo,user,lang)'s name --------------------------------------------------
 function combine(repos, users, langs, lang_num) {
-  //console.log('combine:');
-  //console.log(repos.length + ' ' + users.length + ' ' + langs.length);
-  let ans = [], index = [];
+  let ans = [],
+    index = [];
   for (let i = 0; i < 20; i++) index[i] = i;
   while (index.length > 0) {
-    //console.log(index);
     let r = parseInt(Math.random() * index.length);
-    //console.log(lang_num);
-    //console.log(index[r]-lang_num-5);
     if (index[r] < lang_num) {
       let single = langs[index[r]];
-      ans.push({m_name: single, m_type: 2});
+      ans.push({
+        m_name: single,
+        m_type: 2
+      });
     } else if (index[r] < lang_num + 5) {
       let single = users[index[r] - lang_num];
-      ans.push({m_name: single, m_type: 0});
+      ans.push({
+        m_name: single,
+        m_type: 0
+      });
     } else {
       let single = repos[index[r] - lang_num - 5];
-      ans.push({m_name: single, m_type: 1});
+      ans.push({
+        m_name: single,
+        m_type: 1
+      });
     }
     index.splice(r, 1);
   }
@@ -194,25 +239,15 @@ function getInterval(time_bef) {
 async function fetchData(userName, callback) {
   record_log('system', 'fetch recommend data for: ' + userName, 'add');
   let repos = await get_rec_repos(userName, 1, 1, 1, 1, 1);
-  // console.log('-------------------------------------------------------------');
-  // console.log(repos.length);
-  // let repos = await get_rec_repos_by_also_star(userName,100);
-  console.log('after fetch rec repo data!');
-  // let users = await get_rec_users_by_language(userName,100);
-  // console.log('don111');
-  // users = await get_rec_repos_by_also_star(userName,100);
-  // console.log('don222');
-  let users = await get_rec_users_by_star_contributor(userName,100);
-  // console.log('don333');
-  // users = await get_rec_users(userName, 1, 1, 1);
-  console.log('don444');
+  // console.log('after fetch rec repo data!');
+  let users = await get_rec_users_by_star_contributor(userName, 100);
+  // console.log('don444');
   if (users == [] || users == null)
     users = await get_rec_users_when_zero(userName);
-  console.log('after fetch rec user data!');
+  // console.log('after fetch rec user data!');
   let langs = await get_rec_languages(userName, 1, 1, 1);
-  // let langs = await get_rec_languages_by_repos(userName,10);
-  console.log('after fetch rec data!');
-  console.log(repos.length + ' ' + users.length + ' ' + langs.length);
+  // console.log('after fetch rec data!');
+  // console.log(repos.length + ' ' + users.length + ' ' + langs.length);
   let rec = [];
   for (let i = 0; i < users.length; i++) {
     rec.push({
@@ -240,10 +275,9 @@ async function fetchData(userName, callback) {
       recommend: rec
     }
   };
-  //console.log(rec);
-  userSchema.update({login: userName}, update, (err, res) => {
-    //console.log('fetch again from algorithm');
-    //console.log(res);
+  userSchema.update({
+    login: userName
+  }, update, (err, res) => {
     callback(rec);
   })
 }
@@ -251,9 +285,11 @@ async function fetchData(userName, callback) {
 //---------------------------  switch data, not fetch again(unless all recommended)  --------------------------------------------------
 async function recNew(userName) {
   //console.log('rec new');
-  record_log('system', 'rec new for: '+ userName, 'mark');
+  record_log('system', 'rec new for: ' + userName, 'mark');
   let cur_user = await new Promise(function (resolve, reject) {
-    userSchema.findOne({login: userName}, (err, user) => {
+    userSchema.findOne({
+      login: userName
+    }, (err, user) => {
       if (err) reject(err);
       else if (user == null) reject('null');
       else resolve(user);
@@ -262,7 +298,12 @@ async function recNew(userName) {
   let cur_rec = cur_user.recommend;
   let dislike = cur_user.dislike;
 
-  let repo_rec = [], user_rec = [], lang_rec = [], repos = [], users = [], langs = [];
+  let repo_rec = [],
+    user_rec = [],
+    lang_rec = [],
+    repos = [],
+    users = [],
+    langs = [];
   for (let rec of cur_rec) {
     if (rec.m_date > 0) {
       if (rec.m_type == 0) user_rec.push(rec.m_name);
@@ -306,9 +347,6 @@ async function recNew(userName) {
       now.splice(index, 1);
     }
   }
-  //console.log('in rec new');
-  //console.log(repos);
-  //update
   for (let i = 0; i < cur_rec.length; i++) {
     if (cur_rec[i].m_date <= 0) {
       cur_rec[i].m_date -= 1;
@@ -323,10 +361,10 @@ async function recNew(userName) {
       now_recommend: now
     }
   };
-  let aw = await new Promise((resolve, reject) =>{
-    userSchema.update({login: userName}, update, (err, res) => {
-      //console.log('update recommend dates');
-      //console.log(res);
+  let aw = await new Promise((resolve, reject) => {
+    userSchema.update({
+      login: userName
+    }, update, (err, res) => {
       resolve(1);
     });
   });
@@ -337,7 +375,7 @@ async function recNew(userName) {
 async function getStart(userName) {
   record_log('system', 'get start to recommend in logic!', 'mark');
   let cur_rec = await new Promise(function (resolve, reject) {
-    fetchData(userName, async (ret) => {
+    fetchData(userName, async(ret) => {
       let array = await recNew(userName);
       resolve(array);
     })
@@ -348,7 +386,9 @@ async function getStart(userName) {
 //---------------------------  main function  --------------------------------------------------
 async function getNextDayRecommendData(userName) {
   let cur_user = await new Promise(function (resolve, reject) {
-    userSchema.findOne({login: userName}, (err, user) => {
+    userSchema.findOne({
+      login: userName
+    }, (err, user) => {
       if (err) reject(err);
       else if (user == null) reject('null');
       else resolve(user);
@@ -361,31 +401,39 @@ async function getNextDayRecommendData(userName) {
 }
 
 function circle() {
-  async.until(function () {
-      return time_signal > 0;
-    },
-    function (cb) {
-      let time = new Date();
-      //if (time.getMinutes() % 30 == 0) console.log('30 minutes passed!............' + (new Date()).toLocaleString());
-      if (time.getHours() == 21 && time.getMinutes() == 0 && time.getSeconds() == 0) time_signal = 1;
-      setTimeout(cb, 1000);
-    },
-    function (err) {
-      record_log('system', 'done one circle!', 'mark');
-      time_signal = 0;
-      userSchema.find({}, (err, users) => {
-        console.log('find users');
-        for (let i = 0; i < users.length; i++) {
-          console.log(i+"-------------------------------------------");
-          recNew(users[i].login);
-          // updateInitialInfo(users[i].login);
-        }
-        circle();
-      });
-    });
+  userSchema.find({}, async(err, users) => {
+    console.log('find users');
+    for (let i = 0; i < users.length; i++) {
+      console.log(i + "-------------------------------------------");
+      let w = await recNew(users[i].login);
+    }
+  });
 }
 
-export {getNextDayRecommendData, getARepo, getAUser, getDetail, getStart, circle}
+function timer(){
+  circle();
+  setInterval(circle, 24*60*60*1000);
+}
+
+function setATimer(){
+  let date = new Date();
+  let min = 60 - date.getMinutes() + set_min;
+  let hour = (set_hour + 23 - date.getHours()) % 24;
+  let timeInMin = (hour*60+min) % (24*60);
+  setTimeout(() => {
+    console.log('to circle');
+    timer();
+  }, timeInMin*60*1000);
+}
+
+export {
+  getNextDayRecommendData,
+  getARepo,
+  getAUser,
+  getDetail,
+  getStart,
+  setATimer
+}
 
 //fakeUsers(20);
 //fakeLangs(10);
@@ -412,9 +460,4 @@ export {getNextDayRecommendData, getARepo, getAUser, getDetail, getStart, circle
 //fetchData('ChenDanni', (ret) => {
 //  console.log(ret);
 //})
-//connect();
-//async function test(){
-//  let t = await recNew('RickChem');
-//  console.log('done');
-//}
-//test();
+

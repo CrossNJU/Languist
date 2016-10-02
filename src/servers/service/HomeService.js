@@ -6,11 +6,42 @@ import {github_userSchema} from '../../models/github_userSchema'
 import {userSchema} from '../../models/userSchema'
 import {connect} from '../config'
 import {getNextDayRecommendData, getStart} from '../logic/HandleRecommendLogic'
-import {getSignal, getUser} from '../config'
+import {getSignal, getUser, getSignal_init} from '../config'
 import {record_log} from '../service/LogService'
-import {updateWhenLogin} from '../logic/UpdateWhenLogin'
+import {updateWhenLogin, updateInitialInfo} from '../logic/UpdateWhenLogin'
 
 var async = require("async");
+
+function awaitUpdate_Rec() {
+  return new Promise((resolve, reject) => {
+    async.until(function () {
+        return getSignal() > 0;
+      },
+      function (cb) {
+        setTimeout(cb, 500);
+      },
+      function (err) {
+        record_log(getUser(), getUser() + ' updatewhenlogin done in recommend', 'mark');
+        if (err) reject(err);
+        resolve(1);
+      });
+  });
+}
+
+function awaitUpdate_init() {
+  return new Promise((resolve, reject) => {
+    async.until(function () {
+      return getSignal_init() > 0;
+    },
+    function (cb) {
+      setTimeout(cb, 500);
+    },
+    function (err) {
+      if (err) reject(err);
+      resolve(1);
+    });
+  });
+}
 
 export var getCoverData = (userName, callback) => {
   let data = {};
@@ -28,10 +59,11 @@ export var getCoverData = (userName, callback) => {
 export var getCountData = (userName, callback) => {
   let data = {};
   let condition = {login: userName};
-  userSchema.findOne(condition, (err, user) => {
+  userSchema.findOne(condition, async (err, user) => {
     if (err) {
       console.log('err occurs in home count data: ' + err.message);
     } else {
+      let w = await awaitUpdate_init();
       data.followingCount = user.followings.length;
       data.followersCount = user.followers.length;
       data.starredCount = user.star_repos.length;
@@ -54,31 +86,12 @@ export var getLangListData = (userName, callback) => {
   });
 };
 
-function awaitUpdate() {
-  return new Promise((resolve, reject) => {
-    async.until(function () {
-        return getSignal() > 0;
-      },
-      function (cb) {
-        // console.log('await update');
-        setTimeout(cb, 500);
-      },
-      function (err) {
-        // 4s have passed
-        record_log(getUser(), getUser() + ' updatewhenlogin done in recommend', 'mark');
-        //console.log(err); // -> undefined
-        if (err) reject(err);
-        resolve(1);
-      });
-  });
-}
-
 async function getFlowListData(userName, callback) {
   record_log(getUser(), getUser() + ' get updatewhenlogin signal: ' + getSignal(), 'query');
   record_log(getUser(), getUser() + ' to get recommend date in HomeService', 'query');
   let ans = await getNextDayRecommendData(userName);
   if (ans.length == 0) {
-    let t = await awaitUpdate();
+    let t = await awaitUpdate_Rec();
     let now = await getStart(userName);
     ans = await getNextDayRecommendData(userName);
     record_log(getUser(), getUser() + ' first get recommend data', 'mark');
@@ -90,7 +103,11 @@ async function getFlowListData(userName, callback) {
 
 export {getFlowListData}
 
-//connect();
+// connect();
+// updateInitialInfo('RickChem');
+// getCountData('RickChem', (ans) => {
+//   console.log(ans);
+// })
 //getFlowListData('RickChem', ret => {
 //  addInfoToList('RickChem', ret, true, () => {
 //    console.log(ret);

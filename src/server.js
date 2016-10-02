@@ -30,7 +30,7 @@ import {home, test_login} from './servers/test/testController';
 import {addTestApi, addAdministerApi} from './router_background'
 import {addLanguageAPI, addLoginAPI, addOtherAPI, addUserAPI, addRepoAPI} from './router'
 //circle
-import {circle} from './servers/logic/HandleRecommendLogic'
+import {setATimer} from './servers/logic/HandleRecommendLogic'
 
 var session = require('express-session');
 connect();
@@ -119,7 +119,8 @@ addRepoAPI(server);
 addUserAPI(server);
 addTestApi(server);
 addAdministerApi(server);
-circle();
+//circle();
+setATimer();
 
 //
 // Register server-side rendering middleware

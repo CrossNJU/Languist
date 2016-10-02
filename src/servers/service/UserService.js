@@ -134,10 +134,7 @@ function reloadUser(login, callback) {
       for (let i = 0; i < users.length; i++) {
         met0.push((call0) => {
           userSchema.update({login: users[i].login}, update, (err, res) => {
-            //console.log('reload user:'+users[i].login);
-            //console.log(res);
             updateWhenLogin(users[i].login);
-            //console.log('at');
             call0(null, 'update:' + users[i].login);
           })
         })
@@ -151,7 +148,7 @@ function reloadUser(login, callback) {
   } else {
     userSchema.update({login: login}, update, (err, res) => {
       record_log('system', 'reload user:' + login, 'later');
-      console.log(res + 'reload user');
+      //console.log(res + 'reload user');
       updateWhenLogin(login);
       callback();
     })
@@ -234,6 +231,9 @@ export {evaluateRecommend, getUserFollowings, getUserFollowers, getUserFollowing
 
 //getUserFollowingsAndFollowersNum()
 //connect();
+//reloadUser('RickChem', () => {
+//  console.log('ok');
+//});
 //evaluateRecommend('RickChem', 'lodash/lodash', 1);
 //getUserStarRepo('RickChem', (res) => {
 //  console.log(res);

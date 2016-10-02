@@ -7,6 +7,7 @@ import {github_userSchema} from '../../models/github_userSchema'
 import {github_repoSchema} from '../../models/github_repoSchema'
 import {my_userSchema} from '../../models/mysql-models/my_userSchema'
 import {connect} from '../config'
+import {sended_low, sended_mid, sended_high} from '../data.js'
 
 function getAllUserInfo(callback){
   let ans = [];
@@ -35,26 +36,56 @@ function getUserInfo(login, callback){
   });
 }
 
+function findSendEmailUsers(type, callback) {
+  let condition = {starred_count:{$gt: 20, $lt: 50} };
+  let dup = sended_mid;
+  let num = 20;
+  if (type == 1) {
+    condition = {starred_count: {$gt: 8, $lt: 20}};
+    dup = sended_low;
+    num = 100;
+  }else if (type == 3){
+    condition = {starred_count: {$gt: 100}, followers_count: {$gt: 100}};
+    dup = sended_high;
+    num = 15;
+  }
+  dup = dup.split(';');
+  my_userSchema.find(condition, (err, users)=>{
+   let ans = [];
+   let ans_out = '[';
+   let c = 0;
+   for (let i=0;i<users.length;i++){
+     if (users[i].email != 'Unknown' && users[i].email != null && c<num){
+       if (dup.findIndex(j => j == users[i].email) < 0) {
+         c++;
+         ans.push({
+           login: users[i].login,
+           email: users[i].email,
+           following: users[i].followings_count,
+           follower: users[i].followers_count,
+           star: users[i].starred_count
+         });
+         ans_out = ans_out + users[i].email + ';';
+       }
+     }
+   }
+   ans_out = ans_out + ']';
+   callback(ans_out);
+  });
+}
+
 export {getAllUserInfo, getUserInfo}
 
-//connect();
-//my_userSchema.find({starred_count:{$gt: 20, $lt: 50} }, (err, users)=>{
-//  let ans = [];
-//  let ans_out = '[';
-//  let c = 0;
-//  for (let i=0;i<users.length;i++){
-//    if (users[i].email != 'Unknown' && users[i].email != null && c<20){
-//      c++;
-//      ans.push({
-//        login: users[i].login,
-//        email: users[i].email,
-//        following: users[i].followings_count,
-//        follower: users[i].followers_count,
-//        star: users[i].starred_count
-//      });
-//      ans_out = ans_out + users[i].email + ';';
-//    }
-//  }
-//  ans_out = ans_out + ']';
-//  console.log(ans_out);
-//});
+// connect();
+// findSendEmailUsers(1, (ans) => {
+//   console.log(ans);
+// });
+// findSendEmailUsers(2, (ans) => {
+//   console.log(ans);
+// });
+// findSendEmailUsers(3, (ans) => {
+//   console.log(ans);
+// });
+// let test = sended_low;
+// test = test.split(';');
+// console.log(test);
