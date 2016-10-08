@@ -30,14 +30,13 @@ import {
 } from '../api/github_repo'
 import {
   setSignal,
-  setSignal_init
+  setSignal_init,
+  connect,
+  setSignal_login_wait
 } from '../config'
 import {
   record_log
 } from '../service/LogService'
-import {
-  connect
-} from '../config'
 
 var async = require("async");
 var get_size = 12;
@@ -506,6 +505,7 @@ function updateWhenLogin(login) {
 
   async.parallel(met0, (err, res) => {
     console.log(res + 'done update when login');
+    setSignal_login_wait(1);
     record_log('system', 'update user: ' + login + ' when login done!', 'done');
     setSignal(1);
   })

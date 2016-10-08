@@ -6,7 +6,7 @@ import {github_userSchema} from '../../models/github_userSchema'
 import {userSchema} from '../../models/userSchema'
 import {connect} from '../config'
 import {getNextDayRecommendData, getStart} from '../logic/HandleRecommendLogic'
-import {getSignal, getUser, getSignal_init} from '../config'
+import {getSignal, getUser, getSignal_init, setSignal_login_wait, getSignal_login_wait} from '../config'
 import {record_log} from '../service/LogService'
 import {updateWhenLogin, updateInitialInfo} from '../logic/UpdateWhenLogin'
 
@@ -56,14 +56,14 @@ export var getCoverData = (userName, callback) => {
   });
 };
 
-export var getCountData = (userName, callback) => {
+export var getCountData = async (userName, callback) => {
   let data = {};
   let condition = {login: userName};
-  userSchema.findOne(condition, async (err, user) => {
+  let w = await awaitUpdate_init();
+  userSchema.findOne(condition, (err, user) => {
     if (err) {
       console.log('err occurs in home count data: ' + err.message);
     } else {
-      let w = await awaitUpdate_init();
       data.followingCount = user.followings.length;
       data.followersCount = user.followers.length;
       data.starredCount = user.star_repos.length;
@@ -101,7 +101,17 @@ async function getFlowListData(userName, callback) {
   callback(ans);
 }
 
-export {getFlowListData}
+async function hasRecommendData(login, callback){
+  let ans = await getNextDayRecommendData(login);
+  if (ans.length == 0){
+    setSignal_login_wait(0);
+    callback(0);
+  } else {
+    callback(1);
+  }
+}
+
+export {getFlowListData, hasRecommendData}
 
 // connect();
 // updateInitialInfo('RickChem');
@@ -115,3 +125,6 @@ export {getFlowListData}
 //});
 
 //console.log((new Date()).getHours());
+//setInterval(() => {
+//  console.log('--------------:  '+ getSignal_login_wait());
+//}, 500);

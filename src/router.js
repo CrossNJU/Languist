@@ -7,7 +7,8 @@ import {
   SUCCESS,
   FAIL,
   getUser,
-  setUser
+  setUser,
+  getSignal_login_wait
 } from './servers/config'
 //services
 import {
@@ -19,7 +20,8 @@ import {
   getFlowListData,
   getCountData,
   getLangListData,
-  getCoverData
+  getCoverData,
+  hasRecommendData
 } from './servers/service/HomeService'
 import {
   addLang,
@@ -364,6 +366,27 @@ function addOtherAPI(server) {
     getCoverData(req.query.user, call => {
       record_log(getUser(), getUser() + ' get home cover info', 'query');
       res.send(call);
+    });
+  });
+  //has recommend data
+  server.get('/api/home/hasRecommend', (req, res) => {
+    hasRecommendData(req.query.user, call => {
+      //record_log(getUser(), getUser() + ' get home cover info', 'query');
+      if (call == 1) {
+        res.send({
+          res: SUCCESS
+        });
+      } else {
+        res.send({
+          res: FAIL
+        });
+      }
+    });
+  });
+  //wait to recommend
+  server.get('/api/home/waitNumber', (req, res) => {
+    res.send({
+      res: getSignal_login_wait()
     });
   });
 

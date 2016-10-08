@@ -6,7 +6,7 @@ import {userSchema} from '../../models/userSchema'
 import {addAnewUser, addAnewGitHubUser} from '../api/github_user'
 import {setClient} from '../api/github_conf'
 import {updateWhenLogin, updateInitialInfo} from '../logic/UpdateWhenLogin'
-import {SUCCESS, FAIL, PASSWORD_ERROR, NOT_FOUND, client_id, client_secret} from '../config'
+import {SUCCESS, FAIL, PASSWORD_ERROR, NOT_FOUND, client_id, client_secret, setSignal_login_wait} from '../config'
 var superagent = require('superagent');
 var md5 = require('js-md5');
 
@@ -82,6 +82,7 @@ export var saveUser = (code, callback) => {
           userSchema.findOne({login: json.login}, (err, user) => {
             if (user == null){
               addAnewUser(json.login, access_token, () => {
+                setSignal_login_wait(0);
                 updateInitialInfo(json.login);
               });
             } else {

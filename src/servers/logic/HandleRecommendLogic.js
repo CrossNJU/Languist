@@ -34,7 +34,8 @@ import {
   get_rec_users_by_following_repo
 } from './RecommendLogic_users'
 import {
-  connect
+  connect,
+  setSignal_login_wait
 } from '../config'
 import {
   record_log
@@ -240,12 +241,15 @@ async function fetchData(userName, callback) {
   record_log('system', 'fetch recommend data for: ' + userName, 'add');
   let repos = await get_rec_repos(userName, 1, 1, 1, 1, 1);
   // console.log('after fetch rec repo data!');
+  setSignal_login_wait(2);
   let users = await get_rec_users_by_star_contributor(userName, 100);
   // console.log('don444');
   if (users == [] || users == null)
     users = await get_rec_users_when_zero(userName);
   // console.log('after fetch rec user data!');
+  setSignal_login_wait(3);
   let langs = await get_rec_languages(userName, 1, 1, 1);
+  setSignal_login_wait(4);
   // console.log('after fetch rec data!');
   // console.log(repos.length + ' ' + users.length + ' ' + langs.length);
   let rec = [];
