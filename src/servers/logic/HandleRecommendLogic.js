@@ -46,7 +46,7 @@ import {
 } from './UpdateWhenLogin'
 
 var async = require("async");
-var set_hour = 5;
+var set_hour = 21;
 var set_min = 0;
 
 //---------------------------  common function to get random index  --------------------------------------------------

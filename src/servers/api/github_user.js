@@ -33,7 +33,7 @@ function getUserInfo(login, callback) {
 
 function getUserStarred(login, page, array, is_insert, numbers, callback) {
   client = getClient();
-  console.log('in get star');
+  //console.log('in get star');
   let per_page = number_per_page > numbers ? numbers : number_per_page;
   let next_per_page = numbers > number_per_page ? numbers - number_per_page : 0;
   if (numbers < 0) {
