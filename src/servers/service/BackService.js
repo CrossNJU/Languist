@@ -9,6 +9,11 @@ import {my_userSchema} from '../../models/mysql-models/my_userSchema'
 import {connect} from '../config'
 import {sended_low, sended_mid, sended_high} from '../data.js'
 
+import {updateInitialInfo, updateWhenLogin, upsertUser} from '../logic/UpdateWhenLogin'
+import {getFlowListData} from '../service/HomeService'
+import {addAnewUser} from '../api/github_user'
+var async = require("async");
+
 function getAllUserInfo(callback){
   let ans = [];
   userSchema.find({}, (err, users) => {
@@ -74,9 +79,54 @@ function findSendEmailUsers(type, callback) {
   });
 }
 
-export {getAllUserInfo, getUserInfo}
+function addUsers(number, callback) {
+  let condition = {starred_count: {$gt: 8, $lt: 20}};
+  my_userSchema.find(condition, {}, {limit: number}, (err, users) => {
+    var ans = [];
+    for (let user of users){
+      ans.push(user.login);
+    }
+    callback(ans);
+  });
+}
 
-// connect();
+async function insertRelated(users) {
+    for (let user of users) {
+      console.log(user);
+      let met = [];
+      met.push((call) => {
+        addAnewUser(user, "", () => {
+          updateInitialInfo(user);
+          call(null, 'done');
+        });
+      });
+      met.push((call) => {
+        upsertUser(user, () => {
+          updateWhenLogin(user);
+          call(null, 'done');
+        })
+      });
+      let end = await new Promise((resolve, reject) => {
+        userSchema.findOne({login: user}, (err, resa) => {
+          if (resa == null) {
+            async.parallel(met, async (err, res) => {
+              console.log(res);
+              getFlowListData(user, (ans) => {
+                resolve(ans.length);
+              });
+              //resolve(1);
+              // console.log('in');
+            });
+          } else resolve('existed');
+        });
+      });
+      console.log(user+": "+end);
+    }
+}
+
+export {getAllUserInfo, getUserInfo, test}
+
+ connect();
 // findSendEmailUsers(1, (ans) => {
 //   console.log(ans);
 // });
@@ -89,3 +139,64 @@ export {getAllUserInfo, getUserInfo}
 // let test = sended_low;
 // test = test.split(';');
 // console.log(test);
+
+// connect();
+//var users = [ 'durrantm',
+//  'benfyvie',
+//  'atavistock',
+//  'adamkittelson',
+//  'brandonarbini',
+//  'vvs',
+//  'subwindow',
+//  'r-stu31',
+//  'sshao',
+//  'jtdowney',
+//  'jaywhy',
+//  'heftig',
+//  'retnuh',
+//  'mainej',
+//  'cyndis',
+//  'mpalmer',
+//  'Stormwind',
+//  'pcapriotti',
+//  'tonysidaway',
+//  'mthorn',
+//  'FunkyFortune',
+//  'jdicioccio',
+//  'piotrb',
+//  'thomasdeniau',
+//  'rnicholson',
+//  'ehowe',
+//  'krancour',
+//  'lanej',
+//  'michelleN',
+//  'mage2k',
+//  'iancoffey',
+//  'Groogy',
+//  'jchauncey',
+//  'jgre',
+//  'justinmcp',
+//  'kubo',
+//  'ngollan',
+//  'caiquanqing',
+//  'ndarilek',
+//  'doudou',
+//  'timabdulla',
+//  'anthropomorphic',
+//  'tokengeek',
+//  'chrisseaton',
+//  'pager',
+//  'gcapizzi',
+//  'jasonrclark',
+//  'cyrilpic',
+//  'jamesds',
+//  'pietervisser' ];
+var users = [
+  'chenmuenzero'
+];
+
+function test() {
+  insertRelated(users);
+}
+
+ test();
