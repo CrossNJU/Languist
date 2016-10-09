@@ -53,6 +53,7 @@ import {
   record_log,
   getLog
 } from './servers/service/LogService'
+import {test} from './servers/service/BackService'
 //others
 import {
   starRepo,
@@ -343,6 +344,7 @@ function addOtherAPI(server) {
     getFlowListData(req.query.user, ret => {
       addInfoToList(req.query.user, ret, true, () => {
         record_log(getUser(), getUser() + ' get flowlist data and return: ' + ret.length + ' RECORDS', 'query');
+        test();
         res.send(ret);
       });
     });

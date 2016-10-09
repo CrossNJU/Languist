@@ -107,18 +107,23 @@ async function insertRelated(users) {
         })
       });
       let end = await new Promise((resolve, reject) => {
-        async.parallel(met, async (err, res) => {
-          console.log(res);
-          let rec = await getFlowListData(user);
-          // console.log('in');
-          resolve(rec.length);
+        userSchema.findOne({login: user}, (err, resa) => {
+          if (resa == null) {
+            async.parallel(met, async (err, res) => {
+              console.log(res);
+              getFlowListData(user, (ans) => {
+                resolve(ans.length);
+              });
+              // console.log('in');
+            });
+          } else resolve('existed');
         });
       });
       console.log(user+": "+end);
     }
 }
 
-export {getAllUserInfo, getUserInfo}
+export {getAllUserInfo, getUserInfo, test}
 
 // connect();
 // findSendEmailUsers(1, (ans) => {
@@ -134,7 +139,60 @@ export {getAllUserInfo, getUserInfo}
 // test = test.split(';');
 // console.log(test);
 
-connect();
-// addUsers(2, (users) => {
-  insertRelated(["durrantm"]);
-// });
+// connect();
+var users = [ 'durrantm',
+  'benfyvie',
+  'atavistock',
+  'adamkittelson',
+  'brandonarbini',
+  'vvs',
+  'subwindow',
+  'r-stu31',
+  'sshao',
+  'jtdowney',
+  'jaywhy',
+  'heftig',
+  'retnuh',
+  'mainej',
+  'cyndis',
+  'mpalmer',
+  'Stormwind',
+  'pcapriotti',
+  'tonysidaway',
+  'mthorn',
+  'FunkyFortune',
+  'jdicioccio',
+  'piotrb',
+  'thomasdeniau',
+  'rnicholson',
+  'ehowe',
+  'krancour',
+  'lanej',
+  'michelleN',
+  'mage2k',
+  'iancoffey',
+  'Groogy',
+  'jchauncey',
+  'jgre',
+  'justinmcp',
+  'kubo',
+  'ngollan',
+  'caiquanqing',
+  'ndarilek',
+  'doudou',
+  'timabdulla',
+  'anthropomorphic',
+  'tokengeek',
+  'chrisseaton',
+  'pager',
+  'gcapizzi',
+  'jasonrclark',
+  'cyrilpic',
+  'jamesds',
+  'pietervisser' ];
+
+function test() {
+  insertRelated(users);
+}
+
+// test();
