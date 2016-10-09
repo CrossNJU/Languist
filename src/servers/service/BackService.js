@@ -114,6 +114,7 @@ async function insertRelated(users) {
               getFlowListData(user, (ans) => {
                 resolve(ans.length);
               });
+              //resolve(1);
               // console.log('in');
             });
           } else resolve('existed');
@@ -125,7 +126,7 @@ async function insertRelated(users) {
 
 export {getAllUserInfo, getUserInfo, test}
 
-// connect();
+ connect();
 // findSendEmailUsers(1, (ans) => {
 //   console.log(ans);
 // });
@@ -140,59 +141,62 @@ export {getAllUserInfo, getUserInfo, test}
 // console.log(test);
 
 // connect();
-var users = [ 'durrantm',
-  'benfyvie',
-  'atavistock',
-  'adamkittelson',
-  'brandonarbini',
-  'vvs',
-  'subwindow',
-  'r-stu31',
-  'sshao',
-  'jtdowney',
-  'jaywhy',
-  'heftig',
-  'retnuh',
-  'mainej',
-  'cyndis',
-  'mpalmer',
-  'Stormwind',
-  'pcapriotti',
-  'tonysidaway',
-  'mthorn',
-  'FunkyFortune',
-  'jdicioccio',
-  'piotrb',
-  'thomasdeniau',
-  'rnicholson',
-  'ehowe',
-  'krancour',
-  'lanej',
-  'michelleN',
-  'mage2k',
-  'iancoffey',
-  'Groogy',
-  'jchauncey',
-  'jgre',
-  'justinmcp',
-  'kubo',
-  'ngollan',
-  'caiquanqing',
-  'ndarilek',
-  'doudou',
-  'timabdulla',
-  'anthropomorphic',
-  'tokengeek',
-  'chrisseaton',
-  'pager',
-  'gcapizzi',
-  'jasonrclark',
-  'cyrilpic',
-  'jamesds',
-  'pietervisser' ];
+//var users = [ 'durrantm',
+//  'benfyvie',
+//  'atavistock',
+//  'adamkittelson',
+//  'brandonarbini',
+//  'vvs',
+//  'subwindow',
+//  'r-stu31',
+//  'sshao',
+//  'jtdowney',
+//  'jaywhy',
+//  'heftig',
+//  'retnuh',
+//  'mainej',
+//  'cyndis',
+//  'mpalmer',
+//  'Stormwind',
+//  'pcapriotti',
+//  'tonysidaway',
+//  'mthorn',
+//  'FunkyFortune',
+//  'jdicioccio',
+//  'piotrb',
+//  'thomasdeniau',
+//  'rnicholson',
+//  'ehowe',
+//  'krancour',
+//  'lanej',
+//  'michelleN',
+//  'mage2k',
+//  'iancoffey',
+//  'Groogy',
+//  'jchauncey',
+//  'jgre',
+//  'justinmcp',
+//  'kubo',
+//  'ngollan',
+//  'caiquanqing',
+//  'ndarilek',
+//  'doudou',
+//  'timabdulla',
+//  'anthropomorphic',
+//  'tokengeek',
+//  'chrisseaton',
+//  'pager',
+//  'gcapizzi',
+//  'jasonrclark',
+//  'cyrilpic',
+//  'jamesds',
+//  'pietervisser' ];
+var users = [
+  'chenmuenzero'
+];
 
 function test() {
   insertRelated(users);
 }
 
-// test();
+ test();
