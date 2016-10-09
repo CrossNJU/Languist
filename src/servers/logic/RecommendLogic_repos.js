@@ -209,7 +209,7 @@ async function get_rec_repos_by_also_star(login,rec_num){
       });
     }
     async.parallel(met0,(err,res)=>{
-      console.log('done met0');
+      // console.log('done met0');
       let met1 = [];
       for (let i = 0;i < init_starers.length;i++){
         met1.push(async (call1)=>{
@@ -225,7 +225,7 @@ async function get_rec_repos_by_also_star(login,rec_num){
         });
       }
       async.parallel(met1,(err,res)=>{
-        console.log('done met1');
+        // console.log('done met1');
         let met2 = [];
         for (let i = 0;i < init_repos_name.length;i++){
           met2.push(async (call2)=>{
@@ -236,11 +236,11 @@ async function get_rec_repos_by_also_star(login,rec_num){
               stars: repo_stars
             };
             init_repos.push(repo);
-            call2(null,'done met2');
+            // call2(null,'done met2');
           });
         }
         async.parallel(met2,(err,res)=>{
-          console.log('done met2');
+          // console.log('done met2');
           init_repos.sort(getSortFun('desc','stars'));
           for (let i = 0;i < rec_num;i++){
             if (i >= init_repos.length) break;
@@ -440,6 +440,10 @@ async function get_rec_repos_when_zero(rec_num){
 //  Home Repos推荐列表
 //--------------------------
 async function get_rec_repos(login,user_percent,star_owner_percent,also_star_percent,following_percent,colleague_percent){
+
+
+  console.log('repo recommending');
+
   let big_base = 150;
   let base = 100;
   let user_num = base * user_percent;
@@ -473,7 +477,6 @@ async function get_rec_repos(login,user_percent,star_owner_percent,also_star_per
     });
     met.push(async (call0) => {
       let colleague_rec = await get_rec_repos_by_colleagues(login,colleague_num);
-      // let colleague_rec = [];
       console.log('done5!');
       call0(null, colleague_rec);
     });
@@ -516,6 +519,7 @@ async function get_rec_repos(login,user_percent,star_owner_percent,also_star_per
       resolve(rec_repos);
     });
   });
+  console.log(t.length);
   return t;
 }
 //--------------------------

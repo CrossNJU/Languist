@@ -296,13 +296,18 @@ async function get_rec_users_when_zero(rec_num){
   //     ret.push(rec_github_users[i]);
   // }
 
+  console.log('inininiiiiiii');
   let rec_users = await getTopUsersInGithub(rec_num);
 
+  console.log('------------');
+  console.log(rec_users);
+  console.log('------------');
   return rec_users;
 
 }
 
 async function get_rec_users(login,language_percent,star_contributor_percent,following_repo_percent){
+  console.log('ininin');
   let base = 100;
   let language_num = base * language_percent;
   let star_contributor_num = base * star_contributor_percent;
@@ -312,22 +317,22 @@ async function get_rec_users(login,language_percent,star_contributor_percent,fol
     let met = [];
     met.push(async (call0) => {
       let language_rec = await get_rec_users_by_language(login,language_num);
-      // console.log('done1');
+      console.log('done1');
       call0(null,language_rec);
     });
     met.push(async (call0) => {
       let star_contributor_rec = await get_rec_users_by_star_contributor(login,star_contributor_num);
-      // console.log('done2');
+      console.log('done2');
       call0(null,star_contributor_rec);
     });
     met.push(async (call0) => {
       let following_repo_rec = await get_rec_users_by_following_repo(login,following_repo_num);
-      // console.log('done3');
+      console.log('done3');
       call0(null,following_repo_rec);
     });
     met.push(async (call0) => {
       let base_rec = await get_rec_users_when_zero(base);
-      // console.log('done4');
+      console.log('done4');
       call0(null,base_rec);
     });
 
