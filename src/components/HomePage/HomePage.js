@@ -13,6 +13,7 @@ import RepoList from '../RepoList';
 import FlowList from '../FlowList';
 import AddLanguageDialog from '../AddLanguageDialog';
 import StarDialog from '../StarDialog';
+import InitLoadingDialog from '../InitLoadingDialog';
 
 const title = 'Languist';
 
@@ -45,7 +46,10 @@ class HomePage extends Component {
       isStarDialogOpen: false,
       currentStar: '',
       setList: [],
-      isEdit: false
+      isEdit: false,
+
+      // Loading dialog
+      hasRecommend: true
     };
   }
   static contextTypes = {
@@ -58,15 +62,17 @@ class HomePage extends Component {
       const user = await $.ajax('/api/current_user');
       console.log('Current user is', user);
 
+      let hasRecommend = await $.ajax('/api/home/hasRecommend?user='+user);
+      console.log('hasRecommend '+ hasRecommend.res);
+
+      this.setState({user: user, hasRecommend: hasRecommend.res==1});
+
       if(user) {
         // Get other data
         await this.loadData(user);
       } else {
         window.location.href = '/login';
       }
-
-      this.setState({user: user});
-
     } catch(err) {
       console.error(err);
     }
@@ -83,15 +89,17 @@ class HomePage extends Component {
       count: count,
       cover: cover
     });
-    const data = await $.ajax('/api/home/flowList?user=' + user)
+
+    const data = await $.ajax('/api/home/flowList?user=' + user);
     const unit = {
       title: 'Today',
       data: data
-    }
+    };
     let list = this.state.flowList.slice();
     list.push(unit);
     this.setState({
-      flowList: list
+      flowList: list,
+      hasRecommend: true,
     });
 
     this.getSetList(user);
@@ -365,6 +373,8 @@ class HomePage extends Component {
                     repo = {this.state.currentStar}
                     user = {this.state.user}
                     isEdit={this.state.isEdit}/>
+        <InitLoadingDialog
+          isOpen={!this.state.hasRecommend}/>
       </div>
     );
   }

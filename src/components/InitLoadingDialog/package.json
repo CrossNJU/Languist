@@ -1,0 +1,6 @@
+{
+  "name": "InitLoadingDialog",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./InitLoadingDialog.js"
+}
