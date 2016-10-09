@@ -62,12 +62,12 @@ class HomePage extends Component {
       const user = await $.ajax('/api/current_user');
       console.log('Current user is', user);
 
-      let hasRecommend = await $.ajax('/api/home/hasRecommend?user='+user);
-      console.log('hasRecommend '+ hasRecommend.res);
-
-      this.setState({user: user, hasRecommend: hasRecommend.res==1});
-
       if(user) {
+        let hasRecommend = await $.ajax('/api/home/hasRecommend?user='+user);
+        console.log('hasRecommend '+ hasRecommend.res);
+
+        this.setState({user: user, hasRecommend: hasRecommend.res==1});
+
         // Get other data
         await this.loadData(user);
       } else {

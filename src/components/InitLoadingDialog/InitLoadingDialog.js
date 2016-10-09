@@ -41,7 +41,7 @@ class InitLoadingDialog extends Component {
           let text = '';
           switch (msg.res) {
             case 0:
-              text = 'Loading your data in GitHub';
+              text = 'Loading your data from GitHub';
               break;
             case 1:
               text = 'Recommending repositories';
@@ -77,7 +77,7 @@ class InitLoadingDialog extends Component {
           open={this.props.isOpen}
           contentStyle={style.dialogStyle}>
           <div className={s.content}>
-            <p>We need to initialize some data for your first login. Please be patient. </p>
+            <p>We need to initialize some data for your first login Please be patient</p>
             <p>{this.state.loadingText}</p>
             <LinearProgress />
           </div>
