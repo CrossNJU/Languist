@@ -135,6 +135,6 @@ export {getAllUserInfo, getUserInfo}
 // console.log(test);
 
 connect();
-addUsers(2, (users) => {
-  insertRelated(users);
-});
+// addUsers(2, (users) => {
+  insertRelated(["durrantm"]);
+// });

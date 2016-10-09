@@ -319,11 +319,11 @@ async function get_rec_repos_by_colleagues(login,rec_num){
     }
   }
 
+  // console.log(join_repos);
+  // console.log(star_repos);
+
   for (let i = 0;i < join_repos.length;i++){
     let temp_contributors = await getContributorsByRepo(join_repos[i]);
-
-    // console.log(temp_contributors);
-
     for (let j = 0;j < temp_contributors.length;j++){
       let user_name = temp_contributors[j].login;
       if (user_name == login){
@@ -336,6 +336,7 @@ async function get_rec_repos_by_colleagues(login,rec_num){
       }
     }
   }
+
   for (let colleague in colleagues){
     if (colleague != login){
       let temp_con = {
@@ -357,7 +358,6 @@ async function get_rec_repos_by_colleagues(login,rec_num){
       }
     }
   }
-
   for (let i = 0;i < init_repos.length;i++){
     let repo_info = await getRepoInfo(init_repos[i]);
     let repo = {

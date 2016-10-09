@@ -98,7 +98,7 @@ async function getContributorsByRepo(full_name) {
     let repo = await getRepoInfo(full_name);
     if (repo.contributors.length == 0){
       updateRepoCons(full_name, (contributors) => {
-        resolve(getContributorsByRepo(full_name));
+        resolve(contributors);
       })
     }else {
       resolve(repo.contributors);
