@@ -37,7 +37,7 @@ class InitLoadingDialog extends Component {
     function fn() {
       $.ajax('/api/home/waitNumber', {
         success: (msg) => {
-          console.log(msg);
+          // console.log(msg);
           let text = '';
           switch (msg.res) {
             case 0:
