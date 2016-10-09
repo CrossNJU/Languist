@@ -9,6 +9,11 @@ import {my_userSchema} from '../../models/mysql-models/my_userSchema'
 import {connect} from '../config'
 import {sended_low, sended_mid, sended_high} from '../data.js'
 
+import {updateInitialInfo, updateWhenLogin, upsertUser} from '../logic/UpdateWhenLogin'
+import {getFlowListData} from '../service/HomeService'
+import {addAnewUser} from '../api/github_user'
+var async = require("async");
+
 function getAllUserInfo(callback){
   let ans = [];
   userSchema.find({}, (err, users) => {
@@ -74,6 +79,45 @@ function findSendEmailUsers(type, callback) {
   });
 }
 
+function addUsers(number, callback) {
+  let condition = {starred_count: {$gt: 8, $lt: 20}};
+  my_userSchema.find(condition, {}, {limit: number}, (err, users) => {
+    var ans = [];
+    for (let user of users){
+      ans.push(user.login);
+    }
+    callback(ans);
+  });
+}
+
+async function insertRelated(users) {
+    for (let user of users) {
+      console.log(user);
+      let met = [];
+      met.push((call) => {
+        addAnewUser(user, "", () => {
+          updateInitialInfo(user);
+          call(null, 'done');
+        });
+      });
+      met.push((call) => {
+        upsertUser(user, () => {
+          updateWhenLogin(user);
+          call(null, 'done');
+        })
+      });
+      let end = await new Promise((resolve, reject) => {
+        async.parallel(met, async (err, res) => {
+          console.log(res);
+          let rec = await getFlowListData(user);
+          // console.log('in');
+          resolve(rec.length);
+        });
+      });
+      console.log(user+": "+end);
+    }
+}
+
 export {getAllUserInfo, getUserInfo}
 
 // connect();
@@ -89,3 +133,8 @@ export {getAllUserInfo, getUserInfo}
 // let test = sended_low;
 // test = test.split(';');
 // console.log(test);
+
+connect();
+addUsers(2, (users) => {
+  insertRelated(users);
+});
