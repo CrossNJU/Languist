@@ -17,10 +17,11 @@ import PersonIcon from 'material-ui/svg-icons/social/person-add';
 import StarIcon from 'material-ui/svg-icons/toggle/star';
 import ArrowIcon from 'material-ui/svg-icons/av/play-arrow';
 import FaceIcon from 'material-ui/svg-icons/action/face'
+import {github_signup_url} from '../../config';
 
 const title = 'Languist'
 
-let signUpUrl = 'https://github.com/login/oauth/authorize?scope=user%20public_repo&client_id=d310933db63d64f563a0';
+let signUpUrl = github_signup_url;
 
 let brandColor = '#F2DF83';
 
