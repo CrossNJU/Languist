@@ -21,7 +21,8 @@ import {github_signup_url} from '../../config';
 
 const title = 'Languist'
 
-let signUpUrl = github_signup_url;
+// let signUpUrl = github_signup_url;
+let signUpUrl = "https://github.com/login/oauth/authorize?scope=user%20public_repo&client_id=d310933db63d64f563a0";
 
 let brandColor = '#F2DF83';
 

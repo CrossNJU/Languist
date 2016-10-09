@@ -24,8 +24,8 @@ import {github_signup_url} from '../../config';
 
 const title = 'Log In';
 
-// const url = "https://github.com/login/oauth/authorize?scope=user%20public_repo&client_id=d310933db63d64f563a0";
-const url = github_signup_url;
+const url = "https://github.com/login/oauth/authorize?scope=user%20public_repo&client_id=d310933db63d64f563a0";
+// const url = github_signup_url;
 
 const dividerStyle = {
   marginTop: '10px',

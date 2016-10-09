@@ -25,7 +25,9 @@ const styles = {
   button: {
     color: '#FFF'
   }
-}
+};
+
+let signUpUrl = "https://github.com/login/oauth/authorize?scope=user%20public_repo&client_id=d310933db63d64f563a0";
 
 class Navigation extends Component {
 
@@ -68,7 +70,7 @@ class Navigation extends Component {
       return (
         <div className={cx(s.root, this.props.className)} role="navigation">
           <Link className={s.link} to="/login">LOG IN</Link>
-          <a className={s.link} href={github_signup_url}>SIGN UP WITH GITHUB</a>
+          <a className={s.link} href={signUpUrl}>SIGN UP WITH GITHUB</a>
         </div>
       );
     };
