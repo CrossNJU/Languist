@@ -344,7 +344,8 @@ function updateWhenLogin(login) {
         });
       }
       async.parallel(met1, (err, res) => {
-        //console.log(res);
+        console.log(res);
+        setSignal_login_wait(5);
         call0(null, 'done 0!');
       })
     });
@@ -386,7 +387,8 @@ function updateWhenLogin(login) {
         });
       }
       async.parallel(met1, (err, res) => {
-        //console.log(res);
+        console.log(res);
+        setSignal_login_wait(6);
         call0(null, 'done 0!');
       })
     });
@@ -433,7 +435,8 @@ function updateWhenLogin(login) {
         });
       }
       async.parallel(met1, (err, res) => {
-        //console.log(res);
+        console.log(res);
+        setSignal_login_wait(7);
         call0(null, 'done 0!');
       })
     });
@@ -497,7 +500,8 @@ function updateWhenLogin(login) {
         });
       }
       async.parallel(met1, (err, res) => {
-        //console.log(res);
+        console.log(res);
+        setSignal_login_wait(8);
         call0(null, 'done 0!');
       })
     });

@@ -125,6 +125,10 @@ export {getFlowListData, hasRecommendData}
 //});
 
 //console.log((new Date()).getHours());
+setInterval(() => {
+  console.log('now the time is: '+ (new Date()).toLocaleString());
+}, 1000*60*20);
+
 //setInterval(() => {
-//  console.log('--------------:  '+ getSignal_login_wait());
-//}, 500);
+//  console.log('=----------: '+ getSignal_login_wait());
+//}, 1000);
