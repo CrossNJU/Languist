@@ -39,7 +39,7 @@ import {
 } from '../service/LogService'
 
 var async = require("async");
-var get_size = 12;
+var get_size = 8;
 var run1 = true,
   run2 = true,
   run3 = false,
@@ -344,7 +344,7 @@ function updateWhenLogin(login) {
         });
       }
       async.parallel(met1, (err, res) => {
-        console.log(res);
+        console.log("finish star repo...");
         setSignal_login_wait(5);
         call0(null, 'done 0!');
       })
@@ -387,7 +387,7 @@ function updateWhenLogin(login) {
         });
       }
       async.parallel(met1, (err, res) => {
-        console.log(res);
+        console.log("finish repo...");
         setSignal_login_wait(6);
         call0(null, 'done 0!');
       })
@@ -435,7 +435,7 @@ function updateWhenLogin(login) {
         });
       }
       async.parallel(met1, (err, res) => {
-        console.log(res);
+        console.log("finish join repo...");
         setSignal_login_wait(7);
         call0(null, 'done 0!');
       })
@@ -500,7 +500,7 @@ function updateWhenLogin(login) {
         });
       }
       async.parallel(met1, (err, res) => {
-        console.log(res);
+        console.log("finish following...");
         setSignal_login_wait(8);
         call0(null, 'done 0!');
       })
@@ -609,6 +609,10 @@ function updateInitialInfo(login) {
   })
 }
 
+function setGetSize(value){
+  get_size = value;
+}
+
 export {
   updateWhenLogin,
   upsertRepo,
@@ -619,7 +623,9 @@ export {
   updateUserRepos,
   updateUserStars,
   updateUserJoinRepo,
-  updateInitialInfo
+  updateInitialInfo,
+
+  setGetSize
 }
 
 //let test_login = 'ChenDanni';

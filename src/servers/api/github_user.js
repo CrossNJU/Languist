@@ -69,7 +69,7 @@ function getUserStarred(login, page, array, is_insert, numbers, callback) {
 
 function getFollowings(login, page, array, numbers, callback) {
   client = getClient();
-  console.log('in get folling');
+  //console.log('in get folling');
   let per_page = number_per_page > numbers ? numbers : number_per_page;
   let next_per_page = numbers > number_per_page ? numbers - number_per_page : 0;
   if (numbers < 0) {
@@ -99,7 +99,7 @@ function getFollowings(login, page, array, numbers, callback) {
 
 function getFollowers(login, page, array, numbers, callback) {
   client = getClient();
-  console.log('in get folers');
+  //console.log('in get folers');
   let per_page = number_per_page > numbers ? numbers : number_per_page;
   let next_per_page = numbers > number_per_page ? numbers - number_per_page : 0;
   if (numbers < 0) {
