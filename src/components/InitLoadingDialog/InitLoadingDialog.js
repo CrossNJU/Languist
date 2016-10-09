@@ -37,7 +37,7 @@ class InitLoadingDialog extends Component {
     function fn() {
       $.ajax('/api/home/waitNumber', {
         success: (msg) => {
-          // console.log(msg);
+          console.log(msg);
           let text = '';
           switch (msg.res) {
             case 0:
@@ -55,6 +55,18 @@ class InitLoadingDialog extends Component {
             case 4:
               clearInterval(timer);
               return ;
+            case 5:
+              text = 'Loading your starred repositories';
+              break;
+            case 6:
+              text = 'Loading your own repositories';
+              break;
+            case 7:
+              text = 'Loading repositories you contribute to';
+              break;
+            case 8:
+              text = 'Loading your followed user';
+              break;
           }
 
           this.setState({
