@@ -39,6 +39,10 @@ a {
   }
 }
 
+input textarea{
+  font-family: $font-family-base;
+}
+
 .container {
   display: flex;
   position: relative;
