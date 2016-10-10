@@ -9,7 +9,7 @@ import {getRepoLanguages} from '../api/github_repo';
 import {get_rec_repos_by_contributor} from '../logic/RecommendLogic_repos'
 import {updateRepoCons, updateUserRepos, upsertUser, upsertRepo} from '../logic/UpdateWhenLogin'
 import {getARepo, getDetail} from '../logic/HandleRecommendLogic'
-import {connect} from '../config'
+import {connect, logger} from '../config'
 import {record_log} from '../service/LogService'
 
 var async = require('async');
@@ -33,7 +33,7 @@ function addARepoToSet(login, full_name, set_name, callback) {
         else {
           sets[index2].set_repos.push(full_name);
           userSchema.update({login: login}, {$set: {repo_sets: sets}}, (err, res) => {
-            console.log('add repo:' + full_name + ' to repo set:' + set_name);
+            logger.info('add repo:' + full_name + ' to repo set:' + set_name);
             //console.log(res);
             callback(1);
           })
@@ -54,7 +54,7 @@ function addAReopSet(login, set_name, callback) {
         set_repos: []
       });
       userSchema.update({login: login}, {$set: {repo_sets: sets}}, (err, res) => {
-        console.log('add repo set:' + set_name);
+        logger.info('add repo set:' + set_name);
         //console.log(res);
         callback(1);
       })
@@ -104,6 +104,7 @@ function getRepoSetList(login, callback) {
 
 function updateSingleRepoRecommend(full_name, callback) {
   let met0 = [];
+  logger.info('start related repos for: '+ full_name);
   met0.push((call0) => {
     updateRepoCons(full_name, (contributors) => {
       let met1 = [];
@@ -135,7 +136,7 @@ function updateSingleRepoRecommend(full_name, callback) {
     })
   });
   async.parallel(met0, (err, res) => {
-    console.log(res + 'get related repo info');
+    logger.info(res + 'get related repo info for: '+ full_name);
     record_log('system', 'done get related repo data for: ' + full_name, 'done');
     callback();
   })
@@ -243,8 +244,8 @@ function getRepoLanguage(full_name, callback) {
           }
         };
         github_repoSchema.update(conditions, update, (err, res) => {
-          console.log('update repo:' + full_name + ' languages');
-          console.log(res);
+          logger.debug('update repo:' + full_name + ' languages');
+          logger.debug(res);
           if (languages.length > 3) callback(languages.slice(0,3));
           else callback(languages);
         });

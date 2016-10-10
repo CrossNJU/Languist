@@ -20,36 +20,37 @@ var signal_init = 1;
 var signal_login_wait = 0;
 var current_user = null;
 
+var log4js = require('log4js');
+log4js.configure({
+  appenders: [
+    { type: 'console' }, //控制台输出
+    {
+      type: 'file', //文件输出
+      filename: 'logs/access.log',
+      maxLogSize: 1024,
+      backups: 4,
+      category: 'normal'
+    }
+  ]
+});
+export var logger = log4js.getLogger('normal');
+logger.setLevel('TRACE');
+
 function mon_conn() {
   mongoose.connect('mongodb://localhost/languist');
   var db = mongoose.connection;
   //test connection
   db.on('error', () => {
-    console.log('connect error!');
+    logger.error('connect error!');
   });
   db.once('open', () => {
-    console.log('connected!');
+    logger.info('connected!');
   });
 }
 
 function mon_disconn() {
   mongoose.disconnect((err) => {
-    console.log('disconnect err');
-  });
-}
-
-//**
-function mon_conn2(callback) {
-  mongoose.connect('mongodb://localhost/languist');
-  var db = mongoose.connection;
-  //test connection
-  db.on('error', () => {
-    console.log('connect error!');
-    callback(0);
-  });
-  db.once('open', () => {
-    console.log('connected!');
-    callback(1);
+    logger.error('disconnect err');
   });
 }
 
@@ -88,7 +89,6 @@ function setUser(value) {
 export {
   mon_conn as connect,
   mon_disconn as disconnect,
-  mon_conn2 as connect_callback,
   getSignal,
   setSignal,
   setUser,

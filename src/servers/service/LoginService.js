@@ -6,7 +6,7 @@ import {userSchema} from '../../models/userSchema'
 import {addAnewUser, addAnewGitHubUser} from '../api/github_user'
 import {setClient} from '../api/github_conf'
 import {updateWhenLogin, updateInitialInfo} from '../logic/UpdateWhenLogin'
-import {SUCCESS, FAIL, PASSWORD_ERROR, NOT_FOUND, client_id, client_secret, setSignal_login_wait} from '../config'
+import {SUCCESS, FAIL, PASSWORD_ERROR, NOT_FOUND, client_id, client_secret, setSignal_login_wait, logger} from '../config'
 var superagent = require('superagent');
 var md5 = require('js-md5');
 
@@ -47,7 +47,7 @@ function register(username, password, callback) {
 
 
 export var saveUser = (code, callback) => {
-  console.log('authority code:'+code);
+  logger.debug('authority code:'+code);
   superagent
     .post(getAccessURL)
     .send({client_id: client_id, client_secret: client_secret, code: code})
@@ -61,7 +61,7 @@ export var saveUser = (code, callback) => {
       //console.log(sres.body);
       let access_token = sres.body.access_token;
       if (access_token === undefined) {
-        console.log('access token undefined!');
+        logger.error('access token undefined!');
         callback(0);
         return;
       }

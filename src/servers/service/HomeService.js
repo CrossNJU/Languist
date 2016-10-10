@@ -4,7 +4,7 @@
 
 import {github_userSchema} from '../../models/github_userSchema'
 import {userSchema} from '../../models/userSchema'
-import {connect} from '../config'
+import {connect, logger} from '../config'
 import {getNextDayRecommendData, getStart} from '../logic/HandleRecommendLogic'
 import {getSignal, getUser, getSignal_init, setSignal_login_wait, getSignal_login_wait} from '../config'
 import {record_log} from '../service/LogService'
@@ -62,7 +62,7 @@ export var getCountData = async (userName, callback) => {
   let w = await awaitUpdate_init();
   userSchema.findOne(condition, (err, user) => {
     if (err) {
-      console.log('err occurs in home count data: ' + err.message);
+      logger.error('err occurs in home count data: ' + err.message);
     } else {
       data.followingCount = user.followings.length;
       data.followersCount = user.followers.length;
@@ -97,7 +97,7 @@ async function getFlowListData(userName, callback) {
     record_log(getUser(), getUser() + ' first get recommend data', 'mark');
     //console.log(now);
   }
-  console.log('rec records: '+ans.length);
+  logger.info('rec records: '+ans.length+' for: '+ userName);
   callback(ans);
 }
 

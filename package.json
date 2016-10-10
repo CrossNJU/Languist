@@ -28,6 +28,7 @@
     "jquery": "^3.1.0",
     "js-md5": "^0.4.1",
     "jsonwebtoken": "5.7.0",
+    "log4js": "^0.6.38",
     "markdown-it": "6.0.0",
     "material-ui": "^0.15.2",
     "moment": "^2.14.1",

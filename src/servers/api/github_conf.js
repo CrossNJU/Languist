@@ -25,6 +25,10 @@ export {setClient, getClient}
 //userSchema.findOne({login:'ChenDanni'}, (err, user) => {
 //  setClient(user.access_token);
 //  console.log(user.access_token);
+//client = github.client({
+//  username: 'raychenNJU',
+//  password: 'cr112358132134'
+//});
 //  client.limit(function (err, left, max) {
 //    console.log(left); // 4999
 //    console.log(max);  // 5000

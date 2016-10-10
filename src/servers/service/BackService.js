@@ -6,7 +6,7 @@ import {userSchema} from '../../models/userSchema'
 import {github_userSchema} from '../../models/github_userSchema'
 import {github_repoSchema} from '../../models/github_repoSchema'
 import {my_userSchema} from '../../models/mysql-models/my_userSchema'
-import {connect} from '../config'
+import {connect, logger} from '../config'
 import {sended_low, sended_mid, sended_high} from '../data.js'
 
 import {updateInitialInfo, updateWhenLogin, upsertUser} from '../logic/UpdateWhenLogin'
@@ -92,7 +92,7 @@ function addUsers(number, callback) {
 
 async function insertRelated(users) {
     for (let user of users) {
-      console.log(user);
+      logger.debug(user);
       let met = [];
       met.push((call) => {
         addAnewUser(user, "", () => {
@@ -110,7 +110,7 @@ async function insertRelated(users) {
         userSchema.findOne({login: user}, (err, resa) => {
           if (resa == null) {
             async.parallel(met, async (err, res) => {
-              console.log(res);
+              logger.debug(res);
               getFlowListData(user, (ans) => {
                 resolve(ans.length);
               });
@@ -120,13 +120,13 @@ async function insertRelated(users) {
           } else resolve('existed');
         });
       });
-      console.log(user+": "+end);
+      logger.debug(user+": "+end);
     }
 }
 
 export {getAllUserInfo, getUserInfo, test}
 
- connect();
+ //connect();
 // findSendEmailUsers(1, (ans) => {
 //   console.log(ans);
 // });
@@ -196,7 +196,8 @@ var users = [
 ];
 
 function test() {
+  connect();
   insertRelated(users);
 }
 
- test();
+ //test();

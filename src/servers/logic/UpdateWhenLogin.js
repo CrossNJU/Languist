@@ -32,7 +32,8 @@ import {
   setSignal,
   setSignal_init,
   connect,
-  setSignal_login_wait
+  setSignal_login_wait,
+  logger
 } from '../config'
 import {
   record_log
@@ -248,6 +249,7 @@ function upsertUser(ret, callback) {
 function updateWhenLogin(login) {
   let met0 = [];
   setSignal(0);
+  logger.info('start update when login for: '+ login);
 
   met0.push((call0) => {
     //get star repos
@@ -344,7 +346,7 @@ function updateWhenLogin(login) {
         });
       }
       async.parallel(met1, (err, res) => {
-        console.log("finish star repo...");
+        logger.info("finish star repo for: "+ login);
         setSignal_login_wait(5);
         call0(null, 'done 0!');
       })
@@ -387,7 +389,7 @@ function updateWhenLogin(login) {
         });
       }
       async.parallel(met1, (err, res) => {
-        console.log("finish repo...");
+        logger.info("finish repo for: "+ login);
         setSignal_login_wait(6);
         call0(null, 'done 0!');
       })
@@ -435,7 +437,7 @@ function updateWhenLogin(login) {
         });
       }
       async.parallel(met1, (err, res) => {
-        console.log("finish join repo...");
+        logger.info("finish join repo for: "+ login);
         setSignal_login_wait(7);
         call0(null, 'done 0!');
       })
@@ -500,7 +502,7 @@ function updateWhenLogin(login) {
         });
       }
       async.parallel(met1, (err, res) => {
-        console.log("finish following...");
+        logger.info("finish following for: "+ login);
         setSignal_login_wait(8);
         call0(null, 'done 0!');
       })
@@ -508,7 +510,7 @@ function updateWhenLogin(login) {
   });
 
   async.parallel(met0, (err, res) => {
-    console.log(res + 'done update when login');
+    logger.info('update done for: '+ login);
     setSignal_login_wait(1);
     record_log('system', 'update user: ' + login + ' when login done!', 'done');
     setSignal(1);
@@ -518,6 +520,7 @@ function updateWhenLogin(login) {
 function updateInitialInfo(login) {
   let met = [];
   setSignal_init(0);
+  logger.info('start init info for: '+ login);
   met.push((call0) => {
     getFollowers(login, 1, [], -1, (followers) => {
       //console.log(followers);
@@ -528,7 +531,7 @@ function updateInitialInfo(login) {
           followers: followers
         }
       }, (err, res) => {
-        console.log('update system user followers!');
+        logger.info('update system user followers: '+ login);
         call0(null, 'done for get followers!');
         //console.log(res);
         for (let i = 0; i < followers.length; i++) {
@@ -549,7 +552,7 @@ function updateInitialInfo(login) {
           followings: followings
         }
       }, (err, res) => {
-        console.log('update system user followings!');
+        logger.info('update system user followings: '+ login);
         call0(null, 'done for get followings!');
         //console.log(res);
         for (let i = 0; i < followings.length; i++) {
@@ -590,7 +593,7 @@ function updateInitialInfo(login) {
             repo_sets: repo_set
           }
         }, (err, res) => {
-          console.log('update system user star repos!');
+          logger.info('update system user star repos: '+ login);
           call0(null, 'done for get stars!');
           //console.log(res);
           for (let i = 0; i < stars.length; i++) {
@@ -603,7 +606,7 @@ function updateInitialInfo(login) {
     })
   });
   async.parallel(met, (err, res) => {
-    console.log(res + 'done init data');
+    logger.info('done init info for: '+login);
     record_log('system', 'init user data: ' + login, 'done');
     setSignal_init(1);
   })

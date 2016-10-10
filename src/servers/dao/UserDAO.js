@@ -5,7 +5,7 @@
 import {userSchema} from '../../models/userSchema'
 import {github_repoSchema} from '../../models/github_repoSchema'
 import {github_userSchema} from '../../models/github_userSchema'
-import {connect_callback} from '../config'
+import {connect} from '../config'
 
 import {getFollowings} from '../api/github_user'
 import {getStarredUsers, getContributors} from '../api/github_repo'
@@ -139,7 +139,8 @@ export {getGithubUserInfo, getUserAndLevelByLanguage, getFollowingByUser,
   getStarUserByRepo, getContributorsByRepo, getUserLanguage,getTopUsersInGithub}
 
 async function test() {
-  let t = await getRepoInfo("CrossNJU/PASS");
+  connect();
+  let t = await getTopUsersInGithub(10);
   console.log(t);
 }
 

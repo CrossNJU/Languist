@@ -6,7 +6,7 @@ import {userSchema} from '../../models/userSchema'
 import {languageSchema} from '../../models/languageSchema'
 import {github_userSchema} from '../../models/github_userSchema'
 import {getAUser, getARepo} from '../logic/HandleRecommendLogic'
-import {connect} from '../config'
+import {connect, logger} from '../config'
 import {getUserStarred, getJoinRepos} from '../api/github_user'
 import {upsertRepo, updateWhenLogin} from '../logic/UpdateWhenLogin'
 import {record_log} from '../service/LogService'
@@ -23,7 +23,7 @@ function evaluateRecommend(login, name, type, callback) {
     let dislike = rec[index];
     rec.splice(index, 1);
     userSchema.update({login: login}, {$set: {now_recommend: rec}, $addToSet: {dislike: dislike}}, (err, res) => {
-      console.log('update recommend feedback!');
+      logger.info('update recommend feedback!');
       //console.log(res);
       callback(1);
     })
@@ -72,7 +72,7 @@ function addFeedback(login, feedback, callback) {
       }
     }
   }, (err, res) => {
-    console.log('add feedback!');
+    logger.info('add feedback!');
     //console.log(res);
     callback(1);
   });
@@ -101,10 +101,10 @@ function getUserStarRepo(login, callback) {
         }
         async.parallel(met1, async (err, res) => {
           record_log('system', 'get user: ' + login + ' star repos', 'done');
-          console.log(res + 'get star repos');
+          logger.info(res + 'get star repos');
           github_userSchema.update({login: login}, {$set: {star_repo_all: 1, star_repos: stars}}, (err, res) => {
-            console.log('update user:' + login + ' star all repos');
-            console.log(res);
+            logger.debug('update user:' + login + ' star all repos');
+            logger.debug(res);
           });
           let ans = [];
           for (let i = 0; i < stars.length; i++) {
@@ -141,7 +141,7 @@ function reloadUser(login, callback) {
       }
       async.parallel(met0, async (err, res) => {
         record_log('system', 'reload all user', 'later');
-        console.log(res);
+        logger.debug(res);
         callback();
       })
     })
@@ -191,10 +191,10 @@ function getBestSubRepo(login, callback) {
         }
         async.parallel(met1, async (err, res) => {
           record_log('system', 'get user: ' + login + ' subscribe repos', 'done');
-          console.log(res + 'get subscribe repos');
+          logger.info(res + 'get subscribe repos');
           github_userSchema.update({login: login}, {$set: {join_repo_all: 1, joinRepos: repos}}, (err, res) => {
-            console.log('update user:' + login + ' join all repos');
-            console.log(res);
+            logger.debug('update user:' + login + ' join all repos');
+            logger.debug(res);
           });
           let ans = [];
           for (let i = 0; i < repos.length; i++) {

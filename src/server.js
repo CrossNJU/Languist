@@ -38,6 +38,22 @@ connect();
 const server = global.server = express();
 const ret_success = 'success';
 
+var log4js = require('log4js');
+log4js.configure({
+  appenders: [
+    { type: 'console' }, //控制台输出
+    {
+      type: 'file', //文件输出
+      filename: 'logs/access_net.log',
+      maxLogSize: 1024,
+      backups: 4,
+      category: 'normal'
+    }
+  ]
+});
+var logger2 = log4js.getLogger('normal');
+logger2.setLevel('INFO');
+
 process.on('uncaughtException', function (err) {
   //打印出错误
   console.log(err);
@@ -59,6 +75,7 @@ server.use(express.static(path.join(__dirname, 'public')));
 server.use(cookieParser());
 server.use(bodyParser.urlencoded({extended: true}));
 server.use(bodyParser.json());
+//server.use(log4js.connectLogger(logger2, {level:log4js.levels.INFO, format:':method :url'}));
 server.use(session({
   secret: 'keyboard cat',
   resave: false,

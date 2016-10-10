@@ -35,7 +35,8 @@ import {
 } from './RecommendLogic_users'
 import {
   connect,
-  setSignal_login_wait
+  setSignal_login_wait,
+  logger
 } from '../config'
 import {
   record_log
@@ -239,15 +240,16 @@ function getInterval(time_bef) {
 //---------------------------  update recommend data  --------------------------------------------------
 async function fetchData(userName, callback) {
   record_log('system', 'fetch recommend data for: ' + userName, 'add');
+  logger.info('fetch data for: '+userName);
   let repos = await get_rec_repos(userName, 1, 1, 1, 1, 1);
-  // console.log('after fetch rec repo data!');
+  logger.debug('after fetch repo');
   setSignal_login_wait(2);
   let users = await get_rec_users_by_star_contributor(userName, 100);
-  // console.log('don444');
+  logger.debug('after fetch user');
   if (users.length == 0 || users == null){
     users = await get_rec_users_when_zero(100);
   }
-  // console.log('after fetch rec user data!');
+  logger.info('after fetch for: '+ userName);
   setSignal_login_wait(3);
   let langs = await get_rec_languages(userName, 1, 1, 1);
   setSignal_login_wait(4);
@@ -407,9 +409,9 @@ async function getNextDayRecommendData(userName) {
 
 function circle() {
   userSchema.find({}, async(err, users) => {
-    console.log('find users');
+    logger.info('has '+users.length+' users to recommend new data...');
     for (let i = 0; i < users.length; i++) {
-      console.log(i + "-------------------------------------------");
+      logger.info('recommend new data for: '+ i +' --'+ users[i].login);
       let w = await recNew(users[i].login);
     }
   });
@@ -426,7 +428,7 @@ function setATimer(){
   let hour = (set_hour + 23 - date.getHours()) % 24;
   let timeInMin = (hour*60+min) % (24*60);
   setTimeout(() => {
-    console.log('to circle');
+    logger.info('to the first circle');
     timer();
   }, timeInMin*60*1000);
 }
