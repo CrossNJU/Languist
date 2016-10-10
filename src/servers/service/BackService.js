@@ -192,7 +192,24 @@ export {getAllUserInfo, getUserInfo, test}
 //  'jamesds',
 //  'pietervisser' ];
 var users = [
-  'chenmuenzero'
+  'chenmuenzero',
+  "Catherinena",
+  "njushishuo",
+  "Harry1001",
+  "Tony-Wang",
+  "zengchunhui",
+  "KevinSmile",
+  "sc89703312",
+  "cuiods",
+  "Sorumi",
+  "DeepAQ",
+  "owenchenz",
+  "chenmuenzero",
+  "oraisdy",
+  "PolarisChen",
+  "NJUShenbin",
+  "sferik",
+  "toastsgithub",
 ];
 
 function test() {
@@ -200,4 +217,4 @@ function test() {
   insertRelated(users);
 }
 
- //test();
+ // test();
