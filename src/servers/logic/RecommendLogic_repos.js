@@ -15,6 +15,16 @@ function getSortFun(order, sortBy) {
   return sortFun;
 }
 
+async function cal_repo_sim(repo1,repo2) {
+  let re_info1 = await getRepoInfo(repo1);
+  let re_info2 = await getRepoInfo(repo2);
+  let sim = 0;
+  if (re_info1.main_language == re_info2.main_language){
+    sim = 1;
+  }
+  return 1;
+}
+
 //根据create time和update time 筛除废仓库
 async function handle_repos(repos){
 

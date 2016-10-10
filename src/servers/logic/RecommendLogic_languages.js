@@ -2,7 +2,7 @@
  * Created by ChenDanni on 2016/8/15.
  */
 
-import {getLanguageByUser} from '../dao/languageDAO'
+import {getLanguageByUser,getTagByLanguage} from '../dao/languageDAO'
 import {getLanguageByTag} from '../dao/languageDAO'
 import {getLanguageSize,getAllLanguages} from '../dao/languageDAO'
 import {getUserAndLevelByLanguage, getFollowingByUser, getStarUserByRepo, getContributorsByRepo} from '../dao/UserDAO'
@@ -55,6 +55,21 @@ async function get_user_tag(login){
   //console.log(tags_sort);
 
   return tags_sort;
+}
+
+async function cal_lan_sim(lan1,lan2){
+  let tags1 = await getTagByLanguage(lan1);
+  let tags2 = await getTagByLanguage(lan2);
+  let up = 0;
+  let down = 0;
+  let sim = 0;
+  for (let i = 0;i < tags1.length;i++){
+    if (tags2.indexOf(tags1[i]) > -1) up ++;
+  }
+  down = Math.sqrt(tags1.length*tags2.length);
+  sim = up/down;
+
+  return sim;
 }
 
 async function get_rec_languages_by_select(login, rec_num){
@@ -288,9 +303,10 @@ export {get_rec_languages,get_rec_languages_by_select,get_rec_languages_by_follo
 
 async function test(){
   connect();
-  let user_tags = await get_user_tag('ChenDanni');
-  console.log('tags');
-  console.log(user_tags);
+  // let user_tags = await get_user_tag('ChenDanni');
+  // console.log('tags');
+  // console.log(user_tags);
+  cal_lan_sim('Java','C');
 }
 // test();
 

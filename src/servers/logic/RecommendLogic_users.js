@@ -416,6 +416,7 @@ async function test() {
   connect();
   // let t = await get_rec_users('ChenDanni',1,1,1);
   let t = await get_rec_users_when_zero(10);
+  let sim = await cal_lan_sim()
   console.log(t);
 }
 // test();
