@@ -5,6 +5,10 @@
 import {reloadUser} from './servers/service/UserService'
 import {getLog} from './servers/service/LogService'
 import {getAllUserInfo, getUserInfo} from './servers/service/BackService'
+import {
+  getRelatedRecommend,
+} from './servers/service/RepoService'
+import {logger} from './servers/config'
 
 function addTestApi(server){
   server.get('/api/test/session', (req, res)=>{
@@ -42,4 +46,21 @@ function addAdministerApi(server){
   });
 }
 
-export {addTestApi, addAdministerApi}
+function addPluginApi(server){
+  server.get('/api/plugin/test', (req, res) => {
+    res.send({
+      titile: "github",
+      author: "raychen",
+      postDate: "1996-01-08",
+      firstAccess: "1000-01-01"
+    });
+  });
+  server.get('/api/plugin/related', (req, res) => {
+    logger.info('plugin request to get data');
+    getRelatedRecommend(req.query.fullName, (resa) => {
+      res.send(resa);
+    })
+  });
+}
+
+export {addTestApi, addAdministerApi, addPluginApi}

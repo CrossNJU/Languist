@@ -27,7 +27,7 @@ import { port, auth, analytics } from './config';
 import {connect, disconnect, SUCCESS, FAIL, getUser, setUser} from './servers/config'
 import {home, test_login} from './servers/test/testController';
 //apis
-import {addTestApi, addAdministerApi} from './router_background'
+import {addTestApi, addAdministerApi, addPluginApi} from './router_background'
 import {addLanguageAPI, addLoginAPI, addOtherAPI, addUserAPI, addRepoAPI} from './router'
 //circle
 import {setATimer} from './servers/logic/HandleRecommendLogic'
@@ -136,6 +136,7 @@ addRepoAPI(server);
 addUserAPI(server);
 addTestApi(server);
 addAdministerApi(server);
+addPluginApi(server);
 //circle();
 setATimer();
 
