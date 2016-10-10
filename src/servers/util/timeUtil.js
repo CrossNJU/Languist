@@ -35,7 +35,22 @@ async function calTime(time1,time2){
     return days;
   }
 }
-//calTime('2015-04-15T13:28:22Z','2015-04-16T13:28:21Z');
+
+async function calCreateTime(time){
+  time = translateTime(time);
+  let nowTime = new Date();
+  let createTime = new Date(time);
+  let age = (nowTime - createTime)/(1000*3600*24);
+  age = parseInt(Math.ceil(age)) - 1;
+  if (age < 0){
+    console.log('Create time error!');
+    return 10000;
+  }
+  return age;
+}
+
+// calTime('2015-04-15T13:28:22Z','2015-04-16T13:28:21Z');
+// calCreateTime('2015-04-16T13:28:21Z');
 
 
 export {
