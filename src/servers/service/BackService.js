@@ -120,7 +120,7 @@ async function insertRelated(users) {
         //   });
         // } else resolve('existed');
         if (resa.access_token != "") {
-          setClient(resa.access_token);
+          //setClient(resa.access_token);
           async.parallel(met, async(err, res) => {
             logger.debug(res);
             getFlowListData(user, (ans) => {
@@ -227,7 +227,7 @@ function test() {
   users = [];
   userSchema.find({}, (err, res) => {
     for (let user of res) {
-      users.push(user.login);
+      if (user.now_recommend.length == 0) users.push(user.login);
     }
     insertRelated(users);
   });

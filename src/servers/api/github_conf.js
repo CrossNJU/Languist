@@ -7,7 +7,7 @@ import {connect} from '../config'
 
 var github = require('octonode');
 var client = github.client({
-  username: 'RickChem',
+  username: 'raychenNJU',
   password: 'cr112358132134'
 });
 

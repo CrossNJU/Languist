@@ -159,9 +159,9 @@ async function getRelatedRecommend(full_name, callback) {
     } else {
       updateSingleRepoRecommend(full_name, async ()=> {
         let rec_num = 10;
-        //console.log('in');
+        console.log('in');
         let recs = await get_rec_repos_by_contributor(full_name, rec_num);
-        //console.log(recs);
+        console.log(recs);
         github_repoSchema.update({full_name: full_name}, {$set: {related: recs}}, (err, res) => {
           //console.log('update a repo:' + full_name + ' related!');
           //console.log(res);
@@ -229,6 +229,7 @@ async function addInfoToList(login, flowlist, include_user, callback) {
 }
 
 function getRepoLanguage(full_name, callback) {
+  logger.debug('in get repo: '+ full_name+' language...');
   github_repoSchema.findOne({full_name: full_name}, (err, repo) => {
     if (repo == null){
       getRepoLanguages(full_name, (languages) => {

@@ -126,7 +126,7 @@ export {getFlowListData, hasRecommendData}
 
 //console.log((new Date()).getHours());
 setInterval(() => {
-  console.log('now the time is: '+ (new Date()).toLocaleString());
+  logger.info('now the time is: '+ (new Date()).toLocaleString());
 }, 1000*60*20);
 
 //setInterval(() => {
