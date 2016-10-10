@@ -12,12 +12,13 @@ import {sended_low, sended_mid, sended_high} from '../data.js'
 import {updateInitialInfo, updateWhenLogin, upsertUser} from '../logic/UpdateWhenLogin'
 import {getFlowListData} from '../service/HomeService'
 import {addAnewUser} from '../api/github_user'
+import {setClient} from '../api/github_conf'
 var async = require("async");
 
-function getAllUserInfo(callback){
+function getAllUserInfo(callback) {
   let ans = [];
   userSchema.find({}, (err, users) => {
-    for (let i=0;i<users.length;i++){
+    for (let i = 0; i < users.length; i++) {
       let user = users[i];
       ans.push({
         login: user.login,
@@ -35,47 +36,47 @@ function getAllUserInfo(callback){
   });
 }
 
-function getUserInfo(login, callback){
-  userSchema.findOne({login: login}, (err, user)=>{
+function getUserInfo(login, callback) {
+  userSchema.findOne({login: login}, (err, user)=> {
     callback(user);
   });
 }
 
 function findSendEmailUsers(type, callback) {
-  let condition = {starred_count:{$gt: 20, $lt: 50} };
+  let condition = {starred_count: {$gt: 20, $lt: 50}};
   let dup = sended_mid;
   let num = 20;
   if (type == 1) {
     condition = {starred_count: {$gt: 8, $lt: 20}};
     dup = sended_low;
     num = 100;
-  }else if (type == 3){
+  } else if (type == 3) {
     condition = {starred_count: {$gt: 100}, followers_count: {$gt: 100}};
     dup = sended_high;
     num = 15;
   }
   dup = dup.split(';');
-  my_userSchema.find(condition, (err, users)=>{
-   let ans = [];
-   let ans_out = '[';
-   let c = 0;
-   for (let i=0;i<users.length;i++){
-     if (users[i].email != 'Unknown' && users[i].email != null && c<num){
-       if (dup.findIndex(j => j == users[i].email) < 0) {
-         c++;
-         ans.push({
-           login: users[i].login,
-           email: users[i].email,
-           following: users[i].followings_count,
-           follower: users[i].followers_count,
-           star: users[i].starred_count
-         });
-         ans_out = ans_out + users[i].email + ';';
-       }
-     }
-   }
-   ans_out = ans_out + ']';
-   callback(ans_out);
+  my_userSchema.find(condition, (err, users)=> {
+    let ans = [];
+    let ans_out = '[';
+    let c = 0;
+    for (let i = 0; i < users.length; i++) {
+      if (users[i].email != 'Unknown' && users[i].email != null && c < num) {
+        if (dup.findIndex(j => j == users[i].email) < 0) {
+          c++;
+          ans.push({
+            login: users[i].login,
+            email: users[i].email,
+            following: users[i].followings_count,
+            follower: users[i].followers_count,
+            star: users[i].starred_count
+          });
+          ans_out = ans_out + users[i].email + ';';
+        }
+      }
+    }
+    ans_out = ans_out + ']';
+    callback(ans_out);
   });
 }
 
@@ -83,7 +84,7 @@ function addUsers(number, callback) {
   let condition = {starred_count: {$gt: 8, $lt: 20}};
   my_userSchema.find(condition, {}, {limit: number}, (err, users) => {
     var ans = [];
-    for (let user of users){
+    for (let user of users) {
       ans.push(user.login);
     }
     callback(ans);
@@ -91,42 +92,51 @@ function addUsers(number, callback) {
 }
 
 async function insertRelated(users) {
-    for (let user of users) {
-      logger.debug(user);
-      let met = [];
-      met.push((call) => {
-        addAnewUser(user, "", () => {
-          updateInitialInfo(user);
-          call(null, 'done');
-        });
-      });
-      met.push((call) => {
-        upsertUser(user, () => {
-          updateWhenLogin(user);
-          call(null, 'done');
-        })
-      });
-      let end = await new Promise((resolve, reject) => {
-        userSchema.findOne({login: user}, (err, resa) => {
-          if (resa == null) {
-            async.parallel(met, async (err, res) => {
-              logger.debug(res);
-              getFlowListData(user, (ans) => {
-                resolve(ans.length);
-              });
-              //resolve(1);
-              // console.log('in');
+  for (let user of users) {
+    logger.debug(user);
+    let met = [];
+    // met.push((call) => {
+    //   addAnewUser(user, "", () => {
+    //     updateInitialInfo(user);
+    //     call(null, 'done');
+    //   });
+    // });
+    met.push((call) => {
+      upsertUser(user, () => {
+        updateWhenLogin(user);
+        call(null, 'done');
+      })
+    });
+    let end = await new Promise((resolve, reject) => {
+      userSchema.findOne({login: user}, (err, resa) => {
+        // if (resa == null) {
+        //   async.parallel(met, async (err, res) => {
+        //     logger.debug(res);
+        //     getFlowListData(user, (ans) => {
+        //       resolve(ans.length);
+        //     });
+        //     //resolve(1);
+        //     // console.log('in');
+        //   });
+        // } else resolve('existed');
+        if (resa.access_token != "") {
+          setClient(resa.access_token);
+          async.parallel(met, async(err, res) => {
+            logger.debug(res);
+            getFlowListData(user, (ans) => {
+              resolve(ans.length);
             });
-          } else resolve('existed');
-        });
+          });
+        } else resolve('no access token');
       });
-      logger.debug(user+": "+end);
-    }
+    });
+    logger.debug(user + ": " + end);
+  }
 }
 
 export {getAllUserInfo, getUserInfo, test}
 
- //connect();
+//connect();
 // findSendEmailUsers(1, (ans) => {
 //   console.log(ans);
 // });
@@ -213,8 +223,14 @@ var users = [
 ];
 
 function test() {
-  connect();
-  insertRelated(users);
+  // connect();
+  users = [];
+  userSchema.find({}, (err, res) => {
+    for (let user of res) {
+      users.push(user.login);
+    }
+    insertRelated(users);
+  });
 }
 
- // test();
+// test();

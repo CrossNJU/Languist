@@ -71,8 +71,18 @@ async function getAllLanguages(){
   return promise;
 }
 
+async function getTagByLanguage(language){
+  let promise = await new Promise(function(resolve, reject){
+    languageSchema.findOne({language: language}, (err, lang) => {
+      if (err) reject(err);
+      resolve(lang.tags);
+    });
+  });
+  return promise;
+}
 
-export {getLanguageByUser, getLanguageSize, getLanguageByTag,getAllLanguages}
+
+export {getLanguageByUser, getLanguageSize, getLanguageByTag,getAllLanguages, getTagByLanguage}
 
 async function test(){
   connect();
