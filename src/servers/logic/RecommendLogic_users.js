@@ -296,12 +296,7 @@ async function get_rec_users_when_zero(rec_num){
   //     ret.push(rec_github_users[i]);
   // }
 
-  console.log('inininiiiiiii');
   let rec_users = await getTopUsersInGithub(rec_num);
-
-  console.log('------------');
-  console.log(rec_users);
-  console.log('------------');
   return rec_users;
 
 }

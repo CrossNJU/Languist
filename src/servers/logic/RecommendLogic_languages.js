@@ -274,10 +274,20 @@ async function get_rec_languages(login,select_percent,following_percent,repo_per
 export {get_rec_languages,get_rec_languages_by_select,get_rec_languages_by_following,
         get_rec_languages_by_repos,get_rec_language_when_zero}
 
-// connect();
+
 // get_rec_languages_by_select('RickChem');
 // get_rec_languages_by_following('ChenDanni',5);
 // get_rec_languages_by_repos('ChenDanni',5);
 // get_rec_languages('ChenDanni',1,1,1);
 
 // get_rec_language_when_zero(5);
+
+async function test(){
+  connect();
+  let user_tags = await get_user_tag('ChenDanni');
+  console.log('tags');
+  console.log(user_tags);
+}
+// test();
+
+

@@ -243,13 +243,11 @@ async function fetchData(userName, callback) {
   // console.log('after fetch rec repo data!');
   setSignal_login_wait(2);
   let users = await get_rec_users_by_star_contributor(userName, 100);
-  console.log('don444');
+  // console.log('don444');
   if (users.length == 0 || users == null){
-    console.log('users is null');
-    users = await get_rec_users_when_zero(userName);
+    users = await get_rec_users_when_zero(100);
   }
   // console.log('after fetch rec user data!');
-  console.log(users);
   setSignal_login_wait(3);
   let langs = await get_rec_languages(userName, 1, 1, 1);
   setSignal_login_wait(4);

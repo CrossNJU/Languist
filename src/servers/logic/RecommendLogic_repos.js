@@ -15,20 +15,6 @@ function getSortFun(order, sortBy) {
   return sortFun;
 }
 
-async function handle_repos_tags(repos){
-  let repos_tag_count = [];
-
-  return repos_tag_count;
-}
-
-async function handle_init_repos(repos){
-  let handle_repos = [];
-  let handle_tags = handle_repos_tags(repos);//得到每个repo的tag统计
-
-
-  return handle_repos;
-}
-
 //根据create time和update time 筛除废仓库
 async function handle_repos(repos){
 
@@ -40,11 +26,17 @@ async function handle_repos(repos){
 
     let days = await calTime(repo_info.created_at,repo_info.updated_at);
 
+    //------------------------------
+
+    // let age = await calTime()
+
+
+    //------------------------------
+
     if (days >= 10){
       re_repos.push(repos[i]);
     }
   }
-
   return re_repos;
 
 }
@@ -519,7 +511,6 @@ async function get_rec_repos(login,user_percent,star_owner_percent,also_star_per
       resolve(rec_repos);
     });
   });
-  console.log(t.length);
   return t;
 }
 //--------------------------
