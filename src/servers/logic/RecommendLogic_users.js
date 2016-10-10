@@ -19,6 +19,42 @@ function getSortFun(order, sortBy) {
   return sortFun;
 }
 
+async function cal_lan_sim(user1,user2){
+  let lan1 = await getLanguageByUser(user1);
+  let lan2 = await getLanguageByUser(user2);
+
+  if (user1_lan == null || user1_lan == []) return 0;
+  if (user2_lan == null || user2_lan == []) return 0;
+
+  let up = 0;
+  let down1 = 0;
+  let down2 = 0;
+  let sim = 0;
+
+
+  for (let i = 0;i < lan1.length;i++){
+    for (let j = 0;j < lan2.length;j++){
+      if (lan1[i].name == lan2[j].name){
+        up += lan1[i].level * lan2[j].level;
+      }
+    }
+  }
+
+  for (let i = 0;i < lan1.length;i++){
+    down1 += lan1[i].level*lan1[i].level;
+  }
+  for (let i = 0;i < lan2.length;i++){
+    down2 += lan2[i].level*lan2[i].level;
+  }
+
+  down1 = Math.sqrt(down1);
+  down2 = Math.sqrt(down2);
+
+  sim = up / (down1*down2);
+
+  return sim;
+}
+
 //两个用户之间的语言相似度
 async function get_lan_sim(user1,user2){
   // console.log('in');

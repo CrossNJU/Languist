@@ -113,15 +113,18 @@ async function fakeLangs(number) {
 
 //---------------------------  get detail infomation of (repo,user,lang)  --------------------------------------------------
 function getALanguage(lang) {
+  logger.debug(lang);
   return new Promise(function (resolve, reject) {
     languageSchema.findOne({
       language: lang
     }, (err, lang_single) => {
+      let des = "";
+      if (lang_single != null) des = lang_single.wiki;
       if (err) reject(err);
       let ret = {
         type: 'lang',
         name: lang,
-        description: lang_single.wiki
+        description: des
       };
       resolve(ret);
     });
@@ -240,7 +243,6 @@ function getInterval(time_bef) {
 //---------------------------  update recommend data  --------------------------------------------------
 async function fetchData(userName, callback) {
   record_log('system', 'fetch recommend data for: ' + userName, 'add');
-  logger.info('fetch data for: '+userName);
   let repos = await get_rec_repos(userName, 1, 1, 1, 1, 1);
   logger.debug('after fetch repo');
   setSignal_login_wait(2);
@@ -249,11 +251,15 @@ async function fetchData(userName, callback) {
   if (users.length == 0 || users == null){
     users = await get_rec_users_when_zero(100);
   }
-  logger.info('after fetch for: '+ userName);
   setSignal_login_wait(3);
   let langs = await get_rec_languages(userName, 1, 1, 1);
+  logger.debug('after fetch language');
+
+  // console.log(repos);
+  // console.log(users);
+  console.log(langs);
+
   setSignal_login_wait(4);
-  // console.log('after fetch rec data!');
   // console.log(repos.length + ' ' + users.length + ' ' + langs.length);
   let rec = [];
   for (let i = 0; i < users.length; i++) {
@@ -383,6 +389,7 @@ async function getStart(userName) {
   record_log('system', 'get start to recommend in logic!', 'mark');
   let cur_rec = await new Promise(function (resolve, reject) {
     fetchData(userName, async(ret) => {
+      logger.error(ret);
       let array = await recNew(userName);
       resolve(array);
     })

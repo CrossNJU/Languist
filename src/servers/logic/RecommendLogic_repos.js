@@ -454,31 +454,37 @@ async function get_rec_repos(login,user_percent,star_owner_percent,also_star_per
     met.push(async (call0) => {
       let user_rec = await get_rec_repos_by_user(login,user_num);
       logger.info('[repo]done1!');
+      logger.info(user_rec.length);
       call0(null, user_rec);
     });
     met.push(async (call0) => {
       let star_owner_rec = await get_rec_repos_by_star_repos_owner(login,star_owner_num);
       logger.info('[repo]done2!');
+      logger.info(star_owner_rec.length);
       call0(null, star_owner_rec);
     });
     met.push(async (call0) => {
       let also_star_rec = await get_rec_repos_by_also_star(login,also_star_num);
       logger.info('[repo]done3!');
+      logger.info(also_star_rec.length);
       call0(null, also_star_rec);
     });
     met.push(async (call0) => {
       let following_rec = await get_rec_repos_by_following(login,following_num);
       logger.info('[repo]done4!');
+      logger.info(following_rec.length);
       call0(null, following_rec);
     });
     met.push(async (call0) => {
       let colleague_rec = await get_rec_repos_by_colleagues(login,colleague_num);
       logger.info('[repo]done5!');
+      logger.info(colleague_rec.length);
       call0(null, colleague_rec);
     });
     met.push(async (call0) => {
       let base_rec = await get_rec_repos_when_zero(base);
       logger.info('[repo]done6!');
+      logger.info(base_rec.length);
       call0(null, base_rec);
     });
 
@@ -488,14 +494,11 @@ async function get_rec_repos(login,user_percent,star_owner_percent,also_star_per
       let also_star_rec = res[2];
       let following_rec = res[3];
       let colleague_rec = res[4];
-
       let base_rec = res[5];
-      if (((user_rec.length == 0)&&(star_owner_rec.length == 0)&&(also_star_rec.length == 0)&&
-        (following_rec.length == 0)&&(colleague_rec.length == 0))){
-        // console.log(base_rec);
-        // console.log('base');
-        return base_rec;
-      }
+
+      let sum = user_rec.length + star_owner_rec.length + also_star_rec.length +
+          following_rec.length + colleague_rec.length;
+
       let init_repos = [];
       let rec_repos = [];
 
@@ -512,6 +515,13 @@ async function get_rec_repos(login,user_percent,star_owner_percent,also_star_per
           }
         }
       }
+
+      if (sum < 40){
+        for (let i = 0;i < base_rec.length;i++)
+          rec_repos.push(base_rec[i]);
+        // return base_rec;
+      }
+
       resolve(rec_repos);
     });
   });
