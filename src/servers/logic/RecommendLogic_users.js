@@ -7,7 +7,7 @@ import {getGithubUserInfo, getUserAndLevelByLanguage,
 import {getStarRepoByUser, getPublicRepoByUser, getRepoInfo, getJoinRepoByUser} from '../dao/RepoDAO'
 import {handle_repos} from './RecommendLogic_repos'
 import {getLanguageByUser} from '../dao/languageDAO'
-import {connect} from '../config'
+import {connect, logger} from '../config'
 var async = require("async");
 
 let modulate = 2;
@@ -302,7 +302,7 @@ async function get_rec_users_when_zero(rec_num){
 }
 
 async function get_rec_users(login,language_percent,star_contributor_percent,following_repo_percent){
-  console.log('ininin');
+  //console.log('ininin');
   let base = 100;
   let language_num = base * language_percent;
   let star_contributor_num = base * star_contributor_percent;
@@ -312,22 +312,22 @@ async function get_rec_users(login,language_percent,star_contributor_percent,fol
     let met = [];
     met.push(async (call0) => {
       let language_rec = await get_rec_users_by_language(login,language_num);
-      console.log('done1');
+      logger.info('[user]done1');
       call0(null,language_rec);
     });
     met.push(async (call0) => {
       let star_contributor_rec = await get_rec_users_by_star_contributor(login,star_contributor_num);
-      console.log('done2');
+      logger.info('[user]done2');
       call0(null,star_contributor_rec);
     });
     met.push(async (call0) => {
       let following_repo_rec = await get_rec_users_by_following_repo(login,following_repo_num);
-      console.log('done3');
+      logger.info('[user]done3');
       call0(null,following_repo_rec);
     });
     met.push(async (call0) => {
       let base_rec = await get_rec_users_when_zero(base);
-      console.log('done4');
+      logger.info('[user]done4');
       call0(null,base_rec);
     });
 

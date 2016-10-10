@@ -6,7 +6,7 @@ import {get_rec_users_by_language} from './RecommendLogic_users'
 import {getStarRepoByUser, getRepoInfo,getPublicRepoByUser,getJoinRepoByUser,getTopRepos} from '../dao/RepoDAO'
 import {getUserAndLevelByLanguage, getFollowingByUser, getStarUserByRepo, getContributorsByRepo} from '../dao/UserDAO'
 import {calTime,calLastUpdateTime} from '../util/timeUtil'
-import {connect} from '../config'
+import {connect, logger} from '../config'
 var async = require("async");
 
 function getSortFun(order, sortBy) {
@@ -434,7 +434,7 @@ async function get_rec_repos_when_zero(rec_num){
 async function get_rec_repos(login,user_percent,star_owner_percent,also_star_percent,following_percent,colleague_percent){
 
 
-  console.log('repo recommending');
+  logger.info('[repo]repo recommending for: '+ login);
 
   let big_base = 150;
   let base = 100;
@@ -449,32 +449,32 @@ async function get_rec_repos(login,user_percent,star_owner_percent,also_star_per
 
     met.push(async (call0) => {
       let user_rec = await get_rec_repos_by_user(login,user_num);
-      console.log('done1!');
+      logger.info('[repo]done1!');
       call0(null, user_rec);
     });
     met.push(async (call0) => {
       let star_owner_rec = await get_rec_repos_by_star_repos_owner(login,star_owner_num);
-      console.log('done2!');
+      logger.info('[repo]done2!');
       call0(null, star_owner_rec);
     });
     met.push(async (call0) => {
       let also_star_rec = await get_rec_repos_by_also_star(login,also_star_num);
-      console.log('done3!');
+      logger.info('[repo]done3!');
       call0(null, also_star_rec);
     });
     met.push(async (call0) => {
       let following_rec = await get_rec_repos_by_following(login,following_num);
-      console.log('done4!');
+      logger.info('[repo]done4!');
       call0(null, following_rec);
     });
     met.push(async (call0) => {
       let colleague_rec = await get_rec_repos_by_colleagues(login,colleague_num);
-      console.log('done5!');
+      logger.info('[repo]done5!');
       call0(null, colleague_rec);
     });
     met.push(async (call0) => {
       let base_rec = await get_rec_repos_when_zero(base);
-      console.log('done6!');
+      logger.info('[repo]done6!');
       call0(null, base_rec);
     });
 

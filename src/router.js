@@ -344,7 +344,7 @@ function addOtherAPI(server) {
     getFlowListData(req.query.user, ret => {
       addInfoToList(req.query.user, ret, true, () => {
         record_log(getUser(), getUser() + ' get flowlist data and return: ' + ret.length + ' RECORDS', 'query');
-        test();
+        //test();
         res.send(ret);
       });
     });

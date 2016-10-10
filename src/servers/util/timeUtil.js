@@ -2,6 +2,7 @@
  * Created by raychen on 16/7/29.
  */
 
+import {logger} from '../config'
 import moment from 'moment'
 
 function getTimeFromLong(time){
@@ -27,7 +28,7 @@ async function calTime(time1,time2){
   let start_date = new Date(time1);
   let end_date = new Date(time2);
   if (end_date - start_date < 0){
-    console.log("time1 is larger than time2.ERROR TIME!");
+    logger.warn("time1 is larger than time2.ERROR TIME!");
     return -1;
   }else{
     let num = (end_date - start_date)/(1000*3600*24);
@@ -43,7 +44,7 @@ async function calLastUpdateTime(time){
   let age = (nowTime - updateTime)/(1000*3600*24);
   age = parseInt(Math.ceil(age)) - 1;
   if (age < 0){
-    console.log('Update time error!');
+    logger.warn('Update time error!');
     return 10000;
   }
   return age;
