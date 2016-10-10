@@ -453,38 +453,38 @@ async function get_rec_repos(login,user_percent,star_owner_percent,also_star_per
 
     met.push(async (call0) => {
       let user_rec = await get_rec_repos_by_user(login,user_num);
-      logger.info('[repo]done1!');
-      logger.info(user_rec.length);
+      // logger.info('[repo]done1!');
+      // logger.info(user_rec.length);
       call0(null, user_rec);
     });
     met.push(async (call0) => {
       let star_owner_rec = await get_rec_repos_by_star_repos_owner(login,star_owner_num);
-      logger.info('[repo]done2!');
-      logger.info(star_owner_rec.length);
+      // logger.info('[repo]done2!');
+      // logger.info(star_owner_rec.length);
       call0(null, star_owner_rec);
     });
     met.push(async (call0) => {
       let also_star_rec = await get_rec_repos_by_also_star(login,also_star_num);
-      logger.info('[repo]done3!');
-      logger.info(also_star_rec.length);
+      // logger.info('[repo]done3!');
+      // logger.info(also_star_rec.length);
       call0(null, also_star_rec);
     });
     met.push(async (call0) => {
       let following_rec = await get_rec_repos_by_following(login,following_num);
-      logger.info('[repo]done4!');
-      logger.info(following_rec.length);
+      // logger.info('[repo]done4!');
+      // logger.info(following_rec.length);
       call0(null, following_rec);
     });
     met.push(async (call0) => {
       let colleague_rec = await get_rec_repos_by_colleagues(login,colleague_num);
-      logger.info('[repo]done5!');
-      logger.info(colleague_rec.length);
+      // logger.info('[repo]done5!');
+      // logger.info(colleague_rec.length);
       call0(null, colleague_rec);
     });
     met.push(async (call0) => {
       let base_rec = await get_rec_repos_when_zero(base);
-      logger.info('[repo]done6!');
-      logger.info(base_rec.length);
+      // logger.info('[repo]done6!');
+      // logger.info(base_rec.length);
       call0(null, base_rec);
     });
 

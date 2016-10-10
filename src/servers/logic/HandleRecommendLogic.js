@@ -255,8 +255,6 @@ async function fetchData(userName, callback) {
   let langs = await get_rec_languages(userName, 1, 1, 1);
   logger.debug('after fetch language');
 
-  console.log(langs);
-
   setSignal_login_wait(4);
   let rec = [];
   for (let i = 0; i < users.length; i++) {
@@ -386,7 +384,6 @@ async function getStart(userName) {
   record_log('system', 'get start to recommend in logic!', 'mark');
   let cur_rec = await new Promise(function (resolve, reject) {
     fetchData(userName, async(ret) => {
-      logger.error(ret);
       let array = await recNew(userName);
       resolve(array);
     })
