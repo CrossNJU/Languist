@@ -38,21 +38,21 @@ connect();
 const server = global.server = express();
 const ret_success = 'success';
 
-var log4js = require('log4js');
-log4js.configure({
-  appenders: [
-    { type: 'console' }, //控制台输出
-    {
-      type: 'file', //文件输出
-      filename: 'logs/access_net.log',
-      maxLogSize: 1024,
-      backups: 4,
-      category: 'normal'
-    }
-  ]
-});
-var logger2 = log4js.getLogger('normal');
-logger2.setLevel('INFO');
+//var log4js = require('log4js');
+//log4js.configure({
+//  appenders: [
+//    { type: 'console' }, //控制台输出
+//    {
+//      type: 'file', //文件输出
+//      filename: 'logs/access_net.log',
+//      maxLogSize: 1024,
+//      backups: 4,
+//      category: 'normal'
+//    }
+//  ]
+//});
+//var logger2 = log4js.getLogger('normal');
+//logger2.setLevel('INFO');
 
 process.on('uncaughtException', function (err) {
   //打印出错误
