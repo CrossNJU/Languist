@@ -182,6 +182,7 @@ async function get_rec_repos_by_also_star(login,rec_num){
   let init_repos = [];
   let rec_repos = [];
 
+  logger.info('in rec by also star');
   // console.log("in");
   for (let i = 0;i < stars_handle.length;i++)
     user_stars.push(stars_handle[i]);
@@ -201,7 +202,8 @@ async function get_rec_repos_by_also_star(login,rec_num){
       });
     }
     async.parallel(met0,(err,res)=>{
-      // console.log('done met0');
+
+      logger.debug('done met0');
       let met1 = [];
       for (let i = 0;i < init_starers.length;i++){
         met1.push(async (call1)=>{
@@ -217,10 +219,12 @@ async function get_rec_repos_by_also_star(login,rec_num){
         });
       }
       async.parallel(met1,(err,res)=>{
-        // console.log('done met1');
+
+        logger.debug('done met1');
         let met2 = [];
         for (let i = 0;i < init_repos_name.length;i++){
           met2.push(async (call2)=>{
+            // logger.debug('------------------------!!!');
             let repo_single = await getRepoInfo(init_repos_name[i]);
             let repo_stars = repo_single.stars_count;
             let repo = {
@@ -228,17 +232,17 @@ async function get_rec_repos_by_also_star(login,rec_num){
               stars: repo_stars
             };
             init_repos.push(repo);
-            // call2(null,'done met2');
+            call2(null, "done met2");
           });
         }
         async.parallel(met2,(err,res)=>{
-          // console.log('done met2');
+          if (err) logger.warn(err);
           init_repos.sort(getSortFun('desc','stars'));
           for (let i = 0;i < rec_num;i++){
             if (i >= init_repos.length) break;
             rec_repos.push(init_repos[i].fullname);
           }
-          // console.log(rec_repos);
+          logger.debug('done met2');
           resolve(rec_repos);
         });
       });
