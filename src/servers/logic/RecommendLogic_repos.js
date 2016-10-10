@@ -5,7 +5,7 @@
 import {get_rec_users_by_language} from './RecommendLogic_users'
 import {getStarRepoByUser, getRepoInfo,getPublicRepoByUser,getJoinRepoByUser,getTopRepos} from '../dao/RepoDAO'
 import {getUserAndLevelByLanguage, getFollowingByUser, getStarUserByRepo, getContributorsByRepo} from '../dao/UserDAO'
-import {calTime} from '../util/timeUtil'
+import {calTime,calLastUpdateTime} from '../util/timeUtil'
 import {connect} from '../config'
 var async = require("async");
 
@@ -28,12 +28,12 @@ async function handle_repos(repos){
 
     //------------------------------
 
-    // let age = await calTime()
-
+    let last_update = await calLastUpdateTime(repo_info.updated_at);
+    let update_ref = (repo_info.stars_count/1000)*365 + 60;
 
     //------------------------------
 
-    if (days >= 10){
+    if ((days >= 10)&&(last_update < update_ref)){
       re_repos.push(repos[i]);
     }
   }
@@ -542,9 +542,10 @@ export {get_rec_repos,get_related_rec_repos,get_rec_repos_by_user,get_rec_repos_
 // get_rec_repos_by_colleagues('ChenDanni',10);
 async function test() {
   connect();
-  let t = await get_rec_repos('ChenDanni',1,1,1,1,1);
+  // let t = await get_rec_repos('ChenDanni',1,1,1,1,1);
   // let t = await get_rec_repos_by_also_star('ChenDanni',100);
-  console.log(t.length);
+  let repos = await handle_repos(['rails/spring','dpickett/carrierwave']);
+  console.log(repos);
 }
 // test();
 // get_related_rec_repos('d3/d3',1);
