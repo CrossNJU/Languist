@@ -255,12 +255,9 @@ async function fetchData(userName, callback) {
   let langs = await get_rec_languages(userName, 1, 1, 1);
   logger.debug('after fetch language');
 
-  // console.log(repos);
-  // console.log(users);
   console.log(langs);
 
   setSignal_login_wait(4);
-  // console.log(repos.length + ' ' + users.length + ' ' + langs.length);
   let rec = [];
   for (let i = 0; i < users.length; i++) {
     rec.push({

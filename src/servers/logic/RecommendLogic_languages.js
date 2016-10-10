@@ -240,6 +240,8 @@ async function get_rec_languages(login,select_percent,following_percent,repo_per
   let following_num = base * following_percent;
   let repo_num = base * repo_percent;
 
+  let all_languages = await getAllLanguages();
+
   let select_rec = await get_rec_languages_by_select(login,select_num);
   // console.log(select_rec);
   let following_rec = await get_rec_languages_by_following(login,following_num);
@@ -259,8 +261,10 @@ async function get_rec_languages(login,select_percent,following_percent,repo_per
 
   for (let i = 0;i < init_languages.length;i++){
     for (let j = 0;j < init_languages[i].length;j++){
-      if (rec_languages.indexOf(init_languages[i][j]) <= -1)
-        rec_languages.push(init_languages[i][j]);
+      if (all_languages.indexOf(init_languages[i][j]) > -1){
+        if (rec_languages.indexOf(init_languages[i][j]) <= -1)
+          rec_languages.push(init_languages[i][j]);
+      }
     }
   }
 
