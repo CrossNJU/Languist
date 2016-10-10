@@ -54,6 +54,23 @@ function searchRepo(query, language, page, callback){
   });
 }
 
+function searchPopularRepo(query, language, page, callback){
+  var client = getClient();
+  var ghsearch = client.search();
+  let keyword = query;
+  keyword = keyword+'+language:'+language;
+  ghsearch.repos({
+    q: keyword,
+    sort: 'stars',
+    order: 'desc',
+    page:page,
+    per_page:number_per_page
+  }, (err, body, headers) => {
+    if (body !== undefined) callback(body.items);
+    else callback([]);
+  });
+}
+
 function searchUserJoinRepo(login, callback){
   var client = getClient();
   var ghsearch = client.search();
@@ -102,7 +119,7 @@ function searchUserJoinRepo(login, callback){
 }
 
 //searchRepo();
-export {searchRepo}
+export {searchRepo, searchPopularRepo}
 
 //searchRepo('tetris', 'All', 1, (ans) => {
 //  console.log(ans);

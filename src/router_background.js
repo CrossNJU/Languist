@@ -9,6 +9,7 @@ import {
   getRelatedRecommend,
   getRepoLanguage
 } from './servers/service/RepoService'
+import {searchPopularRepo} from './servers/api/github_search'
 import {logger} from './servers/config'
 var async = require('async');
 
@@ -74,6 +75,13 @@ function addPluginApi(server) {
         logger.debug(ress);
         res.send(resa);
       })
+    })
+  });
+  server.get('/api/plugin/newtab', (req, res) => {
+    logger.info('plugin request to get newtab data');
+    searchPopularRepo("", "Java", 1, (ans) => {
+      logger.debug('get newtab data');
+      res.send(ans);
     })
   });
 }
