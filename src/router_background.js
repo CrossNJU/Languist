@@ -84,7 +84,9 @@ function addPluginApi(server) {
   });
   server.get('/api/plugin/newtab', (req, res) => {
     logger.info('plugin request to get newtab data');
-    searchPopularRepo("", "Java", 1, (ans) => {
+    let langs = ['Java', 'Ruby', 'Perl', 'Go', 'C++', 'C', 'Objective-C', 'Python', 'CSS', 'HTML', 'JavaScript', 'Shell', 'R', 'CoffeeScript', 'Scala', 'C#'];
+    let index = parseInt(Math.random() * langs.length);
+    searchPopularRepo("", langs[index], parseInt(Math.random() * 4), (ans) => {
       logger.debug('get newtab data');
       let met = [], rets = [];
       for (let i = 0; i < ans.length; i++) {
