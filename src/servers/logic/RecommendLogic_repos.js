@@ -441,6 +441,7 @@ async function get_rec_repos_by_contributor(fullname,rec_num){
     rec_repos.push(handled_repos[i]);
   }
   // console.log(rec_repos);
+
   return rec_repos;
 }
 
@@ -664,6 +665,7 @@ async function get_rec_repos(login,user_percent,star_owner_percent,also_star_per
 //  Related Repos推荐列表
 //--------------------------
 async function get_related_rec_repos(fullname,contributor_percent,also_star_percent){
+
   let base = 15;
   contributor_percent = 0.5;
   let contributor_num = base * contributor_percent;
@@ -700,11 +702,15 @@ async function get_related_rec_repos(fullname,contributor_percent,also_star_perc
         if (i < con_rec_len) rec_repos.push(contributor_rec[i]);
       }
 
+      let index = rec_repos.indexOf(fullname);
+      if (index > -1){
+        rec_repos.splice(index,1);
+      }
       resolve(rec_repos);
     });
   });
 
-  // logger.debug(t);
+  // console.log(t);
   return t;
 
   // let contributor_rec = await get_rec_repos_by_contributor(fullname,contributor_num);
@@ -745,8 +751,8 @@ async function test() {
   // let t = await get_rec_repos_by_also_star('ChenDanni',100);
   // let repos = await handle_repos(['rails/spring','dpickett/carrierwave']);
   // console.log(repos);
-  await get_rect_repos_by_also_star('hexojs/hexo',20);
-  // await get_related_rec_repos('hexojs/hexo',1,1);
+  // await get_rect_repos_by_also_star('ruanyf/react-demos',20);
+  await get_related_rec_repos('ruanyf/react-demos',1,1);
   // await get_rec_repos_by_contributor('hexojs/hexo',20);
 }
 // test();
