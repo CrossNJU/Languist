@@ -392,6 +392,8 @@ async function get_rec_repos_by_contributor(fullname,rec_num){
   let init_repos_names = [];
   let init_repos = [];
   let rec_repos = [];
+  let owner_count = [];
+  let handled_repos = [];
 
   // console.log(contributors);
 
@@ -411,17 +413,32 @@ async function get_rec_repos_by_contributor(fullname,rec_num){
   // console.log(init_repos_names.length);
 
   for (let i = 0;i < init_repos_names.length;i++){
+    let temp_info = await getRepoInfo(init_repos_names[i]);
     let temp_repo = {
       fullname: init_repos_names[i],
-      stars: await getRepoInfo(init_repos_names[i]).stars_count
+      stars: temp_info.stars_count,
+      owner: temp_info.owner
     };
     init_repos.push(temp_repo);
   }
   init_repos.sort(getSortFun('desc','stars'));
 
+  // console.log(init_repos);
+
+  for (let i = 0;i < init_repos.length;i++){
+    let temp_owner = init_repos[i].owner;
+    if (owner_count.hasOwnProperty(temp_owner)){
+      owner_count[temp_owner] ++;
+    }else{
+      owner_count[temp_owner] = 1;
+    }
+    if (owner_count[temp_owner] <= 2)
+      handled_repos.push(init_repos[i].fullname);
+  }
+
   for (let i = 0;i < rec_num;i++){
-    if (i >= init_repos.length) break;
-    rec_repos.push(init_repos[i].fullname);
+    if (i >= handled_repos.length) break;
+    rec_repos.push(handled_repos[i]);
   }
   // console.log(rec_repos);
   return rec_repos;
@@ -595,27 +612,67 @@ async function get_rec_repos(login,user_percent,star_owner_percent,also_star_per
 //--------------------------
 async function get_related_rec_repos(fullname,contributor_percent,also_star_percent){
   let base = 15;
+  contributor_percent = 0.5;
   let contributor_num = base * contributor_percent;
   let also_star_num = base * also_star_percent;
-  let contributor_rec = await get_rec_repos_by_contributor(fullname,contributor_num);
-  let also_star_rec = await get_rect_repos_by_also_star(fullname,also_star_num);
 
-  let rec_repos = [];
-  let maxn = 0;
-  let con_rec_len = contributor_rec.length;
-  let also_star_rec_len = also_star_rec.length;
+  contributor_num = parseInt(Math.ceil(contributor_num)) - 1;
+  also_star_num = parseInt(Math.ceil(also_star_num)) - 1;
 
-  if (contributor_num > also_star_num)
-    maxn = contributor_num;
-  else
-    maxn = also_star_num;
+  let t = await new Promise((resolve, reject) => {
+    let met = [];
+    met.push(async (call0) =>{
+      let contributor_rec = await get_rec_repos_by_contributor(fullname,contributor_num);
+      call0(null, contributor_rec);
+    });
+    met.push(async (call0) =>{
+      let also_star_rec = await get_rect_repos_by_also_star(fullname,also_star_num);
+      call0(null,also_star_rec);
+    });
+    async.parallel(met,(err,res)=>{
+      let contributor_rec = res[0];
+      let also_star_rec = res[1];
+      let rec_repos = [];
+      let maxn = 0;
+      let con_rec_len = contributor_rec.length;
+      let also_star_rec_len = also_star_rec.length;
 
-  for (let i = 0;i < maxn;i++){
-    if (i < also_star_rec_len) rec_repos.push(also_star_rec[i]);
-    if (i < con_rec_len) rec_repos.push(contributor_rec[i]);
-  }
+      if (contributor_num > also_star_num)
+        maxn = contributor_num;
+      else
+        maxn = also_star_num;
+
+      for (let i = 0;i < maxn;i++){
+        if (i < also_star_rec_len) rec_repos.push(also_star_rec[i]);
+        if (i < con_rec_len) rec_repos.push(contributor_rec[i]);
+      }
+
+      resolve(rec_repos);
+    });
+  });
+
+  // logger.debug(t);
+  return t;
+
+  // let contributor_rec = await get_rec_repos_by_contributor(fullname,contributor_num);
+  // let also_star_rec = await get_rect_repos_by_also_star(fullname,also_star_num);
+  //
+  // let rec_repos = [];
+  // let maxn = 0;
+  // let con_rec_len = contributor_rec.length;
+  // let also_star_rec_len = also_star_rec.length;
+  //
+  // if (contributor_num > also_star_num)
+  //   maxn = contributor_num;
+  // else
+  //   maxn = also_star_num;
+  //
+  // for (let i = 0;i < maxn;i++){
+  //   if (i < also_star_rec_len) rec_repos.push(also_star_rec[i]);
+  //   if (i < con_rec_len) rec_repos.push(contributor_rec[i]);
+  // }
   // console.log(rec_repos);
-  return rec_repos;
+  // return rec_repos;
 }
 
 
@@ -636,7 +693,8 @@ async function test() {
   // let repos = await handle_repos(['rails/spring','dpickett/carrierwave']);
   // console.log(repos);
   // await get_rect_repos_by_also_star('CrossNJU/Languist',10);
-  await get_related_rec_repos('CrossNJU/Languist',1,1);
+  await get_related_rec_repos('hexojs/hexo',1,1);
+  // await get_rec_repos_by_contributor('hexojs/hexo',20);
 }
 // test();
 // get_related_rec_repos('d3/d3',1);

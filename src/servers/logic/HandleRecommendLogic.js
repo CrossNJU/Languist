@@ -440,7 +440,8 @@ export {
   getAUser,
   getDetail,
   getStart,
-  setATimer
+  setATimer,
+  recNew
 }
 
 //fakeUsers(20);

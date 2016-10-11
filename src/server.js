@@ -138,7 +138,7 @@ addTestApi(server);
 addAdministerApi(server);
 addPluginApi(server);
 //circle();
-setATimer();
+// setATimer();
 
 //
 // Register server-side rendering middleware
