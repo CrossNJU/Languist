@@ -160,7 +160,10 @@ async function getRelatedRecommend(full_name, callback) {
       updateSingleRepoRecommend(full_name, async ()=> {
         let rec_num = 10;
         console.log('in');
-        let recs = await get_rec_repos_by_contributor(full_name, rec_num);
+        let recs = await get_related_rec_repos(fullname,1,1);
+        if (recs == null){
+          recs = await get_rec_repos_by_contributor(full_name, rec_num);
+        }
         console.log(recs);
         github_repoSchema.update({full_name: full_name}, {$set: {related: recs}}, (err, res) => {
           //console.log('update a repo:' + full_name + ' related!');
