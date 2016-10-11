@@ -638,7 +638,7 @@ async function test() {
   // await get_rect_repos_by_also_star('CrossNJU/Languist',10);
   await get_related_rec_repos('CrossNJU/Languist',1,1);
 }
-test();
+// test();
 // get_related_rec_repos('d3/d3',1);
 // get_rec_repos_when_zero(10);
 // async function s1(call0) {
