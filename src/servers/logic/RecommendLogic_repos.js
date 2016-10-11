@@ -451,50 +451,103 @@ async function get_rect_repos_by_also_star(fullname,rec_num){
   let scope = 2;
   let rec_repos = [];
 
-  for (let i = 0;i < star_users.length;i++){
-    let temp_star = await getStarRepoByUser(star_users[i]);
-    // console.log(temp_star);
-    let index = 0;
-    let star = 0;
-    let end = 0;
-    for (let j = 0; j < temp_star.length;j++){
-      if (temp_star[j] == fullname){
-        index = j;
-        break;
-      }
+  let t = await new Promise((resolve, reject)=>{
+    let met = [];
+    for (let i = 0;i < star_users.length;i++){
+      met.push(async (call0)=>{
+        let temp_star = await getStarRepoByUser(star_users[i]);
+        // console.log(temp_star);
+        let index = 0;
+        let star = 0;
+        let end = 0;
+        for (let j = 0; j < temp_star.length;j++){
+          if (temp_star[j] == fullname){
+            index = j;
+            break;
+          }
+        }
+        if (index - scope >= 0) star = index - scope;
+        else star = 0;
+
+        if (index + scope <= temp_star.length - 1) end = index + scope;
+        else end = temp_star.length - 1;
+
+        for (let j = star;j <= end;j++){
+          if (init_repos.hasOwnProperty(temp_star[j])){
+            init_repos[temp_star[j]] ++;
+          }else{
+            init_repos[temp_star[j]] = 1;
+          }
+        }
+        call0(null,'done met');
+      });
     }
-    if (index - scope >= 0) star = index - scope;
-    else star = 0;
+    async.parallel(met,(err,res)=>{
+      delete init_repos[fullname];
 
-    if (index + scope <= temp_star.length - 1) end = index + scope;
-    else end = temp_star.length - 1;
-
-    for (let j = star;j <= end;j++){
-      if (init_repos.hasOwnProperty(temp_star[j])){
-        init_repos[temp_star[j]] ++;
-      }else{
-        init_repos[temp_star[j]] = 1;
+      for (let repo in init_repos){
+        let temp_count = {
+          fullname: repo,
+          count: init_repos[repo]
+        };
+        repos_count.push(temp_count);
       }
-    }
-  }
+      repos_count.sort(getSortFun('desc','count'));
 
-  // console.log(init_repos);
-  delete init_repos[fullname];
+      for (let i = 0;i < rec_num;i++){
+        if (i >= repos_count.length) break;
+        rec_repos.push(repos_count[i].fullname);
+      }
+      resolve(rec_repos);
+    });
+  });
+  // console.log(t);
+  return t;
 
-  for (let repo in init_repos){
-    let temp_count = {
-      fullname: repo,
-      count: init_repos[repo]
-    };
-    repos_count.push(temp_count);
-  }
-  repos_count.sort(getSortFun('desc','count'));
-
-  for (let i = 0;i < rec_num;i++){
-    if (i >= repos_count.length) break;
-    rec_repos.push(repos_count[i].fullname);
-  }
-  return rec_repos;
+  // for (let i = 0;i < star_users.length;i++){
+  //   let temp_star = await getStarRepoByUser(star_users[i]);
+  //   // console.log(temp_star);
+  //   let index = 0;
+  //   let star = 0;
+  //   let end = 0;
+  //   for (let j = 0; j < temp_star.length;j++){
+  //     if (temp_star[j] == fullname){
+  //       index = j;
+  //       break;
+  //     }
+  //   }
+  //   if (index - scope >= 0) star = index - scope;
+  //   else star = 0;
+  //
+  //   if (index + scope <= temp_star.length - 1) end = index + scope;
+  //   else end = temp_star.length - 1;
+  //
+  //   for (let j = star;j <= end;j++){
+  //     if (init_repos.hasOwnProperty(temp_star[j])){
+  //       init_repos[temp_star[j]] ++;
+  //     }else{
+  //       init_repos[temp_star[j]] = 1;
+  //     }
+  //   }
+  // }
+  //
+  // // console.log(init_repos);
+  // delete init_repos[fullname];
+  //
+  // for (let repo in init_repos){
+  //   let temp_count = {
+  //     fullname: repo,
+  //     count: init_repos[repo]
+  //   };
+  //   repos_count.push(temp_count);
+  // }
+  // repos_count.sort(getSortFun('desc','count'));
+  //
+  // for (let i = 0;i < rec_num;i++){
+  //   if (i >= repos_count.length) break;
+  //   rec_repos.push(repos_count[i].fullname);
+  // }
+  // return rec_repos;
 }
 
 
@@ -692,8 +745,8 @@ async function test() {
   // let t = await get_rec_repos_by_also_star('ChenDanni',100);
   // let repos = await handle_repos(['rails/spring','dpickett/carrierwave']);
   // console.log(repos);
-  // await get_rect_repos_by_also_star('CrossNJU/Languist',10);
-  await get_related_rec_repos('hexojs/hexo',1,1);
+  await get_rect_repos_by_also_star('hexojs/hexo',20);
+  // await get_related_rec_repos('hexojs/hexo',1,1);
   // await get_rec_repos_by_contributor('hexojs/hexo',20);
 }
 // test();
