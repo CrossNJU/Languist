@@ -6,7 +6,7 @@ import {userSchema} from '../../models/userSchema'
 import {github_userSchema} from '../../models/github_userSchema'
 import {github_repoSchema} from '../../models/github_repoSchema'
 import {getRepoLanguages} from '../api/github_repo';
-import {get_rec_repos_by_contributor} from '../logic/RecommendLogic_repos'
+import {get_rec_repos_by_contributor, get_related_rec_repos} from '../logic/RecommendLogic_repos'
 import {updateRepoCons, updateUserRepos, upsertUser, upsertRepo} from '../logic/UpdateWhenLogin'
 import {getARepo, getDetail} from '../logic/HandleRecommendLogic'
 import {connect, logger} from '../config'
@@ -160,7 +160,7 @@ async function getRelatedRecommend(full_name, callback) {
       updateSingleRepoRecommend(full_name, async ()=> {
         let rec_num = 10;
         console.log('in');
-        let recs = await get_related_rec_repos(fullname,1,1);
+        let recs = await get_related_rec_repos(full_name,1,1);
         if (recs == null){
           recs = await get_rec_repos_by_contributor(full_name, rec_num);
         }

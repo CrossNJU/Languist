@@ -65,6 +65,7 @@ function addPluginApi(server) {
   server.get('/api/plugin/related', (req, res) => {
     logger.info('plugin request to get data');
     getRelatedRecommend(req.query.fullName, async (resa) => {
+      logger.error('in to get lang');
       let met = [];
       for (let i = 0; i < resa.length; i++) {
         met.push((call) => {
