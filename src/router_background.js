@@ -11,6 +11,7 @@ import {getRepoLanguages} from './servers/api/github_repo'
 import {logger, connect} from './servers/config'
 import {transTime} from './servers/util/timeUtil'
 import {back_newtabSchema} from './models/back_newtabSchema'
+import {github_repoSchema} from './models/github_repoSchema'
 import {recNew} from './servers/logic/HandleRecommendLogic'
 var async = require('async');
 
@@ -51,6 +52,12 @@ function addAdministerApi(server) {
   server.get('/api/admin/recNew', async (req, res) => {
     let wait = await recNew(req.query.login);
     res.send({res:1});
+  });
+  server.get('/api/admin/removeRelated', (req, res) => {
+    github_repoSchema.update({full_name: req.query.repo}, {$set: {related: []}}, (err, ress) => {
+      //console.log('update a repo:' + full_name + ' related!');
+      res.send(ress);
+    });
   });
 }
 
@@ -160,5 +167,5 @@ async function addData() {
 }
 
 
-// connect();
-// addData();
+ //connect();
+ //addData();
