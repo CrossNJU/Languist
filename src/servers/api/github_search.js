@@ -64,7 +64,7 @@ function searchPopularRepo(query, language, page, callback){
     sort: 'stars',
     order: 'desc',
     page:page,
-    per_page:number_per_page
+    per_page:20
   }, (err, body, headers) => {
     if (body !== undefined) callback(body.items);
     else callback([]);

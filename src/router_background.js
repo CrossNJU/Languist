@@ -10,7 +10,11 @@ import {
   getRepoLanguage
 } from './servers/service/RepoService'
 import {searchPopularRepo} from './servers/api/github_search'
+import {getRepoLanguages} from './servers/api/github_repo'
 import {logger} from './servers/config'
+import {
+  transTime
+} from './servers/util/timeUtil'
 var async = require('async');
 
 function addTestApi(server) {
@@ -81,7 +85,29 @@ function addPluginApi(server) {
     logger.info('plugin request to get newtab data');
     searchPopularRepo("", "Java", 1, (ans) => {
       logger.debug('get newtab data');
-      res.send(ans);
+      let met = [], rets = [];
+      for (let i = 0; i < ans.length; i++) {
+        met.push((call) => {
+          getRepoLanguages(ans[i].full_name, (lang) => {
+            logger.debug('finish get language for: ' + ans[i].full_name);
+            rets.push({
+              type: 'repo',
+              avatarUrl: ans[i].owner.avatar_url,
+              owner: ans[i].owner.login,
+              description: ans[i].description,
+              tags: lang,
+              update: transTime(ans[i].updated_at),
+              star: ans[i].stars_count,
+              full_name: ans[i].full_name
+            });
+            call(null, 'done search!')
+          });
+        })
+      }
+      async.parallel(met, (err, ress) => {
+        logger.debug(ress);
+        res.send(rets);
+      });
     })
   });
 }
