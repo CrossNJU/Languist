@@ -92,9 +92,9 @@ function addPluginApi(server) {
   });
   server.get('/api/plugin/newtab', (req, res) => {
     logger.info('plugin request to get newtab data');
-    let langs = ['Java', 'Ruby', 'Perl', 'Go', 'C++', 'C', 'Objective-C', 'Python', 'CSS', 'HTML', 'JavaScript', 'Shell', 'R', 'CoffeeScript', 'Scala', 'C#'];
+    let langs = ['Java', 'Ruby', 'C++', 'C', 'Objective-C', 'Python', 'CSS', 'HTML', 'JavaScript', 'Shell', 'C#'];
     let index = parseInt(Math.random() * langs.length);
-    back_newtabSchema.find({from: langs[index]}, (err, repos) => {
+    back_newtabSchema.find({from: langs[index]}).sort({star:-1}).exec((err,repos) => {
       res.send(repos);
     });
   });
@@ -103,30 +103,34 @@ function addPluginApi(server) {
 export {addTestApi, addAdministerApi, addPluginApi}
 
 async function addData() {
-  let langs = ['Java', 'Ruby', 'Perl', 'Go', 'C++', 'C', 'Objective-C', 'Python', 'CSS', 'HTML', 'JavaScript', 'Shell', 'R', 'CoffeeScript', 'Scala', 'C#'];
+  let langs = ['Java', 'Ruby', 'C++', 'C', 'Objective-C', 'Python', 'CSS', 'HTML', 'JavaScript', 'Shell', 'C#'];
   // let index = parseInt(Math.random() * langs.length);
   for (let i = 0; i< langs.length; i++){
     let wait = await new Promise((resolve, reject) => {
       searchPopularRepo("", langs[i], 1, (ans) => {
         logger.debug('get newtab data');
         let met = [];//, rets = [];
-        for (let i = 0; i < ans.length; i++) {
+        for (let j = 0; j < ans.length; j++) {
           met.push((call) => {
-            getRepoLanguages(ans[i].full_name, (lang) => {
-              logger.debug('finish get language for: ' + ans[i].full_name);
+            getRepoLanguages(ans[j].full_name, (lang) => {
+              logger.debug('finish get language for: ' + ans[j].full_name);
               let rett = {
                 type: 'repo',
-                avatarUrl: ans[i].owner.avatar_url,
-                owner: ans[i].owner.login,
-                description: ans[i].description,
+                avatarUrl: ans[j].owner.avatar_url,
+                owner: ans[j].owner.login,
+                description: ans[j].description,
                 tags: lang.length<=3?lang:lang.slice(0, 3),
-                update: transTime(ans[i].updated_at),
-                star: ans[i].stargazers_count,
-                full_name: ans[i].full_name,
+                update: transTime(ans[j].updated_at),
+                star: ans[j].stargazers_count,
+                full_name: ans[j].full_name,
                 from: langs[i]
               };
-              back_newtabSchema.create(rett, (err, res) => {
-                // console.log(ans[i]);
+              back_newtabSchema.findOne({full_name: rett.full_name}, (err, single) => {
+                if (single == null) {
+                  back_newtabSchema.create(rett, (err, res) => {
+                    // console.log(ans[j]);
+                  });
+                }
               });
               call(null, 'done search!')
             });
@@ -169,3 +173,6 @@ async function addData() {
 
  //connect();
  //addData();
+//back_newtabSchema.find({from: "Java"}).sort({star:-1}).exec((err,res) => {
+//  logger.info(res);
+//});
