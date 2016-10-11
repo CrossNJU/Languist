@@ -454,7 +454,7 @@ async function get_rect_repos_by_also_star(fullname,rec_num){
 
   let t = await new Promise((resolve, reject)=>{
     let met = [];
-    for (let i = 0;i < star_users.length;i++){
+    for (let i = star_users.length - 1;i >= 0;i--){
       met.push(async (call0)=>{
         let temp_star = await getStarRepoByUser(star_users[i]);
         // console.log(temp_star);
@@ -697,6 +697,9 @@ async function get_related_rec_repos(fullname,contributor_percent,also_star_perc
       else
         maxn = also_star_num;
 
+      // console.log(also_star_rec);
+      // console.log(contributor_rec);
+
       for (let i = 0;i < maxn;i++){
         if (i < also_star_rec_len) rec_repos.push(also_star_rec[i]);
         if (i < con_rec_len) rec_repos.push(contributor_rec[i]);
@@ -713,25 +716,6 @@ async function get_related_rec_repos(fullname,contributor_percent,also_star_perc
   // console.log(t);
   return t;
 
-  // let contributor_rec = await get_rec_repos_by_contributor(fullname,contributor_num);
-  // let also_star_rec = await get_rect_repos_by_also_star(fullname,also_star_num);
-  //
-  // let rec_repos = [];
-  // let maxn = 0;
-  // let con_rec_len = contributor_rec.length;
-  // let also_star_rec_len = also_star_rec.length;
-  //
-  // if (contributor_num > also_star_num)
-  //   maxn = contributor_num;
-  // else
-  //   maxn = also_star_num;
-  //
-  // for (let i = 0;i < maxn;i++){
-  //   if (i < also_star_rec_len) rec_repos.push(also_star_rec[i]);
-  //   if (i < con_rec_len) rec_repos.push(contributor_rec[i]);
-  // }
-  // console.log(rec_repos);
-  // return rec_repos;
 }
 
 
@@ -752,7 +736,7 @@ async function test() {
   // let repos = await handle_repos(['rails/spring','dpickett/carrierwave']);
   // console.log(repos);
   // await get_rect_repos_by_also_star('ruanyf/react-demos',20);
-  await get_related_rec_repos('ruanyf/react-demos',1,1);
+  await get_related_rec_repos('CrossNJU/Languist',1,1);
   // await get_rec_repos_by_contributor('hexojs/hexo',20);
 }
 // test();
